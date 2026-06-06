@@ -1,0 +1,156 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+enum StartupStatus {
+  failed
+  acquired
+  pivoted
+  zombie
+}
+
+enum FailureCategory {
+  retention
+  monetization
+  pmf
+  cac
+  competition
+  team
+  timing
+  regulation
+  other
+}
+
+enum TimelineStage {
+  idea
+  prototype
+  launch
+  growth
+  decline
+  shutdown
+}
+
+enum GraphOutcome {
+  shutdown
+  acquired
+  pivoted
+}
+
+model Startup {
+  id             String   @id @default(uuid()) @db.Uuid
+  name           String   @db.VarChar(255)
+  slug           String   @unique @db.VarChar(255)
+  status         StartupStatus
+  industry       String   @db.VarChar(100)
+  country        String   @db.VarChar(100)
+  foundingYear   Int      @map("founding_year")
+  shutdownYear   Int?     @map("shutdown_year")
+  lifetimeMonths Int?     @map("lifetime_months")
+  fundingInr     BigInt?  @map("funding_inr")
+  peakUsers      Int?     @map("peak_users")
+  teamSize       Int?     @map("team_size")
+  logoUrl        String?  @map("logo_url") @db.Text
+  summary        String   @db.Text
+  founderStory   String?  @map("founder_story") @db.Text
+  createdAt      DateTime @default(now()) @map("created_at")
+  updatedAt      DateTime @updatedAt @map("updated_at")
+
+  failureReasons   FailureReason[]
+  timelineEvents   TimelineEvent[]
+  metricsSnapshots MetricsSnapshot[]
+  aiAnalyses       AiAnalysis[]
+  graphEdgesSource GraphEdge[]       @relation("source_startup")
+  graphEdgesTarget GraphEdge[]?      @relation("target_startup")
+
+  @@map("startups")
+}
+
+model FailureReason {
+  id            String          @id @default(uuid()) @db.Uuid
+  startupId     String          @map("startup_id") @db.Uuid
+  category      FailureCategory
+  description   String          @db.Text
+  severityScore Int             @map("severity_score")
+  isPrimary     Boolean         @default(false) @map("is_primary")
+
+  startup Startup @relation(fields: [startupId], references: [id], onDelete: Cascade)
+
+  @@map("failure_reasons")
+}
+
+model TimelineEvent {
+  id          String         @id @default(uuid()) @db.Uuid
+  startupId   String         @map("startup_id") @db.Uuid
+  stage       TimelineStage
+  eventDate   DateTime       @map("event_date") @db.Date
+  title       String         @db.VarChar(255)
+  description String         @db.Text
+  metricKey   String?        @map("metric_key") @db.VarChar(100)
+  metricValue Decimal?       @map("metric_value") @db.Decimal(10, 2)
+
+  startup Startup @relation(fields: [startupId], references: [id], onDelete: Cascade)
+
+  @@map("timeline_events")
+}
+
+model MetricsSnapshot {
+  id           String   @id @default(uuid()) @db.Uuid
+  startupId    String   @map("startup_id") @db.Uuid
+  recordedMonth DateTime @map("recorded_month") @db.Date
+  users        Int?
+  revenueInr   BigInt?  @map("revenue_inr")
+  mrrInr       BigInt?  @map("mrr_inr")
+  burnRateInr  BigInt?  @map("burn_rate_inr")
+  churnRate    Decimal? @map("churn_rate") @db.Decimal(5, 2)
+
+  startup Startup @relation(fields: [startupId], references: [id], onDelete: Cascade)
+
+  @@map("metrics_snapshots")
+}
+
+model AiAnalysis {
+  id               String   @id @default(uuid()) @db.Uuid
+  startupId        String   @unique @map("startup_id") @db.Uuid
+  retentionScore   Int      @map("retention_score")
+  monetizationScore Int     @map("monetization_score")
+  pmfScore         Int      @map("pmf_score")
+  marketingScore   Int      @map("marketing_score")
+  primaryCause     String   @map("primary_cause") @db.VarChar(100)
+  confidence       Int
+  recommendations  Json     @default("[]")
+  rawLlmResponse   String?  @map("raw_llm_response") @db.Text
+  generatedAt      DateTime @default(now()) @map("generated_at")
+
+  startup Startup @relation(fields: [startupId], references: [id], onDelete: Cascade)
+
+  @@map("ai_analyses")
+}
+
+model Confession {
+  id         String   @id @default(uuid()) @db.Uuid
+  text       String   @db.VarChar(280)
+  upvotes    Int      @default(0)
+  isApproved Boolean  @default(true) @map("is_approved")
+  createdAt  DateTime @default(now()) @map("created_at")
+
+  @@map("confessions")
+}
+
+model GraphEdge {
+  id              String        @id @default(uuid()) @db.Uuid
+  sourceStartupId String        @map("source_startup_id") @db.Uuid
+  mistakeCategory String        @map("mistake_category") @db.VarChar(100)
+  targetStartupId String?       @map("target_startup_id") @db.Uuid
+  outcome         GraphOutcome
+  edgeWeight      Decimal       @map("edge_weight") @db.Decimal(5, 2)
+
+  sourceStartup Startup  @relation("source_startup", fields: [sourceStartupId], references: [id], onDelete: Cascade)
+  targetStartup Startup? @relation("target_startup", fields: [targetStartupId], references: [id], onDelete: SetNull)
+
+  @@map("graph_edges")
+}

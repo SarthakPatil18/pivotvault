@@ -1,0 +1,174 @@
+const express = require('express');
+const { PrismaClient } = require('@prisma/client');
+const { z } = require('zod');
+
+const prisma = new PrismaClient();
+const router = express.Router();
+
+// GET /api/startups - List with filters & pagination
+router.get('/', async (req, res, next) => {
+  try {
+    const querySchema = z.object({
+      q: z.string().optional(),
+      industry: z.string().optional(),
+      country: z.string().optional(),
+      status: z.enum(['failed', 'acquired', 'pivoted', 'zombie']).optional(),
+      sort: z.enum(['lifetime', 'funding', 'users', 'name']).optional().default('name'),
+      order: z.enum(['asc', 'desc']).optional().default('desc'),
+      page: z.coerce.number().int().min(1).optional().default(1),
+      limit: z.coerce.number().int().min(1).max(100).optional().default(20),
+    });
+
+    const params = querySchema.parse(req.query);
+    const skip = (params.page - 1) * params.limit;
+
+    const where = {};
+    if (params.industry) where.industry = params.industry;
+    if (params.country) where.country = params.country;
+    if (params.status) where.status = params.status;
+    if (params.q) {
+      where.OR = [
+        { name: { contains: params.q, mode: 'insensitive' } },
+        { summary: { contains: params.q, mode: 'insensitive' } },
+        { industry: { contains: params.q, mode: 'insensitive' } },
+      ];
+    }
+
+    const orderByMap = {
+      lifetime: { lifetimeMonths: params.order },
+      funding: { fundingInr: params.order },
+      users: { peakUsers: params.order },
+      name: { name: params.order },
+    };
+
+    const [data, total] = await Promise.all([
+      prisma.startup.findMany({
+        where,
+        skip,
+        take: params.limit,
+        orderBy: orderByMap[params.sort] || { name: 'asc' },
+        include: {
+          failureReasons: { where: { isPrimary: true }, take: 1 },
+          _count: { select: { timelineEvents: true } },
+        },
+      }),
+      prisma.startup.count({ where }),
+    ]);
+
+    res.json({
+      data: data.map(s => ({
+        id: s.id,
+        name: s.name,
+        slug: s.slug,
+        status: s.status,
+        industry: s.industry,
+        country: s.country,
+        fundingInr: s.fundingInr?.toString(),
+        peakUsers: s.peakUsers,
+        lifetimeMonths: s.lifetimeMonths,
+        teamSize: s.teamSize,
+        summary: s.summary,
+        logoUrl: s.logoUrl,
+        topFailureReason: s.failureReasons[0]?.category || null,
+        timelineEventsCount: s._count.timelineEvents,
+      })),
+      total,
+      page: params.page,
+      limit: params.limit,
+    });
+  } catch (err) {
+    if (err instanceof z.ZodError) {
+      return res.status(400).json({ error: 'Invalid query parameters', code: 'VALIDATION_ERROR', details: err.errors });
+    }
+    next(err);
+  }
+});
+
+// GET /api/startups/:slug - Full postmortem data
+router.get('/:slug', async (req, res, next) => {
+  try {
+    const startup = await prisma.startup.findUnique({
+      where: { slug: req.params.slug },
+      include: {
+        failureReasons: { orderBy: { severityScore: 'desc' } },
+        timelineEvents: { orderBy: { eventDate: 'asc' } },
+        metricsSnapshots: { orderBy: { recordedMonth: 'asc' } },
+        aiAnalyses: true,
+      },
+    });
+
+    if (!startup) {
+      return res.status(404).json({ error: 'Startup not found', code: 'NOT_FOUND' });
+    }
+
+    res.json({
+      ...startup,
+      fundingInr: startup.fundingInr?.toString(),
+      metricsSnapshots: startup.metricsSnapshots.map(m => ({
+        ...m,
+        revenueInr: m.revenueInr?.toString(),
+        mrrInr: m.mrrInr?.toString(),
+        burnRateInr: m.burnRateInr?.toString(),
+        churnRate: m.churnRate?.toString(),
+      })),
+    });
+  } catch (err) {
+    next(err);
+  }
+});
+
+// GET /api/startups/:slug/similar - Similar startups
+router.get('/:slug/similar', async (req, res, next) => {
+  try {
+    const startup = await prisma.startup.findUnique({
+      where: { slug: req.params.slug },
+      include: {
+        failureReasons: { where: { isPrimary: true } },
+      },
+    });
+
+    if (!startup) {
+      return res.status(404).json({ error: 'Startup not found', code: 'NOT_FOUND' });
+    }
+
+    const primaryFailure = startup.failureReasons[0]?.category;
+    const similar = await prisma.startup.findMany({
+      where: {
+        id: { not: startup.id },
+        OR: [
+          { industry: startup.industry },
+          ...(primaryFailure ? [{ failureReasons: { some: { category: primaryFailure } } }] : []),
+        ],
+      },
+      include: {
+        failureReasons: { where: { isPrimary: true }, take: 1 },
+      },
+      take: 5,
+    });
+
+    const results = similar.map(s => {
+      let score = 0;
+      if (s.industry === startup.industry) score += 0.4;
+      if (s.failureReasons[0]?.category === primaryFailure) score += 0.3;
+      score += Math.random() * 0.2;
+      return {
+        id: s.id,
+        name: s.name,
+        slug: s.slug,
+        industry: s.industry,
+        status: s.status,
+        summary: s.summary,
+        logoUrl: s.logoUrl,
+        similarityScore: Math.min(Math.round(score * 100) / 100, 1),
+        keyLesson: s.failureReasons[0]?.description?.slice(0, 120) || '',
+      };
+    });
+
+    results.sort((a, b) => b.similarityScore - a.similarityScore);
+    res.json(results);
+  } catch (err) {
+    next(err);
+  }
+});
+
+module.exports = router;

@@ -6,7 +6,9 @@ import {
 } from 'recharts';
 import { TrendingDown, PieChart as PieIcon, BarChart3, Clock } from 'lucide-react';
 
-const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
+const API_URL =
+  import.meta.env.VITE_API_URL ||
+  'https://pivotvault-production.up.railway.app';
 
 const InsightsDashboard = () => {
   const [data, setData] = React.useState(null);
@@ -15,7 +17,7 @@ const InsightsDashboard = () => {
   React.useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get(`${API_URL}/api/insights`);
+        const response = await axios.get(`${API_URL}/api/insights`); 
         setData(response.data);
       } catch (err) {
         console.error(err);

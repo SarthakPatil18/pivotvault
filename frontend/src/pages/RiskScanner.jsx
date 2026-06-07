@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -142,7 +143,9 @@ const RiskScanner = () => {
               <Zap className="absolute inset-0 m-auto w-12 h-12 text-accent animate-pulse" />
             </div>
             <h2 className="text-2xl font-data text-accent mb-2">{loadingText}</h2>
-            <p className="text-text-secondary">Comparing your idea against {historicalContext?.length || 437} data points...</p>
+            <p className="text-text-secondary">
+  Comparing your idea against 437 data points...
+            </p>
           </motion.div>
         )}
 

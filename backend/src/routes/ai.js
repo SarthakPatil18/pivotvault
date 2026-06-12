@@ -39,28 +39,18 @@ function getCacheKey(input) {
 // AI service for calling Gemini
 async function callGemini(prompt) {
   const { GoogleGenerativeAI } = require('@google/generative-ai');
-
-  console.log('Gemini key exists:', !!process.env.GEMINI_API_KEY);
-  console.log('Gemini key prefix:', process.env.GEMINI_API_KEY?.slice(0, 10));
-
   const genAI = new GoogleGenerativeAI(process.env.GEMINI_API_KEY);
-
   const model = genAI.getGenerativeModel({
     model: 'gemini-2.0-flash',
-    generationConfig: {
-      responseMimeType: 'application/json'
-    }
+    generationConfig: { responseMimeType: 'application/json' },
   });
-
-  try {
-    const result = await model.generateContent(prompt);
-    return JSON.parse(result.response.text());
-  } catch (err) {
-    console.error('FULL GEMINI ERROR:', JSON.stringify(err, null, 2));
-    throw err;
+  const result = await model.generateContent(prompt);
+  let text = result.response.text().trim();
+  if (text.startsWith('```')) {
+    text = text.replace(/^```(json)?/, '').replace(/```$/, '').trim();
   }
+  return JSON.parse(text);
 }
-  
 
 async function callGroq(prompt) {
   const Groq = require('groq-sdk');
@@ -73,10 +63,8 @@ async function callGroq(prompt) {
   return JSON.parse(response.choices[0].message.content);
 }
 
-async function callAI(prompt) {
-  console.log("Gemini key:", !!process.env.GEMINI_API_KEY);
-  console.log("Groq key:", !!process.env.GROQ_API_KEY);
-
+// type = 'risk' | 'research' — determines which mock schema to fall back to
+async function callAI(prompt, type = 'risk') {
   try {
     if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim() !== '' && process.env.GEMINI_API_KEY !== 'your-gemini-api-key-here') {
       return await callGemini(prompt);
@@ -86,15 +74,21 @@ async function callAI(prompt) {
   }
   try {
     if (process.env.GROQ_API_KEY && process.env.GROQ_API_KEY !== 'your-groq-api-key-here') {
+      console.log('Using Groq fallback');
       return await callGroq(prompt);
     }
   } catch (err) {
     console.warn('Groq also failed:', err.message);
   }
-  // Fallback: return mock analysis when no API keys configured
+
+  // Both AI providers failed — return correct mock schema for the caller
+  if (type === 'research') {
+    return generateMockResearch(prompt);
+  }
   return generateMockAnalysis(prompt);
 }
 
+// Fallback for /risk-scan
 function generateMockAnalysis(input) {
   const riskScore = Math.floor(Math.random() * 40) + 30;
   return {
@@ -112,9 +106,25 @@ function generateMockAnalysis(input) {
       { name: 'GymGPT', similarity: 72, keyLesson: 'Failed to retain users after initial novelty wore off' },
     ],
     recommendations: [
-      { priority: 'high', action: `Start with a landing page MVP for ${input.audience} before building full product`, rationale: 'Most failures in this space built before validating' },
+      { priority: 'high', action: 'Start with a landing page MVP before building full product', rationale: 'Most failures in this space built before validating' },
       { priority: 'high', action: 'Define clear retention metrics from day one', rationale: 'Churn was the primary killer for similar startups' },
       { priority: 'medium', action: 'Consider a freemium model to reduce acquisition friction', rationale: 'Similar startups struggled with paid acquisition costs' },
+    ],
+  };
+}
+
+// Fallback for /research
+function generateMockResearch(query) {
+  return {
+    aiSummary: `Analysis for: "${query}". AI services are currently unavailable. Please check that your Gemini or Groq API keys are configured correctly in Railway environment variables.`,
+    sources: [],
+    timeline: [],
+    relatedStartups: [],
+    keyLessons: [
+      {
+        lesson: 'AI service unavailable',
+        details: 'Configure a valid GEMINI_API_KEY or GROQ_API_KEY in your Railway environment variables to enable real analysis.',
+      },
     ],
   };
 }
@@ -125,13 +135,11 @@ router.post('/risk-scan', riskScanLimiter, async (req, res, next) => {
     const input = riskScanSchema.parse(req.body);
     const cacheKey = getCacheKey(input);
 
-    // Check cache
     const cached = scanCache.get(cacheKey);
     if (cached) {
       return res.json({ ...cached, cached: true });
     }
 
-    // Find similar startups from DB for context
     const similarStartups = await prisma.startup.findMany({
       where: {
         OR: [
@@ -170,7 +178,7 @@ Revenue Model: ${input.revenueModel}
 Team Size: ${input.teamSize}
 Industry: ${input.industry}`;
 
-    const analysis = await callAI(prompt);
+    const analysis = await callAI(prompt, 'risk');
 
     const result = {
       ...analysis,
@@ -178,7 +186,6 @@ Industry: ${input.industry}`;
       cached: false,
     };
 
-    // Cache for 1 hour
     scanCache.set(cacheKey, result);
     setTimeout(() => scanCache.delete(cacheKey), 60 * 60 * 1000);
 
@@ -188,14 +195,12 @@ Industry: ${input.industry}`;
       return res.status(400).json({ error: 'Invalid input', code: 'VALIDATION_ERROR', details: err.errors });
     }
     console.error('Risk scan error:', err);
-    // Return mock fallback on error
-    const mockResult = {
+    res.json({
       ...generateMockAnalysis(req.body),
       comparedAgainst: 0,
       cached: false,
       error: 'AI analysis unavailable, showing estimated scores',
-    };
-    res.json(mockResult);
+    });
   }
 });
 
@@ -210,16 +215,14 @@ router.post('/research', async (req, res, next) => {
     const input = researchSchema.parse(req.body);
     const query = input.query;
 
-    // FIX 1: Fetch all startups with full context
     const startups = await prisma.startup.findMany({
       include: {
         failureReasons: true,
         timelineEvents: true,
       },
-      take: 300
+      take: 20,
     });
 
-    // FIX 3: Get count of failed startups
     const failedCount = await prisma.startup.count({
       where: {
         status: 'failed',
@@ -239,21 +242,20 @@ Reasons:
 ${s.failureReasons.map(r => r.description).join(', ')}
 `).join('\n\n');
 
-    // FIX 4 + FIX 8: Updated prompt with stats and strict rules
     const prompt = `SYSTEM: You are an expert startup failure analyst. Analyze the user's research query using ONLY the historical context of startup failures provided below. You must return ONLY valid JSON matching this schema:
-    {
-      "aiSummary": "A detailed 2-3 paragraph analysis matching the query, detailing the mistakes, comparisons, and structural patterns. Support markdown formatting in the text (like **bolding** and bullets).",
-      "sources": ["slug-of-startup-1", "slug-of-startup-2"],
-      "timeline": [
-        { "year": "YYYY", "event": "Title of event", "startup": "Startup Name" }
-      ],
-      "relatedStartups": [
-        { "name": "Startup Name", "slug": "slug", "industry": "Industry", "status": "failed", "summary": "Short summary" }
-      ],
-      "keyLessons": [
-        { "lesson": "A core lesson", "details": "Elaborate on how to avoid it." }
-      ]
-    }
+{
+  "aiSummary": "A detailed 2-3 paragraph analysis matching the query, detailing the mistakes, comparisons, and structural patterns. Support markdown formatting in the text (like **bolding** and bullets).",
+  "sources": ["slug-of-startup-1", "slug-of-startup-2"],
+  "timeline": [
+    { "year": "YYYY", "event": "Title of event", "startup": "Startup Name" }
+  ],
+  "relatedStartups": [
+    { "name": "Startup Name", "slug": "slug", "industry": "Industry", "status": "failed", "summary": "Short summary" }
+  ],
+  "keyLessons": [
+    { "lesson": "A core lesson", "details": "Elaborate on how to avoid it." }
+  ]
+}
 
 Rules:
 - Use ONLY the supplied database.
@@ -261,9 +263,9 @@ Rules:
 - Never invent startups.
 - If information is unavailable, say so clearly in aiSummary.
 - Base all answers strictly on the provided records.
--Return ONLY valid JSON.
--Do not wrap JSON in markdown.
--Do not explain outside the JSON object.
+- Return ONLY valid JSON.
+- Do not wrap JSON in markdown.
+- Do not explain outside the JSON object.
 
 DATABASE STATS:
 Total startups: ${startups.length}
@@ -273,19 +275,30 @@ HISTORICAL CONTEXT FROM DATABASE:
 ${historicalContext || 'No startups found in database.'}
 
 USER QUERY: ${query}`;
-// force redeploy
-    // FIX 5: Simplified AI call
-    let result;
-    result = await callAI(prompt);
+
+    // callAI with type='research' guarantees correct fallback schema
+    const result = await callAI(prompt, 'research');
 
     res.json(result);
   } catch (err) {
     if (err instanceof z.ZodError) {
-      return res.status(400).json({ error: 'Invalid input', code: 'VALIDATION_ERROR', details: err.errors });
+      return res.status(400).json({
+        error: 'Invalid input',
+        code: 'VALIDATION_ERROR',
+        details: err.errors,
+      });
     }
+
+    if (err.status === 429) {
+      return res.status(429).json({
+        error: 'AI quota exceeded',
+        message: 'Please try again later',
+      });
+    }
+
     console.error('Research assistant error:', err);
-    // FIX 7: Return proper error instead of fake mock data
-    res.status(500).json({
+
+    return res.status(500).json({
       error: 'Research assistant unavailable',
       details: err.message,
     });

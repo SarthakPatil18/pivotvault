@@ -64,7 +64,8 @@ async function callGroq(prompt) {
   return JSON.parse(response.choices[0].message.content);
 }
 
-// type = 'risk' | 'research' — determines which mock schema to fall back to
+// type = 'risk' | 'research' | 'playbook' — risk has a legacy mock; the
+// others build grounded fallbacks at the route level with DB context.
 async function callAI(prompt, type = 'risk') {
   try {
     if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim() !== '' && process.env.GEMINI_API_KEY !== 'your-gemini-api-key-here') {
@@ -82,9 +83,9 @@ async function callAI(prompt, type = 'risk') {
     console.warn('Groq also failed:', err.message);
   }
 
-  // Both AI providers failed — return correct mock schema for the caller
-  if (type === 'research') {
-    return generateMockResearch(prompt);
+  // Both AI providers failed.
+  if (type === 'research' || type === 'playbook') {
+    return null;
   }
   return generateMockAnalysis(prompt);
 }
@@ -114,17 +115,148 @@ function generateMockAnalysis(input) {
   };
 }
 
-// Fallback for /research
-function generateMockResearch(query) {
+function prettyCategory(cat) {
+  return String(cat || 'unknown').replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
+}
+
+function findRelevantStartups(query, startups) {
+  const normalized = query.toLowerCase();
+  const tokens = normalized
+    .replace(/[^a-z0-9\s-]/g, ' ')
+    .split(/\s+/)
+    .filter((t) => t.length > 2);
+
+  const scored = startups.map((startup) => {
+    const haystack = [
+      startup.name,
+      startup.slug,
+      startup.industry,
+      startup.status,
+      startup.summary,
+      ...startup.failureReasons.map((r) => `${r.category} ${r.description}`),
+    ].join(' ').toLowerCase();
+
+    let score = 0;
+    if (normalized.includes(startup.name.toLowerCase())) score += 10;
+    if (normalized.includes(startup.slug.toLowerCase())) score += 10;
+    tokens.forEach((token) => {
+      if (haystack.includes(token)) score += 1;
+    });
+    return { startup, score };
+  });
+
+  const directMatches = scored.filter((item) => item.score >= 10);
+  if (directMatches.length > 0) {
+    return directMatches.sort((a, b) => b.score - a.score).map((item) => item.startup);
+  }
+
+  return scored
+    .filter((item) => item.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 5)
+    .map((item) => item.startup);
+}
+
+function getPrimaryReason(startup) {
+  return startup.failureReasons.find((r) => r.isPrimary) || startup.failureReasons[0] || null;
+}
+
+// Grounded fallback for /research when hosted AI providers are unavailable.
+function generateMockResearch(query, startups = [], failedCount = 0) {
+  const related = findRelevantStartups(query, startups);
+  const selected = related.length > 0 ? related : startups.slice(0, 4);
+  const missingNames = ['byju', 'byju\'s', 'byjus']
+    .some((name) => query.toLowerCase().includes(name)) && !startups.some((s) => s.name.toLowerCase().includes('byju'));
+
+  const comparisonText = selected.length >= 2
+    ? `The closest database-backed comparison is ${selected.map((s) => `**${s.name}**`).join(' vs. ')}.`
+    : selected.length === 1
+      ? `The database has a strong match for **${selected[0].name}**, so this analysis focuses on that case.`
+      : 'The database does not contain a strong direct match, so this analysis uses the available failure archive.';
+
+  const caseLines = selected.map((startup) => {
+    const primary = getPrimaryReason(startup);
+    return `**${startup.name}** (${startup.industry}) failed mainly around **${prettyCategory(primary?.category)}**: ${primary?.description || startup.summary}`;
+  });
+
   return {
-    aiSummary: `Analysis for: "${query}". AI services are currently unavailable. Please check that your Gemini or Groq API keys are configured correctly in Railway environment variables.`,
-    sources: [],
-    timeline: [],
-    relatedStartups: [],
-    keyLessons: [
+    aiSummary: [
+      `Analysis for: "${query}". ${comparisonText}`,
+      missingNames
+        ? 'Important limitation: Byju\'s is not currently present in the PivotVault database, so I will not invent facts about it. Add a Byju\'s record to compare it directly against Quibi.'
+        : `This fallback used ${startups.length} local startup records, including ${failedCount} failed-company records, because no hosted AI provider is currently available.`,
+      ...caseLines,
+    ].join('\n\n'),
+    sources: selected.map((s) => s.slug),
+    timeline: selected
+      .flatMap((startup) => startup.timelineEvents.slice(0, 2).map((event) => ({
+        year: new Date(event.eventDate).getFullYear().toString(),
+        event: event.title,
+        startup: startup.name,
+      })))
+      .slice(0, 6),
+    relatedStartups: selected.map((startup) => ({
+      name: startup.name,
+      slug: startup.slug,
+      industry: startup.industry,
+      status: startup.status,
+      summary: startup.summary,
+    })),
+    keyLessons: selected.slice(0, 4).map((startup) => {
+      const primary = getPrimaryReason(startup);
+      return {
+        lesson: `${startup.name}: ${prettyCategory(primary?.category)}`,
+        details: primary?.description || startup.summary,
+      };
+    }),
+  };
+}
+
+function generateLocalPlaybook(input, similar = []) {
+  const primaryReasons = similar.map(getPrimaryReason).filter(Boolean);
+  const common = primaryReasons[0];
+  const industry = input.industry || 'your market';
+  const idea = input.idea || 'your startup idea';
+
+  return {
+    title: `Founder Playbook: ${industry}`,
+    overview: similar.length > 0
+      ? `This playbook is generated from ${similar.length} similar PivotVault cases in ${industry}. The strongest repeated risk is ${prettyCategory(common?.category)}, so validate that before scaling product or spend.`
+      : `This playbook is generated without direct industry matches in the local database. It focuses on the most common early startup failure traps: weak demand validation, unclear retention, and scaling before unit economics are proven.`,
+    checklist: [
       {
-        lesson: 'AI service unavailable',
-        details: 'Configure a valid GEMINI_API_KEY or GROQ_API_KEY in your Railway environment variables to enable real analysis.',
+        phase: 'Validate',
+        items: [
+          `Interview 20 target users about the exact pain behind: ${idea.slice(0, 90)}${idea.length > 90 ? '...' : ''}`,
+          'Write one falsifiable demand hypothesis and define the metric that would disprove it.',
+          similar.length > 0 ? `Study ${similar[0].name} before choosing positioning or launch timing.` : 'Find at least 3 comparable failures before finalizing the MVP scope.',
+        ],
+      },
+      {
+        phase: 'Build',
+        items: [
+          'Ship the thinnest workflow that proves retention, not the broadest feature set.',
+          'Instrument activation, week-one retention, pricing intent, and churn reasons from day one.',
+          common ? `Add a specific guardrail for ${prettyCategory(common.category)} risk.` : 'Keep fixed costs low until repeat usage is visible.',
+        ],
+      },
+      {
+        phase: 'Scale',
+        items: [
+          'Increase acquisition spend only after the payback period and retention curve are known.',
+          'Run a pre-mortem every month: what would make this fail like the closest archive case?',
+          'Keep a shutdown/pivot threshold so sunk cost does not become strategy.',
+        ],
+      },
+    ],
+    pitfalls: [
+      ...primaryReasons.slice(0, 3).map((reason) => ({
+        mistake: prettyCategory(reason.category),
+        avoidance: reason.description,
+      })),
+      {
+        mistake: 'Scaling before proof',
+        avoidance: 'Do not hire, spend, or expand until a small customer segment repeats the behavior without founder hand-holding.',
       },
     ],
   };
@@ -283,7 +415,8 @@ ${historicalContext || 'No startups found in database.'}
 USER QUERY: ${query}`;
 
     // callAI with type='research' guarantees correct fallback schema
-    const result = await callAI(prompt, 'research');
+    const aiResult = await callAI(prompt, 'research');
+    const result = aiResult || generateMockResearch(query, startups, failedCount);
 
     res.json(result);
   } catch (err) {
@@ -333,23 +466,6 @@ const playbookSchema = z.object({
   stage: z.string().min(2).max(60).optional(),
 });
 
-function generateMockPlaybook(input) {
-  return {
-    title: `Founder Playbook: ${input.industry || 'Your Startup'}`,
-    overview:
-      'AI services are currently unavailable, so this is a generic checklist. Configure a valid GEMINI_API_KEY or GROQ_API_KEY for a personalized playbook.',
-    checklist: [
-      { phase: 'Validate', items: ['Talk to 20 target users before building', 'Define a falsifiable demand hypothesis'] },
-      { phase: 'Build', items: ['Ship a thin MVP in weeks, not months', 'Instrument retention from day one'] },
-      { phase: 'Scale', items: ['Only scale spend once unit economics are positive', 'Watch CAC vs LTV continuously'] },
-    ],
-    pitfalls: [
-      { mistake: 'Building before validating demand', avoidance: 'Run a landing-page or concierge MVP first.' },
-      { mistake: 'Ignoring retention', avoidance: 'Track cohort retention before chasing growth.' },
-    ],
-  };
-}
-
 // POST /api/ai/playbook (auth required) - personalized founder checklist
 router.post('/playbook', requireAuth, riskScanLimiter, async (req, res) => {
   try {
@@ -382,13 +498,12 @@ STAGE: ${input.stage || 'idea'}`;
 
     let playbook;
     try {
-      playbook = await callAI(prompt, 'risk');
-      // callAI returns risk-mock shape on failure; detect and swap
+      playbook = await callAI(prompt, 'playbook');
       if (!playbook || !playbook.checklist) {
-        playbook = generateMockPlaybook(input);
+        playbook = generateLocalPlaybook(input, similar);
       }
     } catch {
-      playbook = generateMockPlaybook(input);
+      playbook = generateLocalPlaybook(input, similar);
     }
 
     res.json({ ...playbook, comparedAgainst: similar.length });
@@ -397,7 +512,7 @@ STAGE: ${input.stage || 'idea'}`;
       return res.status(400).json({ error: 'Invalid input', code: 'VALIDATION_ERROR', details: err.errors });
     }
     console.error('Playbook error:', err);
-    res.json({ ...generateMockPlaybook(req.body || {}), comparedAgainst: 0, error: 'AI unavailable' });
+    res.json({ ...generateLocalPlaybook(req.body || {}, []), comparedAgainst: 0 });
   }
 });
 

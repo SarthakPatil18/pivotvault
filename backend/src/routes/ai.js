@@ -2,7 +2,7 @@ const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const { z } = require('zod');
 const rateLimit = require('express-rate-limit');
-const { requireAuth } = require('../middleware/auth');
+const { searchWeb } = require('../services/searchService');
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -57,16 +57,18 @@ async function callGroq(prompt) {
   const Groq = require('groq-sdk');
   const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
   const response = await groq.chat.completions.create({
-    model: 'llama-3.3-70b-versatile',
+    model: 'llama-3.1-70b-versatile',
     messages: [{ role: 'user', content: prompt }],
     response_format: { type: 'json_object' },
   });
   return JSON.parse(response.choices[0].message.content);
 }
 
-// type = 'risk' | 'research' | 'playbook' — risk has a legacy mock; the
-// others build grounded fallbacks at the route level with DB context.
+// type = 'risk' | 'research' — determines which mock schema to fall back to
 async function callAI(prompt, type = 'risk') {
+  console.log("Gemini key:", !!process.env.GEMINI_API_KEY);
+  console.log("Groq key:", !!process.env.GROQ_API_KEY);
+  console.log("Trying Groq...");
   try {
     if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim() !== '' && process.env.GEMINI_API_KEY !== 'your-gemini-api-key-here') {
       return await callGemini(prompt);
@@ -83,9 +85,9 @@ async function callAI(prompt, type = 'risk') {
     console.warn('Groq also failed:', err.message);
   }
 
-  // Both AI providers failed.
-  if (type === 'research' || type === 'playbook') {
-    return null;
+  // Both AI providers failed — return correct mock schema for the caller
+  if (type === 'research') {
+    return generateMockResearch(prompt);
   }
   return generateMockAnalysis(prompt);
 }
@@ -115,155 +117,24 @@ function generateMockAnalysis(input) {
   };
 }
 
-function prettyCategory(cat) {
-  return String(cat || 'unknown').replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
-}
-
-function findRelevantStartups(query, startups) {
-  const normalized = query.toLowerCase();
-  const tokens = normalized
-    .replace(/[^a-z0-9\s-]/g, ' ')
-    .split(/\s+/)
-    .filter((t) => t.length > 2);
-
-  const scored = startups.map((startup) => {
-    const haystack = [
-      startup.name,
-      startup.slug,
-      startup.industry,
-      startup.status,
-      startup.summary,
-      ...startup.failureReasons.map((r) => `${r.category} ${r.description}`),
-    ].join(' ').toLowerCase();
-
-    let score = 0;
-    if (normalized.includes(startup.name.toLowerCase())) score += 10;
-    if (normalized.includes(startup.slug.toLowerCase())) score += 10;
-    tokens.forEach((token) => {
-      if (haystack.includes(token)) score += 1;
-    });
-    return { startup, score };
-  });
-
-  const directMatches = scored.filter((item) => item.score >= 10);
-  if (directMatches.length > 0) {
-    return directMatches.sort((a, b) => b.score - a.score).map((item) => item.startup);
-  }
-
-  return scored
-    .filter((item) => item.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 5)
-    .map((item) => item.startup);
-}
-
-function getPrimaryReason(startup) {
-  return startup.failureReasons.find((r) => r.isPrimary) || startup.failureReasons[0] || null;
-}
-
-// Grounded fallback for /research when hosted AI providers are unavailable.
-function generateMockResearch(query, startups = [], failedCount = 0) {
-  const related = findRelevantStartups(query, startups);
-  const selected = related.length > 0 ? related : startups.slice(0, 4);
-  const missingNames = ['byju', 'byju\'s', 'byjus']
-    .some((name) => query.toLowerCase().includes(name)) && !startups.some((s) => s.name.toLowerCase().includes('byju'));
-
-  const comparisonText = selected.length >= 2
-    ? `The closest database-backed comparison is ${selected.map((s) => `**${s.name}**`).join(' vs. ')}.`
-    : selected.length === 1
-      ? `The database has a strong match for **${selected[0].name}**, so this analysis focuses on that case.`
-      : 'The database does not contain a strong direct match, so this analysis uses the available failure archive.';
-
-  const caseLines = selected.map((startup) => {
-    const primary = getPrimaryReason(startup);
-    return `**${startup.name}** (${startup.industry}) failed mainly around **${prettyCategory(primary?.category)}**: ${primary?.description || startup.summary}`;
-  });
-
+// Fallback for /research
+function generateMockResearch(query) {
   return {
-    aiSummary: [
-      `Analysis for: "${query}". ${comparisonText}`,
-      missingNames
-        ? 'Important limitation: Byju\'s is not currently present in the PivotVault database, so I will not invent facts about it. Add a Byju\'s record to compare it directly against Quibi.'
-        : `This fallback used ${startups.length} local startup records, including ${failedCount} failed-company records, because no hosted AI provider is currently available.`,
-      ...caseLines,
-    ].join('\n\n'),
-    sources: selected.map((s) => s.slug),
-    timeline: selected
-      .flatMap((startup) => startup.timelineEvents.slice(0, 2).map((event) => ({
-        year: new Date(event.eventDate).getFullYear().toString(),
-        event: event.title,
-        startup: startup.name,
-      })))
-      .slice(0, 6),
-    relatedStartups: selected.map((startup) => ({
-      name: startup.name,
-      slug: startup.slug,
-      industry: startup.industry,
-      status: startup.status,
-      summary: startup.summary,
-    })),
-    keyLessons: selected.slice(0, 4).map((startup) => {
-      const primary = getPrimaryReason(startup);
-      return {
-        lesson: `${startup.name}: ${prettyCategory(primary?.category)}`,
-        details: primary?.description || startup.summary,
-      };
-    }),
-  };
-}
-
-function generateLocalPlaybook(input, similar = []) {
-  const primaryReasons = similar.map(getPrimaryReason).filter(Boolean);
-  const common = primaryReasons[0];
-  const industry = input.industry || 'your market';
-  const idea = input.idea || 'your startup idea';
-
-  return {
-    title: `Founder Playbook: ${industry}`,
-    overview: similar.length > 0
-      ? `This playbook is generated from ${similar.length} similar PivotVault cases in ${industry}. The strongest repeated risk is ${prettyCategory(common?.category)}, so validate that before scaling product or spend.`
-      : `This playbook is generated without direct industry matches in the local database. It focuses on the most common early startup failure traps: weak demand validation, unclear retention, and scaling before unit economics are proven.`,
-    checklist: [
+    aiSummary: `Analysis for: "${query}". AI services are currently unavailable. Please check that your Gemini or Groq API keys are configured correctly in Railway environment variables.`,
+    sources: [],
+    timeline: [],
+    relatedStartups: [],
+    keyLessons: [
       {
-        phase: 'Validate',
-        items: [
-          `Interview 20 target users about the exact pain behind: ${idea.slice(0, 90)}${idea.length > 90 ? '...' : ''}`,
-          'Write one falsifiable demand hypothesis and define the metric that would disprove it.',
-          similar.length > 0 ? `Study ${similar[0].name} before choosing positioning or launch timing.` : 'Find at least 3 comparable failures before finalizing the MVP scope.',
-        ],
-      },
-      {
-        phase: 'Build',
-        items: [
-          'Ship the thinnest workflow that proves retention, not the broadest feature set.',
-          'Instrument activation, week-one retention, pricing intent, and churn reasons from day one.',
-          common ? `Add a specific guardrail for ${prettyCategory(common.category)} risk.` : 'Keep fixed costs low until repeat usage is visible.',
-        ],
-      },
-      {
-        phase: 'Scale',
-        items: [
-          'Increase acquisition spend only after the payback period and retention curve are known.',
-          'Run a pre-mortem every month: what would make this fail like the closest archive case?',
-          'Keep a shutdown/pivot threshold so sunk cost does not become strategy.',
-        ],
-      },
-    ],
-    pitfalls: [
-      ...primaryReasons.slice(0, 3).map((reason) => ({
-        mistake: prettyCategory(reason.category),
-        avoidance: reason.description,
-      })),
-      {
-        mistake: 'Scaling before proof',
-        avoidance: 'Do not hire, spend, or expand until a small customer segment repeats the behavior without founder hand-holding.',
+        lesson: 'AI service unavailable',
+        details: 'Configure a valid GEMINI_API_KEY or GROQ_API_KEY in your Railway environment variables to enable real analysis.',
       },
     ],
   };
 }
 
-// POST /api/ai/risk-scan (auth required)
-router.post('/risk-scan', requireAuth, riskScanLimiter, async (req, res, next) => {
+// POST /api/ai/risk-scan
+router.post('/risk-scan', riskScanLimiter, async (req, res, next) => {
   try {
     const input = riskScanSchema.parse(req.body);
     const cacheKey = getCacheKey(input);
@@ -342,17 +213,13 @@ const researchSchema = z.object({
   query: z.string().min(3).max(500),
 });
 
-// POST /api/ai/research (auth required)
-router.post('/research', requireAuth, async (req, res, next) => {
+// POST /api/ai/research
+router.post('/research', async (req, res, next) => {
   try {
     const input = researchSchema.parse(req.body);
     const query = input.query;
 
-    // Record search history for the logged-in user (best-effort)
-    prisma.searchHistory
-      .create({ data: { userId: req.user.id, query: query.slice(0, 500) } })
-      .catch((e) => console.warn('Could not record search history:', e.message));
-
+    // ── 1. Fetch from local DB ──────────────────────────────────────────────
     const startups = await prisma.startup.findMany({
       include: {
         failureReasons: true,
@@ -362,9 +229,7 @@ router.post('/research', requireAuth, async (req, res, next) => {
     });
 
     const failedCount = await prisma.startup.count({
-      where: {
-        status: 'failed',
-      },
+      where: { status: 'failed' },
     });
 
     const historicalContext = startups.map(s => `
@@ -372,15 +237,35 @@ Name: ${s.name}
 Slug: ${s.slug}
 Industry: ${s.industry}
 Status: ${s.status}
-Founded: ${s.foundingYear}
-Closed: ${s.shutdownYear ?? 'N/A'}
+Founded: ${s.foundedYear}
+Closed: ${s.closedYear}
 Summary: ${s.summary}
 
 Reasons:
 ${s.failureReasons.map(r => r.description).join(', ')}
 `).join('\n\n');
 
-    const prompt = `SYSTEM: You are an expert startup failure analyst. Analyze the user's research query using ONLY the historical context of startup failures provided below. You must return ONLY valid JSON matching this schema:
+    // ── 2. Fetch live web results via Tavily ────────────────────────────────
+    let webContext = '';
+    let webSearchUsed = false;
+
+    try {
+      const webResults = await searchWeb(query);
+      if (webResults && webResults.length > 0) {
+        webContext = webResults
+          .slice(0, 5) // top 5 results is enough for a prompt
+          .map((r, i) => `[${i + 1}] ${r.title}\nURL: ${r.url}\n${r.content}`)
+          .join('\n\n');
+        webSearchUsed = true;
+        console.log(`Tavily returned ${webResults.length} results for query: "${query}"`);
+      }
+    } catch (webErr) {
+      // Non-fatal — degrade gracefully to DB-only if Tavily fails
+      console.warn('Tavily search failed, continuing with DB only:', webErr.message);
+    }
+
+    // ── 3. Build prompt ─────────────────────────────────────────────────────
+    const prompt = `SYSTEM: You are an expert startup failure analyst. Analyze the user's research query using the historical startup failure database AND the latest web information provided below. Return ONLY valid JSON matching this schema:
 {
   "aiSummary": "A detailed 2-3 paragraph analysis matching the query, detailing the mistakes, comparisons, and structural patterns. Support markdown formatting in the text (like **bolding** and bullets).",
   "sources": ["slug-of-startup-1", "slug-of-startup-2"],
@@ -396,11 +281,11 @@ ${s.failureReasons.map(r => r.description).join(', ')}
 }
 
 Rules:
-- Use ONLY the supplied database.
+- Prioritise the startup failure DATABASE for slug references, timelines, and relatedStartups.
+- Use WEB RESULTS to add current context, recent news, and up-to-date trends.
 - Never invent statistics.
-- Never invent startups.
+- Never invent startups that are not in the database or web results.
 - If information is unavailable, say so clearly in aiSummary.
-- Base all answers strictly on the provided records.
 - Return ONLY valid JSON.
 - Do not wrap JSON in markdown.
 - Do not explain outside the JSON object.
@@ -409,16 +294,25 @@ DATABASE STATS:
 Total startups: ${startups.length}
 Failed startups: ${failedCount}
 
-HISTORICAL CONTEXT FROM DATABASE:
+HISTORICAL DATABASE CONTEXT:
 ${historicalContext || 'No startups found in database.'}
+
+LATEST WEB INFORMATION:
+${webContext || 'No web results available.'}
 
 USER QUERY: ${query}`;
 
-    // callAI with type='research' guarantees correct fallback schema
-    const aiResult = await callAI(prompt, 'research');
-    const result = aiResult || generateMockResearch(query, startups, failedCount);
+    // ── 4. Call AI ──────────────────────────────────────────────────────────
+    const result = await callAI(prompt, 'research');
 
-    res.json(result);
+    res.json({
+      ...result,
+      _meta: {
+        webSearchUsed,
+        dbStartupsUsed: startups.length,
+      },
+    });
+
   } catch (err) {
     if (err instanceof z.ZodError) {
       return res.status(400).json({
@@ -441,78 +335,6 @@ USER QUERY: ${query}`;
       error: 'Research assistant unavailable',
       details: err.message,
     });
-  }
-});
-
-// GET /api/ai/history - recent research queries for the logged-in user
-router.get('/history', requireAuth, async (req, res) => {
-  try {
-    const history = await prisma.searchHistory.findMany({
-      where: { userId: req.user.id },
-      orderBy: { createdAt: 'desc' },
-      take: 12,
-    });
-    res.json({ history: history.map((h) => ({ id: h.id, query: h.query, createdAt: h.createdAt })) });
-  } catch (err) {
-    console.error('History error:', err);
-    res.status(500).json({ error: 'Could not load history', code: 'INTERNAL_ERROR' });
-  }
-});
-
-// Founder Playbook schema
-const playbookSchema = z.object({
-  idea: z.string().min(10).max(500),
-  industry: z.string().min(2).max(100),
-  stage: z.string().min(2).max(60).optional(),
-});
-
-// POST /api/ai/playbook (auth required) - personalized founder checklist
-router.post('/playbook', requireAuth, riskScanLimiter, async (req, res) => {
-  try {
-    const input = playbookSchema.parse(req.body);
-
-    const similar = await prisma.startup.findMany({
-      where: { industry: { contains: input.industry, mode: 'insensitive' } },
-      include: { failureReasons: { take: 3 } },
-      take: 8,
-    });
-
-    const historicalContext = similar
-      .map((s) => `${s.name} (${s.status}): ${s.failureReasons.map((r) => r.description).join('; ')}`)
-      .join('\n');
-
-    const prompt = `SYSTEM: You are a startup mentor. Based ONLY on the historical failures below, generate a personalized founder playbook for the user's idea. Return ONLY valid JSON, no markdown:
-{
-  "title": "string",
-  "overview": "2-3 sentence summary of the biggest risks for this idea",
-  "checklist": [{ "phase": "Validate|Build|Scale", "items": ["actionable item"] }],
-  "pitfalls": [{ "mistake": "a common mistake", "avoidance": "how to avoid it" }]
-}
-
-HISTORICAL FAILURES:
-${historicalContext || 'No similar startups found.'}
-
-USER IDEA: ${input.idea}
-INDUSTRY: ${input.industry}
-STAGE: ${input.stage || 'idea'}`;
-
-    let playbook;
-    try {
-      playbook = await callAI(prompt, 'playbook');
-      if (!playbook || !playbook.checklist) {
-        playbook = generateLocalPlaybook(input, similar);
-      }
-    } catch {
-      playbook = generateLocalPlaybook(input, similar);
-    }
-
-    res.json({ ...playbook, comparedAgainst: similar.length });
-  } catch (err) {
-    if (err instanceof z.ZodError) {
-      return res.status(400).json({ error: 'Invalid input', code: 'VALIDATION_ERROR', details: err.errors });
-    }
-    console.error('Playbook error:', err);
-    res.json({ ...generateLocalPlaybook(req.body || {}, []), comparedAgainst: 0 });
   }
 });
 

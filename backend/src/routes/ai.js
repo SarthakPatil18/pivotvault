@@ -66,26 +66,39 @@ async function callGroq(prompt) {
 
 // type = 'risk' | 'research' — determines which mock schema to fall back to
 async function callAI(prompt, type = 'risk') {
-  console.log("Gemini key:", !!process.env.GEMINI_API_KEY);
-  console.log("Groq key:", !!process.env.GROQ_API_KEY);
-  console.log("Trying Groq...");
-  try {
-    if (process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim() !== '' && process.env.GEMINI_API_KEY !== 'your-gemini-api-key-here') {
-      return await callGemini(prompt);
-    }
-  } catch (err) {
-    console.warn('Gemini failed, trying Groq fallback:', err.message);
-  }
-  try {
-    if (process.env.GROQ_API_KEY && process.env.GROQ_API_KEY !== 'your-groq-api-key-here') {
-      console.log('Using Groq fallback');
+  const hasGemini = process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim() !== '' && process.env.GEMINI_API_KEY !== 'your-gemini-api-key-here';
+  const hasGroq = process.env.GROQ_API_KEY && process.env.GROQ_API_KEY.trim() !== '' && process.env.GROQ_API_KEY !== 'your-groq-api-key-here';
+
+  console.log("Gemini key:", hasGemini);
+  console.log("Groq key:", hasGroq);
+
+  // ── Try Groq first (faster, no quota issues on free tier) ──────────────
+  if (hasGroq) {
+    try {
+      console.log('Trying Groq...');
       return await callGroq(prompt);
+    } catch (err) {
+      console.warn('Groq failed:', err.message);
     }
-  } catch (err) {
-    console.warn('Groq also failed:', err.message);
   }
 
-  // Both AI providers failed — return correct mock schema for the caller
+  // ── Fall back to Gemini ─────────────────────────────────────────────────
+  if (hasGemini) {
+    try {
+      console.log('Trying Gemini...');
+      return await callGemini(prompt);
+    } catch (err) {
+      // If quota exceeded, log clearly and skip — no point retrying
+      if (err.message?.includes('429') || err.message?.includes('quota')) {
+        console.warn('Gemini quota exceeded — skipping.');
+      } else {
+        console.warn('Gemini failed:', err.message);
+      }
+    }
+  }
+
+  // ── Both failed — return mock ───────────────────────────────────────────
+  console.error('All AI providers failed. Returning mock response.');
   if (type === 'research') {
     return generateMockResearch(prompt);
   }

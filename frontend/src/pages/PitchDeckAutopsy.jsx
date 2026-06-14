@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FileText, Search, ShieldAlert, Target, Activity, Loader2, Sparkles, AlertTriangle, Upload, FileUp } from 'lucide-react';
 import api from '../lib/api';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import JSZip from 'jszip';
 
 const PitchDeckAutopsy = () => {

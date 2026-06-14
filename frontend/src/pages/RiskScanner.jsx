@@ -1,4 +1,4 @@
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Zap, AlertTriangle, CheckCircle2, Share2, ArrowRight, Loader2, Shuffle, Lightbulb, Sword, ShieldCheck, Target } from 'lucide-react';

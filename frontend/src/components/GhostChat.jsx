@@ -2,7 +2,7 @@ import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Ghost, X, Send, Terminal, MessageSquare, Loader2 } from 'lucide-react';
 import api from '../lib/api';
-import clsx from 'clsx';
+import { clsx } from 'clsx';
 
 const GhostChat = ({ startupSlug, startupName }) => {
   const [isOpen, setIsOpen] = React.useState(false);

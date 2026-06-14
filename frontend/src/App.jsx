@@ -20,6 +20,7 @@ import Sidebar from './components/Sidebar';
 import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
 import PitchDeckAutopsy from './pages/PitchDeckAutopsy.jsx';
+import { clsx } from 'clsx';
 
 function App() {
   const [isCollapsed, setIsCollapsed] = React.useState(() => {

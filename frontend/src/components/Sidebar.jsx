@@ -6,7 +6,7 @@ import {
   Bookmark, Brain, GitCompare, ClipboardCheck, Sun, Moon, LogOut, User,
   FileText, ChevronRight, PanelLeftClose, PanelLeft
 } from 'lucide-react';
-import { clsx } from 'clsx';
+import  clsx  from 'clsx';
 import { useTheme } from '../context/ThemeContext';
 import { useAuth } from '../context/AuthContext';
 

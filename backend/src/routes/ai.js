@@ -493,21 +493,38 @@ Return ONLY valid JSON with this schema:
   "pathologistVerdict": "A 2-3 sentence candid assessment of whether this startup will survive or join the vault."
 }`;
 
-    const analysis = await callGemini(prompt);
-    res.json(analysis);
+    let analysis;
 
-  } catch (err) {
-    console.error('Autopsy error:', err);
-    res.status(500).json({ 
-      error: 'Failed to perform autopsy',
-      overallRisk: 'High',
-      lethalWeaknesses: [
-        { slide: 'Monetization', issue: 'Over-reliance on ad revenue in a low-engagement niche.', historicalPrecedent: 'Similar to "Socially" which failed in 2021 after burn exceeded CPM.' }
-      ],
-      structuralRedFlags: ['Burn rate projections are missing', 'Competitive moat is purely "First Mover"'],
-      pathologistVerdict: 'The deck shows classic signs of "Product-First Blindness." Without a clear distribution advantage, this is a high-risk entry into the vault.'
-    });
-  }
+try {
+  analysis = await callAI(prompt, 'autopsy');
+} catch (err) {
+  console.error('Autopsy AI failed:', err);
+
+  analysis = {
+    overallRisk: 'High',
+    lethalWeaknesses: [
+      {
+        slide: 'AI Service',
+        issue: 'Analysis service temporarily unavailable',
+        historicalPrecedent: 'AI provider quota exceeded'
+      }
+    ],
+    structuralRedFlags: [
+      'Could not run full AI analysis'
+    ],
+    pathologistVerdict: 'AI providers are temporarily unavailable. Showing fallback analysis.'
+  };
+}
+
+res.json(analysis);
+
+} catch (err) {
+  console.error('Autopsy route error:', err);
+
+  res.status(500).json({
+    error: 'Failed to perform autopsy'
+  });
+}
 });
 
 // POST /api/ai/ghost-chat

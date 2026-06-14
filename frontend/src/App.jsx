@@ -22,14 +22,33 @@ import ScrollToTop from './components/ScrollToTop';
 import PitchDeckAutopsy from './pages/PitchDeckAutopsy.jsx';
 
 function App() {
-  const [isSidebarOpen, setIsSidebarOpen] = React.useState(false);
+  const [isCollapsed, setIsCollapsed] = React.useState(() => {
+    const saved = localStorage.getItem('sidebar-collapsed');
+    return saved ? JSON.parse(saved) : true;
+  });
+  const [isMobileOpen, setIsMobileOpen] = React.useState(false);
+
+  React.useEffect(() => {
+    localStorage.setItem('sidebar-collapsed', JSON.stringify(isCollapsed));
+  }, [isCollapsed]);
 
   return (
     <Router>
       <div className="flex min-h-screen bg-bg">
         <ScrollToTop />
-        <Sidebar isOpen={isSidebarOpen} setIsOpen={setIsSidebarOpen} />
-        <main className="flex-1 lg:ml-[260px] min-h-screen transition-all duration-300">
+        <Sidebar 
+          isCollapsed={isCollapsed} 
+          setIsCollapsed={setIsCollapsed}
+          isMobileOpen={isMobileOpen}
+          setIsMobileOpen={setIsMobileOpen}
+        />
+        <main 
+          className={clsx(
+            "flex-1 min-h-screen transition-all duration-300 ease-in-out",
+            "lg:ml-[72px]", // Base offset for collapsed state
+            !isCollapsed && "lg:ml-[280px]" // Offset for expanded state
+          )}
+        >
           <div className="pt-16 lg:pt-0"> {/* Mobile header offset */}
             <Routes>
               <Route path="/" element={<LandingPage />} />

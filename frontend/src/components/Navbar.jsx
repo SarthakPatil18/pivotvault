@@ -71,12 +71,12 @@ const Navbar = () => {
 
   return (
     <nav className="sticky top-0 z-[60] border-b border-border/40 bg-bg/70 backdrop-blur-xl">
-      <div className="max-w-[1440px] mx-auto px-6 sm:px-8 lg:px-12">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-20">
           
-          {/* Logo Section */}
-          <div className="flex items-center gap-12">
-            <Link to="/" className="flex items-center gap-3 group shrink-0 pr-4">
+          {/* Logo & Nav Group */}
+          <div className="flex items-center gap-8">
+            <Link to="/" className="flex items-center gap-3 group shrink-0">
               <div className="relative">
                 <Skull className="w-9 h-9 text-accent transition-transform duration-300 group-hover:scale-110" />
                 <div className="absolute inset-0 bg-accent/20 blur-xl rounded-full scale-0 group-hover:scale-150 transition-transform duration-500" />
@@ -87,7 +87,7 @@ const Navbar = () => {
             </Link>
 
             {/* Desktop Navigation */}
-            <div className="hidden xl:flex items-center gap-2 border-l border-border/50 pl-10 h-10">
+            <div className="hidden xl:flex items-center gap-1 border-l border-border/50 pl-8 h-10 ml-2">
               {primaryNav.map((item) => (
                 <NavLink 
                   key={item.path} 

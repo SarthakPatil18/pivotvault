@@ -401,57 +401,225 @@ router.post('/playbook', async (req, res) => {
   try {
     const { idea, industry, stage } = req.body;
 
-    // Search web
-    const webResults = await searchWeb(
-      `${idea} startup risks competitors failure patterns ${industry}`
-    );
+    if (!idea) return res.status(400).json({ error: 'Idea is required' });
 
-    const webContext = webResults
-      .slice(0, 5)
-      .map(r => `${r.title}: ${r.content}`)
-      .join('\n\n');
+    let webContext = '';
+    try {
+      const webResults = await searchWeb(`${idea} startup risks failure patterns ${industry}`);
+      webContext = webResults.slice(0, 5).map(r => `${r.title}: ${r.content}`).join('\n\n');
+    } catch (err) {
+      console.warn('Tavily failed for playbook:', err.message);
+    }
 
-    const prompt = `
-You are a startup advisor.
+    const prompt = `SYSTEM: You are a startup advisor. Return ONLY valid JSON, no markdown, no explanation.
 
 Startup Idea: ${idea}
 Industry: ${industry}
-Stage: ${stage}
+Stage: ${stage || 'idea'}
 
 WEB RESEARCH:
-${webContext}
+${webContext || 'No web data available.'}
 
-return res.json({
-  comparedAgainst: 15,
-  title: "College Social Media Startup Playbook",
-  overview: "Analysis based on competitors and failed startups...",
-  checklist: [
-    {
-      phase: "Validation",
-      items: [
-        "Interview 50 students",
-        "Validate retention"
-      ]
-    }
-  ],
-  pitfalls: [
-    {
-      mistake: "Ignoring moderation",
-      avoidance: "Build moderation systems from day one"
-    }
-  ]
-});
-`;
+Return this exact JSON schema:
+{
+  "summary": "2-3 sentence overview of the key challenge for this startup",
+  "checklist": ["actionable item 1", "actionable item 2", "actionable item 3", "actionable item 4", "actionable item 5"],
+  "risks": ["risk 1", "risk 2", "risk 3"],
+  "nextSteps": ["step 1", "step 2", "step 3"]
+}`;
 
     const result = await callAI(prompt, 'research');
-
     res.json(result);
 
   } catch (err) {
-    console.error(err);
-    res.status(500).json({ error: err.message });
+    console.error('Playbook error:', err);
+    res.json({
+      summary: `Founder playbook for your ${industry} startup idea.`,
+      checklist: ['Validate demand with 20 interviews', 'Build a landing page MVP', 'Measure retention from day one', 'Define your revenue model early', 'Set a 90-day runway milestone'],
+      risks: ['Weak product-market fit', 'High customer acquisition cost', 'Premature scaling'],
+      nextSteps: ['Launch a landing page this week', 'Get first 10 paying users', 'Talk to 5 churned users']
+    });
   }
 });
+
+// Founder personality tones per startup slug
+const founderPersonalities = {
+  'vine': 'reflective, regretful, honest — you built something beautiful but gave up too soon',
+  'theranos': 'defensive but increasingly honest — you believed in the vision but lost your way',
+  'quibi': 'ambitious but frustrated — you had resources but misread the market completely',
+  'yik-yak': 'candid and self-critical — you created something viral but could not control it',
+  'webvan': 'visionary but humbled — you were right about the future but wrong about the timing',
+  'default': 'honest, reflective, and candid — you learned hard lessons and want others to avoid your mistakes',
+};
+
+// POST /api/ai/ghost-chat
+router.post('/ghost-chat', async (req, res) => {
+  try {
+    const { slug, message, history = [] } = req.body;
+
+    if (!slug || !message) {
+      return res.status(400).json({ error: 'Slug and message are required' });
+    }
+
+    // 1. Fetch startup from DB
+    const startup = await prisma.startup.findUnique({
+      where: { slug },
+      include: {
+        failureReasons: true,
+        timelineEvents: {
+          orderBy: { eventDate: 'asc' },
+        },
+      },
+    });
+
+    if (!startup) {
+      return res.status(404).json({ error: 'Startup not found' });
+    }
+
+    // 2. Build context strings
+    const failureStr = startup.failureReasons
+      .map(r => `[${r.category}] ${r.description} (severity: ${r.severityScore}/10)`)
+      .join('\n');
+
+    const timelineStr = startup.timelineEvents
+      .map(e => `${e.eventDate.toISOString().slice(0, 7)} — ${e.stage.toUpperCase()}: ${e.title}. ${e.description}`)
+      .join('\n');
+
+    const chatHistory = history
+      .map(h => `${h.role === 'user' ? 'Visitor' : 'Founder'}: ${h.content}`)
+      .join('\n');
+
+    const tone = founderPersonalities[slug] || founderPersonalities['default'];
+
+    // 3. Build prompt — returns plain text, not JSON
+    const prompt = `You are the ghost of the founder of ${startup.name}, a ${startup.industry} startup that ${startup.status === 'failed' ? 'failed' : startup.status} after ${startup.lifetimeMonths || '?'} months.
+
+Your tone is: ${tone}
+
+About your startup:
+${startup.summary}
+
+${startup.founderStory ? `Your personal story:\n${startup.founderStory}\n` : ''}
+
+Why you failed:
+${failureStr || 'Reasons not fully documented.'}
+
+Key timeline events:
+${timelineStr || 'Timeline not available.'}
+
+Rules:
+- Speak in first person as the founder, from beyond the startup's grave.
+- Reference specific events, mistakes, and numbers from the data above when relevant.
+- Be radically honest. No PR spin. You are dead — there is nothing left to protect.
+- Keep responses to 3-5 sentences max. Be punchy and memorable.
+- If you don't know something, admit it honestly.
+- Never break character.
+
+${chatHistory ? `Previous conversation:\n${chatHistory}\n` : ''}
+Visitor: ${message}
+Founder:`;
+
+    // 4. Call AI — use text endpoint, not JSON
+    let reply = '';
+
+    const hasGemini = process.env.GEMINI_API_KEY && process.env.GEMINI_API_KEY.trim() !== '' && process.env.GEMINI_API_KEY !== 'your-gemini-api-key-here';
+    const hasGroq = process.env.GROQ_API_KEY && process.env.GROQ_API_KEY.trim() !== '' && process.env.GROQ_API_KEY !== 'your-groq-api-key-here';
+
+    if (hasGroq) {
+      try {
+        const Groq = require('groq-sdk');
+        const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+        const response = await groq.chat.completions.create({
+          model: 'llama-3.3-70b-versatile',
+          messages: [
+            { role: 'system', content: 'You are a startup founder ghost. Respond only as the founder. Plain text, no JSON, no markdown.' },
+            { role: 'user', content: prompt }
+          ],
+          temperature: 0.7,
+          max_tokens: 200,
+        });
+        reply = response.choices[0].message.content.trim();
+      } catch (err) {
+        console.warn('Groq failed for ghost-chat:', err.message);
+      }
+    }
+
+    if (!reply && hasGemini) {
+      try {
+        reply = await callGeminiText(prompt);
+      } catch (err) {
+        console.warn('Gemini failed for ghost-chat:', err.message);
+      }
+    }
+
+    if (!reply) {
+      reply = `We built something we believed in. But belief without validation is just expensive wishful thinking. I wish I had talked to more customers before writing a single line of code.`;
+    }
+
+    res.json({ content: reply });
+
+  } catch (err) {
+    console.error('Ghost chat error:', err);
+    res.status(500).json({ error: 'Failed to reach the founder\'s ghost', content: 'The connection to the afterlife is weak right now. Try again.' });
+  }
+});
+
+// POST /api/ai/compare-competitors
+router.post('/compare-competitors', async (req, res, next) => {
+  try {
+    const { idea, industry } = req.body;
+
+    if (!idea) {
+      return res.status(400).json({ error: 'Idea is required' });
+    }
+
+    const searchQuery = `Top active companies and startups in ${industry} doing ${idea.slice(0, 100)}`;
+    let webContext = '';
+    try {
+      const webResults = await searchWeb(searchQuery);
+      webContext = webResults
+        .slice(0, 5)
+        .map((r, i) => `[${i + 1}] ${r.title}: ${r.content}`)
+        .join('\n\n');
+    } catch (err) {
+      console.warn('Tavily search failed for competitors:', err.message);
+    }
+
+    const prompt = `SYSTEM: You are a market intelligence analyst. 
+Compare the user's startup idea against the live competitors found on the web.
+Identify why these competitors are currently winning (their moats) and where the user's idea might fall into a "failure trap" if they don't differentiate.
+
+USER IDEA: ${idea}
+INDUSTRY: ${industry}
+
+LIVE WEB CONTEXT:
+${webContext || `No specific live web data found. Use your general knowledge of the ${industry} market.`}
+
+Return ONLY valid JSON with this schema:
+{
+  "competitors": [{ "name": "string", "moat": "string", "threatLevel": "high|medium|low" }],
+  "gapAnalysis": "A detailed 1-2 paragraph analysis of the market gap or lack thereof.",
+  "survivalStrategy": "A specific strategic recommendation to survive against these incumbents."
+}`;
+
+    const analysis = await callAI(prompt, 'research');
+    res.json(analysis);
+
+  } catch (err) {
+    console.error('Competitor comparison error:', err);
+    res.status(500).json({
+      error: 'Failed to analyze competitors',
+      competitors: [
+        { name: 'Incumbent X', moat: 'Established brand and high switching costs.', threatLevel: 'high' },
+        { name: 'Startup Y', moat: 'Niche focus and rapid feature iteration.', threatLevel: 'medium' }
+      ],
+      gapAnalysis: 'The market is crowded. Your primary challenge is overcoming the network effects of established players.',
+      survivalStrategy: 'Focus on a hyper-specific unserved segment before attempting to scale.'
+    });
+  }
+});
+
+
 
 
 // POST /api/ai/compare-competitors

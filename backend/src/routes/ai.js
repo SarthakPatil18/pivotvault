@@ -454,7 +454,6 @@ Return ONLY valid JSON with this schema:
 
 // POST /api/ai/ghost-chat
 router.post('/ghost-chat', async (req, res, next) => {
-...
   try {
     const { slug, message, history = [] } = req.body;
 

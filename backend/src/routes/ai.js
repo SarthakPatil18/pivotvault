@@ -395,6 +395,55 @@ USER QUERY: ${query}`;
     });
   }
 });
+
+// POST /api/ai/playbook
+router.post('/playbook', async (req, res) => {
+  try {
+    const { idea, industry, stage } = req.body;
+
+    const prompt = `
+You are a startup advisor.
+
+Startup Idea: ${idea}
+Industry: ${industry}
+Stage: ${stage}
+
+Return ONLY JSON:
+
+{
+  "summary": "string",
+  "checklist": ["item1","item2","item3"],
+  "risks": ["risk1","risk2"],
+  "nextSteps": ["step1","step2"]
+}
+`;
+
+    const result = await callAI(prompt, 'research');
+    res.json(result);
+
+  } catch (err) {
+    console.error('Playbook error:', err);
+    res.json({
+      summary: `Founder playbook for ${idea}`,
+      checklist: [
+        'Validate demand',
+        'Interview customers',
+        'Build MVP',
+        'Measure retention'
+      ],
+      risks: [
+        'Weak PMF',
+        'High acquisition cost'
+      ],
+      nextSteps: [
+        'Launch landing page',
+        'Get first 20 users'
+      ]
+    });
+  }
+});
+
+
 // POST /api/ai/compare-competitors
 router.post('/compare-competitors', async (req, res, next) => {
   try {

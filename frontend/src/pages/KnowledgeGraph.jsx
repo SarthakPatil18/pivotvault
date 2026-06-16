@@ -60,7 +60,7 @@ const KnowledgeGraph = () => {
       .force("y", d3.forceY(height / 2).strength(0.05));
 
     // Links
-    const linkColor = theme === 'blue' ? '#CBD5E1' : '#1E293B';
+    const linkColor = theme === 'blue' ? '#2A2A2A' : '#CBD5E1';
     const link = g.append("g")
       .attr("stroke", linkColor)
       .attr("stroke-opacity", 0.6)
@@ -86,15 +86,15 @@ const KnowledgeGraph = () => {
     node.append("circle")
       .attr("r", d => d.type === 'startup' ? 12 : d.type === 'mistake' ? 8 : 6)
       .attr("fill", d => {
-        if (d.type === 'startup') return "#8B5CF6";
+        if (d.type === 'startup') return "#C58A2A"; // Gold for startups
         if (d.type === 'mistake') return "#F97316";
         return "#EF4444";
       })
-      .attr("stroke", theme === 'blue' ? "#FFFFFF" : "#0A0F1A")
+      .attr("stroke", theme === 'blue' ? "#0A0A0A" : "#FFFFFF")
       .attr("stroke-width", 2);
 
     // Labels
-    const labelColor = theme === 'blue' ? '#1E293B' : '#94A3B8';
+    const labelColor = theme === 'blue' ? '#F5F5F5' : '#1E293B';
     node.append("text")
       .text(d => d.name)
       .attr("x", 16)
@@ -104,7 +104,7 @@ const KnowledgeGraph = () => {
       .attr("font-weight", "600")
       .attr("font-family", "Plus Jakarta Sans")
       .style("pointer-events", "none")
-      .style("text-shadow", theme === 'blue' ? "0 0 4px rgba(255,255,255,0.8)" : "0 0 4px rgba(0,0,0,0.5)");
+      .style("text-shadow", theme === 'blue' ? "0 0 4px rgba(0,0,0,0.8)" : "0 0 4px rgba(255,255,255,0.8)");
 
     simulation.on("tick", () => {
       link

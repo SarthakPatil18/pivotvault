@@ -13,23 +13,23 @@
 
 :root,
 [data-theme='blue'] {
-  /* Dark navy / indigo (the original premium dark look) */
-  --color-bg: 11 16 32;          /* #0B1020 */
-  --color-surface: 17 24 39;     /* #111827 */
-  --color-surface-2: 31 41 55;   /* #1F2937 */
-  --color-border: 31 41 55;      /* #1F2937 */
-  --color-accent: 109 94 245;    /* #6D5EF5 */
-  --color-accent-2: 139 92 246;  /* #8B5CF6 */
-  --color-success: 16 185 129;   /* #10B981 */
-  --color-warning: 245 158 11;   /* #F59E0B */
-  --color-danger: 239 68 68;     /* #EF4444 */
-  --color-text-primary: 241 245 249;   /* #F1F5F9 */
-  --color-text-secondary: 148 163 184; /* #94A3B8 */
-  --color-text-muted: 71 85 105;       /* #475569 */
+  /* Premium Black & Gold Theme */
+  --color-bg: 10 10 10;           /* #0A0A0A Black */
+  --color-surface: 17 17 17;      /* #111111 Deep Surface */
+  --color-surface-2: 24 24 24;    /* #181818 Card Surface */
+  --color-border: 42 42 42;       /* #2A2A2A Muted Border */
+  --color-accent: 197 138 42;     /* #C58A2A Gold */
+  --color-accent-2: 214 155 58;   /* #D69B3A Lighter Gold */
+  --color-success: 34 197 94;     /* Emerald-500 */
+  --color-warning: 234 179 8;     /* Amber-500 */
+  --color-danger: 239 68 68;      /* Red-500 */
+  --color-text-primary: 245 245 245;   /* #F5F5F5 Off-white */
+  --color-text-secondary: 161 161 161; /* #A1A1A1 Gray */
+  --color-text-muted: 100 116 139;     /* #64748B Slate-500 */
 
-  --grid-line: 31 41 55;
-  --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-  --card-hover-shadow: 0 8px 32px 0 rgba(109, 94, 245, 0.15), inset 0 0 12px rgba(109, 94, 245, 0.05);
+  --grid-line: 42 42 42;
+  --card-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.6);
+  --card-hover-shadow: 0 8px 32px 0 rgba(197, 138, 42, 0.1), inset 0 0 12px rgba(197, 138, 42, 0.03);
   color-scheme: dark;
 }
 

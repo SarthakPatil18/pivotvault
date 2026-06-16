@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Skull, Search, Zap, BarChart2, MessageSquare, Share2, Menu, X, Sparkles,
   Bookmark, Brain, GitCompare, ClipboardCheck, Sun, Moon, LogOut, User,
-  FileText, ChevronRight, PanelLeftClose, PanelLeft
+  FileText, ChevronRight, PanelLeftClose, PanelLeft, Ghost
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useTheme } from '../context/ThemeContext';

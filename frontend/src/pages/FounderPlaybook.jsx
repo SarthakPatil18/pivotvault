@@ -75,32 +75,52 @@ const FounderPlaybook = () => {
           {result ? (
             <div className="space-y-6">
               <section className="glass-card p-7">
-                <div className="text-xs text-accent font-bold uppercase tracking-widest mb-2">Compared against {result.comparedAgainst ?? 0} cases</div>
-                <h2 className="text-2xl font-display font-bold mb-3">{result.title}</h2>
-                <p className="text-text-secondary leading-relaxed">{result.overview}</p>
+                <div className="text-xs text-accent font-bold uppercase tracking-widest mb-2">Failure-Aware Analysis</div>
+                <h2 className="text-2xl font-display font-bold mb-3">Your Strategic Playbook</h2>
+                <p className="text-text-secondary leading-relaxed">{result.summary}</p>
               </section>
-              <section className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                {(result.checklist || []).map((group) => (
-                  <div key={group.phase} className="glass-card p-5">
-                    <h3 className="font-display font-bold text-accent mb-4">{group.phase}</h3>
-                    <ul className="space-y-3">
-                      {(group.items || []).map((item) => (
-                        <li key={item} className="text-sm text-text-secondary flex gap-2">
-                          <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
-                          {item}
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                ))}
-              </section>
-              <section className="glass-card p-7">
-                <h3 className="text-lg font-display font-bold mb-4">Pitfalls to avoid</h3>
-                <div className="space-y-4">
-                  {(result.pitfalls || []).map((pitfall, i) => (
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <section className="glass-card p-6 border-accent/20">
+                  <h3 className="font-display font-bold text-accent mb-4 flex items-center gap-2">
+                    <div className="w-1.5 h-6 bg-accent rounded-full" />
+                    Validation Checklist
+                  </h3>
+                  <ul className="space-y-3">
+                    {(result.checklist || []).map((item, i) => (
+                      <li key={i} className="text-sm text-text-secondary flex gap-3">
+                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-accent shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+
+                <section className="glass-card p-6 border-red/20">
+                  <h3 className="font-display font-bold text-red mb-4 flex items-center gap-2">
+                    <div className="w-1.5 h-6 bg-red rounded-full" />
+                    Lethal Risks
+                  </h3>
+                  <ul className="space-y-3">
+                    {(result.risks || []).map((item, i) => (
+                      <li key={i} className="text-sm text-text-secondary flex gap-3">
+                        <span className="mt-1.5 w-1.5 h-1.5 rounded-full bg-red shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </section>
+              </div>
+
+              <section className="glass-card p-7 bg-accent/5 border-accent/20">
+                <h3 className="text-lg font-display font-bold mb-4 flex items-center gap-2">
+                  <Sparkles className="w-5 h-5 text-accent" />
+                  Recommended Next Steps
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                  {(result.nextSteps || []).map((step, i) => (
                     <div key={i} className="border border-border/60 rounded-xl p-4 bg-bg/30">
-                      <div className="font-bold text-danger mb-1">{pitfall.mistake}</div>
-                      <div className="text-sm text-text-secondary">{pitfall.avoidance}</div>
+                      <div className="text-sm text-text-primary font-medium">{step}</div>
                     </div>
                   ))}
                 </div>

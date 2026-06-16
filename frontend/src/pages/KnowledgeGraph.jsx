@@ -3,6 +3,7 @@ import * as d3 from 'd3';
 import axios from 'axios';
 import { Info, ZoomIn, ZoomOut, RotateCcw, Building2, MapPin, Skull } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useTheme } from '../context/ThemeContext';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 

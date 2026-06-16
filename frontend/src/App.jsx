@@ -16,6 +16,7 @@ import HistoryPage from './pages/HistoryPage';
 import FailureQuiz from './pages/FailureQuiz';
 import FounderPlaybook from './pages/FounderPlaybook';
 import CompareStartups from './pages/CompareStartups';
+import HallOfGhosts from './pages/HallOfGhosts';
 import Sidebar from './components/Sidebar';
 import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
@@ -35,7 +36,7 @@ function App() {
 
   return (
     <Router>
-      <div className="flex min-h-screen bg-bg">
+      <div className="flex min-h-screen bg-bg overflow-x-hidden">
         <ScrollToTop />
         <Sidebar 
           isCollapsed={isCollapsed} 
@@ -43,14 +44,13 @@ function App() {
           isMobileOpen={isMobileOpen}
           setIsMobileOpen={setIsMobileOpen}
         />
-        <main 
+        <div 
           className={clsx(
-            "flex-1 min-h-screen transition-all duration-300 ease-in-out",
-            "lg:ml-[72px]", // Base offset for collapsed state
-            !isCollapsed && "lg:ml-[280px]" // Offset for expanded state
+            "flex-1 flex flex-col min-h-screen transition-all duration-300 ease-in-out min-w-0",
+            isCollapsed ? "lg:pl-[72px]" : "lg:pl-[280px]"
           )}
         >
-          <div className="pt-16 lg:pt-0"> {/* Mobile header offset */}
+          <main className="flex-1 flex flex-col pt-16 lg:pt-0">
             <Routes>
               <Route path="/" element={<LandingPage />} />
               <Route path="/explore" element={<FailureExplorer />} />
@@ -65,12 +65,13 @@ function App() {
               <Route path="/playbook" element={<ProtectedRoute><FounderPlaybook /></ProtectedRoute>} />
               <Route path="/quiz" element={<FailureQuiz />} />
               <Route path="/compare" element={<CompareStartups />} />
+              <Route path="/ghosts" element={<HallOfGhosts />} />
               <Route path="/autopsy" element={<ProtectedRoute><PitchDeckAutopsy /></ProtectedRoute>} />
               <Route path="/login" element={<Login />} />
               <Route path="/signup" element={<Signup />} />
             </Routes>
-          </div>
-        </main>
+          </main>
+        </div>
       </div>
     </Router>
   );

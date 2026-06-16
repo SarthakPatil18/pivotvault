@@ -4,11 +4,22 @@ import { Ghost, X, Send, Terminal, MessageSquare, Loader2 } from 'lucide-react';
 import api from '../lib/api';
 import { clsx } from 'clsx';
 
-const GhostChat = ({ startupSlug, startupName }) => {
-  const [isOpen, setIsOpen] = React.useState(false);
+const GhostChat = ({ startupSlug, startupName, autoOpen = false }) => {
+  const [isOpen, setIsOpen] = React.useState(autoOpen);
   const [messages, setMessages] = React.useState([
     { role: 'founder', content: `Hello. I am the founder of ${startupName}. Ask me anything about our journey and why we ultimately failed. I have nothing to hide now.` }
   ]);
+
+  React.useEffect(() => {
+    if (autoOpen) setIsOpen(true);
+  }, [autoOpen, startupSlug]);
+
+  // Reset messages when startup changes
+  React.useEffect(() => {
+    setMessages([
+      { role: 'founder', content: `Hello. I am the founder of ${startupName}. Ask me anything about our journey and why we ultimately failed. I have nothing to hide now.` }
+    ]);
+  }, [startupSlug, startupName]);
   const [input, setInput] = React.useState('');
   const [loading, setLoading] = React.useState(false);
   const scrollRef = React.useRef(null);

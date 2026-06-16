@@ -80,6 +80,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOpen })
   const learnNav = [
     { name: 'Failure Quiz', path: '/quiz', icon: Brain },
     { name: 'Founder Confessions', path: '/confessions', icon: MessageSquare },
+    { name: 'Hall of Ghosts', path: '/ghosts', icon: Ghost },
   ];
 
   const sidebarContent = (

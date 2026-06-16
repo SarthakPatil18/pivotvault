@@ -18,6 +18,27 @@ const RiskScanner = () => {
   const [compLoading, setCompLoading] = React.useState(false);
   const [compResult, setCompResult] = React.useState(null);
   const [loadingText, setLoadingText] = React.useState('');
+  const [simulating, setSimulating] = React.useState(null); // null | pivotIndex
+  const [simulatedResult, setSimulatedResult] = React.useState(null);
+
+  const handleSimulatePivot = (pivot, index) => {
+    setSimulating(index);
+    setTimeout(() => {
+      // Create a "simulated" improvement
+      const improvedScore = Math.max(20, result.riskScore - 25);
+      const improvedBreakdown = {
+        ...result.riskBreakdown,
+        customerAcquisition: Math.max(15, result.riskBreakdown.customerAcquisition - 30),
+        retention: Math.max(10, result.riskBreakdown.retention - 20)
+      };
+      setSimulatedResult({
+        pivot,
+        score: improvedScore,
+        breakdown: improvedBreakdown
+      });
+      setSimulating(null);
+    }, 2000);
+  };
 
   const loadingMessages = [
     "Scanning failure database...",
@@ -75,6 +96,15 @@ const RiskScanner = () => {
     { subject: 'Market', A: result.riskBreakdown.competition, fullMark: 100 },
     { subject: 'Timing', A: result.riskBreakdown.timing, fullMark: 100 },
   ] : [];
+
+  const currentScore = simulatedResult ? simulatedResult.score : result?.riskScore;
+  const currentBreakdown = simulatedResult ? [
+    { subject: 'CAC', A: simulatedResult.breakdown.customerAcquisition, fullMark: 100 },
+    { subject: 'Retention', A: simulatedResult.breakdown.retention, fullMark: 100 },
+    { subject: 'Revenue', A: result.riskBreakdown.monetization, fullMark: 100 },
+    { subject: 'Market', A: result.riskBreakdown.competition, fullMark: 100 },
+    { subject: 'Timing', A: result.riskBreakdown.timing, fullMark: 100 },
+  ] : radarData;
 
   return (
     <div className="max-w-4xl mx-auto px-4 py-20">
@@ -172,7 +202,12 @@ const RiskScanner = () => {
             className="space-y-10"
           >
             <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="md:col-span-1 glass-card p-8 flex flex-col items-center justify-center text-center">
+              <div className="md:col-span-1 glass-card p-8 flex flex-col items-center justify-center text-center relative overflow-hidden">
+                {simulatedResult && (
+                  <div className="absolute top-0 left-0 w-full bg-green/20 text-green text-[10px] font-bold py-1 uppercase tracking-widest animate-pulse">
+                    Simulated Pivot Active
+                  </div>
+                )}
                 <div className="text-sm font-bold text-text-muted uppercase tracking-[0.2em] mb-6">Aggregate Risk</div>
                 <div className="relative w-48 h-48 flex items-center justify-center mb-6">
                   <svg className="absolute inset-0 w-full h-full -rotate-90">
@@ -180,29 +215,40 @@ const RiskScanner = () => {
                     <circle 
                       cx="96" cy="96" r="88" stroke="currentColor" strokeWidth="12" fill="transparent" 
                       strokeDasharray={2 * Math.PI * 88}
-                      strokeDashoffset={2 * Math.PI * 88 * (1 - result.riskScore / 100)}
+                      strokeDashoffset={2 * Math.PI * 88 * (1 - currentScore / 100)}
                       className={clsx(
                         'transition-all duration-1000',
-                        result.riskScore > 70 ? 'text-red' : result.riskScore > 40 ? 'text-accent' : 'text-green'
+                        currentScore > 70 ? 'text-red' : currentScore > 40 ? 'text-accent' : 'text-green'
                       )}
                     />
                   </svg>
-                  <div className="text-6xl font-data font-bold">{result.riskScore}</div>
+                  <div className="text-6xl font-data font-bold">{currentScore}</div>
                 </div>
-                <div className="text-red font-bold flex items-center gap-2">
-                  <AlertTriangle className="w-5 h-5" />
-                  {result.riskScore > 60 ? 'HIGH RISK' : 'MODERATE RISK'}
+                <div className={clsx(
+                  "font-bold flex items-center gap-2",
+                  currentScore > 70 ? "text-red" : currentScore > 40 ? "text-accent" : "text-green"
+                )}>
+                  {currentScore > 60 ? <AlertTriangle className="w-5 h-5" /> : <CheckCircle2 className="w-5 h-5" />}
+                  {currentScore > 70 ? 'HIGH RISK' : currentScore > 40 ? 'MODERATE RISK' : 'LOW RISK'}
                 </div>
+                {simulatedResult && (
+                  <button 
+                    onClick={() => setSimulatedResult(null)}
+                    className="mt-4 text-[10px] text-text-muted hover:text-accent underline uppercase font-bold tracking-widest"
+                  >
+                    Reset to Original
+                  </button>
+                )}
               </div>
 
               <div className="md:col-span-2 glass-card p-8">
                 <div className="text-sm font-bold text-text-muted uppercase tracking-[0.2em] mb-6 text-center">Risk Analysis Matrix</div>
                 <div className="h-[250px]">
                   <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={radarData}>
+                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={currentBreakdown}>
                       <PolarGrid stroke="#1E293B" />
                       <PolarAngleAxis dataKey="subject" tick={{ fill: '#94A3B8', fontSize: 12 }} />
-                      <Radar name="Risk" dataKey="A" stroke="#F97316" fill="#F97316" fillOpacity={0.6} />
+                      <Radar name="Risk" dataKey="A" stroke={simulatedResult ? "#10B981" : "#F97316"} fill={simulatedResult ? "#10B981" : "#F97316"} fillOpacity={0.6} />
                     </RadarChart>
                   </ResponsiveContainer>
                 </div>
@@ -309,23 +355,46 @@ const RiskScanner = () => {
 
             {result.suggestedPivots && (
               <div className="glass-card p-10 bg-accent/5 border-accent/20">
-                <h3 className="text-2xl font-display font-bold mb-8 flex items-center gap-3">
+                <h3 className="text-2xl font-display font-bold mb-2 flex items-center gap-3">
                   <Shuffle className="text-accent w-8 h-8" />
                   AI-Powered Strategic Pivots
                 </h3>
+                <p className="text-text-secondary text-sm mb-8 pl-11 italic">Select a pivot to simulate its impact on your risk profile.</p>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   {result.suggestedPivots.map((pivot, i) => (
-                    <div key={i} className="p-6 rounded-xl bg-surface/50 border border-border/50 hover:border-accent/40 transition-all group">
+                    <motion.div 
+                      key={i} 
+                      whileHover={{ scale: 1.02 }}
+                      className={clsx(
+                        "p-6 rounded-xl border transition-all group relative cursor-pointer",
+                        simulatedResult?.pivot === pivot ? "bg-green/10 border-green/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]" : "bg-surface/50 border-border/50 hover:border-accent/40"
+                      )}
+                      onClick={() => handleSimulatePivot(pivot, i)}
+                    >
+                      {simulating === i && (
+                        <div className="absolute inset-0 bg-bg/80 backdrop-blur-sm rounded-xl flex flex-col items-center justify-center z-10 gap-2">
+                          <Loader2 className="w-6 h-6 text-accent animate-spin" />
+                          <div className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">Simulating Pivot...</div>
+                        </div>
+                      )}
                       <div className="flex items-center gap-2 mb-3">
-                        <Lightbulb className="w-5 h-5 text-accent" />
-                        <div className="text-xs font-bold text-accent uppercase tracking-widest">{pivot.type}</div>
+                        <Lightbulb className={clsx("w-5 h-5", simulatedResult?.pivot === pivot ? "text-green" : "text-accent")} />
+                        <div className={clsx("text-xs font-bold uppercase tracking-widest", simulatedResult?.pivot === pivot ? "text-green" : "text-accent")}>{pivot.type}</div>
                       </div>
                       <div className="font-bold text-lg mb-2 text-text-primary group-hover:text-accent transition-colors">{pivot.description}</div>
                       <div className="text-text-secondary text-sm italic border-l-2 border-border pl-4 mt-4">
                         <span className="font-bold text-text-muted not-italic uppercase text-[10px] block mb-1">Historical Precedent</span>
                         "{pivot.historicalExample}"
                       </div>
-                    </div>
+                      <div className="mt-4 pt-4 border-t border-border/20 flex justify-end">
+                        <span className={clsx(
+                          "text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5",
+                          simulatedResult?.pivot === pivot ? "text-green" : "text-accent opacity-0 group-hover:opacity-100 transition-opacity"
+                        )}>
+                          {simulatedResult?.pivot === pivot ? "SIMULATION ACTIVE" : "SIMULATE IMPACT →"}
+                        </span>
+                      </div>
+                    </motion.div>
                   ))}
                 </div>
               </div>

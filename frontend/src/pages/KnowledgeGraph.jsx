@@ -11,6 +11,7 @@ const KnowledgeGraph = () => {
   const [data, setData] = React.useState(null);
   const [selectedNode, setSelectedNode] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
+  const { theme } = useTheme();
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -58,8 +59,9 @@ const KnowledgeGraph = () => {
       .force("y", d3.forceY(height / 2).strength(0.05));
 
     // Links
+    const linkColor = theme === 'blue' ? '#CBD5E1' : '#1E293B';
     const link = g.append("g")
-      .attr("stroke", "#1E293B")
+      .attr("stroke", linkColor)
       .attr("stroke-opacity", 0.6)
       .selectAll("line")
       .data(data.links)
@@ -87,18 +89,21 @@ const KnowledgeGraph = () => {
         if (d.type === 'mistake') return "#F97316";
         return "#EF4444";
       })
-      .attr("stroke", "#0A0F1A")
+      .attr("stroke", theme === 'blue' ? "#FFFFFF" : "#0A0F1A")
       .attr("stroke-width", 2);
 
     // Labels
+    const labelColor = theme === 'blue' ? '#1E293B' : '#94A3B8';
     node.append("text")
       .text(d => d.name)
       .attr("x", 16)
       .attr("y", 4)
-      .attr("fill", "#94A3B8")
+      .attr("fill", labelColor)
       .attr("font-size", "10px")
+      .attr("font-weight", "600")
       .attr("font-family", "Plus Jakarta Sans")
-      .style("pointer-events", "none");
+      .style("pointer-events", "none")
+      .style("text-shadow", theme === 'blue' ? "0 0 4px rgba(255,255,255,0.8)" : "0 0 4px rgba(0,0,0,0.5)");
 
     simulation.on("tick", () => {
       link
@@ -144,13 +149,13 @@ const KnowledgeGraph = () => {
         </div>
 
         <div className="flex gap-2">
-          <button className="p-3 bg-surface-2 border border-border rounded-lg text-text-secondary hover:text-white transition-colors">
+          <button className="p-3 bg-surface-2 border border-border rounded-lg text-text-secondary hover:text-text-primary transition-colors">
             <ZoomIn className="w-5 h-5" />
           </button>
-          <button className="p-3 bg-surface-2 border border-border rounded-lg text-text-secondary hover:text-white transition-colors">
+          <button className="p-3 bg-surface-2 border border-border rounded-lg text-text-secondary hover:text-text-primary transition-colors">
             <ZoomOut className="w-5 h-5" />
           </button>
-          <button className="p-3 bg-surface-2 border border-border rounded-lg text-text-secondary hover:text-white transition-colors">
+          <button className="p-3 bg-surface-2 border border-border rounded-lg text-text-secondary hover:text-text-primary transition-colors">
             <RotateCcw className="w-5 h-5" />
           </button>
         </div>
@@ -169,7 +174,7 @@ const KnowledgeGraph = () => {
           >
             <button 
               onClick={() => setSelectedNode(null)}
-              className="absolute top-4 right-4 text-text-muted hover:text-white transition-colors"
+              className="absolute top-4 right-4 text-text-muted hover:text-text-primary transition-colors"
             >
               Close
             </button>
@@ -178,7 +183,7 @@ const KnowledgeGraph = () => {
               {selectedNode.name.charAt(0)}
             </div>
             
-            <h2 className="text-2xl font-display font-bold mb-2">{selectedNode.name}</h2>
+            <h2 className="text-2xl font-display font-bold mb-2 text-text-primary">{selectedNode.name}</h2>
             <div className="bg-red/10 text-red border border-red/20 px-2 py-0.5 rounded-badge text-[10px] font-bold uppercase w-fit mb-6">
               {selectedNode.status}
             </div>

@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import { Search, Sparkles, AlertTriangle, ArrowRight, TrendingUp, BarChart3, Database, ShieldAlert } from 'lucide-react';
 import StartupCard from '../components/StartupCard';
+import LiveIntelPulse from '../components/LiveIntelPulse';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
@@ -150,6 +151,8 @@ const LandingPage = () => {
           </motion.div>
         </div>
       </section>
+
+      <LiveIntelPulse />
 
       {/* Featured Failures Preview */}
       <section className="py-20 border-t border-border/60 bg-surface/10 relative">

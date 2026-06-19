@@ -56,7 +56,7 @@ const ConfessionWall = () => {
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 py-20">
+    <div className="pv-content-container py-12">
       <div className="text-center mb-16">
         <Ghost className="w-12 h-12 text-accent mx-auto mb-4" />
         <h1 className="text-5xl font-display font-bold mb-4">Founder Confession Wall</h1>
@@ -69,7 +69,7 @@ const ConfessionWall = () => {
       <div className="grid grid-cols-1 lg:grid-cols-4 gap-10">
         {/* Sticky Input Sidebar */}
         <div className="lg:col-span-1">
-          <div className="sticky top-24 glass-card p-6">
+          <div className="sticky top-24 pv-card p-6">
             <h3 className="font-bold mb-4 flex items-center gap-2">
               <MessageSquare className="w-4 h-4 text-accent" />
               Confess Your Failure
@@ -107,7 +107,7 @@ const ConfessionWall = () => {
           {loading ? (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               {[1,2,3,4,5,6].map(i => (
-                <div key={i} className="h-32 glass-card animate-pulse bg-surface-2/50" />
+                <div key={i} className="h-32 pv-card animate-pulse bg-surface-2/50" />
               ))}
             </div>
           ) : (

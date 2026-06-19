@@ -74,7 +74,7 @@ const GhostChat = ({ startupSlug, startupName, autoOpen = false }) => {
             initial={{ opacity: 0, y: 100, scale: 0.8 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             exit={{ opacity: 0, y: 100, scale: 0.8 }}
-            className="fixed bottom-28 right-8 w-96 h-[500px] glass-card flex flex-col z-50 shadow-2xl overflow-hidden border-accent/30"
+            className="fixed bottom-28 right-8 w-96 h-[500px] pv-card flex flex-col z-50 shadow-2xl overflow-hidden border-accent/30"
           >
             {/* Header */}
             <div className="p-4 bg-accent/10 border-b border-accent/20 flex items-center justify-between">

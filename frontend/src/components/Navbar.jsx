@@ -18,11 +18,11 @@ const NavLink = ({ item, isActive, mobile, onClick }) => {
       to={item.path}
       onClick={onClick}
       className={clsx(
-        "relative flex items-center gap-2.5 transition-all duration-200 group",
+        "pv-nav-item relative group",
         mobile ? "w-full p-4 text-lg font-semibold" : "px-3 py-2 text-sm font-medium",
         isActive 
-          ? "text-accent bg-accent/5 rounded-md" 
-          : "text-text-secondary hover:text-text-primary"
+          ? "pv-nav-item-active"
+          : ""
       )}
     >
       <Icon className={clsx("shrink-0", mobile ? "w-6 h-6" : "w-[18px] h-[18px]")} />
@@ -163,7 +163,7 @@ const Navbar = () => {
             ) : (
               <Link 
                 to="/login" 
-                className="bg-accent hover:bg-orange-600 text-white px-7 py-2.5 rounded-full text-sm font-black tracking-wide transition-all shadow-lg shadow-accent/20"
+                className="pv-btn-primary rounded-full px-7"
               >
                 Sign In
               </Link>
@@ -235,7 +235,7 @@ const Navbar = () => {
                   )}
                 </div>
                 {!isAuthed && (
-                  <Link to="/login" onClick={() => setIsOpen(false)} className="bg-accent text-white px-8 py-4 rounded-xl font-bold">
+                  <Link to="/login" onClick={() => setIsOpen(false)} className="pv-btn-primary h-control-lg rounded-xl px-8">
                     Get Started
                   </Link>
                 )}

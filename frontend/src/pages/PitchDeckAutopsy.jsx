@@ -62,7 +62,7 @@ const PitchDeckAutopsy = () => {
   };
 
   return (
-    <div className="max-w-5xl mx-auto px-4 py-20">
+    <div className="pv-content-container py-12">
       <div className="text-center mb-12">
         <Activity className="w-16 h-16 text-accent mx-auto mb-4" />
         <h1 className="text-5xl font-display font-bold mb-4">Pitch Deck Autopsy</h1>
@@ -75,7 +75,7 @@ const PitchDeckAutopsy = () => {
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="glass-card p-10"
+          className="pv-card p-10"
         >
           <form onSubmit={handleAutopsy} className="space-y-8">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
@@ -165,7 +165,7 @@ const PitchDeckAutopsy = () => {
           {/* Risk Level Header */}
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             <div className={clsx(
-              "md:col-span-1 glass-card p-8 flex flex-col items-center justify-center text-center border-l-8",
+              "md:col-span-1 pv-card p-8 flex flex-col items-center justify-center text-center border-l-8",
               result.overallRisk === 'Lethal' ? "border-l-red bg-red/5" : "border-l-warning bg-warning/5"
             )}>
               <div className="text-sm font-bold text-text-muted uppercase tracking-[0.2em] mb-4">Overall Risk</div>
@@ -179,7 +179,7 @@ const PitchDeckAutopsy = () => {
               </div>
             </div>
 
-            <div className="md:col-span-2 glass-card p-8 bg-accent/5 border-accent/20">
+            <div className="md:col-span-2 pv-card p-8 bg-accent/5 border-accent/20">
               <div className="text-sm font-bold text-accent uppercase tracking-[0.2em] mb-4 flex items-center gap-2">
                 <Sparkles className="w-4 h-4" />
                 Pathologist's Verdict
@@ -191,7 +191,7 @@ const PitchDeckAutopsy = () => {
           </div>
 
           {/* Lethal Weaknesses */}
-          <div className="glass-card p-10">
+          <div className="pv-card p-10">
             <h3 className="text-2xl font-display font-bold mb-8 flex items-center gap-3 text-red">
               <AlertTriangle className="w-8 h-8" />
               Lethal Weaknesses Identified

@@ -1,17 +1,18 @@
 import React from 'react';
 import { Sun, Moon } from 'lucide-react';
-import { useTheme } from '../hooks/useTheme';
+import { useTheme } from '../context/ThemeContext';
 
 export default function ThemeToggle() {
-  const { theme, toggle } = useTheme();
+  const { theme, toggleTheme } = useTheme();
 
   return (
     <button
-      onClick={toggle}
-      aria-label="Toggle dark mode"
-      className="p-2 rounded-full hover:bg-slate-200 dark:hover:bg-slate-700 transition"
+      type="button"
+      onClick={toggleTheme}
+      aria-label={theme === 'blue' ? 'Switch to light theme' : 'Switch to dark theme'}
+      className="pv-btn-ghost pv-btn-icon"
     >
-      {theme === 'dark' ? <Sun size={20} /> : <Moon size={20} />}
+      {theme === 'blue' ? <Sun size={18} /> : <Moon size={18} />}
     </button>
   );
 }

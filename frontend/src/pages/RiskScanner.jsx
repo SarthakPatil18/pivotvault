@@ -1,7 +1,7 @@
 import { clsx } from 'clsx';
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, AlertTriangle, CheckCircle2, Share2, ArrowRight, Loader2, Shuffle, Lightbulb, Sword, ShieldCheck, Target } from 'lucide-react';
+import { Zap, AlertTriangle, CheckCircle2, ArrowRight, Loader2, Shuffle, Lightbulb, Sword, ShieldCheck, Target, RefreshCcw, X } from 'lucide-react';
 import { ResponsiveContainer, RadarChart, PolarGrid, PolarAngleAxis, Radar } from 'recharts';
 import api from '../lib/api';
 
@@ -18,13 +18,12 @@ const RiskScanner = () => {
   const [compLoading, setCompLoading] = React.useState(false);
   const [compResult, setCompResult] = React.useState(null);
   const [loadingText, setLoadingText] = React.useState('');
-  const [simulating, setSimulating] = React.useState(null); // null | pivotIndex
+  const [simulating, setSimulating] = React.useState(null); 
   const [simulatedResult, setSimulatedResult] = React.useState(null);
 
   const handleSimulatePivot = (pivot, index) => {
     setSimulating(index);
     setTimeout(() => {
-      // Create a "simulated" improvement
       const improvedScore = Math.max(20, result.riskScore - 25);
       const improvedBreakdown = {
         ...result.riskBreakdown,
@@ -51,8 +50,6 @@ const RiskScanner = () => {
   const handleScan = async (e) => {
     e.preventDefault();
     setStep('scanning');
-    
-    // Cycle messages
     let msgIdx = 0;
     const interval = setInterval(() => {
       setLoadingText(loadingMessages[msgIdx % loadingMessages.length]);
@@ -62,7 +59,6 @@ const RiskScanner = () => {
     try {
       const response = await api.post('/ai/risk-scan', formData);
       setResult(response.data);
-      // Wait at least 2.5s for "perceived intelligence"
       setTimeout(() => {
         clearInterval(interval);
         setStep('result');
@@ -107,310 +103,351 @@ const RiskScanner = () => {
   ] : radarData;
 
   return (
-    <div className="max-w-4xl mx-auto px-4 py-20">
-      <AnimatePresence mode="wait">
-        {step === 'form' && (
-          <motion.div
-            key="form"
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-          >
-            <div className="text-center mb-12">
-              <Zap className="w-16 h-16 text-accent mx-auto mb-4" />
-              <h1 className="text-5xl font-display font-bold mb-4">AI Risk Scanner</h1>
-              <p className="text-text-secondary text-lg">Input your startup details to see how you stack up against historical failure patterns.</p>
-            </div>
-
-            <form onSubmit={handleScan} className="glass-card p-10 space-y-8">
-              <div className="space-y-2">
-                <label className="text-sm font-bold text-text-secondary uppercase tracking-widest">Startup Idea</label>
-                <textarea
-                  required
-                  placeholder="Describe your product and the core problem it solves..."
-                  rows={4}
-                  className="w-full bg-surface-2 border border-border rounded-lg p-4 focus:outline-none focus:border-accent text-lg"
-                  value={formData.idea}
-                  onChange={e => setFormData({...formData, idea: e.target.value})}
-                />
+    <div className="min-h-screen bg-bg">
+      <div className="pv-content-container py-12">
+        <AnimatePresence mode="wait">
+          {step === 'form' && (
+            <motion.div
+              key="form"
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -20 }}
+              className="max-w-3xl mx-auto"
+            >
+              <div className="mb-8">
+                <div className="text-xs font-bold uppercase text-text-muted tracking-[0.2em] mb-2">
+                  Risk Assessment
+                </div>
+                <h1 className="text-4xl font-display font-bold text-text-primary mb-3">AI Risk Scanner</h1>
+                <p className="text-text-secondary text-lg">Input your startup details to benchmark against historical failure patterns.</p>
               </div>
 
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+              <form onSubmit={handleScan} className="pv-card p-8 space-y-6">
                 <div className="space-y-2">
-                  <label className="text-sm font-bold text-text-secondary uppercase tracking-widest">Target Audience</label>
-                  <input
+                  <label className="text-xs font-bold uppercase text-text-secondary tracking-widest">Startup Idea</label>
+                  <textarea
                     required
-                    type="text"
-                    placeholder="e.g. Early stage founders in India"
-                    className="w-full bg-surface-2 border border-border rounded-lg p-3 focus:outline-none focus:border-accent"
-                    value={formData.audience}
-                    onChange={e => setFormData({...formData, audience: e.target.value})}
+                    placeholder="Describe your product and the core problem it solves..."
+                    rows={4}
+                    className="pv-field"
+                    value={formData.idea}
+                    onChange={e => setFormData({...formData, idea: e.target.value})}
                   />
                 </div>
-                <div className="space-y-2">
-                  <label className="text-sm font-bold text-text-secondary uppercase tracking-widest">Industry</label>
-                  <select
-                    className="w-full bg-surface-2 border border-border rounded-lg p-3 focus:outline-none focus:border-accent"
-                    value={formData.industry}
-                    onChange={e => setFormData({...formData, industry: e.target.value})}
-                  >
-                    <option value="SaaS">SaaS</option>
-                    <option value="FinTech">FinTech</option>
-                    <option value="EdTech">EdTech</option>
-                    <option value="Fitness">Fitness</option>
-                    <option value="E-commerce">E-commerce</option>
-                    <option value="Healthcare">Healthcare</option>
-                  </select>
-                </div>
-              </div>
 
-              <button
-                type="submit"
-                className="w-full bg-accent hover:bg-orange-600 text-white font-bold py-5 rounded-lg text-xl transition-all shadow-lg flex items-center justify-center gap-3"
-              >
-                Start AI Risk Assessment
-                <ArrowRight className="w-6 h-6" />
-              </button>
-            </form>
-          </motion.div>
-        )}
-
-        {step === 'scanning' && (
-          <motion.div
-            key="scanning"
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="flex flex-col items-center justify-center py-40"
-          >
-            <div className="relative mb-12">
-              <div className="w-32 h-32 border-4 border-accent/20 border-t-accent rounded-full animate-spin" />
-              <Zap className="absolute inset-0 m-auto w-12 h-12 text-accent animate-pulse" />
-            </div>
-            <h2 className="text-2xl font-data text-accent mb-2">{loadingText}</h2>
-            <p className="text-text-secondary">
-  Comparing your idea against 437 data points...
-            </p>
-          </motion.div>
-        )}
-
-        {step === 'result' && result && (
-          <motion.div
-            key="result"
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="space-y-10"
-          >
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              <div className="md:col-span-1 glass-card p-8 flex flex-col items-center justify-center text-center relative overflow-hidden">
-                {simulatedResult && (
-                  <div className="absolute top-0 left-0 w-full bg-green/20 text-green text-[10px] font-bold py-1 uppercase tracking-widest animate-pulse">
-                    Simulated Pivot Active
-                  </div>
-                )}
-                <div className="text-sm font-bold text-text-muted uppercase tracking-[0.2em] mb-6">Aggregate Risk</div>
-                <div className="relative w-48 h-48 flex items-center justify-center mb-6">
-                  <svg className="absolute inset-0 w-full h-full -rotate-90">
-                    <circle cx="96" cy="96" r="88" stroke="currentColor" strokeWidth="12" fill="transparent" className="text-border" />
-                    <circle 
-                      cx="96" cy="96" r="88" stroke="currentColor" strokeWidth="12" fill="transparent" 
-                      strokeDasharray={2 * Math.PI * 88}
-                      strokeDashoffset={2 * Math.PI * 88 * (1 - currentScore / 100)}
-                      className={clsx(
-                        'transition-all duration-1000',
-                        currentScore > 70 ? 'text-red' : currentScore > 40 ? 'text-accent' : 'text-green'
-                      )}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase text-text-secondary tracking-widest">Target Audience</label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="e.g. Early stage founders"
+                      className="pv-field"
+                      value={formData.audience}
+                      onChange={e => setFormData({...formData, audience: e.target.value})}
                     />
-                  </svg>
-                  <div className="text-6xl font-data font-bold">{currentScore}</div>
-                </div>
-                <div className={clsx(
-                  "font-bold flex items-center gap-2",
-                  currentScore > 70 ? "text-red" : currentScore > 40 ? "text-accent" : "text-green"
-                )}>
-                  {currentScore > 60 ? <AlertTriangle className="w-5 h-5" /> : <CheckCircle2 className="w-5 h-5" />}
-                  {currentScore > 70 ? 'HIGH RISK' : currentScore > 40 ? 'MODERATE RISK' : 'LOW RISK'}
-                </div>
-                {simulatedResult && (
-                  <button 
-                    onClick={() => setSimulatedResult(null)}
-                    className="mt-4 text-[10px] text-text-muted hover:text-accent underline uppercase font-bold tracking-widest"
-                  >
-                    Reset to Original
-                  </button>
-                )}
-              </div>
-
-              <div className="md:col-span-2 glass-card p-8">
-                <div className="text-sm font-bold text-text-muted uppercase tracking-[0.2em] mb-6 text-center">Risk Analysis Matrix</div>
-                <div className="h-[250px]">
-                  <ResponsiveContainer width="100%" height="100%">
-                    <RadarChart cx="50%" cy="50%" outerRadius="80%" data={currentBreakdown}>
-                      <PolarGrid stroke="#1E293B" />
-                      <PolarAngleAxis dataKey="subject" tick={{ fill: '#94A3B8', fontSize: 12 }} />
-                      <Radar name="Risk" dataKey="A" stroke={simulatedResult ? "#10B981" : "#F97316"} fill={simulatedResult ? "#10B981" : "#F97316"} fillOpacity={0.6} />
-                    </RadarChart>
-                  </ResponsiveContainer>
-                </div>
-              </div>
-            </div>
-
-            <div className="glass-card p-10">
-              <h3 className="text-2xl font-display font-bold mb-8 flex items-center gap-3">
-                <CheckCircle2 className="text-green w-8 h-8" />
-                AI Recommendations
-              </h3>
-              <div className="space-y-6">
-                {result.recommendations.map((rec, i) => (
-                  <div key={i} className="flex gap-6 p-4 rounded-lg hover:bg-surface-2 transition-colors border border-transparent hover:border-border">
-                    <div className={clsx(
-                      'shrink-0 w-3 h-3 rounded-full mt-1.5',
-                      rec.priority === 'high' ? 'bg-red' : 'bg-accent'
-                    )} />
-                    <div>
-                      <div className="font-bold text-lg mb-1">{rec.action}</div>
-                      <div className="text-text-secondary text-sm leading-relaxed">{rec.rationale}</div>
-                    </div>
                   </div>
-                ))}
-              </div>
-            </div>
-
-            <div className="glass-card p-10 bg-accent/5 border-accent/20">
-              <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-10">
-                <div>
-                  <h3 className="text-2xl font-display font-bold flex items-center gap-3">
-                    <Sword className="text-accent w-8 h-8" />
-                    Market Battleground
-                  </h3>
-                  <p className="text-text-secondary text-sm mt-1">Live web analysis of active competitors in your space.</p>
-                </div>
-                {!compResult && (
-                  <button 
-                    onClick={handleCompare}
-                    disabled={compLoading}
-                    className="bg-accent hover:bg-orange-600 text-white font-bold py-3 px-6 rounded-lg transition-all flex items-center gap-2 disabled:opacity-50"
-                  >
-                    {compLoading ? (
-                      <Loader2 className="w-5 h-5 animate-spin" />
-                    ) : (
-                      <Target className="w-5 h-5" />
-                    )}
-                    Compare with Live Competitors
-                  </button>
-                )}
-              </div>
-
-              {compLoading && (
-                <div className="py-20 text-center animate-pulse text-accent font-data flex flex-col items-center justify-center gap-4">
-                  <div className="w-8 h-8 border-3 border-accent/20 border-t-accent rounded-full animate-spin" />
-                  SCANNING THE LIVE WEB FOR ACTIVE THREATS...
-                </div>
-              )}
-
-              {compResult && (
-                <motion.div 
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  className="space-y-8"
-                >
-                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {compResult.competitors.map((comp, i) => (
-                      <div key={i} className="p-5 rounded-xl bg-surface/40 border border-border flex flex-col justify-between">
-                        <div>
-                          <div className="flex justify-between items-start mb-3">
-                            <div className="font-bold text-text-primary">{comp.name}</div>
-                            <div className={clsx(
-                              "text-[8px] font-bold uppercase px-1.5 py-0.5 rounded",
-                              comp.threatLevel === 'high' ? "bg-red text-white" : "bg-warning text-black"
-                            )}>
-                              {comp.threatLevel} threat
-                            </div>
-                          </div>
-                          <div className="text-xs text-text-secondary leading-relaxed italic">"{comp.moat}"</div>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-
-                  <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                    <div className="p-6 rounded-xl bg-surface-2 border border-border">
-                      <h4 className="text-sm font-bold text-text-muted uppercase tracking-widest mb-4 flex items-center gap-2">
-                        <ShieldCheck className="w-4 h-4 text-green" />
-                        Survival Strategy
-                      </h4>
-                      <p className="text-sm text-text-primary leading-relaxed">{compResult.survivalStrategy}</p>
-                    </div>
-                    <div className="p-6 rounded-xl bg-surface-2 border border-border">
-                      <h4 className="text-sm font-bold text-text-muted uppercase tracking-widest mb-4 flex items-center gap-2">
-                        <Target className="w-4 h-4 text-accent" />
-                        Market Gap Analysis
-                      </h4>
-                      <p className="text-sm text-text-primary leading-relaxed">{compResult.gapAnalysis}</p>
-                    </div>
-                  </div>
-                </motion.div>
-              )}
-            </div>
-
-            {result.suggestedPivots && (
-              <div className="glass-card p-10 bg-accent/5 border-accent/20">
-                <h3 className="text-2xl font-display font-bold mb-2 flex items-center gap-3">
-                  <Shuffle className="text-accent w-8 h-8" />
-                  AI-Powered Strategic Pivots
-                </h3>
-                <p className="text-text-secondary text-sm mb-8 pl-11 italic">Select a pivot to simulate its impact on your risk profile.</p>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  {result.suggestedPivots.map((pivot, i) => (
-                    <motion.div 
-                      key={i} 
-                      whileHover={{ scale: 1.02 }}
-                      className={clsx(
-                        "p-6 rounded-xl border transition-all group relative cursor-pointer",
-                        simulatedResult?.pivot === pivot ? "bg-green/10 border-green/50 shadow-[0_0_20px_rgba(16,185,129,0.2)]" : "bg-surface/50 border-border/50 hover:border-accent/40"
-                      )}
-                      onClick={() => handleSimulatePivot(pivot, i)}
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase text-text-secondary tracking-widest">Industry</label>
+                    <select
+                      className="pv-field"
+                      value={formData.industry}
+                      onChange={e => setFormData({...formData, industry: e.target.value})}
                     >
-                      {simulating === i && (
-                        <div className="absolute inset-0 bg-bg/80 backdrop-blur-sm rounded-xl flex flex-col items-center justify-center z-10 gap-2">
-                          <Loader2 className="w-6 h-6 text-accent animate-spin" />
-                          <div className="text-[10px] font-black text-accent uppercase tracking-[0.2em]">Simulating Pivot...</div>
+                      <option value="SaaS">SaaS</option>
+                      <option value="FinTech">FinTech</option>
+                      <option value="EdTech">EdTech</option>
+                      <option value="Fitness">Fitness</option>
+                      <option value="E-commerce">E-commerce</option>
+                      <option value="Healthcare">Healthcare</option>
+                    </select>
+                  </div>
+                  <div className="space-y-2">
+                    <label className="text-xs font-bold uppercase text-text-secondary tracking-widest">Team Size</label>
+                    <input
+                      required
+                      type="text"
+                      placeholder="e.g. 2"
+                      className="pv-field"
+                      value={formData.teamSize}
+                      onChange={e => setFormData({...formData, teamSize: e.target.value})}
+                    />
+                  </div>
+                </div>
+
+                <div className="pt-4">
+                  <button
+                    type="submit"
+                    className="pv-btn-primary w-full justify-center text-lg"
+                  >
+                    Start Risk Assessment
+                    <ArrowRight className="w-5 h-5 ml-2" />
+                  </button>
+                </div>
+              </form>
+            </motion.div>
+          )}
+
+          {step === 'scanning' && (
+            <motion.div
+              key="scanning"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              className="flex flex-col items-center justify-center py-20"
+            >
+              <div className="relative mb-8">
+                <div className="w-24 h-24 border-4 border-surface-3 border-t-accent rounded-full animate-spin" />
+                <Zap className="absolute inset-0 m-auto w-8 h-8 text-accent animate-pulse" />
+              </div>
+              <h2 className="text-xl font-data text-accent mb-2">{loadingText}</h2>
+              <p className="text-text-secondary text-sm">
+                Comparing your idea against historical data...
+              </p>
+            </motion.div>
+          )}
+
+          {step === 'result' && result && (
+            <motion.div
+              key="result"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              className="space-y-8"
+            >
+              {/* Top Controls */}
+              <div className="flex items-center justify-between">
+                <div>
+                  <div className="text-xs font-bold uppercase text-text-muted tracking-[0.2em] mb-1">
+                    Assessment Complete
+                  </div>
+                  <h1 className="text-3xl font-display font-bold text-text-primary">Risk Analysis Report</h1>
+                </div>
+                <button
+                  onClick={() => setStep('form')}
+                  className="pv-btn-secondary flex items-center gap-2"
+                >
+                  <RefreshCcw className="w-4 h-4" />
+                  New Scan
+                </button>
+              </div>
+
+              {/* Main Grid */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+                {/* Score Card */}
+                <div className="lg:col-span-1">
+                  <div className="pv-card p-6 relative">
+                    {simulatedResult && (
+                      <div className="absolute top-4 right-4 bg-success/10 text-success text-[10px] font-bold px-2 py-1 rounded-full uppercase tracking-wider">
+                        Simulated Pivot
+                      </div>
+                    )}
+                    <div className="text-xs font-bold uppercase text-text-muted tracking-widest mb-6">
+                      Aggregate Risk
+                    </div>
+                    <div className="flex items-center justify-center mb-6">
+                      <div className="relative w-44 h-44">
+                        <svg className="absolute inset-0 w-full h-full -rotate-90" viewBox="0 0 192 192">
+                          <circle cx="96" cy="96" r="80" stroke="currentColor" strokeWidth="14" fill="transparent" className="text-border" />
+                          <circle 
+                            cx="96" cy="96" r="80" stroke="currentColor" strokeWidth="14" fill="transparent" 
+                            strokeDasharray={502.65}
+                            strokeDashoffset={502.65 * (1 - currentScore / 100)}
+                            className={clsx(
+                              'transition-all duration-1000',
+                              currentScore > 70 ? 'text-danger' : currentScore > 40 ? 'text-accent' : 'text-success'
+                            )}
+                          />
+                        </svg>
+                        <div className="absolute inset-0 flex flex-col items-center justify-center">
+                          <span className="text-6xl font-data font-bold text-text-primary">{currentScore}</span>
+                          <span className="text-xs font-bold uppercase text-text-muted tracking-wider mt-1">Risk Score</span>
                         </div>
-                      )}
-                      <div className="flex items-center gap-2 mb-3">
-                        <Lightbulb className={clsx("w-5 h-5", simulatedResult?.pivot === pivot ? "text-green" : "text-accent")} />
-                        <div className={clsx("text-xs font-bold uppercase tracking-widest", simulatedResult?.pivot === pivot ? "text-green" : "text-accent")}>{pivot.type}</div>
                       </div>
-                      <div className="font-bold text-lg mb-2 text-text-primary group-hover:text-accent transition-colors">{pivot.description}</div>
-                      <div className="text-text-secondary text-sm italic border-l-2 border-border pl-4 mt-4">
-                        <span className="font-bold text-text-muted not-italic uppercase text-[10px] block mb-1">Historical Precedent</span>
-                        "{pivot.historicalExample}"
+                    </div>
+                    <div className={clsx(
+                      "flex items-center justify-center gap-2 font-bold text-sm uppercase tracking-wider",
+                      currentScore > 70 ? "text-danger" : currentScore > 40 ? "text-accent" : "text-success"
+                    )}>
+                      {currentScore > 70 ? <AlertTriangle className="w-4 h-4" /> : <CheckCircle2 className="w-4 h-4" />}
+                      {currentScore > 70 ? 'HIGH RISK' : currentScore > 40 ? 'MODERATE RISK' : 'LOW RISK'}
+                    </div>
+                    {simulatedResult && (
+                      <button 
+                        onClick={() => setSimulatedResult(null)}
+                        className="mt-4 w-full text-xs text-text-muted hover:text-accent underline font-bold tracking-widest"
+                      >
+                        Reset to Original
+                      </button>
+                    )}
+                  </div>
+                </div>
+
+                {/* Radar Chart */}
+                <div className="lg:col-span-2">
+                  <div className="pv-card p-6 h-full">
+                    <div className="text-xs font-bold uppercase text-text-muted tracking-widest mb-4">
+                      Risk Analysis Matrix
+                    </div>
+                    <div className="h-72">
+                      <ResponsiveContainer width="100%" height="100%">
+                        <RadarChart cx="50%" cy="50%" outerRadius="75%" data={currentBreakdown}>
+                          <PolarGrid stroke="var(--color-border)" />
+                          <PolarAngleAxis dataKey="subject" tick={{ fill: 'var(--color-text-secondary)', fontSize: 12 }} />
+                          <Radar name="Risk" dataKey="A" stroke={simulatedResult ? "var(--color-success)" : "var(--color-accent)"} fill={simulatedResult ? "var(--color-success)" : "var(--color-accent)"} fillOpacity={0.5} />
+                        </RadarChart>
+                      </ResponsiveContainer>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Recommendations */}
+              <div className="pv-card p-8">
+                <h3 className="text-xl font-display font-bold text-text-primary mb-6 flex items-center gap-2">
+                  <CheckCircle2 className="text-success w-6 h-6" />
+                  Recommendations
+                </h3>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {result.recommendations.map((rec, i) => (
+                    <div key={i} className="border border-border rounded-lg p-5 bg-surface-2/30">
+                      <div className="flex items-start gap-3">
+                        <div className={clsx(
+                          'shrink-0 w-2.5 h-2.5 rounded-full mt-1.5',
+                          rec.priority === 'high' ? 'bg-danger' : 'bg-accent'
+                        )} />
+                        <div className="flex-1">
+                          <div className="font-semibold text-text-primary mb-1">{rec.action}</div>
+                          <div className="text-sm text-text-secondary leading-relaxed">{rec.rationale}</div>
+                        </div>
                       </div>
-                      <div className="mt-4 pt-4 border-t border-border/20 flex justify-end">
-                        <span className={clsx(
-                          "text-[10px] font-black uppercase tracking-widest flex items-center gap-1.5",
-                          simulatedResult?.pivot === pivot ? "text-green" : "text-accent opacity-0 group-hover:opacity-100 transition-opacity"
-                        )}>
-                          {simulatedResult?.pivot === pivot ? "SIMULATION ACTIVE" : "SIMULATE IMPACT →"}
-                        </span>
-                      </div>
-                    </motion.div>
+                    </div>
                   ))}
                 </div>
               </div>
-            )}
 
-            <div className="flex justify-center">
-              <button 
-                onClick={() => setStep('form')}
-                className="text-text-muted hover:text-white transition-colors"
-              >
-                ← Scan another idea
-              </button>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+              {/* Market Battleground */}
+              <div className="pv-card p-8 border-accent/20 bg-surface/30">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                  <div>
+                    <h3 className="text-xl font-display font-bold text-text-primary flex items-center gap-2">
+                      <Sword className="text-accent w-6 h-6" />
+                      Market Battleground
+                    </h3>
+                    <p className="text-sm text-text-secondary mt-1">Live web analysis of active competitors</p>
+                  </div>
+                  {!compResult && (
+                    <button 
+                      onClick={handleCompare}
+                      disabled={compLoading}
+                      className="pv-btn-primary disabled:opacity-50"
+                    >
+                      {compLoading ? (
+                        <Loader2 className="w-4 h-4 animate-spin mr-2" />
+                      ) : (
+                        <Target className="w-4 h-4 mr-2" />
+                      )}
+                      Compare Competitors
+                    </button>
+                  )}
+                </div>
+
+                {compLoading && (
+                  <div className="py-16 text-center">
+                    <div className="flex flex-col items-center gap-3">
+                      <Loader2 className="w-8 h-8 text-accent animate-spin" />
+                      <span className="text-sm font-data text-text-muted uppercase tracking-widest">
+                        SCANNING LIVE WEB...
+                      </span>
+                    </div>
+                  </div>
+                )}
+
+                {compResult && (
+                  <div className="space-y-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                      {compResult.competitors.map((comp, i) => (
+                        <div key={i} className="p-5 bg-surface border border-border rounded-lg">
+                          <div className="flex justify-between items-start mb-3">
+                            <div className="font-semibold text-text-primary">{comp.name}</div>
+                            <span className={clsx(
+                              "text-[10px] font-bold uppercase px-2 py-0.5 rounded",
+                              comp.threatLevel === 'high' ? "bg-danger text-white" : "bg-warning text-black"
+                            )}>
+                              {comp.threatLevel} threat
+                            </span>
+                          </div>
+                          <p className="text-sm text-text-secondary italic">"{comp.moat}"</p>
+                        </div>
+                      ))}
+                    </div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                      <div className="p-6 bg-surface-2 border border-border rounded-lg">
+                        <h4 className="text-xs font-bold uppercase text-text-muted tracking-widest mb-4 flex items-center gap-2">
+                          <ShieldCheck className="w-4 h-4 text-success" />
+                          Survival Strategy
+                        </h4>
+                        <p className="text-sm text-text-primary leading-relaxed">{compResult.survivalStrategy}</p>
+                      </div>
+                      <div className="p-6 bg-surface-2 border border-border rounded-lg">
+                        <h4 className="text-xs font-bold uppercase text-text-muted tracking-widest mb-4 flex items-center gap-2">
+                          <Target className="w-4 h-4 text-accent" />
+                          Market Gap Analysis
+                        </h4>
+                        <p className="text-sm text-text-primary leading-relaxed">{compResult.gapAnalysis}</p>
+                      </div>
+                    </div>
+                  </div>
+                )}
+              </div>
+
+              {/* Suggested Pivots */}
+              {result.suggestedPivots && (
+                <div className="pv-card p-8 border-accent/20 bg-surface/30">
+                  <div className="mb-6">
+                    <h3 className="text-xl font-display font-bold text-text-primary flex items-center gap-2">
+                      <Shuffle className="text-accent w-6 h-6" />
+                      Strategic Pivots
+                    </h3>
+                    <p className="text-sm text-text-secondary mt-1">Select a pivot to simulate its impact</p>
+                  </div>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {result.suggestedPivots.map((pivot, i) => (
+                      <motion.button
+                        key={i}
+                        whileHover={{ y: -2 }}
+                        className={clsx(
+                          "p-6 border rounded-lg transition-all text-left relative overflow-hidden",
+                          simulatedResult?.pivot === pivot 
+                            ? "bg-success/5 border-success/30 shadow-[0_0_20px_rgba(16,185,129,0.1)]" 
+                            : "bg-surface border-border hover:border-accent/40"
+                        )}
+                        onClick={() => handleSimulatePivot(pivot, i)}
+                      >
+                        {simulating === i && (
+                          <div className="absolute inset-0 bg-bg/80 backdrop-blur-sm rounded-lg flex flex-col items-center justify-center z-10 gap-2">
+                            <Loader2 className="w-6 h-6 text-accent animate-spin" />
+                            <span className="text-xs font-bold uppercase tracking-widest text-accent">Simulating...</span>
+                          </div>
+                        )}
+                        <div className="flex items-center gap-2 mb-3">
+                          <Lightbulb className={clsx("w-5 h-5", simulatedResult?.pivot === pivot ? "text-success" : "text-accent")} />
+                          <span className={clsx("text-xs font-bold uppercase tracking-widest", simulatedResult?.pivot === pivot ? "text-success" : "text-accent")}>{pivot.type}</span>
+                        </div>
+                        <div className="font-semibold text-text-primary mb-2">{pivot.description}</div>
+                        <div className="text-sm text-text-secondary border-l border-border/40 pl-4 italic mt-3">
+                          <span className="block text-[10px] font-bold uppercase text-text-muted tracking-wider not-italic mb-1">Historical Precedent</span>
+                          "{pivot.historicalExample}"
+                        </div>
+                      </motion.button>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </motion.div>
+          )}
+        </AnimatePresence>
+      </div>
     </div>
   );
 };

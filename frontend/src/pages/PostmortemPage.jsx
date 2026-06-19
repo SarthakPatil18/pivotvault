@@ -13,6 +13,7 @@ import {
 import { clsx } from 'clsx';
 import StartupCard from '../components/StartupCard';
 import GhostChat from '../components/GhostChat';
+import Logo from '../components/Logo';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
@@ -135,7 +136,7 @@ const PostmortemPage = () => {
       {/* Header / Hero */}
       <div className="border-b border-border/80 bg-surface/30 pt-12 pb-14 relative overflow-hidden">
         <div className="absolute inset-0 bg-[linear-gradient(to_bottom,rgba(109,94,245,0.03),transparent)] -z-10" />
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="pv-content-container">
           <Link to="/explore" className="inline-flex items-center gap-2 text-xs font-semibold text-text-secondary hover:text-accent mb-8 group transition-colors">
             <ArrowLeft className="w-4 h-4 group-hover:-translate-x-1 transition-transform" />
             Back to Failures Explorer
@@ -143,9 +144,12 @@ const PostmortemPage = () => {
           
           <div className="flex flex-col lg:flex-row lg:items-center justify-between gap-8">
             <div className="flex items-center gap-6">
-              <div className="w-20 h-20 rounded-2xl flex items-center justify-center font-display font-extrabold text-3xl text-white shadow-xl bg-gradient-to-br from-indigo-500 to-purple-600">
-                {startup.name.substring(0, 2).toUpperCase()}
-              </div>
+              <Logo 
+                name={startup.name} 
+                domain={startup.domain} 
+                size="xl"
+                className="shrink-0 shadow-xl"
+              />
               <div>
                 <div className="flex flex-wrap items-center gap-3 mb-2.5">
                   <h1 className="text-4xl font-display font-bold text-text-primary">{startup.name}</h1>
@@ -179,7 +183,7 @@ const PostmortemPage = () => {
       </div>
 
       {/* Main Grid */}
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+      <div className="pv-content-container py-12">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
           
           {/* Left Column: Narrative, Timeline, Metrics */}
@@ -191,7 +195,7 @@ const PostmortemPage = () => {
                 <Info className="text-accent w-5.5 h-5.5" />
                 The Story
               </h2>
-              <div className="glass-card p-8 leading-relaxed text-text-secondary space-y-4">
+              <div className="pv-card p-8 leading-relaxed text-text-secondary space-y-4">
                 {startup.founderStory ? (
                   startup.founderStory.split('\n\n').map((para, i) => {
                     if (para.startsWith('#')) return null; // skip titles
@@ -256,7 +260,7 @@ const PostmortemPage = () => {
                   <TrendingDown className="text-accent w-5.5 h-5.5" />
                   Key Metrics Timeline
                 </h2>
-                <div className="glass-card p-8 h-[360px] bg-surface/30">
+                <div className="pv-card p-8 h-[360px] bg-surface/30">
                   <ResponsiveContainer width="100%" height="100%">
                     <LineChart data={startup.metricsSnapshots}>
                       <CartesianGrid strokeDasharray="3 3" stroke="#1F2937" vertical={false} />
@@ -284,7 +288,7 @@ const PostmortemPage = () => {
           <div className="space-y-12">
             
             {/* Mistake Breakdown Chart */}
-            <section className="glass-card p-6">
+            <section className="pv-card p-6">
               <h3 className="text-lg font-display font-bold mb-6 text-text-primary">Failure Breakdown Matrix</h3>
               <div className="h-[250px] flex items-center justify-center">
                 <ResponsiveContainer width="100%" height="100%">

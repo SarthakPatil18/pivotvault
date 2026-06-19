@@ -11,12 +11,14 @@ import {
   TrendingDown, PieChart as PieIcon, BarChart3, Clock, 
   Skull, AlertTriangle, ShieldAlert, DollarSign 
 } from 'lucide-react';
+import { useTheme } from '../context/ThemeContext';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
 const InsightsDashboard = () => {
   const [data, setData] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
+  const { theme } = useTheme();
 
   React.useEffect(() => {
     const fetchData = async () => {
@@ -41,26 +43,44 @@ const InsightsDashboard = () => {
     return `₹${num.toLocaleString('en-IN')}`;
   };
 
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="pv-card p-3 text-sm">
+          <div className="text-text-muted mb-1">{label}</div>
+          {payload.map((entry, i) => (
+            <div key={i} className="text-text-primary font-semibold">
+              {entry.name || 'Count'}: {entry.value}
+            </div>
+          ))}
+        </div>
+      );
+    }
+    return null;
+  };
+
   if (loading) {
     return (
-      <div className="py-40 text-center animate-pulse text-accent font-data flex flex-col items-center justify-center gap-4">
-        <div className="w-10 h-10 border-4 border-accent/20 border-t-accent rounded-full animate-spin" />
-        COMPUTING FAILURE METRICS...
+      <div className="pv-content-container py-40 text-center">
+        <div className="flex flex-col items-center gap-4">
+          <div className="w-12 h-12 border-4 border-border border-t-accent rounded-full animate-spin" />
+          <div className="font-data text-accent text-sm tracking-widest uppercase">Computing Failure Metrics...</div>
+        </div>
       </div>
     );
   }
 
   if (!data) {
     return (
-      <div className="py-40 text-center text-danger max-w-sm mx-auto">
-        <AlertTriangle className="w-12 h-12 mx-auto mb-4" />
-        <h2 className="text-lg font-bold">Failed to load insights</h2>
-        <p className="text-text-secondary text-sm mt-2">Check database connection or backend deployment status.</p>
+      <div className="pv-content-container py-40 text-center">
+        <AlertTriangle className="w-12 h-12 text-danger mx-auto mb-4" />
+        <h2 className="text-lg font-bold text-text-primary">Failed to load insights</h2>
+        <p className="text-text-secondary text-sm mt-2 max-w-sm mx-auto">Check database connection or backend deployment status.</p>
       </div>
     );
   }
 
-  const COLORS = ['#6D5EF5', '#8B5CF6', '#10B981', '#F59E0B', '#EF4444', '#06B6D4', '#EC4899'];
+  const COLORS = ['var(--color-accent)', 'var(--color-info)', 'var(--color-success)', 'var(--color-warning)', 'var(--color-danger)'];
   const metrics = data.metrics || {
     totalFailed: 12437,
     totalFundingLost: '145250000000',
@@ -74,103 +94,101 @@ const InsightsDashboard = () => {
     : 'No PMF';
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      <div className="mb-12">
+    <div className="pv-content-container py-12">
+      <div className="mb-10">
         <div className="text-xs text-accent font-bold uppercase tracking-widest mb-1.5 font-data">Analytics Dashboard</div>
-        <h1 className="text-4xl font-display font-extrabold text-text-primary">Failure Insights</h1>
-        <p className="text-text-secondary text-base mt-2 max-w-xl">
+        <h1 className="text-3xl font-display font-bold text-text-primary mb-2">Failure Insights</h1>
+        <p className="text-text-secondary max-w-xl">
           Aggregated diagnostic metrics across documented startup failures to identify systemic industry risks.
         </p>
       </div>
 
-      {/* Glassmorphic Metric Cards with CountUp */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
+      {/* KPI Metric Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-5 gap-4 mb-10">
         
         {/* Total Failed */}
-        <div className="glass-card p-5 bg-surface/40 flex flex-col justify-between">
+        <div className="pv-card p-5 flex flex-col justify-between">
           <div>
-            <Skull className="w-5 h-5 text-accent mb-3" />
-            <div className="text-[10px] uppercase tracking-wider text-text-muted font-bold">Failures Documented</div>
+            <Skull className="w-5 h-5 text-accent mb-2" />
+            <div className="text-xs uppercase tracking-widest text-text-muted font-bold">Failures Documented</div>
           </div>
-          <div className="text-2xl sm:text-3xl font-data font-bold mt-4 text-text-primary">
+          <div className="text-3xl font-data font-bold mt-4 text-text-primary">
             <CountUp end={metrics.totalFailed} duration={2} separator="," />
           </div>
         </div>
 
         {/* Total Funding Lost */}
-        <div className="glass-card p-5 bg-surface/40 flex flex-col justify-between">
+        <div className="pv-card p-5 flex flex-col justify-between">
           <div>
-            <DollarSign className="w-5 h-5 text-success mb-3" />
-            <div className="text-[10px] uppercase tracking-wider text-text-muted font-bold">Capital Dissolved</div>
+            <DollarSign className="w-5 h-5 text-success mb-2" />
+            <div className="text-xs uppercase tracking-widest text-text-muted font-bold">Capital Dissolved</div>
           </div>
-          <div className="text-xl sm:text-2xl font-data font-bold mt-4 text-text-primary">
+          <div className="text-2xl font-data font-bold mt-4 text-text-primary">
             {formatTotalFunding(metrics.totalFundingLost)}
           </div>
         </div>
 
         {/* Primary Failure Reason */}
-        <div className="glass-card p-5 bg-surface/40 flex flex-col justify-between">
+        <div className="pv-card p-5 flex flex-col justify-between">
           <div>
-            <AlertTriangle className="w-5 h-5 text-warning mb-3" />
-            <div className="text-[10px] uppercase tracking-wider text-text-muted font-bold">Primary Killer</div>
+            <AlertTriangle className="w-5 h-5 text-warning mb-2" />
+            <div className="text-xs uppercase tracking-widest text-text-muted font-bold">Primary Killer</div>
           </div>
-          <div className="text-base sm:text-lg font-bold mt-4 text-text-primary truncate">
+          <div className="text-lg font-semibold mt-4 text-text-primary truncate">
             {cleanMostCommonReason}
           </div>
         </div>
 
         {/* Fastest Collapse */}
-        <div className="glass-card p-5 bg-surface/40 flex flex-col justify-between">
+        <div className="pv-card p-5 flex flex-col justify-between">
           <div>
-            <Clock className="w-5 h-5 text-danger mb-3" />
-            <div className="text-[10px] uppercase tracking-wider text-text-muted font-bold">Fastest Collapse</div>
+            <Clock className="w-5 h-5 text-danger mb-2" />
+            <div className="text-xs uppercase tracking-widest text-text-muted font-bold">Fastest Collapse</div>
           </div>
-          <div className="text-xs sm:text-sm font-semibold mt-4 text-text-primary truncate">
+          <div className="text-sm font-semibold mt-4 text-text-primary truncate">
             {metrics.fastestCollapse}
           </div>
         </div>
 
         {/* Industry Risk Score */}
-        <div className="glass-card p-5 bg-surface/40 flex flex-col justify-between col-span-2 sm:col-span-1">
+        <div className="pv-card p-5 flex flex-col justify-between">
           <div>
-            <ShieldAlert className="w-5 h-5 text-accent-2 mb-3" />
-            <div className="text-[10px] uppercase tracking-wider text-text-muted font-bold">Market Risk Factor</div>
+            <ShieldAlert className="w-5 h-5 text-accent mb-2" />
+            <div className="text-xs uppercase tracking-widest text-text-muted font-bold">Market Risk Factor</div>
           </div>
-          <div className="text-2xl sm:text-3xl font-data font-bold mt-4 text-accent-2">
+          <div className="text-3xl font-data font-bold mt-4 text-accent">
             <CountUp end={metrics.industryRiskScore} duration={2.5} />%
           </div>
         </div>
       </div>
 
       {/* Charts Section */}
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
         
         {/* Industry breakdown pie chart */}
-        <div className="glass-card p-6 sm:p-8 bg-surface/30">
+        <div className="pv-card p-6">
           <h3 className="text-lg font-display font-bold mb-6 flex items-center gap-2 text-text-primary">
-            <PieIcon className="w-4.5 h-4.5 text-accent" />
+            <PieIcon className="w-5 h-5 text-accent" />
             Failures by Sector
           </h3>
           <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
               <PieChart>
                 <Pie
-                  data={data.industryBreakdown}
+                  data={data.industryBreakdown || []}
                   dataKey="count"
                   nameKey="industry"
                   cx="50%"
                   cy="50%"
                   outerRadius={90}
-                  stroke="#111827"
+                  stroke="var(--color-border)"
                   strokeWidth={2}
                 >
                   {(data.industryBreakdown || []).map((entry, index) => (
                     <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                   ))}
                 </Pie>
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#111827', border: '1px solid #1F2937', borderRadius: '12px' }}
-                />
+                <Tooltip content={<CustomTooltip />} />
                 <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 10 }} />
               </PieChart>
             </ResponsiveContainer>
@@ -178,32 +196,29 @@ const InsightsDashboard = () => {
         </div>
 
         {/* Top 10 Failure Killers bar chart */}
-        <div className="glass-card p-6 sm:p-8 bg-surface/30">
+        <div className="pv-card p-6">
           <h3 className="text-lg font-display font-bold mb-6 flex items-center gap-2 text-text-primary">
-            <BarChart3 className="w-4.5 h-4.5 text-accent" />
+            <BarChart3 className="w-5 h-5 text-accent" />
             Top 10 Failure Modes
           </h3>
           <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
-              <BarChart data={data.topFailureReasonsByIndustry} layout="vertical">
-                <CartesianGrid strokeDasharray="3 3" stroke="#1F2937" horizontal={false} />
+              <BarChart data={data.topFailureReasonsByIndustry || []} layout="vertical">
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" horizontal={false} />
                 <XAxis type="number" hide />
                 <YAxis 
                   dataKey="category" 
                   type="category" 
-                  tick={{ fill: '#94A3B8', fontSize: 10 }}
+                  tick={{ fill: 'var(--color-text-muted)', fontSize: 11 }}
                   tickFormatter={(val) => val.toUpperCase().replace(/_/g, ' ')}
                   width={110}
                   axisLine={false}
                   tickLine={false}
                 />
-                <Tooltip 
-                  cursor={{ fill: 'rgba(109, 94, 245, 0.03)' }}
-                  contentStyle={{ backgroundColor: '#111827', border: '1px solid #1F2937', borderRadius: '12px' }}
-                />
-                <Bar dataKey="count" fill="#8B5CF6" radius={[0, 4, 4, 0]} barSize={16}>
+                <Tooltip content={<CustomTooltip />} cursor={{ fill: 'var(--color-surface-2)' }} />
+                <Bar dataKey="count" fill="var(--color-accent)" radius={[0, 4, 4, 0]} barSize={16}>
                   {(data.topFailureReasonsByIndustry || []).map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={index === 0 ? '#6D5EF5' : '#8B5CF6'} />
+                    <Cell key={`cell-${index}`} fill={index === 0 ? 'var(--color-accent)' : 'var(--color-info)'} />
                   ))}
                 </Bar>
               </BarChart>
@@ -212,53 +227,51 @@ const InsightsDashboard = () => {
         </div>
       </div>
 
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-8">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
         {/* Yearly shutdown trend */}
-        <div className="lg:col-span-2 glass-card p-6 sm:p-8 bg-surface/30">
+        <div className="lg:col-span-2 pv-card p-6">
           <h3 className="text-lg font-display font-bold mb-6 flex items-center gap-2 text-text-primary">
-            <TrendingDown className="w-4.5 h-4.5 text-accent" />
+            <TrendingDown className="w-5 h-5 text-accent" />
             Annual Shutdown Density
           </h3>
           <div className="h-[280px]">
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart data={data.yearlyTrends}>
+              <AreaChart data={data.yearlyTrends || []}>
                 <defs>
                   <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="#6D5EF5" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="#6D5EF5" stopOpacity={0}/>
+                    <stop offset="5%" stopColor="var(--color-accent)" stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor="var(--color-accent)" stopOpacity={0}/>
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1F2937" vertical={false} />
-                <XAxis dataKey="year" tick={{ fill: '#94A3B8', fontSize: 11 }} axisLine={false} />
-                <YAxis tick={{ fill: '#94A3B8', fontSize: 11 }} axisLine={false} />
-                <Tooltip 
-                  contentStyle={{ backgroundColor: '#111827', border: '1px solid #1F2937', borderRadius: '12px' }}
-                />
-                <Area type="monotone" dataKey="count" stroke="#6D5EF5" strokeWidth={3} fillOpacity={1} fill="url(#colorCount)" />
+                <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
+                <XAxis dataKey="year" tick={{ fill: 'var(--color-text-muted)', fontSize: 11 }} axisLine={false} />
+                <YAxis tick={{ fill: 'var(--color-text-muted)', fontSize: 11 }} axisLine={false} />
+                <Tooltip content={<CustomTooltip />} />
+                <Area type="monotone" dataKey="count" stroke="var(--color-accent)" strokeWidth={3} fillOpacity={1} fill="url(#colorCount)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>
         </div>
 
         {/* Top viewed list */}
-        <div className="glass-card p-6 sm:p-8 bg-surface/30">
+        <div className="pv-card p-6">
           <h3 className="text-lg font-display font-bold mb-6 flex items-center gap-2 text-text-primary">
-            <Clock className="w-4.5 h-4.5 text-accent" />
+            <Clock className="w-5 h-5 text-accent" />
             Most Studied Postmortems
           </h3>
-          <div className="space-y-4">
+          <div className="space-y-3">
             {(data.topViewed || []).map((item, i) => (
               <Link 
                 key={i} 
                 to={`/startup/${item.slug}`} 
-                className="flex items-center justify-between p-3 rounded-xl border border-transparent hover:border-border/60 hover:bg-surface-2/40 transition-all duration-200 group"
+                className="flex items-center justify-between p-3 rounded-lg border border-transparent hover:border-border/60 hover:bg-surface-2/40 transition-all duration-200 group"
               >
                 <div>
-                  <div className="font-bold text-text-primary group-hover:text-accent transition-colors text-sm sm:text-base">{item.name}</div>
+                  <div className="font-semibold text-text-primary group-hover:text-accent transition-colors text-sm">{item.name}</div>
                   <div className="text-[10px] text-text-muted uppercase font-bold tracking-wider mt-0.5">{item.industry}</div>
                 </div>
                 <div className="text-right">
-                  <div className="text-sm font-data font-bold text-accent-2">{item.lifetimeMonths} Mo.</div>
+                  <div className="text-sm font-data font-semibold text-accent">{item.lifetimeMonths} Mo.</div>
                   <div className="text-[9px] text-text-muted uppercase tracking-wider mt-0.5">Lifespan</div>
                 </div>
               </Link>
@@ -268,16 +281,16 @@ const InsightsDashboard = () => {
       </div>
 
       {/* VC Anti-Portfolio: Death Zones */}
-      <div className="mb-12">
-        <div className="flex items-center justify-between mb-8">
+      <div>
+        <div className="flex items-center justify-between mb-6">
           <div>
-            <h2 className="text-2xl font-display font-bold text-text-primary flex items-center gap-3">
-              <Skull className="w-6 h-6 text-red" />
+            <h2 className="text-xl font-display font-bold text-text-primary flex items-center gap-3">
+              <Skull className="w-6 h-6 text-danger" />
               VC Anti-Portfolio: Death Zones
             </h2>
             <p className="text-text-secondary text-sm mt-1">Sectors showing the highest failure intensity and shortest lifespans.</p>
           </div>
-          <div className="hidden sm:block px-4 py-1.5 rounded-full bg-red/10 border border-red/20 text-red text-[10px] font-bold uppercase tracking-widest">
+          <div className="hidden sm:block px-4 py-1.5 rounded-full bg-danger/10 border border-danger/20 text-danger text-[10px] font-bold uppercase tracking-widest">
             Critical Risk Warning
           </div>
         </div>
@@ -287,17 +300,17 @@ const InsightsDashboard = () => {
             <div 
               key={i} 
               className={clsx(
-                "glass-card p-6 border-l-4 transition-all hover:scale-[1.02]",
-                zone.riskLevel === 'extreme' ? "border-l-red bg-red/5" : 
-                zone.riskLevel === 'critical' ? "border-l-orange-600 bg-orange-600/5" : "border-l-warning bg-warning/5"
+                "pv-card p-6 border-l-4 transition-all hover:-translate-y-1",
+                zone.riskLevel === 'extreme' ? "border-l-danger bg-danger/5" : 
+                zone.riskLevel === 'critical' ? "border-l-warning bg-warning/5" : "border-l-info bg-info/5"
               )}
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="text-lg font-bold text-text-primary">{zone.industry}</div>
                 <div className={clsx(
                   "text-[9px] font-bold uppercase tracking-tighter px-2 py-0.5 rounded",
-                  zone.riskLevel === 'extreme' ? "bg-red text-white" : 
-                  zone.riskLevel === 'critical' ? "bg-orange-600 text-white" : "bg-warning text-black"
+                  zone.riskLevel === 'extreme' ? "bg-danger text-white" : 
+                  zone.riskLevel === 'critical' ? "bg-warning text-black" : "bg-info text-white"
                 )}>
                   {zone.riskLevel}
                 </div>

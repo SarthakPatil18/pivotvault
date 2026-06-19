@@ -19,14 +19,20 @@ export function ToastProvider({ children }) {
   return (
     <ToastContext.Provider value={addToast}>
       {children}
-      <div className="fixed top-4 right-4 z-50 space-y-2">
+      <div className="fixed top-4 right-4 z-[100] w-[min(24rem,calc(100vw-2rem))] space-y-2" aria-live="polite">
         {toasts.map((t) => (
           <div
             key={t.id}
-            className="flex items-center gap-2 bg-white dark:bg-slate-800 px-4 py-2 rounded shadow"
+            role="status"
+            className="pv-card flex items-center gap-3 px-4 py-3 text-text-primary shadow-elevated"
           >
             <span className="text-sm">{t.title}</span>
-            <button onClick={() => setToasts((p) => p.filter((x) => x.id !== t.id))}>
+            <button
+              type="button"
+              aria-label="Dismiss notification"
+              className="pv-btn-ghost pv-btn-icon ml-auto h-8 w-8 shrink-0"
+              onClick={() => setToasts((p) => p.filter((x) => x.id !== t.id))}
+            >
               <X size={16} />
             </button>
           </div>

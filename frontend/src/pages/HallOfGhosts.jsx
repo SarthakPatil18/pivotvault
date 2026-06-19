@@ -32,7 +32,7 @@ const HallOfGhosts = () => {
   );
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="pv-content-container py-12">
       <div className="text-center mb-16">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-red/20 bg-red/5 text-red text-xs font-semibold uppercase tracking-wider mb-3">
           <Ghost className="w-3.5 h-3.5" />
@@ -60,7 +60,7 @@ const HallOfGhosts = () => {
       {loading ? (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
           {[1, 2, 3, 4, 5, 6].map(i => (
-            <div key={i} className="h-64 glass-card animate-pulse bg-surface-2/40" />
+            <div key={i} className="h-64 pv-card animate-pulse bg-surface-2/40" />
           ))}
         </div>
       ) : (
@@ -69,7 +69,7 @@ const HallOfGhosts = () => {
             <motion.div
               key={startup.id}
               whileHover={{ y: -5 }}
-              className="glass-card p-8 bg-surface/40 group hover:border-accent/40 transition-all cursor-pointer relative overflow-hidden"
+              className="pv-card p-8 bg-surface/40 group hover:border-accent/40 transition-all cursor-pointer relative overflow-hidden"
               onClick={() => setSelectedGhost(startup)}
             >
               <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-30 transition-opacity">

@@ -21,7 +21,7 @@ const HistoryPage = () => {
   }, []);
 
   return (
-    <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="pv-content-container py-12">
       <div className="mb-10">
         <div className="text-xs text-accent font-bold uppercase tracking-widest mb-2">Research Trail</div>
         <h1 className="text-4xl font-display font-extrabold">Search History</h1>
@@ -30,7 +30,7 @@ const HistoryPage = () => {
 
       {loading ? (
         <div className="space-y-3">
-          {[1, 2, 3].map((i) => <div key={i} className="h-20 glass-card animate-pulse" />)}
+          {[1, 2, 3].map((i) => <div key={i} className="h-20 pv-card animate-pulse" />)}
         </div>
       ) : history.length > 0 ? (
         <div className="space-y-3">
@@ -38,7 +38,7 @@ const HistoryPage = () => {
             <button
               key={item.id}
               onClick={() => navigate(`/assistant?q=${encodeURIComponent(item.query)}`)}
-              className="w-full glass-card p-5 text-left flex items-center justify-between gap-4 hover:border-accent/40"
+              className="w-full pv-card p-5 text-left flex items-center justify-between gap-4 hover:border-accent/40"
             >
               <div className="flex items-start gap-4">
                 <Search className="w-5 h-5 text-accent mt-0.5" />
@@ -52,7 +52,7 @@ const HistoryPage = () => {
           ))}
         </div>
       ) : (
-        <div className="glass-card p-10 text-center">
+        <div className="pv-card p-10 text-center">
           <Clock className="w-12 h-12 text-accent mx-auto mb-4" />
           <h2 className="text-xl font-display font-bold mb-2">No research history yet</h2>
           <p className="text-text-secondary text-sm mb-6">Run a query in the AI Assistant and it will appear here.</p>

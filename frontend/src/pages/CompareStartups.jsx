@@ -47,7 +47,7 @@ const CompareStartups = () => {
   ];
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="pv-content-container py-12">
       <div className="text-center mb-10">
         <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/20 bg-accent/5 text-accent text-xs font-semibold uppercase tracking-wider mb-3">
           <GitCompare className="w-4 h-4" />
@@ -58,9 +58,9 @@ const CompareStartups = () => {
       </div>
 
       {loading ? (
-        <div className="h-96 glass-card animate-pulse" />
+        <div className="h-96 pv-card animate-pulse" />
       ) : (
-        <div className="glass-card overflow-hidden">
+        <div className="pv-card overflow-hidden">
           <div className="grid grid-cols-1 md:grid-cols-3 border-b border-border">
             <div className="p-5 bg-bg/30 hidden md:block" />
             <div className="p-5 border-b md:border-b-0 md:border-l border-border">

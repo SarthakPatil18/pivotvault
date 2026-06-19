@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSearchParams, Link } from 'react-router-dom';
-import { motion, AnimatePresence } from 'framer-motion';
-import { Sparkles, Search, BookOpen, AlertCircle, ArrowRight, ShieldAlert, ListRestart, HelpCircle } from 'lucide-react';
+import { motion } from 'framer-motion';
+import { Sparkles, Search, BookOpen, AlertCircle, ArrowRight, ShieldAlert, HelpCircle, Bot, User } from 'lucide-react';
 import StartupCard from '../components/StartupCard';
 import api from '../lib/api';
 
@@ -52,23 +52,22 @@ const AiAssistant = () => {
     "Find startups with broken unit economics."
   ];
 
-  // Helper function to render inline markdown strings
+  // Helper function to render markdown
   const renderMarkdown = (text) => {
     if (!text) return null;
     return text.split('\n').map((line, idx) => {
       let content = line;
-      // Replace **bold** with <strong>bold</strong>
-      content = content.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+      content = content.replace(/\*\*(.*?)\*\*/g, '<strong class="text-text-primary">$1</strong>');
       
       if (line.trim().startsWith('* ') || line.trim().startsWith('- ')) {
         return (
-          <li key={idx} className="ml-4 list-disc text-sm text-text-secondary mb-2" 
+          <li key={idx} className="ml-6 list-disc text-text-secondary mb-2" 
               dangerouslySetInnerHTML={{ __html: content.replace(/^[*-\s]+/, '') }} />
         );
       }
       if (line.trim().startsWith('1. ') || line.trim().startsWith('2. ') || line.trim().startsWith('3. ')) {
         return (
-          <li key={idx} className="ml-4 list-decimal text-sm text-text-secondary mb-2" 
+          <li key={idx} className="ml-6 list-decimal text-text-secondary mb-2" 
               dangerouslySetInnerHTML={{ __html: content.replace(/^\d+\.\s+/, '') }} />
         );
       }
@@ -78,215 +77,232 @@ const AiAssistant = () => {
       if (line.trim().startsWith('## ')) {
         return <h3 key={idx} className="text-lg font-bold text-text-primary mt-6 mb-3 border-b border-border pb-1" dangerouslySetInnerHTML={{ __html: content.replace(/^##\s+/, '') }} />;
       }
-      return <p key={idx} className="text-sm sm:text-base text-text-secondary leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: content }} />;
+      return <p key={idx} className="text-text-secondary leading-relaxed mb-4" dangerouslySetInnerHTML={{ __html: content }} />;
     });
   };
 
   return (
-    <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-      {/* Page Title */}
-      <div className="text-center mb-10">
-        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full border border-accent/20 bg-accent/5 text-accent text-xs font-semibold uppercase tracking-wider mb-3">
-          <Sparkles className="w-3.5 h-3.5" />
-          Failure Analyst Core
+    <div className="min-h-screen bg-bg">
+      <div className="pv-content-container py-12">
+        {/* Header */}
+        <div className="text-center mb-10">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-accent/20 bg-accent/5 text-accent text-[10px] font-semibold uppercase tracking-wider mb-3">
+            <Sparkles className="w-3.5 h-3.5" />
+            AI Research Assistant
+          </div>
+          <h1 className="text-4xl font-display font-bold text-text-primary mb-3">AI Research Assistant</h1>
+          <p className="text-text-secondary text-lg max-w-2xl mx-auto">Query our failure database, extract insights, and compare strategies semantically.</p>
         </div>
-        <h1 className="text-4xl font-display font-extrabold text-text-primary">AI Research Assistant</h1>
-        <p className="text-text-secondary text-base mt-2 max-w-lg mx-auto">
-          Query failures, extract historical insights, and compare failed business strategies semantically.
-        </p>
-      </div>
 
-      {/* Perplexity-style Large Glowing Query Input */}
-      <div className="max-w-3xl mx-auto mb-10">
-        <form onSubmit={handleSubmit} className="relative glass-card p-2 rounded-2xl border border-border/80 flex flex-col sm:flex-row items-center gap-2 bg-surface/80 shadow-[0_15px_40px_rgba(0,0,0,0.4)]">
-          <div className="flex items-center w-full px-3 py-2">
-            <Search className="w-5.5 h-5.5 text-text-muted shrink-0 mr-3" />
+        {/* Search Section */}
+        <div className="max-w-3xl mx-auto mb-10">
+          <form onSubmit={handleSubmit} className="relative pv-card p-3 flex items-center gap-3">
+            <Search className="w-5 h-5 text-text-muted shrink-0 ml-2" />
             <input
               type="text"
-              placeholder="e.g. Compare WeWork and Quibi or Ask about Food delivery burn rates..."
-              className="w-full bg-transparent border-none py-1 focus:outline-none text-text-primary placeholder:text-text-muted text-base sm:text-lg"
+              placeholder="Ask anything about startup failures..."
+              className="flex-1 bg-transparent border-0 py-2 text-text-primary placeholder:text-text-muted focus:ring-0 text-base"
               value={query}
               onChange={(e) => setQuery(e.target.value)}
               disabled={loading}
             />
-          </div>
-          <button
-            type="submit"
-            disabled={loading}
-            className="w-full sm:w-auto bg-accent hover:bg-indigo-600 disabled:opacity-50 text-white px-6 py-3.5 rounded-xl font-bold flex items-center justify-center gap-2 transition-all shrink-0 shadow-md cursor-pointer"
-          >
-            {loading ? (
-              <div className="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin" />
-            ) : (
-              <Sparkles className="w-4 h-4" />
-            )}
-            Run Analysis
-          </button>
-        </form>
+            <button
+              type="submit"
+              disabled={loading}
+              className="pv-btn-primary disabled:opacity-50 shrink-0"
+            >
+              {loading ? (
+                <div className="w-5 h-5 border-2 border-accent-contrast/30 border-t-accent-contrast rounded-full animate-spin" />
+              ) : (
+                <>
+                  Analyze
+                  <ArrowRight className="w-4 h-4 ml-2" />
+                </>
+              )}
+            </button>
+          </form>
 
-        {/* Example Suggestions */}
-        {!result && !loading && (
-          <div className="mt-8 text-center">
-            <h3 className="text-xs text-text-muted font-bold uppercase tracking-wider mb-4 flex items-center justify-center gap-1.5">
-              <HelpCircle className="w-4 h-4 text-accent" />
-              Suggested Research Directions
-            </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-              {sampleQuestions.map((q, idx) => (
-                <button
-                  key={idx}
-                  onClick={() => {
-                    setQuery(q);
-                    setSearchParams({ q });
-                    executeResearch(q);
-                  }}
-                  className="text-left text-sm text-text-secondary bg-surface-2/40 border border-border hover:border-accent/30 hover:bg-surface-2/70 p-4 rounded-xl transition-all duration-200"
-                >
-                  <div className="font-semibold text-text-primary mb-1 flex items-center justify-between">
-                    <span>Topic {idx + 1}</span>
-                    <ArrowRight className="w-3.5 h-3.5 text-accent" />
-                  </div>
-                  <div className="text-xs text-text-secondary">{q}</div>
-                </button>
-              ))}
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Loading Skeletal state */}
-      {loading && (
-        <div className="max-w-4xl mx-auto space-y-8 animate-pulse mt-12">
-          <div className="h-6 bg-surface-2 rounded w-1/4" />
-          <div className="space-y-3">
-            <div className="h-4 bg-surface-2 rounded" />
-            <div className="h-4 bg-surface-2 rounded w-5/6" />
-            <div className="h-4 bg-surface-2 rounded w-4/6" />
-          </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 mt-8">
-            <div className="h-40 bg-surface-2 rounded-xl" />
-            <div className="h-40 bg-surface-2 rounded-xl" />
-          </div>
-        </div>
-      )}
-
-      {/* Error state */}
-      {error && (
-        <div className="max-w-md mx-auto bg-red-500/10 border border-red-500/20 p-5 rounded-xl text-center text-danger mt-12">
-          <AlertCircle className="w-8 h-8 mx-auto mb-3" />
-          <p className="font-semibold text-sm">{error}</p>
-          <button 
-            onClick={() => executeResearch(query)}
-            className="mt-3 text-xs bg-red-500/20 text-text-primary px-4 py-2 rounded-lg font-bold hover:bg-red-500/30"
-          >
-            Retry Call
-          </button>
-        </div>
-      )}
-
-      {/* Result presentation */}
-      {!loading && result && (
-        <motion.div 
-          initial={{ opacity: 0, y: 15 }}
-          animate={{ opacity: 1, y: 0 }}
-          className="max-w-4xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-10 mt-12"
-        >
-          {/* Main content pane */}
-          <div className="lg:col-span-2 space-y-10">
-            {/* AI Summary */}
-            <section className="glass-card p-8 bg-surface/40">
-              <div className="flex items-center gap-2 text-accent-2 font-bold text-xs uppercase tracking-wider mb-4">
-                <BookOpen className="w-4 h-4" />
-                AI Analysis Summary
-              </div>
-              <div className="text-text-secondary leading-relaxed">
-                {renderMarkdown(result.aiSummary)}
-              </div>
-            </section>
-
-            {/* Timeline comparison */}
-            {result.timeline && result.timeline.length > 0 && (
-              <section className="glass-card p-8 bg-surface/40">
-                <h3 className="font-display font-bold text-lg mb-6 flex items-center gap-2">
-                  <span className="w-1.5 h-5 bg-accent rounded" />
-                  Comparative Timeline
-                </h3>
-                <div className="relative pl-6 border-l border-border/80 ml-2 space-y-6">
-                  {result.timeline.map((evt, idx) => (
-                    <div key={idx} className="relative">
-                      <span className="absolute -left-[31px] top-1.5 w-3 h-3 rounded-full bg-accent border-2 border-bg" />
-                      <div>
-                        <span className="text-[10px] font-data font-bold text-accent-2 uppercase tracking-widest">{evt.year} — {evt.startup}</span>
-                        <h4 className="text-sm font-bold text-text-primary mt-0.5">{evt.event}</h4>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-          </div>
-
-          {/* Right Sidebar: Sources and Lessons */}
-          <div className="space-y-8">
-            {/* Cited references */}
-            {result.sources && result.sources.length > 0 && (
-              <section className="glass-card p-6 bg-surface/40">
-                <h3 className="text-xs text-text-muted font-bold uppercase tracking-wider mb-4">Cited Sources</h3>
-                <div className="space-y-3">
-                  {result.sources.map((src, i) => (
-                    <Link 
-                      key={i} 
-                      to={`/startup/${src}`}
-                      className="block p-3 bg-surface-2/50 border border-border/80 hover:border-accent/30 rounded-xl transition-all hover:bg-surface-2"
-                    >
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-bold text-text-primary capitalize">{src.replace(/-/g, ' ')}</span>
-                        <ArrowRight className="w-3.5 h-3.5 text-accent" />
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              </section>
-            )}
-
-            {/* Lessons panel */}
-            {result.keyLessons && result.keyLessons.length > 0 && (
-              <section className="glass-card p-6 bg-surface/40 border border-accent/20">
-                <h3 className="text-sm font-display font-bold text-text-primary mb-4 flex items-center gap-2">
-                  <ShieldAlert className="w-4 h-4 text-accent" />
-                  Key Lessons
-                </h3>
-                <div className="space-y-4">
-                  {result.keyLessons.map((les, i) => (
-                    <div key={i} className="text-xs">
-                      <div className="font-bold text-text-primary mb-1 border-b border-border/40 pb-1 flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-accent" />
-                        {les.lesson}
-                      </div>
-                      <p className="text-text-secondary leading-relaxed pl-3">{les.details}</p>
-                    </div>
-                  ))}
-                </div>
-              </section>
-            )}
-          </div>
-
-          {/* Related startups grid at the bottom */}
-          {result.relatedStartups && result.relatedStartups.length > 0 && (
-            <div className="lg:col-span-3 mt-4">
-              <h3 className="font-display font-bold text-lg mb-6 flex items-center gap-2">
-                <span className="w-1.5 h-5 bg-accent-2 rounded" />
-                Related Failures
+          {/* Example Suggestions */}
+          {!result && !loading && (
+            <div className="mt-8">
+              <h3 className="text-xs font-bold uppercase text-text-muted tracking-widest mb-4 flex items-center justify-center gap-2">
+                <HelpCircle className="w-4 h-4 text-accent" />
+                Suggested Research Directions
               </h3>
-              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
-                {result.relatedStartups.map((rs, idx) => (
-                  <StartupCard key={idx} {...rs} topFailureReason={null} />
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {sampleQuestions.map((q, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      setQuery(q);
+                      setSearchParams({ q });
+                      executeResearch(q);
+                    }}
+                    className="text-left p-5 pv-card-interactive"
+                  >
+                    <div className="text-xs font-bold uppercase text-accent mb-1">Topic {idx + 1}</div>
+                    <div className="text-text-primary font-medium">{q}</div>
+                  </button>
                 ))}
               </div>
             </div>
           )}
-        </motion.div>
-      )}
+        </div>
+
+        {/* Loading State */}
+        {loading && (
+          <div className="max-w-4xl mx-auto py-16 text-center">
+            <div className="flex flex-col items-center gap-4">
+              <div className="w-12 h-12 border-4 border-surface-3 border-t-accent rounded-full animate-spin" />
+              <div className="text-lg font-data text-accent">Researching...</div>
+            </div>
+          </div>
+        )}
+
+        {/* Error State */}
+        {error && (
+          <div className="max-w-md mx-auto pv-card p-6 border-danger/30 bg-danger/5 mt-12">
+            <AlertCircle className="w-8 h-8 text-danger mx-auto mb-4" />
+            <p className="text-center text-text-primary font-semibold mb-3">{error}</p>
+            <div className="flex justify-center">
+              <button 
+                onClick={() => executeResearch(query)}
+                className="pv-btn-secondary"
+              >
+                Try Again
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Result Presentation */}
+        {!loading && result && (
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            className="max-w-5xl mx-auto"
+          >
+            {/* Conversation Flow */}
+            <div className="space-y-6 mb-10">
+              {/* User Query */}
+              <div className="flex gap-4 items-start">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-surface-3 shrink-0">
+                  <User className="w-5 h-5 text-text-primary" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-xs font-bold uppercase text-text-muted tracking-wider mb-2">You</div>
+                  <div className="pv-card p-5">
+                    <p className="text-text-primary">{searchParams.get('q') || query}</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* AI Response */}
+              <div className="flex gap-4 items-start">
+                <div className="flex items-center justify-center w-10 h-10 rounded-full bg-accent shrink-0">
+                  <Bot className="w-5 h-5 text-accent-contrast" />
+                </div>
+                <div className="flex-1">
+                  <div className="text-xs font-bold uppercase text-accent tracking-wider mb-2 flex items-center gap-2">
+                    <Sparkles className="w-3.5 h-3.5" />
+                    AI Analysis
+                  </div>
+                  <div className="pv-card p-6">
+                    {renderMarkdown(result.aiSummary)}
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Timeline Comparison */}
+            {result.timeline && result.timeline.length > 0 && (
+              <div className="pv-card p-8 mb-8">
+                <h3 className="text-xl font-display font-bold text-text-primary mb-6 flex items-center gap-2">
+                  <span className="w-1 h-6 bg-accent rounded-full" />
+                  Comparative Timeline
+                </h3>
+                <div className="relative pl-8 border-l border-border space-y-6 ml-2">
+                  {result.timeline.map((evt, idx) => (
+                    <div key={idx} className="relative">
+                      <span className="absolute -left-10 top-1.5 w-4 h-4 rounded-full bg-accent border-4 border-bg" />
+                      <div>
+                        <span className="text-xs font-data font-bold text-accent uppercase tracking-widest">{evt.year} — {evt.startup}</span>
+                        <h4 className="text-base font-semibold text-text-primary mt-1">{evt.event}</h4>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Key Insights and Sources */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+              {/* Key Lessons */}
+              {result.keyLessons && result.keyLessons.length > 0 && (
+                <div className="lg:col-span-1">
+                  <div className="pv-card p-6 border-accent/20 bg-surface/20 h-full">
+                    <h3 className="text-sm font-display font-bold text-text-primary mb-5 flex items-center gap-2">
+                      <ShieldAlert className="w-4 h-4 text-accent" />
+                      Key Lessons
+                    </h3>
+                    <div className="space-y-4">
+                      {result.keyLessons.map((les, i) => (
+                        <div key={i} className="text-sm">
+                          <div className="font-semibold text-text-primary mb-1 border-b border-border/40 pb-1 flex items-center gap-2">
+                            <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                            {les.lesson}
+                          </div>
+                          <p className="text-text-secondary leading-relaxed pl-3">{les.details}</p>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Cited References */}
+              {result.sources && result.sources.length > 0 && (
+                <div className="lg:col-span-2">
+                  <div className="pv-card p-6 h-full">
+                    <h3 className="text-xs font-bold uppercase text-text-muted tracking-widest mb-5">
+                      Cited References
+                    </h3>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                      {result.sources.map((src, i) => (
+                        <Link
+                          key={i}
+                          to={`/startup/${src}`}
+                          className="p-4 border border-border rounded-lg bg-surface hover:border-accent/40 hover:bg-surface-2 transition-colors"
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="font-semibold text-text-primary capitalize">{src.replace(/-/g, ' ')}</span>
+                            <ArrowRight className="w-4 h-4 text-accent" />
+                          </div>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Related Startups */}
+            {result.relatedStartups && result.relatedStartups.length > 0 && (
+              <div>
+                <h3 className="text-xl font-display font-bold text-text-primary mb-6 flex items-center gap-2">
+                  <span className="w-1 h-6 bg-accent rounded-full" />
+                  Related Failures
+                </h3>
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+                  {result.relatedStartups.map((rs, idx) => (
+                    <StartupCard key={idx} {...rs} topFailureReason={null} />
+                  ))}
+                </div>
+              </div>
+            )}
+          </motion.div>
+        )}
+      </div>
     </div>
   );
 };

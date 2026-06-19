@@ -27,10 +27,10 @@ const BookmarkButton = ({ slug, className }) => {
       onClick={handleClick}
       title={active ? 'Remove bookmark' : 'Save startup'}
       className={clsx(
-        'p-2 rounded-lg border transition-all',
+        'pv-btn-icon h-9 w-9',
         active
           ? 'bg-accent/15 border-accent/40 text-accent'
-          : 'bg-surface-2/60 border-border/60 text-text-muted hover:text-accent hover:border-accent/30',
+          : 'bg-surface-2 border-border text-text-muted hover:text-accent hover:border-accent/40',
         className
       )}
     >

@@ -28,7 +28,7 @@ const FailureQuiz = () => {
   const complete = questions.length > 0 && Object.keys(answers).length === questions.length;
 
   return (
-    <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div className="pv-content-container py-12">
       <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-10">
         <div>
           <div className="text-xs text-accent font-bold uppercase tracking-widest mb-2">Pattern Training</div>
@@ -42,9 +42,9 @@ const FailureQuiz = () => {
       </div>
 
       {loading ? (
-        <div className="space-y-4">{[1, 2, 3].map((i) => <div key={i} className="h-36 glass-card animate-pulse" />)}</div>
+        <div className="space-y-4">{[1, 2, 3].map((i) => <div key={i} className="h-36 pv-card animate-pulse" />)}</div>
       ) : questions.length === 0 ? (
-        <div className="glass-card p-10 text-center">
+        <div className="pv-card p-10 text-center">
           <Brain className="w-12 h-12 text-accent mx-auto mb-4" />
           <h2 className="text-xl font-display font-bold mb-2">Not enough data for a quiz yet</h2>
           <p className="text-text-secondary text-sm">Seed at least four startups with failure reasons to generate questions.</p>
@@ -52,7 +52,7 @@ const FailureQuiz = () => {
       ) : (
         <>
           {complete && (
-            <div className="glass-card p-5 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-accent/30">
+            <div className="pv-card p-5 mb-6 flex flex-col sm:flex-row sm:items-center justify-between gap-4 border-accent/30">
               <div>
                 <div className="text-xs text-accent font-bold uppercase tracking-widest">Result</div>
                 <div className="text-2xl font-display font-bold">You scored {score}/{questions.length}</div>
@@ -68,7 +68,7 @@ const FailureQuiz = () => {
               const picked = answers[i];
               const answered = Boolean(picked);
               return (
-                <section key={`${q.slug}-${i}`} className="glass-card p-6">
+                <section key={`${q.slug}-${i}`} className="pv-card p-6">
                   <div className="flex flex-col sm:flex-row sm:items-start justify-between gap-3 mb-5">
                     <div>
                       <div className="text-xs text-text-muted uppercase font-bold tracking-wider">Question {i + 1} / {questions.length}</div>

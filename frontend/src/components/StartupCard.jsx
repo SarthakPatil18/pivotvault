@@ -1,20 +1,33 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Calendar, Users, DollarSign, ArrowRight, ShieldAlert } from 'lucide-react';
+import { DollarSign, ShieldAlert, ArrowRight } from 'lucide-react';
 import { clsx } from 'clsx';
 import BookmarkButton from './BookmarkButton';
+import Logo from './Logo';
 
-const StartupCard = ({ name, slug, status, industry, fundingInr, peakUsers, lifetimeMonths, summary, topFailureReason, foundingYear, shutdownYear }) => {
+const StartupCard = ({ 
+  name, 
+  slug, 
+  status, 
+  industry, 
+  fundingInr, 
+  peakUsers, 
+  lifetimeMonths, 
+  summary, 
+  topFailureReason, 
+  foundingYear, 
+  shutdownYear,
+  domain
+}) => {
   const formatINR = (val) => {
     if (!val) return 'Undisclosed';
     const num = Number(val);
-    if (num >= 1000000000) return `₹${(num / 1000000000).toFixed(1)} B`;
-    if (num >= 10000000) return `₹${(num / 10000000).toFixed(1)} Cr`;
-    if (num >= 100000) return `₹${(num / 100000).toFixed(1)} L`;
+    if (num >= 1000000000) return `₹${(num / 1000000000).toFixed(1)}B`;
+    if (num >= 10000000) return `₹${(num / 10000000).toFixed(1)}Cr`;
+    if (num >= 100000) return `₹${(num / 100000).toFixed(1)}L`;
     return `₹${num.toLocaleString('en-IN')}`;
   };
 
-  // Compute a deterministic failure score (40-100)
   const getFailureScore = (reason) => {
     if (!reason) return 72;
     const r = reason.toLowerCase();
@@ -31,24 +44,10 @@ const StartupCard = ({ name, slug, status, industry, fundingInr, peakUsers, life
   const failureScore = getFailureScore(topFailureReason);
 
   const statusColors = {
-    failed: 'bg-red-500/10 text-danger border-red-500/20',
-    acquired: 'bg-emerald-500/10 text-success border-emerald-500/20',
-    pivoted: 'bg-amber-500/10 text-warning border-amber-500/20',
-    zombie: 'bg-slate-500/10 text-text-secondary border-slate-500/20',
-  };
-
-  // Custom logo color based on hash of the name
-  const getLogoGradient = (str) => {
-    const hash = str.split('').reduce((acc, char) => acc + char.charCodeAt(0), 0);
-    const gradients = [
-      'from-pink-500 to-rose-500',
-      'from-purple-600 to-indigo-600',
-      'from-blue-500 to-cyan-500',
-      'from-emerald-500 to-teal-500',
-      'from-amber-500 to-orange-500',
-      'from-violet-500 to-fuchsia-500',
-    ];
-    return gradients[hash % gradients.length];
+    failed: 'bg-danger/10 text-danger border-danger/20',
+    acquired: 'bg-success/10 text-success border-success/20',
+    pivoted: 'bg-warning/10 text-warning border-warning/20',
+    zombie: 'bg-surface-3 text-text-secondary border-border',
   };
 
   const cleanReason = topFailureReason
@@ -57,66 +56,60 @@ const StartupCard = ({ name, slug, status, industry, fundingInr, peakUsers, life
 
   return (
     <Link to={`/startup/${slug}`} className="group block h-full">
-      <div className="glass-card p-6 h-full flex flex-col hover:-translate-y-2 hover:border-accent/30 hover:shadow-[0_12px_30px_rgba(109,94,245,0.18)] transition-all duration-350 relative overflow-hidden">
-        
-        {/* Glow overlay on hover */}
-        <div className="absolute inset-0 bg-gradient-to-br from-accent/5 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
-
-        <div className="flex items-start justify-between mb-5 relative z-10">
-          <div className={clsx(
-            "w-12 h-12 rounded-xl flex items-center justify-center font-display font-bold text-lg text-white shadow-md bg-gradient-to-br",
-            getLogoGradient(name)
-          )}>
-            {name.substring(0, 2).toUpperCase()}
-          </div>
-          <div className="flex flex-col items-end gap-1.5">
+      <div className="pv-card-interactive p-6 h-full flex flex-col">
+        {/* Header */}
+        <div className="flex items-start justify-between mb-4">
+          <Logo 
+            name={name} 
+            domain={domain} 
+            size="md"
+            className="shrink-0"
+          />
+          <div className="flex flex-col items-end gap-2">
             <BookmarkButton slug={slug} />
             <span className={clsx(
-              'px-2.5 py-0.5 rounded-badge text-[10px] font-bold uppercase tracking-wider border',
+              'px-2.5 py-1 rounded-md text-xs font-bold uppercase border',
               statusColors[status] || statusColors.failed
             )}>
               {status}
             </span>
-            <span className="text-[10px] text-text-secondary bg-surface-2/80 px-2 py-0.5 rounded-badge border border-border/40 font-data">
-              {foundingYear && shutdownYear ? `${foundingYear} - ${shutdownYear}` : `${lifetimeMonths || 12} Mo.`}
-            </span>
           </div>
         </div>
 
-        <div className="relative z-10 flex-1 flex flex-col">
-          <h3 className="text-xl font-display font-bold mb-1 text-text-primary group-hover:text-accent transition-colors duration-200">{name}</h3>
-          <p className="text-xs text-accent font-semibold tracking-wider uppercase mb-3">{industry}</p>
+        {/* Content */}
+        <div className="flex-1 flex flex-col">
+          <h3 className="text-xl font-display font-bold mb-1 text-text-primary group-hover:text-accent transition-colors">{name}</h3>
+          <p className="text-sm text-text-muted mb-3">{industry}</p>
           
-          <p className="text-sm text-text-secondary line-clamp-3 mb-5 leading-relaxed flex-1">
+          <p className="text-sm text-text-secondary line-clamp-3 mb-4 leading-relaxed">
             {summary}
           </p>
 
-          <div className="grid grid-cols-2 gap-4 py-3 border-y border-border/50 mb-4 bg-bg/30 px-3 rounded-lg">
+          {/* Stats */}
+          <div className="grid grid-cols-2 gap-4 py-3 border-y border-border bg-surface-2/50 px-3 rounded-md mb-4">
             <div>
-              <div className="text-[9px] uppercase tracking-wider text-text-muted mb-0.5 font-bold">Capital Raised</div>
-              <div className="flex items-center gap-1 text-xs font-semibold text-text-primary font-data">
-                <DollarSign className="w-3.5 h-3.5 text-accent" />
+              <div className="text-xs uppercase text-text-muted mb-1 font-medium">Capital Raised</div>
+              <div className="flex items-center gap-1 text-sm font-semibold text-text-primary font-data">
+                <DollarSign className="w-4 h-4 text-accent" />
                 {formatINR(fundingInr)}
               </div>
             </div>
             <div>
-              <div className="text-[9px] uppercase tracking-wider text-text-muted mb-0.5 font-bold">Failure Score</div>
-              <div className="flex items-center gap-1.5 text-xs font-semibold text-danger font-data">
-                <ShieldAlert className="w-3.5 h-3.5" />
+              <div className="text-xs uppercase text-text-muted mb-1 font-medium">Failure Score</div>
+              <div className="flex items-center gap-1.5 text-sm font-semibold text-danger font-data">
+                <ShieldAlert className="w-4 h-4" />
                 {failureScore}%
               </div>
             </div>
           </div>
         </div>
 
-        {/* Action / Expand Preview Area */}
-        <div className="relative z-10 flex items-center justify-between mt-2 pt-1">
-          <div className="text-xs text-text-muted font-medium group-hover:text-text-secondary transition-colors">
-            Core Root: <span className="text-danger font-semibold">{cleanReason}</span>
+        {/* Footer */}
+        <div className="flex items-center justify-between pt-1">
+          <div className="text-sm text-text-muted">
+            Root cause: <span className="text-danger font-medium">{cleanReason}</span>
           </div>
-          <span className="text-accent group-hover:translate-x-1.5 transition-transform duration-300">
-            <ArrowRight className="w-4 h-4" />
-          </span>
+          <ArrowRight className="w-4 h-4 text-text-muted group-hover:text-accent group-hover:translate-x-0.5 transition-all" />
         </div>
       </div>
     </Link>

@@ -1,7 +1,7 @@
 import React from 'react';
 import * as d3 from 'd3';
 import axios from 'axios';
-import { Info, ZoomIn, ZoomOut, RotateCcw, Building2, MapPin, Skull } from 'lucide-react';
+import { Info, ZoomIn, ZoomOut, RotateCcw, Building2, MapPin, Skull, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useTheme } from '../context/ThemeContext';
 
@@ -9,6 +9,8 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
 const KnowledgeGraph = () => {
   const containerRef = React.useRef(null);
+  const svgRef = React.useRef(null);
+  const zoomRef = React.useRef(null);
   const [data, setData] = React.useState(null);
   const [selectedNode, setSelectedNode] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
@@ -43,6 +45,8 @@ const KnowledgeGraph = () => {
       .attr("height", height)
       .attr("viewBox", [0, 0, width, height]);
 
+    svgRef.current = svg.node();
+
     const g = svg.append("g");
 
     // Zoom behavior
@@ -50,6 +54,7 @@ const KnowledgeGraph = () => {
       .scaleExtent([0.1, 8])
       .on("zoom", (event) => g.attr("transform", event.transform));
 
+    zoomRef.current = zoom;
     svg.call(zoom);
 
     const simulation = d3.forceSimulation(data.nodes)
@@ -59,10 +64,9 @@ const KnowledgeGraph = () => {
       .force("x", d3.forceX(width / 2).strength(0.05))
       .force("y", d3.forceY(height / 2).strength(0.05));
 
-    // Links
-    const linkColor = theme === 'blue' ? '#2A2A2A' : '#CBD5E1';
+    // Links with theme-aware colors
     const link = g.append("g")
-      .attr("stroke", linkColor)
+      .attr("stroke", "var(--color-border)")
       .attr("stroke-opacity", 0.6)
       .selectAll("line")
       .data(data.links)
@@ -82,24 +86,23 @@ const KnowledgeGraph = () => {
         if (d.type === 'startup') setSelectedNode(d);
       });
 
-    // Node circles/shapes
+    // Node circles/shapes with theme-aware colors
     node.append("circle")
       .attr("r", d => d.type === 'startup' ? 12 : d.type === 'mistake' ? 8 : 6)
       .attr("fill", d => {
-        if (d.type === 'startup') return "#C58A2A"; // Gold for startups
-        if (d.type === 'mistake') return "#F97316";
-        return "#EF4444";
+        if (d.type === 'startup') return "var(--color-accent)";
+        if (d.type === 'mistake') return "var(--color-warning)";
+        return "var(--color-danger)";
       })
-      .attr("stroke", theme === 'blue' ? "#0A0A0A" : "#FFFFFF")
+      .attr("stroke", "var(--color-bg)")
       .attr("stroke-width", 2);
 
-    // Labels
-    const labelColor = theme === 'blue' ? '#F5F5F5' : '#1E293B';
+    // Labels with theme-aware colors
     node.append("text")
       .text(d => d.name)
       .attr("x", 16)
       .attr("y", 4)
-      .attr("fill", labelColor)
+      .attr("fill", "var(--color-text-primary)")
       .attr("font-size", "10px")
       .attr("font-weight", "600")
       .attr("font-family", "Plus Jakarta Sans")
@@ -134,29 +137,59 @@ const KnowledgeGraph = () => {
     }
 
     return () => simulation.stop();
-  }, [data]);
+  }, [data, theme]);
+
+  const handleZoomIn = () => {
+    if (svgRef.current && zoomRef.current) {
+      d3.select(svgRef.current).transition().duration(300).call(zoomRef.current.scaleBy, 1.2);
+    }
+  };
+
+  const handleZoomOut = () => {
+    if (svgRef.current && zoomRef.current) {
+      d3.select(svgRef.current).transition().duration(300).call(zoomRef.current.scaleBy, 0.8);
+    }
+  };
+
+  const handleResetZoom = () => {
+    if (svgRef.current && zoomRef.current) {
+      d3.select(svgRef.current).transition().duration(300).call(zoomRef.current.transform, d3.zoomIdentity);
+    }
+  };
 
   return (
     <div className="relative w-full h-[calc(100vh-64px)] overflow-hidden bg-bg">
       {/* Sidebar UI */}
       <div className="absolute top-6 left-6 z-10 space-y-4">
-        <div className="bg-surface/80 backdrop-blur-md border border-border p-6 rounded-card max-w-xs">
-          <h1 className="text-2xl font-display font-bold mb-2">Failure Knowledge Graph</h1>
+        <div className="pv-card p-6 max-w-xs">
+          <h1 className="text-xl font-display font-bold text-text-primary mb-2">Failure Knowledge Graph</h1>
           <p className="text-xs text-text-secondary leading-relaxed">
-            Visualizing connections between <span className="text-accent-2 font-bold">Startups</span>, 
-            the <span className="text-accent font-bold">Mistakes</span> they made, and the final 
-            <span className="text-red font-bold"> Outcome</span>.
+            Visualizing connections between <span className="text-accent font-bold">Startups</span>, 
+            the <span className="text-warning font-bold">Mistakes</span> they made, and their 
+            <span className="text-danger font-bold"> Outcome</span>.
           </p>
         </div>
 
-        <div className="flex gap-2">
-          <button className="p-3 bg-surface-2 border border-border rounded-lg text-text-secondary hover:text-text-primary transition-colors">
+        <div className="pv-card p-2 flex gap-2">
+          <button 
+            onClick={handleZoomIn}
+            className="pv-btn-icon"
+            aria-label="Zoom In"
+          >
             <ZoomIn className="w-5 h-5" />
           </button>
-          <button className="p-3 bg-surface-2 border border-border rounded-lg text-text-secondary hover:text-text-primary transition-colors">
+          <button 
+            onClick={handleZoomOut}
+            className="pv-btn-icon"
+            aria-label="Zoom Out"
+          >
             <ZoomOut className="w-5 h-5" />
           </button>
-          <button className="p-3 bg-surface-2 border border-border rounded-lg text-text-secondary hover:text-text-primary transition-colors">
+          <button 
+            onClick={handleResetZoom}
+            className="pv-btn-icon"
+            aria-label="Reset View"
+          >
             <RotateCcw className="w-5 h-5" />
           </button>
         </div>
@@ -168,41 +201,44 @@ const KnowledgeGraph = () => {
       <AnimatePresence>
         {selectedNode && (
           <motion.div
-            initial={{ x: 400 }}
-            animate={{ x: 0 }}
-            exit={{ x: 400 }}
-            className="absolute top-6 right-6 bottom-6 w-80 bg-surface/90 backdrop-blur-xl border border-border rounded-card p-8 shadow-2xl z-20 flex flex-col"
+            initial={{ x: 400, opacity: 0 }}
+            animate={{ x: 0, opacity: 1 }}
+            exit={{ x: 400, opacity: 0 }}
+            className="absolute top-6 right-6 bottom-6 w-80 pv-card p-6 z-20 flex flex-col"
           >
             <button 
               onClick={() => setSelectedNode(null)}
-              className="absolute top-4 right-4 text-text-muted hover:text-text-primary transition-colors"
+              className="pv-btn-icon absolute top-4 right-4"
+              aria-label="Close Panel"
             >
-              Close
+              <X className="w-4 h-4" />
             </button>
             
-            <div className="w-16 h-16 bg-surface-2 rounded-2xl flex items-center justify-center text-2xl font-bold text-accent mb-6 border border-border">
-              {selectedNode.name.charAt(0)}
+            <div className="w-16 h-16 bg-accent/10 text-accent rounded-lg flex items-center justify-center text-2xl font-display font-bold mb-6 border border-accent/20">
+              {selectedNode.name.charAt(0).toUpperCase()}
             </div>
             
-            <h2 className="text-2xl font-display font-bold mb-2 text-text-primary">{selectedNode.name}</h2>
-            <div className="bg-red/10 text-red border border-red/20 px-2 py-0.5 rounded-badge text-[10px] font-bold uppercase w-fit mb-6">
-              {selectedNode.status}
-            </div>
+            <h2 className="text-xl font-display font-bold text-text-primary mb-1">{selectedNode.name}</h2>
+            {selectedNode.status && (
+              <div className="bg-danger/10 text-danger border border-danger/20 px-2 py-0.5 rounded text-[10px] font-bold uppercase w-fit mb-6">
+                {selectedNode.status}
+              </div>
+            )}
 
-            <div className="space-y-4 flex-1">
+            <div className="space-y-3 flex-1">
               <div className="flex items-center gap-3 text-sm text-text-secondary">
-                <Building2 className="w-4 h-4 text-accent" />
+                <Building2 className="w-4 h-4 text-accent shrink-0" />
                 {selectedNode.industry}
               </div>
               <div className="flex items-center gap-3 text-sm text-text-secondary">
-                <MapPin className="w-4 h-4 text-accent" />
-                India
+                <MapPin className="w-4 h-4 text-accent shrink-0" />
+                {selectedNode.country || 'India'}
               </div>
             </div>
 
             <a 
               href={`/startup/${selectedNode.slug}`}
-              className="mt-auto bg-accent hover:bg-orange-600 text-white font-bold py-3 rounded-lg text-center transition-all flex items-center justify-center gap-2"
+              className="mt-auto pv-btn-primary flex items-center justify-center gap-2"
             >
               View Full Postmortem
               <Skull className="w-4 h-4" />
@@ -212,10 +248,10 @@ const KnowledgeGraph = () => {
       </AnimatePresence>
 
       {loading && (
-        <div className="absolute inset-0 flex items-center justify-center bg-bg/50 backdrop-blur-sm z-50">
+        <div className="absolute inset-0 flex items-center justify-center bg-bg/80 backdrop-blur-sm z-50">
           <div className="flex flex-col items-center gap-4">
-            <div className="w-12 h-12 border-4 border-accent/20 border-t-accent rounded-full animate-spin" />
-            <div className="font-data text-accent text-sm tracking-widest uppercase">Initializing Force Layout...</div>
+            <div className="w-12 h-12 border-4 border-border border-t-accent rounded-full animate-spin" />
+            <div className="text-sm font-data text-accent tracking-widest uppercase">Initializing Force Layout...</div>
           </div>
         </div>
       )}

@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { GitCompare, ArrowRight } from 'lucide-react';
 import api from '../lib/api';
+import Logo from '../components/Logo';
 
 const formatINR = (val) => {
   if (!val) return 'Undisclosed';
@@ -80,14 +81,20 @@ const CompareStartups = () => {
               <div className="grid grid-cols-1 md:grid-cols-3 border-b border-border">
                 <div className="p-5 bg-bg/30 text-xs uppercase tracking-wider font-bold text-text-muted">Summary</div>
                 <div className="p-5 md:border-l border-border">
-                  <h2 className="text-xl font-display font-bold mb-2">{left.name}</h2>
+                  <div className="flex items-center gap-3 mb-3">
+                    <Logo name={left.name} domain={left.domain} size="sm" />
+                    <h2 className="text-xl font-display font-bold">{left.name}</h2>
+                  </div>
                   <p className="text-sm text-text-secondary leading-relaxed">{left.summary}</p>
                   <Link to={`/startup/${left.slug}`} className="mt-4 inline-flex items-center gap-1 text-accent text-sm font-semibold">
                     View postmortem <ArrowRight className="w-4 h-4" />
                   </Link>
                 </div>
                 <div className="p-5 md:border-l border-border">
-                  <h2 className="text-xl font-display font-bold mb-2">{right.name}</h2>
+                  <div className="flex items-center gap-3 mb-3">
+                    <Logo name={right.name} domain={right.domain} size="sm" />
+                    <h2 className="text-xl font-display font-bold">{right.name}</h2>
+                  </div>
                   <p className="text-sm text-text-secondary leading-relaxed">{right.summary}</p>
                   <Link to={`/startup/${right.slug}`} className="mt-4 inline-flex items-center gap-1 text-accent text-sm font-semibold">
                     View postmortem <ArrowRight className="w-4 h-4" />

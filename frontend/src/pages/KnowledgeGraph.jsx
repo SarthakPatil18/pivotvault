@@ -7,6 +7,18 @@ import { useTheme } from '../context/ThemeContext';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
+// Node color definitions
+const getNodeColors = (d) => {
+  if (d.type === 'center' || d.type === 'shutdown' || !d.type) {
+    return { fill: '#EF4444', stroke: '#F87171' };
+  } else if (d.type === 'mistake' || d.type === 'failure_reason') {
+    return { fill: '#F59E0B', stroke: '#FBBF24' };
+  } else if (d.type === 'startup' || d.type === 'company') {
+    return { fill: '#8B5CF6', stroke: '#A78BFA' };
+  }
+  return { fill: '#8B5CF6', stroke: '#A78BFA' };
+};
+
 const KnowledgeGraph = () => {
   const containerRef = React.useRef(null);
   const svgRef = React.useRef(null);
@@ -51,27 +63,28 @@ const KnowledgeGraph = () => {
 
     // Zoom behavior
     const zoom = d3.zoom()
-      .scaleExtent([0.1, 8])
+      .scaleExtent([0.2, 5])
       .on("zoom", (event) => g.attr("transform", event.transform));
 
     zoomRef.current = zoom;
     svg.call(zoom);
 
     const simulation = d3.forceSimulation(data.nodes)
-      .force("link", d3.forceLink(data.links).id(d => d.id).distance(150))
-      .force("charge", d3.forceManyBody().strength(-300))
+      .force("link", d3.forceLink(data.links).id(d => d.id).distance(200))
+      .force("charge", d3.forceManyBody().strength(-600))
       .force("center", d3.forceCenter(width / 2, height / 2))
-      .force("x", d3.forceX(width / 2).strength(0.05))
-      .force("y", d3.forceY(height / 2).strength(0.05));
+      .force("x", d3.forceX(width / 2).strength(0.03))
+      .force("y", d3.forceY(height / 2).strength(0.03))
+      .force("collide", d3.forceCollide().radius(40));
 
     // Links with theme-aware colors
     const link = g.append("g")
       .attr("stroke", "var(--color-border)")
-      .attr("stroke-opacity", 0.6)
+      .attr("stroke-opacity", 0.5)
       .selectAll("line")
       .data(data.links)
       .join("line")
-      .attr("stroke-width", d => Math.sqrt(d.weight) * 3);
+      .attr("stroke-width", d => Math.sqrt(d.weight || 1) * 2);
 
     // Nodes
     const node = g.append("g")
@@ -83,31 +96,42 @@ const KnowledgeGraph = () => {
         .on("drag", dragged)
         .on("end", dragended))
       .on("click", (event, d) => {
-        if (d.type === 'startup') setSelectedNode(d);
+        if (d.type === 'startup' || d.type === 'company') setSelectedNode(d);
       });
 
     // Node circles/shapes with theme-aware colors
     node.append("circle")
-      .attr("r", d => d.type === 'startup' ? 12 : d.type === 'mistake' ? 8 : 6)
-      .attr("fill", d => {
-        if (d.type === 'startup') return "var(--color-accent)";
-        if (d.type === 'mistake') return "var(--color-warning)";
-        return "var(--color-danger)";
+      .attr("r", d => d.type === 'startup' || d.type === 'company' ? 16 : d.type === 'mistake' || d.type === 'failure_reason' ? 12 : 18)
+      .attr("fill", d => getNodeColors(d).fill)
+      .attr("stroke", d => getNodeColors(d).stroke)
+      .attr("stroke-width", 3)
+      .style("cursor", d => (d.type === 'startup' || d.type === 'company') ? 'pointer' : 'default')
+      .on("mouseenter", function(event, d) {
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .attr("r", d => (d.type === 'startup' || d.type === 'company' ? 20 : d.type === 'mistake' || d.type === 'failure_reason' ? 16 : 22));
       })
-      .attr("stroke", "var(--color-bg)")
-      .attr("stroke-width", 2);
+      .on("mouseleave", function(event, d) {
+        d3.select(this)
+          .transition()
+          .duration(200)
+          .attr("r", d => (d.type === 'startup' || d.type === 'company' ? 16 : d.type === 'mistake' || d.type === 'failure_reason' ? 12 : 18));
+      });
 
     // Labels with theme-aware colors
     node.append("text")
       .text(d => d.name)
-      .attr("x", 16)
-      .attr("y", 4)
-      .attr("fill", "var(--color-text-primary)")
-      .attr("font-size", "10px")
+      .attr("x", 22)
+      .attr("y", 5)
+      .attr("fill", theme === 'blue' ? '#F3F4F6' : '#111827')
+      .attr("font-size", "12px")
       .attr("font-weight", "600")
       .attr("font-family", "Plus Jakarta Sans")
       .style("pointer-events", "none")
-      .style("text-shadow", theme === 'blue' ? "0 0 4px rgba(0,0,0,0.8)" : "0 0 4px rgba(255,255,255,0.8)");
+      .style("text-shadow", theme === 'blue' 
+        ? "0 1px 3px rgba(0,0,0,0.9), 0 0 8px rgba(0,0,0,0.7)" 
+        : "0 1px 3px rgba(255,255,255,0.9), 0 0 8px rgba(255,255,255,0.7)");
 
     simulation.on("tick", () => {
       link
@@ -141,13 +165,13 @@ const KnowledgeGraph = () => {
 
   const handleZoomIn = () => {
     if (svgRef.current && zoomRef.current) {
-      d3.select(svgRef.current).transition().duration(300).call(zoomRef.current.scaleBy, 1.2);
+      d3.select(svgRef.current).transition().duration(300).call(zoomRef.current.scaleBy, 1.3);
     }
   };
 
   const handleZoomOut = () => {
     if (svgRef.current && zoomRef.current) {
-      d3.select(svgRef.current).transition().duration(300).call(zoomRef.current.scaleBy, 0.8);
+      d3.select(svgRef.current).transition().duration(300).call(zoomRef.current.scaleBy, 0.7);
     }
   };
 

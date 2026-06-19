@@ -15,6 +15,18 @@ import { useTheme } from '../context/ThemeContext';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
+// Chart color palette
+const chartColors = [
+  '#F59E0B',
+  '#8B5CF6',
+  '#10B981',
+  '#3B82F6',
+  '#EC4899',
+  '#F97316',
+  '#06B6D4',
+  '#84CC16'
+];
+
 const InsightsDashboard = () => {
   const [data, setData] = React.useState(null);
   const [loading, setLoading] = React.useState(true);
@@ -46,8 +58,8 @@ const InsightsDashboard = () => {
   const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
       return (
-        <div className="pv-card p-3 text-sm">
-          <div className="text-text-muted mb-1">{label}</div>
+        <div className="pv-card p-3 text-sm border border-border/50 shadow-lg">
+          <div className="text-text-muted mb-1 font-bold">{label}</div>
           {payload.map((entry, i) => (
             <div key={i} className="text-text-primary font-semibold">
               {entry.name || 'Count'}: {entry.value}
@@ -80,7 +92,6 @@ const InsightsDashboard = () => {
     );
   }
 
-  const COLORS = ['var(--color-accent)', 'var(--color-info)', 'var(--color-success)', 'var(--color-warning)', 'var(--color-danger)'];
   const metrics = data.metrics || {
     totalFailed: 12437,
     totalFundingLost: '145250000000',
@@ -181,15 +192,15 @@ const InsightsDashboard = () => {
                   cx="50%"
                   cy="50%"
                   outerRadius={90}
-                  stroke="var(--color-border)"
+                  stroke={theme === 'blue' ? '#2A2A2A' : 'var(--color-border)'}
                   strokeWidth={2}
                 >
                   {(data.industryBreakdown || []).map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
+                    <Cell key={`cell-${index}`} fill={chartColors[index % chartColors.length]} />
                   ))}
                 </Pie>
                 <Tooltip content={<CustomTooltip />} />
-                <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 10 }} />
+                <Legend iconType="circle" wrapperStyle={{ fontSize: 11, paddingTop: 10, color: 'var(--color-text-primary)' }} />
               </PieChart>
             </ResponsiveContainer>
           </div>
@@ -216,9 +227,9 @@ const InsightsDashboard = () => {
                   tickLine={false}
                 />
                 <Tooltip content={<CustomTooltip />} cursor={{ fill: 'var(--color-surface-2)' }} />
-                <Bar dataKey="count" fill="var(--color-accent)" radius={[0, 4, 4, 0]} barSize={16}>
+                <Bar dataKey="count" radius={[0, 4, 4, 0]} barSize={16}>
                   {(data.topFailureReasonsByIndustry || []).map((entry, index) => (
-                    <Cell key={`cell-${index}`} fill={index === 0 ? 'var(--color-accent)' : 'var(--color-info)'} />
+                    <Cell key={`cell-${index}`} fill={chartColors[index % chartColors.length]} />
                   ))}
                 </Bar>
               </BarChart>
@@ -239,15 +250,15 @@ const InsightsDashboard = () => {
               <AreaChart data={data.yearlyTrends || []}>
                 <defs>
                   <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="5%" stopColor="var(--color-accent)" stopOpacity={0.3}/>
-                    <stop offset="95%" stopColor="var(--color-accent)" stopOpacity={0}/>
+                    <stop offset="5%" stopColor={chartColors[0]} stopOpacity={0.3}/>
+                    <stop offset="95%" stopColor={chartColors[0]} stopOpacity={0}/>
                   </linearGradient>
                 </defs>
                 <CartesianGrid strokeDasharray="3 3" stroke="var(--color-border)" vertical={false} />
                 <XAxis dataKey="year" tick={{ fill: 'var(--color-text-muted)', fontSize: 11 }} axisLine={false} />
                 <YAxis tick={{ fill: 'var(--color-text-muted)', fontSize: 11 }} axisLine={false} />
                 <Tooltip content={<CustomTooltip />} />
-                <Area type="monotone" dataKey="count" stroke="var(--color-accent)" strokeWidth={3} fillOpacity={1} fill="url(#colorCount)" />
+                <Area type="monotone" dataKey="count" stroke={chartColors[0]} strokeWidth={3} fillOpacity={1} fill="url(#colorCount)" />
               </AreaChart>
             </ResponsiveContainer>
           </div>

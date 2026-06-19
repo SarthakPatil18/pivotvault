@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { Ghost, MessageSquare, Terminal, Search, Filter, Sparkles, AlertCircle } from 'lucide-react';
 import axios from 'axios';
 import GhostChat from '../components/GhostChat';
+import Logo from '../components/Logo';
 
 const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
@@ -78,9 +79,12 @@ const HallOfGhosts = () => {
 
               <div className="relative z-10">
                 <div className="flex items-center gap-3 mb-6">
-                  <div className="w-12 h-12 rounded-2xl bg-surface-2 border border-border flex items-center justify-center text-xl font-bold text-accent">
-                    {startup.name.charAt(0)}
-                  </div>
+                  <Logo 
+                    name={startup.name} 
+                    domain={startup.domain}
+                    size="md"
+                    className="rounded-2xl"
+                  />
                   <div>
                     <h3 className="font-display font-bold text-xl text-text-primary">{startup.name}</h3>
                     <div className="text-xs text-text-muted uppercase tracking-widest font-bold">{startup.industry}</div>

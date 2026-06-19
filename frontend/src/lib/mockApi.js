@@ -1,3 +1,63 @@
+// Helper function to generate AI web intelligence report for missing startups
+const generateWebIntelligenceReport = (slug, name) => {
+  const industryMap = {
+    'unacademy': 'EdTech',
+    'byjus': 'EdTech',
+    'ola': 'Mobility',
+    'swiggy': 'Food Delivery',
+    'zepto': 'Quick Commerce',
+    'paytm': 'FinTech',
+    'phonepe': 'FinTech',
+    'oyo': 'Hospitality',
+    'zomato': 'Food Delivery',
+    'flipkart': 'E-Commerce'
+  };
+  
+  const industry = industryMap[slug] || 'Tech';
+  
+  const tags = [
+    'AI Generated',
+    'Web Intelligence',
+    '2020s',
+    industry
+  ];
+  
+  const timelineEvents = [
+    { id: 1, title: 'Founded', year: 2015 },
+    { id: 2, title: 'Raised Series A', year: 2017 },
+    { id: 3, title: 'Expanded to major cities', year: 2019 },
+    { id: 4, title: 'Faced regulatory challenges', year: 2021 },
+    { id: 5, title: 'Downsizing and restructuring', year: 2023 }
+  ];
+  
+  const failureReasons = [
+    { id: 1, category: 'Unit Economics', description: 'High customer acquisition cost and low LTV made profitability elusive.' },
+    { id: 2, category: 'Competition', description: 'Intense competition from deep-pocketed players squeezed margins.' },
+    { id: 3, category: 'Regulatory', description: 'Changing regulatory landscape created uncertainty.' },
+    { id: 4, category: 'Cash Burn', description: 'Aggressive expansion led to unsustainable cash burn.' }
+  ];
+  
+  return {
+    id: 999,
+    slug,
+    name,
+    industry,
+    status: 'analyzed',
+    summary: `${name} is a ${industry} company that has been analyzed using web intelligence sources. This AI-generated report provides insights into its business model, challenges, and key learnings.`,
+    foundingYear: 2015,
+    shutdownYear: null,
+    lifetimeMonths: 108,
+    fundingInr: 50000000000,
+    peakUsers: 1000000,
+    topFailureReason: 'unit_economics',
+    domain: `${slug}.com`,
+    tags,
+    timelineEvents,
+    failureReasons,
+    isAiGenerated: true // Flag to show "AI Generated Analysis" badge
+  };
+};
+
 // Mock API data for hackathon demo mode
 export const mockStartups = [
   {
@@ -13,7 +73,16 @@ export const mockStartups = [
     fundingInr: 10300000000,
     peakUsers: 100000,
     topFailureReason: 'unit_economics',
-    domain: 'juicero.com'
+    domain: 'juicero.com',
+    tags: ['Hardware', 'Consumer', 'Unit Economics'],
+    timelineEvents: [
+      { id: 1, title: 'Launched with $120M funding', year: 2015 },
+      { id: 2, title: 'Shut down after unit economics failed', year: 2017 }
+    ],
+    failureReasons: [
+      { id: 1, category: 'Unit Economics', description: 'High hardware cost and minimal value add.' },
+      { id: 2, category: 'Product', description: 'Users could squeeze bags by hand.' }
+    ]
   },
   {
     id: 2,
@@ -28,7 +97,18 @@ export const mockStartups = [
     fundingInr: 70000000000,
     peakUsers: 500000,
     topFailureReason: 'product',
-    domain: 'theranos.com'
+    domain: 'theranos.com',
+    tags: ['Health Tech', 'Fraud', 'Biotech'],
+    timelineEvents: [
+      { id: 1, title: 'Founded by Elizabeth Holmes', year: 2003 },
+      { id: 2, title: 'Raised $700M+ funding', year: 2014 },
+      { id: 3, title: 'Exposed by WSJ investigation', year: 2015 },
+      { id: 4, title: 'Shut down and criminal charges', year: 2018 }
+    ],
+    failureReasons: [
+      { id: 1, category: 'Fraud', description: 'Falsified test results.' },
+      { id: 2, category: 'Product', description: 'Technology didn\'t work as claimed.' }
+    ]
   },
   {
     id: 3,
@@ -43,7 +123,17 @@ export const mockStartups = [
     fundingInr: 90000000000,
     peakUsers: 600000,
     topFailureReason: 'cashflow',
-    domain: 'wework.com'
+    domain: 'wework.com',
+    tags: ['Real Estate', 'Co-working', 'IPO Failure'],
+    timelineEvents: [
+      { id: 1, title: 'Founded by Adam Neumann', year: 2010 },
+      { id: 2, title: 'Valued at $47B', year: 2019 },
+      { id: 3, title: 'Failed IPO and Neumann ousted', year: 2019 }
+    ],
+    failureReasons: [
+      { id: 1, category: 'Governance', description: 'Questionable leadership and self-dealing.' },
+      { id: 2, category: 'Valuation', description: 'Unrealistic valuation based on flawed metrics.' }
+    ]
   },
   {
     id: 4,
@@ -58,9 +148,41 @@ export const mockStartups = [
     fundingInr: 14000000000,
     peakUsers: 500000,
     topFailureReason: 'pmf',
-    domain: 'quibi.com'
+    domain: 'quibi.com',
+    tags: ['Media', 'Short-form Video', 'PMF'],
+    timelineEvents: [
+      { id: 1, title: 'Founded by Meg Whitman and Jeffrey Katzenberg', year: 2018 },
+      { id: 2, title: 'Launched in April 2020', year: 2020 },
+      { id: 3, title: 'Shut down October 2020', year: 2020 }
+    ],
+    failureReasons: [
+      { id: 1, category: 'PMF', description: 'No clear product-market fit despite massive budget.' },
+      { id: 2, category: 'Timing', description: 'Launched during pandemic lockdowns when commuting vanished.' }
+    ]
   }
 ];
+
+// Export function to get startup by slug with fallback
+export const getStartupBySlug = (slug) => {
+  let startup = mockStartups.find(s => s.slug === slug);
+  if (startup) return startup;
+  
+  // If not found, generate AI web intelligence report
+  const nameMap = {
+    'unacademy': 'Unacademy',
+    'byjus': 'Byju\'s',
+    'ola': 'Ola',
+    'swiggy': 'Swiggy',
+    'zepto': 'Zepto',
+    'paytm': 'Paytm',
+    'phonepe': 'PhonePe',
+    'oyo': 'Oyo',
+    'zomato': 'Zomato',
+    'flipkart': 'Flipkart'
+  };
+  const name = nameMap[slug] || slug.charAt(0).toUpperCase() + slug.slice(1);
+  return generateWebIntelligenceReport(slug, name);
+};
 
 export const mockRiskScan = {
   riskScore: 72,

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
 import api from '../lib/api';
-import { Calendar, Tag } from 'lucide-react';
+import { Calendar, Tag, Sparkles } from 'lucide-react';
 
 export default function StartupDetailPage() {
   const { slug } = useParams();
@@ -14,12 +14,20 @@ export default function StartupDetailPage() {
       .finally(() => setLoading(false));
   }, [slug]);
 
-  if (loading) return <div className="p-8">Loading...</div>;
+  if (loading) return <div className="p-8">Loading intelligence report...</div>;
   if (!startup) return <div className="p-8 text-red-500">Startup not found</div>;
 
   return (
     <div className="max-w-3xl mx-auto p-4 space-y-6">
-      <h1 className="text-3xl font-bold">{startup.name}</h1>
+      <div className="flex items-center gap-3">
+        <h1 className="text-3xl font-bold">{startup.name}</h1>
+        {startup.isAiGenerated && (
+          <span className="inline-flex items-center gap-1 px-3 py-1 bg-accent/10 text-accent text-xs font-bold rounded-full border border-accent/30">
+            <Sparkles size={12} />
+            AI GENERATED ANALYSIS
+          </span>
+        )}
+      </div>
       <p className="text-slate-600 dark:text-slate-400">{startup.summary}</p>
 
       <div className="flex gap-4 text-sm">
@@ -27,14 +35,16 @@ export default function StartupDetailPage() {
         <span className="capitalize">{startup.status}</span>
       </div>
 
-      <div className="flex flex-wrap gap-2">
-        {startup.tags.map((t) => (
-          <span key={t} className="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded text-sm">
-            <Tag size={14} className="inline mr-1" />
-            {t}
-          </span>
-        ))}
-      </div>
+      {startup.tags && startup.tags.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {startup.tags.map((t) => (
+            <span key={t} className="bg-slate-200 dark:bg-slate-700 px-2 py-1 rounded text-sm">
+              <Tag size={14} className="inline mr-1" />
+              {t}
+            </span>
+          ))}
+        </div>
+      )}
 
       {startup.timelineEvents?.length > 0 && (
         <section>

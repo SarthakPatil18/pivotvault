@@ -4,8 +4,10 @@ import {
   mockRiskScan,
   mockAiResponse,
   mockPlaybook,
-  mockPitchDeckAutopsy
+  mockPitchDeckAutopsy,
+  getStartupBySlug
 } from './mockApi';
+import { getRandomQuestions } from './quizData';
 
 export const API_URL =
   import.meta.env.VITE_API_URL || 'http://localhost:4000';
@@ -36,8 +38,30 @@ realApi.interceptors.request.use((config) => {
 const mockApiHandler = async (config) => {
   const { method, url, data } = config;
   
+  // Mock /quiz endpoint
+  if (url.includes('/quiz')) {
+    // Parse query parameters
+    const urlObj = new URL(url, 'http://localhost');
+    const count = parseInt(urlObj.searchParams.get('count')) || 5;
+    const difficulty = urlObj.searchParams.get('difficulty') || 'mixed';
+    return {
+      data: {
+        questions: getRandomQuestions(count, difficulty)
+      }
+    };
+  }
+
   // Mock /startups endpoint
   if (url.includes('/startups')) {
+    // Check if it's a single startup request (has slug)
+    const match = url.match(/\/startups\/([^/?#]+)/);
+    if (match) {
+      const slug = match[1];
+      return {
+        data: getStartupBySlug(slug)
+      };
+    }
+    
     return {
       data: {
         data: mockStartups,

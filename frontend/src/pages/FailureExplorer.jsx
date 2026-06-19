@@ -243,14 +243,27 @@ const FailureExplorer = () => {
                 <AlertTriangle className="w-12 h-12 text-warning mx-auto mb-4" />
                 <h3 className="text-lg font-semibold text-text-primary mb-2">No results found</h3>
                 <p className="text-text-secondary text-sm mb-6 max-w-md mx-auto">
-                  No startups match your current filters. Try adjusting your search or clearing filters.
+                  {query ? "No startups match your search, but we can generate an AI analysis!" : "No startups match your current filters. Try adjusting your search or clearing filters."}
                 </p>
-                <button
-                  onClick={clearAllFilters}
-                  className="pv-btn-primary"
-                >
-                  Clear all filters
-                </button>
+                <div className="flex flex-col sm:flex-row gap-3 justify-center">
+                  {query && (
+                    <button
+                      onClick={() => {
+                        const slug = query.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+                        window.location.href = `/startup/${slug}`;
+                      }}
+                      className="pv-btn-primary"
+                    >
+                      Generate Intelligence Report
+                    </button>
+                  )}
+                  <button
+                    onClick={clearAllFilters}
+                    className="pv-btn-secondary"
+                  >
+                    Clear all filters
+                  </button>
+                </div>
               </div>
             )}
           </div>

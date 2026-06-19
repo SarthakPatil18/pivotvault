@@ -1,38 +1,56 @@
 import React, { useState } from 'react';
 import { clsx } from 'clsx';
 
-// Helper function to extract domain from name (improved heuristic)
-const getDomainFromName = (name) => {
-  if (!name) return null;
-  
-  // Clean name cleaning
-  const cleanName = name.toLowerCase().replace(/[^a-z0-9]/g, '').trim();
-  if (!cleanName) return null;
-  
-  // Try common suffixes, starting with most likely for startups
-  const suffixes = ['.com', '.co', '.io', '.ai', '.app', '.net', '.org', '.in'];
-  
-  for (const suffix of suffixes) {
-    return cleanName + suffix;
-  }
+// Helper: Normalize company name to find in logo map
+function normalizeName(name) {
+  if (!name) return '';
+  return name.toLowerCase().replace(/[^a-z0-9]/g, '');
+}
 
-  return cleanName + '.com';
+const logoMap = {
+  "dopplerlabs": "/logos/doppler labs.jpg",
+  "fab": "/logos/fab.webp",
+  "googleplus": "/logos/google plus.png",
+  "homejoy": "/logos/homejoy.png",
+  "jawbone": "/logos/jawbone.png",
+  "juicero": "/logos/juicero.png",
+  "moviepass": "/logos/moviepass.png",
+  "parse": "/logos/parse.jpg",
+  "petscom": "/logos/pets.png",
+  "pets": "/logos/pets.png",
+  "pivatechnologies": "/logos/powa technologies.png",
+  "powa": "/logos/powa technologies.png",
+  "quibi": "/logos/quibi.webp",
+  "rdio": "/logos/rdio.png",
+  "secret": "/logos/secret.webp",
+  "shyp": "/logos/shyp.png",
+  "sprig": "/logos/sprig.png",
+  "theranos": "/logos/theranos.png",
+  "vine": "/logos/vine.png",
+  "webvan": "/logos/webvan.jpg",
+  "yikyak": "/logos/yik yak.png",
+  "zirtual": "/logos/zirtual.jpg"
 };
 
-const Logo = ({ 
-  name, 
-  domain, 
-  size = 'md', 
-  className = '', 
+const Logo = ({
+  name,
+  domain,
+  size = 'md',
+  className = '',
   fallbackInitials,
-  ...props 
+  ...props
 }) => {
   const [isError, setIsError] = useState(false);
+
+  const normalizedName = normalizeName(name);
+  let logoUrl = null;
   
-  const logoDomain = domain || getDomainFromName(name);
-  const logoUrl = logoDomain 
-    ? `https://logo.clearbit.com/${logoDomain}` 
-    : null;
+  for (const key in logoMap) {
+    if (normalizedName.includes(key) || key.includes(normalizedName)) {
+      logoUrl = logoMap[key];
+      break;
+    }
+  }
 
   const initials = fallbackInitials || (() => {
     if (!name) return '??';
@@ -65,7 +83,7 @@ const Logo = ({
   };
 
   return (
-    <div 
+    <div
       className={clsx(
         'relative overflow-hidden rounded-lg flex items-center justify-center bg-surface-3 border border-border',
         sizeClasses[size],

@@ -9,14 +9,14 @@ const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:4000';
 
 // Node color definitions
 const getNodeColors = (d) => {
-  if (d.type === 'center' || d.type === 'shutdown' || !d.type) {
-    return { fill: '#EF4444', stroke: '#F87171' };
+  if (d.type === 'center' || d.type === 'shutdown' || d.name === 'Shutdown') {
+    return { fill: '#EF4444', stroke: '#F87171', glow: 'rgba(239, 68, 68, 0.6)' };
   } else if (d.type === 'mistake' || d.type === 'failure_reason') {
-    return { fill: '#F59E0B', stroke: '#FBBF24' };
+    return { fill: '#F59E0B', stroke: '#FBBF24', glow: null };
   } else if (d.type === 'startup' || d.type === 'company') {
-    return { fill: '#8B5CF6', stroke: '#A78BFA' };
+    return { fill: '#8B5CF6', stroke: '#A78BFA', glow: null };
   }
-  return { fill: '#8B5CF6', stroke: '#A78BFA' };
+  return { fill: '#8B5CF6', stroke: '#A78BFA', glow: null };
 };
 
 const KnowledgeGraph = () => {
@@ -48,6 +48,62 @@ const KnowledgeGraph = () => {
     const width = containerRef.current.clientWidth;
     const height = containerRef.current.clientHeight;
 
+    // Process data to ensure all nodes are connected and shutdown node is present
+    let processedNodes = [...data.nodes];
+    let processedLinks = [...data.links];
+
+    // Ensure we have a shutdown node
+    let shutdownNode = processedNodes.find(n => n.name === 'Shutdown' || n.type === 'shutdown');
+    if (!shutdownNode) {
+      shutdownNode = {
+        id: 'shutdown',
+        name: 'Shutdown',
+        type: 'shutdown'
+      };
+      processedNodes.push(shutdownNode);
+    }
+
+    // Ensure all failure reasons connect to shutdown node
+    const failureNodes = processedNodes.filter(n => 
+      n.type === 'mistake' || n.type === 'failure_reason'
+    );
+    failureNodes.forEach(node => {
+      const linkExists = processedLinks.some(link => {
+        const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+        const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+        return (
+          (sourceId === node.id && targetId === shutdownNode.id) ||
+          (targetId === node.id && sourceId === shutdownNode.id)
+        );
+      });
+      if (!linkExists) {
+        processedLinks.push({
+          source: node.id,
+          target: shutdownNode.id,
+          weight: 1
+        });
+      }
+    });
+
+    // Ensure all startups connect to at least one failure reason
+    const startupNodes = processedNodes.filter(n => 
+      n.type === 'startup' || n.type === 'company'
+    );
+    startupNodes.forEach(startup => {
+      const isConnected = processedLinks.some(link => {
+        const sourceId = typeof link.source === 'object' ? link.source.id : link.source;
+        const targetId = typeof link.target === 'object' ? link.target.id : link.target;
+        return sourceId === startup.id || targetId === startup.id;
+      });
+      if (!isConnected && failureNodes.length > 0) {
+        processedLinks.push({
+          source: startup.id,
+          target: failureNodes[0].id,
+          weight: 1
+        });
+      }
+    });
+
     // Clear previous svg
     d3.select(containerRef.current).selectAll("svg").remove();
 
@@ -69,8 +125,8 @@ const KnowledgeGraph = () => {
     zoomRef.current = zoom;
     svg.call(zoom);
 
-    const simulation = d3.forceSimulation(data.nodes)
-      .force("link", d3.forceLink(data.links).id(d => d.id).distance(200))
+    const simulation = d3.forceSimulation(processedNodes)
+      .force("link", d3.forceLink(processedLinks).id(d => d.id).distance(200))
       .force("charge", d3.forceManyBody().strength(-600))
       .force("center", d3.forceCenter(width / 2, height / 2))
       .force("x", d3.forceX(width / 2).strength(0.03))
@@ -79,17 +135,17 @@ const KnowledgeGraph = () => {
 
     // Links with theme-aware colors
     const link = g.append("g")
-      .attr("stroke", "var(--color-border)")
-      .attr("stroke-opacity", 0.5)
+      .attr("stroke", theme === 'blue' ? '#E5E7EB' : '#1F2937')
+      .attr("stroke-opacity", theme === 'blue' ? 0.35 : 0.45)
       .selectAll("line")
-      .data(data.links)
+      .data(processedLinks)
       .join("line")
       .attr("stroke-width", d => Math.sqrt(d.weight || 1) * 2);
 
     // Nodes
     const node = g.append("g")
       .selectAll("g")
-      .data(data.nodes)
+      .data(processedNodes)
       .join("g")
       .call(d3.drag()
         .on("start", dragstarted)
@@ -98,6 +154,15 @@ const KnowledgeGraph = () => {
       .on("click", (event, d) => {
         if (d.type === 'startup' || d.type === 'company') setSelectedNode(d);
       });
+
+    // Add glow for shutdown node
+    node.filter(d => d.name === 'Shutdown' || d.type === 'shutdown')
+      .append("circle")
+      .attr("r", 24)
+      .attr("fill", "none")
+      .attr("stroke", "rgba(239, 68, 68, 0.3)")
+      .attr("stroke-width", 8)
+      .style("filter", "blur(4px)");
 
     // Node circles/shapes with theme-aware colors
     node.append("circle")

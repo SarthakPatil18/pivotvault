@@ -1,6 +1,7 @@
 const express = require('express');
 const { PrismaClient } = require('@prisma/client');
 const { z } = require('zod');
+const { researchStartup } = require('../services/searchService');
 
 const prisma = new PrismaClient();
 const router = express.Router();
@@ -180,6 +181,25 @@ router.get('/:slug/similar', async (req, res, next) => {
     res.json(results);
   } catch (err) {
     next(err);
+  }
+});
+
+// GET /api/startups/:slug/external-research - Web research and citations
+router.get('/:slug/external-research', async (req, res, next) => {
+  try {
+    const startup = await prisma.startup.findUnique({
+      where: { slug: req.params.slug },
+    });
+
+    if (!startup) {
+      return res.status(404).json({ error: 'Startup not found', code: 'NOT_FOUND' });
+    }
+
+    const sources = await researchStartup(startup.name);
+    res.json({ sources });
+  } catch (err) {
+    console.error('External research failed:', err);
+    res.json({ sources: [] }); // Graceful fallback to empty sources
   }
 });
 

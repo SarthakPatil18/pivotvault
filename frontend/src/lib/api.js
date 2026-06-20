@@ -5,7 +5,8 @@ import {
   mockAiResponse,
   mockPlaybook,
   mockPitchDeckAutopsy,
-  getStartupBySlug
+  getStartupBySlug,
+  generateMockExternalSources
 } from './mockApi';
 import { getRandomQuestions } from './quizData';
 
@@ -53,6 +54,18 @@ const mockApiHandler = async (config) => {
 
   // Mock /startups endpoint
   if (url.includes('/startups')) {
+    // Check for external-research endpoint
+    const researchMatch = url.match(/\/startups\/([^/?#]+)\/external-research/);
+    if (researchMatch) {
+      const slug = researchMatch[1];
+      const startup = getStartupBySlug(slug);
+      return {
+        data: {
+          sources: generateMockExternalSources(startup.name)
+        }
+      };
+    }
+    
     // Check if it's a single startup request (has slug)
     const match = url.match(/\/startups\/([^/?#]+)/);
     if (match) {

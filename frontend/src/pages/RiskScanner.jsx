@@ -1,9 +1,10 @@
 import { clsx } from 'clsx';
 import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Zap, AlertTriangle, CheckCircle2, ArrowRight, Loader2, Shuffle, Lightbulb, Sword, ShieldCheck, Target, RefreshCcw, X, HelpCircle, Send } from 'lucide-react';
+import { Zap, AlertTriangle, CheckCircle2, ArrowRight, Loader2, Shuffle, Lightbulb, Sword, ShieldCheck, Target, RefreshCcw } from 'lucide-react';
 import api from '../lib/api';
 import PremiumRadarChart from '../components/PremiumRadarChart';
+import ConversationPanel from '../components/ui/ConversationPanel';
 
 const RiskScanner = () => {
   const [step, setStep] = React.useState('form'); // form | scanning | result
@@ -21,36 +22,7 @@ const RiskScanner = () => {
   const [loadingText, setLoadingText] = React.useState('');
   const [simulating, setSimulating] = React.useState(null); 
   const [simulatedResult, setSimulatedResult] = React.useState(null);
-  const [followUpQuery, setFollowUpQuery] = React.useState('');
-  const messagesEndRef = React.useRef(null);
-
-  const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  };
-
-  React.useEffect(() => {
-    scrollToBottom();
-  }, [conversation]);
-
-  const handleSimulatePivot = (pivot, index) => {
-    setSimulating(index);
-    setTimeout(() => {
-      const lastResult = conversation[conversation.length - 1]?.fullResult;
-      if (!lastResult) return;
-      const improvedScore = Math.max(20, lastResult.riskScore - 25);
-      const improvedBreakdown = {
-        ...lastResult.riskBreakdown,
-        customerAcquisition: Math.max(15, lastResult.riskBreakdown.customerAcquisition - 30),
-        retention: Math.max(10, lastResult.riskBreakdown.retention - 20)
-      };
-      setSimulatedResult({
-        pivot,
-        score: improvedScore,
-        breakdown: improvedBreakdown
-      });
-      setSimulating(null);
-    }, 2000);
-  };
+  const [query, setQuery] = React.useState('');
 
   const loadingMessages = [
     "Scanning failure database...",
@@ -98,9 +70,8 @@ const RiskScanner = () => {
     }
   };
 
-  const handleFollowUp = async (e) => {
-    if (e && e.preventDefault) e.preventDefault();
-    if (!followUpQuery.trim()) return;
+  const handleFollowUp = async () => {
+    if (!query.trim()) return;
     
     setLoading(true);
     const newHistory = conversation.map(msg => ({ role: msg.role, content: msg.content }));
@@ -113,10 +84,10 @@ const RiskScanner = () => {
 
       setConversation(prev => [
         ...prev,
-        { role: 'user', content: followUpQuery },
+        { role: 'user', content: query },
         { role: 'assistant', content: "Here's your updated assessment.", fullResult: response.data }
       ]);
-      setFollowUpQuery('');
+      setQuery('');
     } catch (err) {
       console.error(err);
     } finally {
@@ -124,9 +95,29 @@ const RiskScanner = () => {
     }
   };
 
-  const handleSuggestedFollowUp = (query) => {
-    setFollowUpQuery(query);
+  const handleSuggestedFollowUp = (suggestedQuery) => {
+    setQuery(suggestedQuery);
     handleFollowUp();
+  };
+
+  const handleSimulatePivot = (pivot, index) => {
+    setSimulating(index);
+    setTimeout(() => {
+      const lastResult = conversation[conversation.length - 1]?.fullResult;
+      if (!lastResult) return;
+      const improvedScore = Math.max(20, lastResult.riskScore - 25);
+      const improvedBreakdown = {
+        ...lastResult.riskBreakdown,
+        customerAcquisition: Math.max(15, lastResult.riskBreakdown.customerAcquisition - 30),
+        retention: Math.max(10, lastResult.riskBreakdown.retention - 20)
+      };
+      setSimulatedResult({
+        pivot,
+        score: improvedScore,
+        breakdown: improvedBreakdown
+      });
+      setSimulating(null);
+    }, 2000);
   };
 
   const handleCompare = async () => {
@@ -149,7 +140,7 @@ const RiskScanner = () => {
     setConversation([]);
     setCompResult(null);
     setSimulatedResult(null);
-    setFollowUpQuery('');
+    setQuery('');
   };
 
   const lastResult = conversation.length > 0 ? conversation[conversation.length - 1].fullResult : null;
@@ -506,8 +497,8 @@ const RiskScanner = () => {
                           <span className={clsx("text-xs font-bold uppercase tracking-widest", simulatedResult?.pivot === pivot ? "text-success" : "text-accent")}>{pivot.type}</span>
                         </div>
                         <div className="font-semibold text-text-primary mb-2">{pivot.description}</div>
-                        <div className="text-sm text-text-secondary border-l border-border/40 pl-4 italic mt-3">
-                          <span className="block text-[10px] font-bold uppercase text-text-muted tracking-wider not-italic mb-1">Historical Precedent</span>
+                        <div className="text-sm text-text-secondary border-t border-border/20 pt-4 italic mt-3">
+                          <span className="block text-[10px] font-bold uppercase text-text-muted tracking-widest not-italic mb-1">Historical Precedent</span>
                           "{pivot.historicalExample}"
                         </div>
                       </motion.button>
@@ -516,56 +507,21 @@ const RiskScanner = () => {
                 </div>
               )}
 
-              {/* Follow-up Section */}
-              <div className="pv-card p-8 border-accent/20 bg-surface/30">
-                <h3 className="text-xl font-display font-bold text-text-primary mb-6 flex items-center gap-2">
-                  <HelpCircle className="text-accent w-6 h-6" />
-                  Ask Follow-up Questions
-                </h3>
-
-                {/* Suggested Follow-up Chips */}
-                <div className="mb-6">
-                  <div className="text-xs font-bold uppercase text-text-muted tracking-widest mb-3">Suggested</div>
-                  <div className="flex flex-wrap gap-2">
-                    {suggestedFollowUps.map((followUp, i) => (
-                      <button
-                        key={i}
-                        onClick={() => handleSuggestedFollowUp(followUp)}
-                        className="px-4 py-2 border border-border rounded-lg bg-surface hover:border-accent/40 hover:bg-surface-2 transition-colors text-sm font-medium"
-                      >
-                        {followUp}
-                      </button>
-                    ))}
-                  </div>
-                </div>
-
-                {/* Follow-up Input */}
-                <form onSubmit={handleFollowUp} className="flex gap-3">
-                  <input
-                    type="text"
-                    placeholder="Ask a follow-up question..."
-                    className="flex-1 pv-field"
-                    value={followUpQuery}
-                    onChange={e => setFollowUpQuery(e.target.value)}
-                    disabled={loading}
-                  />
-                  <button
-                    type="submit"
-                    disabled={loading || !followUpQuery.trim()}
-                    className="pv-btn-primary disabled:opacity-50"
-                  >
-                    {loading ? (
-                      <Loader2 className="w-4 h-4 animate-spin" />
-                    ) : (
-                      <Send className="w-4 h-4" />
-                    )}
-                  </button>
-                </form>
-              </div>
+              {/* Conversation Panel */}
+              <ConversationPanel
+                conversation={conversation}
+                query={query}
+                setQuery={setQuery}
+                loading={loading}
+                onSend={handleFollowUp}
+                suggestedFollowUps={suggestedFollowUps}
+                onSuggestedFollowUp={handleSuggestedFollowUp}
+                placeholder="Ask a follow-up question..."
+                title="Continue Analysis"
+              />
             </motion.div>
           )}
         </AnimatePresence>
-        <div ref={messagesEndRef} />
       </div>
     </div>
   );

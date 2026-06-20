@@ -1,3 +1,35 @@
+// Mock external sources generator
+const generateMockExternalSources = (startupName) => {
+  const mockPublishers = [
+    'techcrunch.com',
+    'bloomberg.com',
+    'wired.com',
+    'forbes.com',
+    'businessinsider.com',
+    'wsj.com',
+    'nytimes.com',
+    'cnbc.com'
+  ];
+  
+  const mockTitles = [
+    `${startupName}: The Rise and Fall of a Promising Startup`,
+    `What Went Wrong at ${startupName}? A Post-Mortem`,
+    `${startupName} Raises $XXM in Series Funding`,
+    `${startupName} Shuts Down After Years of Struggle`,
+    `Lessons from ${startupName}'s Spectacular Failure`,
+    `Founder of ${startupName} Speaks Out About Closure`,
+    `${startupName}'s Market Journey: From Hype to Collapse`
+  ];
+  
+  return mockTitles.slice(0, 5).map((title, i) => ({
+    title,
+    publisher: mockPublishers[i % mockPublishers.length],
+    date: `${2020 + i % 5}-0${1 + i % 9}-0${1 + i % 28}`,
+    summary: `This article provides insights into ${startupName}'s journey, covering key milestones, challenges, and lessons learned from their failure. It includes interviews with former employees and industry experts.`,
+    url: `https://${mockPublishers[i % mockPublishers.length]}/${startupName.toLowerCase().replace(/\s+/g, '-')}-article-${i + 1}`
+  }));
+};
+
 // Helper function to generate AI web intelligence report for missing startups
 const generateWebIntelligenceReport = (slug, name) => {
   const industryMap = {
@@ -63,6 +95,7 @@ const generateWebIntelligenceReport = (slug, name) => {
       scalingPhase: `In 2019, they began aggressive expansion, entering multiple new markets simultaneously.`,
       warningSigns: `By 2021, there were clear signs of trouble, including rising costs and slowing growth.`,
       strategicMistakes: `Key mistakes included premature scaling, insufficient focus on unit economics, and underestimating competition.`,
+      criticalDecisions: `The most consequential decisions included prioritizing growth over profitability from the outset, expanding into too many markets at once without validating product-market fit in each, and failing to heed early warnings from the data and team members.`,
       collapseSequence: `The company tried to pivot in 2023, but it was too late — they eventually downsized significantly.`,
       whyFailed: `Ultimately, ${name} failed because of a combination of unsustainable unit economics and a lack of clear product-market fit in their core market.`,
       founderLessons: `The biggest lesson was to validate product-market fit before scaling, and to always prioritize unit economics over growth at all costs.`,
@@ -501,47 +534,58 @@ export const mockPlaybook = {
   ]
 };
 
+export { generateMockExternalSources };
+
 export const mockPitchDeckAutopsy = {
-  overallRisk: 'High',
-  pathologistVerdict: 'Your deck shows several red flags common to failed startups.',
-  executiveSummary: 'Focus on product-market fit before scaling operations.',
+  overallRisk: 'Lethal',
+  pathologistVerdict: 'Your deck shows several red flags that mirror patterns from hundreds of failed startups.',
+  executiveSummary: 'You\'ve got a clear problem statement but are missing critical pieces like product-market fit validation and a sustainable GTM strategy. Focus on those before scaling.',
   strengths: [
-    { title: 'Clear Problem Statement', description: 'You\'ve defined the problem well.' },
-    { title: 'Strong Team', description: 'Your team has relevant experience.' }
+    { title: 'Clear Problem Statement', description: 'You\'ve done a good job articulating the customer pain point.' },
+    { title: 'Strong Team', description: 'Your team has relevant industry experience.' }
   ],
   weaknesses: [
-    { title: 'Unrealistic Market Size', description: 'Your TAM calculation seems inflated.' },
-    { title: 'No Clear Differentiation', description: 'It\'s not obvious how you stand out.' }
+    { title: 'Unrealistic Market Size', description: 'Your TAM calculation seems heavily inflated.' },
+    { title: 'No Clear Differentiation', description: 'It\'s not obvious how you stand out from incumbents.' },
+    { title: 'Missing Retention Strategy', description: 'You haven\'t addressed how you\'ll keep customers long-term.' }
   ],
   marketRisks: [
-    { title: 'Competition', description: 'Incumbents could easily copy this.' }
+    { title: 'Intense Competition', description: 'Incumbents could easily copy your features.' },
+    { title: 'Market Timing', description: 'It\'s unclear if the market is ready for this solution.' }
   ],
   productRisks: [
-    { title: 'Complexity', description: 'Too many features for MVP.' }
+    { title: 'Feature Overload', description: 'Too many features for an MVP — focus on core value.' },
+    { title: 'Unproven Demand', description: 'No user validation to back up your assumptions.' }
   ],
   gtmRisks: [
-    { title: 'Customer Acquisition', description: 'CAC seems too high.' }
+    { title: 'High CAC', description: 'Your customer acquisition cost assumptions seem too low.' },
+    { title: 'Viral Loop Missing', description: 'No clear plan for organic growth.' }
   ],
   financialRisks: [
-    { title: 'Burn Rate', description: 'You\'ll run out of cash in 12 months.' }
+    { title: 'Unsustainable Burn Rate', description: 'You\'ll run out of cash in 12 months at this rate.' },
+    { title: 'Unrealistic Revenue', description: 'Your projections are aggressive without supporting data.' }
   ],
-  pmfAnalysis: 'You haven\'t proven product-market fit yet. Focus on that first.',
+  pmfAnalysis: 'You haven\'t proven product-market fit yet. Focus on that before investing heavily in growth.',
   investorConcerns: [
-    { title: 'Unit Economics', description: 'Need to show path to profitability.' },
-    { title: 'Churn', description: 'Retention numbers are missing.' }
+    { title: 'Unit Economics', description: 'You need to show a clear path to profitability.' },
+    { title: 'Churn Risk', description: 'Retention numbers are missing from the deck.' },
+    { title: 'Moat', description: 'What prevents competitors from copying you?' }
   ],
-  competitiveAnalysis: 'The space is crowded but there might be a niche.',
+  competitiveAnalysis: 'The space is crowded but there might be a niche you can carve out. Focus on your unique value proposition.',
   recommendedImprovements: [
-    { title: 'Simplify MVP', description: 'Cut features to the core value prop.' },
-    { title: 'Validate Pricing', description: 'Talk to customers about willingness to pay.' }
+    { title: 'Simplify MVP', description: 'Cut features to focus on core value prop.' },
+    { title: 'Validate Pricing', description: 'Talk to customers about willingness to pay.' },
+    { title: 'Add User Data', description: 'Include customer interviews or survey results.' }
   ],
   actionPlan: [
-    { phase: 'Month 1-2', tasks: ['Customer interviews', 'Landing page', 'Waitlist'] },
-    { phase: 'Month 3-4', tasks: ['Build MVP', 'Beta test', 'Iterate'] }
+    { phase: 'Month 1-2', tasks: ['50 customer interviews', 'Landing page', 'Waitlist'] },
+    { phase: 'Month 3-4', tasks: ['Build MVP', 'Beta test with 100 users', 'Iterate'] },
+    { phase: 'Month 5-6', tasks: ['Validate pricing', 'Refine GTM', 'Prepare for seed'] }
   ],
   lethalWeaknesses: [
-    { slide: 'Go-to-Market', issue: 'No clear user acquisition strategy', historicalPrecedent: 'Similar to Quibi\'s vague GTM plan.' },
-    { slide: 'Financials', issue: 'Unrealistic revenue projections', historicalPrecedent: 'WeWork\'s inflated numbers.' }
+    { slide: 'Go-to-Market', issue: 'No clear user acquisition strategy', historicalPrecedent: 'Similar to Quibi\'s vague GTM plan that failed spectacularly.' },
+    { slide: 'Financials', issue: 'Unrealistic revenue projections', historicalPrecedent: 'WeWork\'s inflated numbers that led to their IPO collapse.' },
+    { slide: 'Market', issue: 'No competitive moat', historicalPrecedent: 'Juicero\'s easily copyable product.' }
   ],
   structuralRedFlags: ['Team', 'Market', 'Product']
 };

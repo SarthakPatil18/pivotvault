@@ -1,13 +1,13 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-const ThemeContext = createContext({ theme: 'blue', toggleTheme: () => {}, setTheme: () => {} });
+const ThemeContext = createContext({ theme: 'apple', toggleTheme: () => {}, setTheme: () => {} });
 
 const STORAGE_KEY = 'pivotvault-theme';
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setThemeState] = useState(() => {
-    if (typeof window === 'undefined') return 'blue';
-    return localStorage.getItem(STORAGE_KEY) || 'blue';
+    if (typeof window === 'undefined') return 'apple';
+    return localStorage.getItem(STORAGE_KEY) || 'apple';
   });
 
   useEffect(() => {
@@ -15,8 +15,8 @@ export const ThemeProvider = ({ children }) => {
     localStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
 
-  const setTheme = (t) => setThemeState(t === 'beige' ? 'beige' : 'blue');
-  const toggleTheme = () => setThemeState((t) => (t === 'blue' ? 'beige' : 'blue'));
+  const setTheme = (t) => setThemeState(t === 'cursor' ? 'cursor' : 'apple');
+  const toggleTheme = () => setThemeState((t) => (t === 'apple' ? 'cursor' : 'apple'));
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>

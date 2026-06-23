@@ -1,18 +1,21 @@
 import React from 'react';
 import { Sun, Moon } from 'lucide-react';
 import { useTheme } from '../context/ThemeContext';
+import Button from './ui/Button';
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
+  const isApple = theme === 'apple';
 
   return (
-    <button
-      type="button"
+    <Button
+      variant="ghost"
+      size="sm"
+      iconOnly
       onClick={toggleTheme}
-      aria-label={theme === 'blue' ? 'Switch to light theme' : 'Switch to dark theme'}
-      className="pv-btn-ghost pv-btn-icon"
+      aria-label={isApple ? 'Switch to Cursor theme' : 'Switch to Apple theme'}
     >
-      {theme === 'blue' ? <Sun size={18} /> : <Moon size={18} />}
-    </button>
+      {isApple ? <Moon size={20} /> : <Sun size={20} />}
+    </Button>
   );
 }

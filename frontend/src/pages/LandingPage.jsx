@@ -63,8 +63,9 @@ const LandingPage = () => {
 
   return (
     <div className="relative min-h-screen bg-bg">
+
       {/* Hero Section */}
-      <section className="relative py-16 px-4 sm:px-6 lg:px-8 border-b border-border">
+      <section className="relative z-10 py-16 px-4 sm:px-6 lg:px-8 border-b border-border">
         <div className="pv-content-container">
           <div className="max-w-4xl">
             <div className="flex items-center gap-2 text-sm text-text-secondary mb-4">

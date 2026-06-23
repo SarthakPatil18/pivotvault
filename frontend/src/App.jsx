@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import LandingPage from './pages/LandingPage';
 import FailureExplorer from './pages/FailureExplorer';
@@ -20,56 +20,89 @@ import Sidebar from './components/Sidebar';
 import ProtectedRoute from './components/ProtectedRoute';
 import ScrollToTop from './components/ScrollToTop';
 import PitchDeckAutopsy from './pages/PitchDeckAutopsy.jsx';
+import PivotVaultIntro from './components/loaders/PivotVaultIntro';
+import PivotVaultLoader from './components/loaders/PivotVaultLoader';
+import { LoadingProvider, useLoading } from './context/LoadingContext';
 
-function App() {
+function AppContent() {
   const [isCollapsed, setIsCollapsed] = React.useState(() => {
     const saved = localStorage.getItem('sidebar-collapsed');
     return saved ? JSON.parse(saved) : true;
   });
   const [isMobileOpen, setIsMobileOpen] = React.useState(false);
+  const [showIntro, setShowIntro] = useState(false);
+  const { isLoading, loadingMessage } = useLoading();
 
-  React.useEffect(() => {
+  useEffect(() => {
     localStorage.setItem('sidebar-collapsed', JSON.stringify(isCollapsed));
   }, [isCollapsed]);
 
+  useEffect(() => {
+    const hasSeenIntro = sessionStorage.getItem('pivotvault_intro_seen');
+    console.log('hasSeenIntro:', hasSeenIntro);
+    if (!hasSeenIntro) {
+      setShowIntro(true);
+    }
+  }, []);
+
+  const handleIntroComplete = () => {
+    sessionStorage.setItem('pivotvault_intro_seen', 'true');
+    setShowIntro(false);
+  };
+
+  if (showIntro) {
+    return <PivotVaultIntro onComplete={handleIntroComplete} />;
+  }
+
   return (
-    <Router>
-      <div
-        className="pv-app-shell"
-        data-sidebar={isCollapsed ? 'collapsed' : 'expanded'}
-      >
-        <ScrollToTop />
-        <Sidebar 
-          isCollapsed={isCollapsed} 
-          setIsCollapsed={setIsCollapsed}
-          isMobileOpen={isMobileOpen}
-          setIsMobileOpen={setIsMobileOpen}
-        />
-        <div className="pv-app-column">
-          <main className="pv-app-main">
-            <Routes>
-              <Route path="/" element={<LandingPage />} />
-              <Route path="/explore" element={<FailureExplorer />} />
-              <Route path="/startup/:slug" element={<PostmortemPage />} />
-              <Route path="/scan" element={<ProtectedRoute><RiskScanner /></ProtectedRoute>} />
-              <Route path="/graph" element={<KnowledgeGraph />} />
-              <Route path="/confessions" element={<ConfessionWall />} />
-              <Route path="/insights" element={<InsightsDashboard />} />
-              <Route path="/assistant" element={<ProtectedRoute><AiAssistant /></ProtectedRoute>} />
-              <Route path="/bookmarks" element={<ProtectedRoute><BookmarksPage /></ProtectedRoute>} />
-              <Route path="/history" element={<ProtectedRoute><HistoryPage /></ProtectedRoute>} />
-              <Route path="/playbook" element={<ProtectedRoute><FounderPlaybook /></ProtectedRoute>} />
-              <Route path="/quiz" element={<FailureQuiz />} />
-              <Route path="/compare" element={<CompareStartups />} />
-              <Route path="/ghosts" element={<HallOfGhosts />} />
-              <Route path="/autopsy" element={<ProtectedRoute><PitchDeckAutopsy /></ProtectedRoute>} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/signup" element={<Signup />} />
-            </Routes>
-          </main>
+    <>
+      {isLoading && <PivotVaultLoader customMessage={loadingMessage} />}
+      <Router>
+        <div
+          className="pv-app-shell"
+          data-sidebar={isCollapsed ? 'collapsed' : 'expanded'}
+        >
+          <ScrollToTop />
+          <Sidebar 
+            isCollapsed={isCollapsed} 
+            setIsCollapsed={setIsCollapsed}
+            isMobileOpen={isMobileOpen}
+            setIsMobileOpen={setIsMobileOpen}
+          />
+          <div className="pv-app-column">
+            <main className="pv-app-main">
+              <Routes>
+                <Route path="/" element={<LandingPage />} />
+                <Route path="/explore" element={<FailureExplorer />} />
+                <Route path="/startup/:slug" element={<PostmortemPage />} />
+                <Route path="/scan" element={<ProtectedRoute><RiskScanner /></ProtectedRoute>} />
+                <Route path="/graph" element={<KnowledgeGraph />} />
+                <Route path="/confessions" element={<ConfessionWall />} />
+                <Route path="/insights" element={<InsightsDashboard />} />
+                <Route path="/assistant" element={<ProtectedRoute><AiAssistant /></ProtectedRoute>} />
+                <Route path="/bookmarks" element={<ProtectedRoute><BookmarksPage /></ProtectedRoute>} />
+                <Route path="/history" element={<ProtectedRoute><HistoryPage /></ProtectedRoute>} />
+                <Route path="/playbook" element={<ProtectedRoute><FounderPlaybook /></ProtectedRoute>} />
+                <Route path="/quiz" element={<FailureQuiz />} />
+                <Route path="/compare" element={<CompareStartups />} />
+                <Route path="/ghosts" element={<HallOfGhosts />} />
+                <Route path="/autopsy" element={<ProtectedRoute><PitchDeckAutopsy /></ProtectedRoute>} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/signup" element={<Signup />} />
+              </Routes>
+            </main>
+          </div>
         </div>
-      </div>
-    </Router>
+      </Router>
+    </>
+  );
+}
+
+function App() {
+  return (
+    <LoadingProvider>
+      <AppContent />
+    </LoadingProvider>
   );
 }
 

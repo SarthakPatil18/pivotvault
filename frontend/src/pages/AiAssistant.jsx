@@ -5,19 +5,20 @@ import { Sparkles, Search, AlertTriangle, ArrowRight, ShieldAlert, RefreshCw } f
 import StartupCard from '../components/StartupCard';
 import api from '../lib/api';
 import ConversationPanel from '../components/ui/ConversationPanel';
+import { useLoading } from '../context/LoadingContext';
 
 const AiAssistant = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [query, setQuery] = React.useState('');
-  const [loading, setLoading] = React.useState(false);
   const [conversation, setConversation] = React.useState([]);
   const [error, setError] = React.useState(null);
+  const { showLoader, hideLoader } = useLoading();
 
   const urlQuery = searchParams.get('q') || '';
 
   const executeResearch = async (searchQuery, isFollowUp = false) => {
     if (!searchQuery.trim()) return;
-    setLoading(true);
+    showLoader('Researching startup intelligence...');
     setError(null);
 
     const newHistory = isFollowUp
@@ -39,7 +40,7 @@ const AiAssistant = () => {
       console.error(err);
       setError('Failed to fetch research analytics. Check backend status.');
     } finally {
-      setLoading(false);
+      hideLoader();
     }
   };
 
@@ -125,58 +126,38 @@ const AiAssistant = () => {
                 className="flex-1 bg-transparent border-0 min-h-control px-2 py-2 text-text-primary placeholder:text-text-muted focus:ring-0 text-base"
                 value={query}
                 onChange={(e) => setQuery(e.target.value)}
-                disabled={loading}
               />
               <button
                 type="submit"
-                disabled={loading}
-                className="pv-btn-primary disabled:opacity-50 shrink-0"
+                className="pv-btn-primary shrink-0"
               >
-                {loading ? (
-                  <div className="w-5 h-5 border-2 border-accent-contrast/30 border-t-accent-contrast rounded-full animate-spin" />
-                ) : (
-                  <>
-                    Send
-                    <ArrowRight className="w-4 h-4 ml-2" />
-                  </>
-                )}
+                Send
+                <ArrowRight className="w-4 h-4 ml-2" />
               </button>
             </form>
 
             {/* Example Suggestions */}
-            {!loading && (
-              <div className="mt-8">
-                <h3 className="text-xs font-bold uppercase text-text-muted tracking-widest mb-4 flex items-center justify-center gap-2">
-                  <Search className="w-4 h-4 text-accent" />
-                  Suggested Research Directions
-                </h3>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {sampleQuestions.map((q, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => {
-                        setQuery(q);
-                        setSearchParams({ q });
-                        executeResearch(q);
-                      }}
-                      className="text-left p-5 pv-card-interactive"
-                    >
-                      <div className="text-xs font-bold uppercase text-accent mb-1">Topic {idx + 1}</div>
-                      <div className="text-text-primary font-medium">{q}</div>
-                    </button>
-                  ))}
-                </div>
+            <div className="mt-8">
+              <h3 className="text-xs font-bold uppercase text-text-muted tracking-widest mb-4 flex items-center justify-center gap-2">
+                <Search className="w-4 h-4 text-accent" />
+                Suggested Research Directions
+              </h3>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                {sampleQuestions.map((q, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => {
+                      setQuery(q);
+                      setSearchParams({ q });
+                      executeResearch(q);
+                    }}
+                    className="text-left p-5 pv-card-interactive"
+                  >
+                    <div className="text-xs font-bold uppercase text-accent mb-1">Topic {idx + 1}</div>
+                    <div className="text-text-primary font-medium">{q}</div>
+                  </button>
+                ))}
               </div>
-            )}
-          </div>
-        )}
-
-        {/* Loading State */}
-        {loading && conversation.length === 0 && (
-          <div className="max-w-4xl mx-auto py-16 text-center">
-            <div className="flex flex-col items-center gap-4">
-              <div className="w-12 h-12 border-4 border-surface-3 border-t-accent rounded-full animate-spin" />
-              <div className="text-lg font-data text-accent">Researching...</div>
             </div>
           </div>
         )}
@@ -308,7 +289,7 @@ const AiAssistant = () => {
               conversation={conversation}
               query={query}
               setQuery={setQuery}
-              loading={loading}
+              loading={false}
               onSend={handleSendFollowUp}
               suggestedFollowUps={suggestedFollowUps}
               onSuggestedFollowUp={handleSuggestedFollowUp}

@@ -4,9 +4,9 @@ import { twMerge } from 'tailwind-merge';
 import { useDesignSystem } from '../../lib/design-system';
 
 export const Card = ({ as: Component = 'div', variant = 'default', className, ...props }) => {
-  const { isApple, colors, radius } = useDesignSystem();
+  const { isBeige, colors, radius, spacing } = useDesignSystem();
 
-  const baseClasses = 'p-apple-lg md:p-apple-xl';
+  const baseClasses = isBeige ? 'p-apple-lg md:p-apple-xl' : 'p-cursor-lg md:p-cursor-xl';
   
   const variantsClasses = {
     default: clsx(

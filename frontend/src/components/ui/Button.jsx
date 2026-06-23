@@ -11,7 +11,7 @@ export const Button = ({
   type = 'button', 
   ...props 
 }) => {
-  const { isApple, colors, radius, typography } = useDesignSystem();
+  const { isBeige, colors, radius } = useDesignSystem();
 
   const baseClasses = 'inline-flex items-center justify-center font-medium transition-all active:scale-[0.97]';
   
@@ -21,7 +21,7 @@ export const Button = ({
       radius.button
     ),
     secondary: clsx(
-      isApple 
+      isBeige 
         ? 'bg-apple-surface-pearl text-apple-ink-muted-80 border border-apple-divider-soft' 
         : 'bg-cursor-surface-card text-cursor-ink border border-cursor-hairline',
       radius.button
@@ -34,15 +34,15 @@ export const Button = ({
 
   const sizeClasses = {
     sm: clsx(
-      isApple ? 'px-4 py-2 text-apple-button-utility' : 'px-4 py-2 text-cursor-button',
+      isBeige ? 'px-4 py-2 text-apple-button-utility' : 'px-4 py-2 text-cursor-button',
       iconOnly && 'w-10 h-10 p-0'
     ),
     md: clsx(
-      isApple ? 'px-6 py-3 text-apple-body' : 'px-5 py-2.5 text-cursor-button h-10',
+      isBeige ? 'px-6 py-3 text-apple-body' : 'px-5 py-2.5 text-cursor-button h-10',
       iconOnly && 'w-11 h-11 p-0'
     ),
     lg: clsx(
-      isApple ? 'px-8 py-4 text-apple-button-lg' : 'px-6 py-3 text-cursor-button h-11',
+      isBeige ? 'px-8 py-4 text-apple-button-lg' : 'px-6 py-3 text-cursor-button h-11',
       iconOnly && 'w-12 h-12 p-0'
     ),
   };

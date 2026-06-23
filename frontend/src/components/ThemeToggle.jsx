@@ -5,7 +5,7 @@ import Button from './ui/Button';
 
 export default function ThemeToggle() {
   const { theme, toggleTheme } = useTheme();
-  const isApple = theme === 'apple';
+  const isBeige = theme === 'beige' || theme === 'apple';
 
   return (
     <Button
@@ -13,9 +13,9 @@ export default function ThemeToggle() {
       size="sm"
       iconOnly
       onClick={toggleTheme}
-      aria-label={isApple ? 'Switch to Cursor theme' : 'Switch to Apple theme'}
+      aria-label={isBeige ? 'Switch to dark theme' : 'Switch to light theme'}
     >
-      {isApple ? <Moon size={20} /> : <Sun size={20} />}
+      {isBeige ? <Moon size={20} /> : <Sun size={20} />}
     </Button>
   );
 }

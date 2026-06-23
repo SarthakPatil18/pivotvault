@@ -1,13 +1,17 @@
 import React, { createContext, useContext, useEffect, useState } from 'react';
 
-const ThemeContext = createContext({ theme: 'apple', toggleTheme: () => {}, setTheme: () => {} });
+const ThemeContext = createContext({ theme: 'beige', toggleTheme: () => {}, setTheme: () => {} });
 
 const STORAGE_KEY = 'pivotvault-theme';
 
 export const ThemeProvider = ({ children }) => {
   const [theme, setThemeState] = useState(() => {
-    if (typeof window === 'undefined') return 'apple';
-    return localStorage.getItem(STORAGE_KEY) || 'apple';
+    if (typeof window === 'undefined') return 'beige';
+    // Convert old theme names ('apple', 'cursor') to new ones ('beige', 'blue')
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved === 'apple') return 'beige';
+    if (saved === 'cursor') return 'blue';
+    return saved || 'beige';
   });
 
   useEffect(() => {
@@ -15,8 +19,8 @@ export const ThemeProvider = ({ children }) => {
     localStorage.setItem(STORAGE_KEY, theme);
   }, [theme]);
 
-  const setTheme = (t) => setThemeState(t === 'cursor' ? 'cursor' : 'apple');
-  const toggleTheme = () => setThemeState((t) => (t === 'apple' ? 'cursor' : 'apple'));
+  const setTheme = (t) => setThemeState(t === 'blue' ? 'blue' : 'beige');
+  const toggleTheme = () => setThemeState((t) => (t === 'beige' ? 'blue' : 'beige'));
 
   return (
     <ThemeContext.Provider value={{ theme, toggleTheme, setTheme }}>

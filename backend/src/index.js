@@ -27,7 +27,7 @@ app.use(helmet());
 app.use(cors({
   origin: [
     "http://localhost:5173",
-    "https://pivotvault.netlify.app"
+    "https://pivotvault.netlify.app",
     "https://pivotvault.vercel.app"
   ],
   credentials: true

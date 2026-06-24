@@ -21,15 +21,22 @@ const quizRoutes = require('./routes/quiz');
 const prisma = new PrismaClient();
 const app = express();
 app.set('trust proxy', 1);
-
+// new added link 
 // Middleware
 app.use(helmet());
 app.use(cors({
-  origin: [
-    "http://localhost:5173",
-    "https://pivotvault.netlify.app",
-    "https://pivotvault.vercel.app"
-  ],
+  origin: (origin, callback) => {
+    if (
+      !origin ||
+      origin.includes("vercel.app") ||
+      origin === "https://pivotvault.netlify.app" ||
+      origin === "http://localhost:5173"
+    ) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
   credentials: true
 }));
 app.use(morgan('dev'));

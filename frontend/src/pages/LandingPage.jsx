@@ -155,12 +155,12 @@ const LandingPage = () => {
             <Link to="/confessions" className="hover:text-text-primary transition-colors">Confessions</Link>
           </nav>
 
-          <div className="flex items-center gap-6">
-            <Link to="/login" className="text-sm font-semibold text-text-secondary hover:text-text-primary transition-colors">
-              Sign in
+          <div className="flex items-center gap-4">
+            <Link to="/login" className="px-5 py-2 border border-border hover:border-border-strong text-text-primary font-bold text-sm rounded-button transition-colors">
+              Log in
             </Link>
-            <Link to="/explore" className="pv-btn-primary text-sm py-2.5 px-5 h-auto rounded-button font-bold flex items-center gap-2 transition-all">
-              Enter vault <ArrowRight className="w-4 h-4" />
+            <Link to="/signup" className="pv-btn-primary text-sm py-2 px-5 h-auto rounded-button font-bold transition-all">
+              Sign up
             </Link>
           </div>
         </div>

@@ -118,11 +118,11 @@ const LandingPage = () => {
   ];
 
   return (
-    <div className="relative min-h-screen bg-[#0a0a0f] text-text-primary overflow-x-hidden font-sans selection:bg-accent selection:text-accent-contrast">
+    <div className="relative min-h-screen bg-bg text-text-primary overflow-x-hidden font-sans selection:bg-accent selection:text-accent-contrast">
       
       {/* Background Gradients & Grids */}
-      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(255,255,255,0.01)_1px,transparent_1px),linear-gradient(to_bottom,rgba(255,255,255,0.01)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none -z-10" />
-      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1200px] h-[600px] bg-[radial-gradient(ellipse_at_top,rgba(var(--color-accent),0.05),transparent_60%)] pointer-events-none -z-10" />
+      <div className="absolute inset-0 bg-[linear-gradient(to_right,rgba(var(--color-border),0.12)_1px,transparent_1px),linear-gradient(to_bottom,rgba(var(--color-border),0.12)_1px,transparent_1px)] bg-[size:32px_32px] pointer-events-none -z-10" />
+      <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full max-w-[1200px] h-[600px] bg-[radial-gradient(ellipse_at_top,rgba(var(--color-accent),0.06),transparent_60%)] pointer-events-none -z-10" />
 
       {/* Inline Styles for Ticker */}
       <style>{`
@@ -141,7 +141,7 @@ const LandingPage = () => {
       `}</style>
 
       {/* 1. Sticky Navbar */}
-      <header className="sticky top-0 z-50 w-full border-b border-white/5 bg-[#0a0a0f]/80 backdrop-blur-md">
+      <header className="sticky top-0 z-50 w-full border-b border-border bg-bg/85 backdrop-blur-md">
         <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-2 group">
             <Skull className="w-5 h-5 text-accent" />
@@ -172,7 +172,7 @@ const LandingPage = () => {
           
           {/* Left Column */}
           <div className="lg:col-span-5 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-white/5 bg-white/5 text-[10px] font-data font-bold text-accent tracking-wider uppercase">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface-2/60 text-[10px] font-data font-bold text-accent tracking-wider uppercase">
               <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
               4,200+ postmortems indexed
             </div>
@@ -189,24 +189,24 @@ const LandingPage = () => {
               <Link to="/explore" className="pv-btn-primary px-6 py-3 h-auto font-bold text-xs rounded-button">
                 Start Exploring
               </Link>
-              <a href="#features" className="px-6 py-3 border border-white/10 hover:border-white/20 bg-transparent text-text-primary font-bold text-xs rounded-button transition-colors">
+              <a href="#features" className="px-6 py-3 border border-border hover:border-border-strong bg-transparent text-text-primary font-bold text-xs rounded-button transition-colors">
                 View Features
               </a>
             </div>
 
             {/* Divider & Stat Row */}
-            <div className="h-px bg-white/5 my-8" />
+            <div className="h-px bg-border my-8" />
             <div className="grid grid-cols-3 gap-6">
               <div>
                 <div className="font-data text-xl sm:text-2xl font-bold text-text-primary">4,200+</div>
                 <div className="text-[10px] text-text-muted uppercase tracking-wider mt-1">Postmortems</div>
               </div>
               <div>
-                <div className="font-data text-xl sm:text-2xl font-bold text-[#e85d3a]">₹145Cr+</div>
+                <div className="font-data text-xl sm:text-2xl font-bold text-accent">₹145Cr+</div>
                 <div className="text-[10px] text-text-muted uppercase tracking-wider mt-1">Capital Lost</div>
               </div>
               <div>
-                <div className="font-data text-xl sm:text-2xl font-bold text-[#3b82f6]">450+</div>
+                <div className="font-data text-xl sm:text-2xl font-bold text-accent-2">450+</div>
                 <div className="text-[10px] text-text-muted uppercase tracking-wider mt-1">AI Scan Patterns</div>
               </div>
             </div>
@@ -214,29 +214,29 @@ const LandingPage = () => {
 
           {/* Right Column: Interactive Browser-Style Demo */}
           <div className="lg:col-span-7">
-            <div className="rounded-xl border border-white/5 bg-[#111118]/40 backdrop-blur-[12px] overflow-hidden shadow-2xl">
+            <div className="rounded-xl border border-border bg-surface/50 backdrop-blur-[12px] overflow-hidden shadow-card">
               
               {/* Fake Browser Toolbar */}
-              <div className="px-4 py-3 bg-[#111118]/80 border-b border-white/5 flex items-center justify-between gap-4">
+              <div className="px-4 py-3 bg-surface border-b border-border flex items-center justify-between gap-4">
                 <div className="flex gap-1.5 shrink-0">
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#ef5252]" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#e8ae36]" />
-                  <div className="w-2.5 h-2.5 rounded-full bg-[#34c77b]" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-danger/80" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-warning/80" />
+                  <div className="w-2.5 h-2.5 rounded-full bg-success/80" />
                 </div>
-                <div className="flex-1 max-w-sm bg-[#0a0a0f] border border-white/5 rounded-md px-3 py-1 text-[10px] font-data text-text-muted text-center truncate">
+                <div className="flex-1 max-w-sm bg-bg border border-border rounded-md px-3 py-1 text-[10px] font-data text-text-muted text-center truncate">
                   pivotvault.com/intel/interactive-dashboard
                 </div>
                 <div className="w-10" /> {/* Spacer */}
               </div>
 
               {/* Demo Tabs */}
-              <div className="flex border-b border-white/5 bg-[#111118]/30">
+              <div className="flex border-b border-border bg-surface-2/30">
                 {['explorer', 'scanner', 'heatmap'].map((tab) => (
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`flex-1 py-3 text-[10px] sm:text-xs font-semibold tracking-wider uppercase border-r border-white/5 last:border-r-0 transition-colors ${
-                      activeTab === tab ? 'bg-[#0a0a0f] text-accent' : 'text-text-muted hover:text-text-primary'
+                    className={`flex-1 py-3 text-[10px] sm:text-xs font-semibold tracking-wider uppercase border-r border-border last:border-r-0 transition-colors ${
+                      activeTab === tab ? 'bg-bg text-accent' : 'text-text-muted hover:text-text-primary'
                     }`}
                   >
                     {tab === 'explorer' && 'Failure Explorer'}
@@ -247,12 +247,12 @@ const LandingPage = () => {
               </div>
 
               {/* Interactive Dashboard Content */}
-              <div className="p-6 bg-[#0a0a0f]/90 min-h-[280px] flex flex-col justify-between">
+              <div className="p-6 bg-bg/95 min-h-[280px] flex flex-col justify-between">
                 
                 {/* 1. Explorer Tab */}
                 {activeTab === 'explorer' && (
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between border-b border-white/5 pb-2 text-[10px] font-semibold text-text-muted uppercase tracking-wider">
+                    <div className="flex items-center justify-between border-b border-border pb-2 text-[10px] font-semibold text-text-muted uppercase tracking-wider">
                       <span>Startup</span>
                       <span>Category</span>
                       <span>Status</span>
@@ -262,13 +262,13 @@ const LandingPage = () => {
                       { name: 'WeWork', industry: 'Real Estate', reason: 'Cash Burn', status: 'Failed' },
                       { name: 'Theranos', industry: 'Health Tech', reason: 'Product Fraud', status: 'Failed' }
                     ].map((item, idx) => (
-                      <div key={idx} className="flex items-center justify-between py-2 border-b border-white/5 last:border-0 text-xs">
+                      <div key={idx} className="flex items-center justify-between py-2 border-b border-border/60 last:border-0 text-xs">
                         <div className="flex items-center gap-2">
                           <span className="w-1.5 h-1.5 rounded-full bg-accent" />
                           <span className="font-bold text-text-primary">{item.name}</span>
                         </div>
-                        <span className="text-text-secondary text-[11px]">{item.industry} — <strong className="text-[#e85d3a]/80 font-normal">{item.reason}</strong></span>
-                        <span className="text-[10px] font-data font-bold uppercase px-1.5 py-0.5 rounded bg-red-500/10 text-red-400 border border-red-500/20">{item.status}</span>
+                        <span className="text-text-secondary text-[11px]">{item.industry} — <strong className="text-accent-2 font-normal">{item.reason}</strong></span>
+                        <span className="text-[10px] font-data font-bold uppercase px-1.5 py-0.5 rounded bg-danger/10 text-danger border border-danger/20">{item.status}</span>
                       </div>
                     ))}
                   </div>
@@ -285,7 +285,7 @@ const LandingPage = () => {
                             <select
                               value={industry}
                               onChange={(e) => setIndustry(e.target.value)}
-                              className="w-full bg-[#111118]/80 border border-white/5 rounded-md px-2 py-1 text-xs text-text-primary focus:outline-none"
+                              className="w-full bg-surface-2 border border-border rounded-md px-2 py-1 text-xs text-text-primary focus:outline-none"
                             >
                               <option value="Grocery & Delivery">Grocery & Delivery</option>
                               <option value="FinTech">FinTech</option>
@@ -297,7 +297,7 @@ const LandingPage = () => {
                             <select
                               value={burn}
                               onChange={(e) => setBurn(e.target.value)}
-                              className="w-full bg-[#111118]/80 border border-white/5 rounded-md px-2 py-1 text-xs text-text-primary focus:outline-none"
+                              className="w-full bg-surface-2 border border-border rounded-md px-2 py-1 text-xs text-text-primary focus:outline-none"
                             >
                               <option value="Low">Low</option>
                               <option value="High">High</option>
@@ -307,25 +307,25 @@ const LandingPage = () => {
                         <button
                           type="submit"
                           disabled={isScanning}
-                          className="w-full py-2 bg-accent text-accent-contrast font-bold text-xs rounded-md transition-all uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer"
+                          className="w-full py-2 bg-accent text-accent-contrast font-bold text-xs rounded-md transition-all uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer hover:bg-accent-2"
                         >
                           {isScanning ? 'Analyzing Growth Hurdles...' : 'Scan Business Model'}
                         </button>
                       </form>
                     ) : (
                       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
-                        <div className="flex items-center justify-between border-b border-white/5 pb-2">
+                        <div className="flex items-center justify-between border-b border-border pb-2">
                           <span className="text-xs font-semibold text-text-secondary uppercase">Risk Assessment</span>
                           <button onClick={() => setScanResult(null)} className="text-[10px] text-accent font-semibold hover:underline uppercase tracking-wider">
                             Reset Scanner
                           </button>
                         </div>
                         <div className="flex items-center gap-4 py-2">
-                          <div className="w-16 h-16 rounded-full border-4 border-white/5 flex items-center justify-center shrink-0">
+                          <div className="w-16 h-16 rounded-full border-4 border-border flex items-center justify-center shrink-0">
                             <span className="font-data text-lg font-bold text-accent">{scanResult.score}%</span>
                           </div>
                           <div>
-                            <div className="text-xs font-bold text-text-primary">
+                            <div className={`text-xs font-bold ${scanResult.score > 70 ? 'text-danger' : 'text-success'}`}>
                               {scanResult.score > 70 ? '⚠️ High Structural Risk' : '✅ Low/Moderate Risk'}
                             </div>
                             <p className="text-[11px] text-text-secondary leading-relaxed mt-1">{scanResult.warning}</p>
@@ -344,17 +344,17 @@ const LandingPage = () => {
                       <span>Failure Rate</span>
                     </div>
                     {[
-                      { name: 'Grocery & Delivery', rate: 84, color: 'bg-red-500' },
-                      { name: 'FinTech', rate: 71, color: 'bg-orange-500' },
-                      { name: 'Consumer Hardware', rate: 69, color: 'bg-yellow-500' },
-                      { name: 'SaaS / B2B', rate: 32, color: 'bg-emerald-500' }
+                      { name: 'Grocery & Delivery', rate: 84, color: 'bg-danger' },
+                      { name: 'FinTech', rate: 71, color: 'bg-warning' },
+                      { name: 'Consumer Hardware', rate: 69, color: 'bg-warning/80' },
+                      { name: 'SaaS / B2B', rate: 32, color: 'bg-success' }
                     ].map((item, idx) => (
                       <div key={idx} className="space-y-1.5">
                         <div className="flex justify-between text-xs font-semibold">
                           <span className="text-text-primary">{item.name}</span>
                           <span className="font-data text-text-secondary">{item.rate}%</span>
                         </div>
-                        <div className="w-full h-1.5 bg-white/5 rounded-full overflow-hidden">
+                        <div className="w-full h-1.5 bg-surface-2 rounded-full overflow-hidden">
                           <div className={`h-full ${item.color}`} style={{ width: `${item.rate}%` }} />
                         </div>
                       </div>
@@ -363,7 +363,7 @@ const LandingPage = () => {
                 )}
 
                 {/* Simulation Notice Footer */}
-                <div className="text-[9px] font-data text-text-muted tracking-wide mt-4 border-t border-white/5 pt-3">
+                <div className="text-[9px] font-data text-text-muted tracking-wide mt-4 border-t border-border pt-3">
                   // SIMULATION ENGINE v1.4.0 — LIVE INTEL FEED
                 </div>
 
@@ -375,7 +375,7 @@ const LandingPage = () => {
       </section>
 
       {/* 3. Social Proof Strip */}
-      <section className="border-y border-white/5 bg-[#111118]/20 py-8">
+      <section className="border-y border-border bg-surface-2/30 py-8">
         <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row md:items-center justify-between gap-6">
           <span className="text-[10px] font-data font-bold text-text-muted uppercase tracking-widest">
             Used by founders at
@@ -391,31 +391,31 @@ const LandingPage = () => {
       </section>
 
       {/* 4. Infinite Auto-Scrolling Ticker */}
-      <section className="py-16 overflow-hidden relative border-b border-white/5">
+      <section className="py-16 overflow-hidden relative border-b border-border">
         
         {/* Mask/Fade overlays for ticker */}
-        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-[#0a0a0f] to-transparent z-10 pointer-events-none" />
-        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-[#0a0a0f] to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-bg to-transparent z-10 pointer-events-none" />
+        <div className="absolute inset-y-0 right-0 w-24 bg-gradient-to-l from-bg to-transparent z-10 pointer-events-none" />
 
         <div className="animate-ticker gap-6">
           {/* Double array to create seamless loop */}
           {[...tickerCards, ...tickerCards].map((card, idx) => (
             <div
               key={idx}
-              className="w-64 rounded-xl border border-white/5 bg-[#111118]/40 p-5 shrink-0 flex flex-col justify-between h-36"
+              className="w-64 rounded-card border border-border bg-surface/50 p-5 shrink-0 flex flex-col justify-between h-36 hover:border-accent/30"
             >
               <div>
                 <div className="flex justify-between items-start">
                   <h3 className="font-bold text-text-primary text-sm">{card.name}</h3>
-                  <span className="text-[9px] font-data font-bold uppercase px-1.5 py-0.5 rounded bg-red-500/10 text-red-400 border border-red-500/20">
+                  <span className="text-[9px] font-data font-bold uppercase px-1.5 py-0.5 rounded bg-danger/10 text-danger border border-danger/20">
                     {card.status}
                   </span>
                 </div>
                 <p className="text-xs text-text-secondary mt-1">{card.category}</p>
               </div>
-              <div className="flex justify-between items-center text-[10px] font-data text-text-muted border-t border-white/5 pt-2">
+              <div className="flex justify-between items-center text-[10px] font-data text-text-muted border-t border-border pt-2">
                 <span>Raised</span>
-                <span className="text-[#e85d3a]">{card.raised}</span>
+                <span className="text-accent">{card.raised}</span>
               </div>
             </div>
           ))}
@@ -442,14 +442,14 @@ const LandingPage = () => {
             return (
               <div
                 key={idx}
-                className="rounded-xl border border-white/5 bg-[#111118]/20 p-8 flex flex-col justify-between h-72 transition-colors hover:bg-[#111118]/40"
+                className="rounded-card border border-border bg-surface/50 p-8 flex flex-col justify-between h-72 transition-colors hover:bg-surface-2/40"
               >
                 <div>
                   <div className="flex justify-between items-start mb-6">
                     <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center text-accent">
                       <Icon className="w-5 h-5" />
                     </div>
-                    <span className="text-[9px] font-data font-bold uppercase px-2 py-0.5 rounded border border-white/5 bg-white/5 text-text-muted">
+                    <span className="text-[9px] font-data font-bold uppercase px-2 py-0.5 rounded border border-border bg-surface-2 text-text-muted">
                       {feat.badge}
                     </span>
                   </div>
@@ -463,7 +463,7 @@ const LandingPage = () => {
       </section>
 
       {/* 6. Testimonials Grid */}
-      <section className="py-24 border-t border-white/5 bg-[#111118]/10 px-4">
+      <section className="py-24 border-t border-border bg-surface-2/10 px-4">
         <div className="max-w-6xl mx-auto space-y-16">
           <div className="text-center space-y-3">
             <span className="font-data text-xs text-accent tracking-[0.25em] font-semibold uppercase">
@@ -478,7 +478,7 @@ const LandingPage = () => {
             {testimonials.map((t, idx) => (
               <div
                 key={idx}
-                className="rounded-xl border border-white/5 bg-[#111118]/30 p-8 flex flex-col justify-between"
+                className="rounded-card border border-border bg-surface/50 p-8 flex flex-col justify-between"
               >
                 <p className="text-xs sm:text-sm text-text-secondary italic leading-relaxed mb-6">
                   "{t.quote}"
@@ -504,7 +504,7 @@ const LandingPage = () => {
         {/* Glow effect behind heading */}
         <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-accent/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
-        <div className="rounded-2xl border border-white/5 bg-[#111118]/20 p-10 sm:p-12 text-center space-y-8 backdrop-blur-[12px]">
+        <div className="rounded-card border border-border bg-surface/50 p-10 sm:p-12 text-center space-y-8 backdrop-blur-[12px]">
           <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-text-primary leading-tight">
             Stress-test your idea before scaling.
           </h2>
@@ -517,7 +517,7 @@ const LandingPage = () => {
               type="email"
               placeholder="Enter your email"
               required
-              className="flex-1 bg-[#0a0a0f] border border-white/5 rounded-button px-4 py-3 text-xs text-text-primary focus:outline-none focus:border-accent"
+              className="flex-1 bg-bg border border-border rounded-button px-4 py-3 text-xs text-text-primary focus:outline-none focus:border-accent"
             />
             <button
               type="submit"
@@ -534,7 +534,7 @@ const LandingPage = () => {
       </section>
 
       {/* 8. Footer */}
-      <footer className="border-t border-white/5 py-8 bg-[#0a0a0f]">
+      <footer className="border-t border-border py-8 bg-bg">
         <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] sm:text-xs text-text-muted font-semibold">
           <div className="flex items-center gap-2">
             <Skull className="w-4 h-4 text-accent" />

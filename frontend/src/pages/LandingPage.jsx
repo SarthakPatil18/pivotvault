@@ -142,72 +142,72 @@ const LandingPage = () => {
 
       {/* 1. Sticky Navbar */}
       <header className="sticky top-0 z-50 w-full border-b border-border bg-bg/85 backdrop-blur-md">
-        <div className="max-w-6xl mx-auto px-4 h-16 flex items-center justify-between">
-          <Link to="/" className="flex items-center gap-2 group">
-            <Skull className="w-5 h-5 text-accent" />
-            <span className="font-data font-bold tracking-tight text-text-primary text-sm uppercase">PV <span className="font-display lowercase tracking-normal text-xs text-text-secondary">PivotVault</span></span>
+        <div className="max-w-6xl mx-auto px-4 h-20 flex items-center justify-between">
+          <Link to="/" className="flex items-center gap-2.5 group">
+            <Skull className="w-6 h-6 text-accent" />
+            <span className="font-display font-extrabold tracking-tight text-text-primary text-lg">PivotVault</span>
           </Link>
 
-          <nav className="hidden md:flex items-center gap-8 text-xs font-semibold text-text-secondary">
+          <nav className="hidden md:flex items-center gap-10 text-sm font-semibold text-text-secondary">
             <a href="#features" className="hover:text-text-primary transition-colors">Features</a>
             <a href="#demo" className="hover:text-text-primary transition-colors">Demo</a>
             <Link to="/pricing" className="hover:text-text-primary transition-colors">Pricing</Link>
             <Link to="/confessions" className="hover:text-text-primary transition-colors">Confessions</Link>
           </nav>
 
-          <div className="flex items-center gap-4">
-            <Link to="/login" className="text-xs font-semibold text-text-secondary hover:text-text-primary transition-colors">
+          <div className="flex items-center gap-6">
+            <Link to="/login" className="text-sm font-semibold text-text-secondary hover:text-text-primary transition-colors">
               Sign in
             </Link>
-            <Link to="/explore" className="pv-btn-primary text-xs py-2 px-4 h-auto rounded-button font-bold flex items-center gap-1.5 transition-all">
-              Enter vault <ArrowRight className="w-3.5 h-3.5" />
+            <Link to="/explore" className="pv-btn-primary text-sm py-2.5 px-5 h-auto rounded-button font-bold flex items-center gap-2 transition-all">
+              Enter vault <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
         </div>
       </header>
 
       {/* 2. Hero Section */}
-      <section id="demo" className="py-20 px-4 max-w-6xl mx-auto">
+      <section id="demo" className="py-24 px-4 max-w-6xl mx-auto">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-16 items-center">
           
           {/* Left Column */}
-          <div className="lg:col-span-5 space-y-6">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-surface-2/60 text-[10px] font-data font-bold text-accent tracking-wider uppercase">
-              <span className="w-1.5 h-1.5 rounded-full bg-accent animate-pulse" />
+          <div className="lg:col-span-5 space-y-8">
+            <div className="inline-flex items-center gap-2.5 px-4 py-1.5 rounded-full border border-border bg-surface-2/60 text-xs font-data font-bold text-accent tracking-wider uppercase">
+              <span className="w-2 h-2 rounded-full bg-accent animate-pulse" />
               4,200+ postmortems indexed
             </div>
             
-            <h1 className="text-4xl sm:text-5xl font-display font-extrabold tracking-tight leading-[1.1] text-text-primary">
+            <h1 className="text-5xl sm:text-6xl font-display font-extrabold tracking-tight leading-[1.08] text-text-primary">
               Learn from <span className="text-accent">failure</span> before writing code.
             </h1>
             
-            <p className="text-sm sm:text-base text-text-secondary leading-relaxed max-w-lg">
+            <p className="text-base sm:text-lg text-text-secondary leading-relaxed max-w-lg">
               PivotVault decrypts historical startup postmortems, indexes growth hurdles, and scans business models to stress-test your unit economics.
             </p>
 
             <div className="flex flex-wrap gap-4 pt-2">
-              <Link to="/explore" className="pv-btn-primary px-6 py-3 h-auto font-bold text-xs rounded-button">
+              <Link to="/explore" className="pv-btn-primary px-8 py-3.5 h-auto font-bold text-sm rounded-button">
                 Start Exploring
               </Link>
-              <a href="#features" className="px-6 py-3 border border-border hover:border-border-strong bg-transparent text-text-primary font-bold text-xs rounded-button transition-colors">
+              <a href="#features" className="px-8 py-3.5 border border-border hover:border-border-strong bg-transparent text-text-primary font-bold text-sm rounded-button transition-colors">
                 View Features
               </a>
             </div>
 
             {/* Divider & Stat Row */}
             <div className="h-px bg-border my-8" />
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-3 gap-8">
               <div>
-                <div className="font-data text-xl sm:text-2xl font-bold text-text-primary">4,200+</div>
-                <div className="text-[10px] text-text-muted uppercase tracking-wider mt-1">Postmortems</div>
+                <div className="font-data text-2xl sm:text-3xl font-bold text-text-primary">4,200+</div>
+                <div className="text-xs text-text-muted uppercase tracking-wider mt-1">Postmortems</div>
               </div>
               <div>
-                <div className="font-data text-xl sm:text-2xl font-bold text-accent">₹145Cr+</div>
-                <div className="text-[10px] text-text-muted uppercase tracking-wider mt-1">Capital Lost</div>
+                <div className="font-data text-2xl sm:text-3xl font-bold text-accent">₹145Cr+</div>
+                <div className="text-xs text-text-muted uppercase tracking-wider mt-1">Capital Lost</div>
               </div>
               <div>
-                <div className="font-data text-xl sm:text-2xl font-bold text-accent-2">450+</div>
-                <div className="text-[10px] text-text-muted uppercase tracking-wider mt-1">AI Scan Patterns</div>
+                <div className="font-data text-2xl sm:text-3xl font-bold text-accent-2">450+</div>
+                <div className="text-xs text-text-muted uppercase tracking-wider mt-1">AI Scan Patterns</div>
               </div>
             </div>
           </div>
@@ -223,7 +223,7 @@ const LandingPage = () => {
                   <div className="w-2.5 h-2.5 rounded-full bg-warning/80" />
                   <div className="w-2.5 h-2.5 rounded-full bg-success/80" />
                 </div>
-                <div className="flex-1 max-w-sm bg-bg border border-border rounded-md px-3 py-1 text-[10px] font-data text-text-muted text-center truncate">
+                <div className="flex-1 max-w-sm bg-bg border border-border rounded-md px-3 py-1 text-xs font-data text-text-muted text-center truncate">
                   pivotvault.com/intel/interactive-dashboard
                 </div>
                 <div className="w-10" /> {/* Spacer */}
@@ -235,7 +235,7 @@ const LandingPage = () => {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`flex-1 py-3 text-[10px] sm:text-xs font-semibold tracking-wider uppercase border-r border-border last:border-r-0 transition-colors ${
+                    className={`flex-1 py-3.5 text-xs sm:text-sm font-semibold tracking-wider uppercase border-r border-border last:border-r-0 transition-colors ${
                       activeTab === tab ? 'bg-bg text-accent' : 'text-text-muted hover:text-text-primary'
                     }`}
                   >
@@ -247,12 +247,12 @@ const LandingPage = () => {
               </div>
 
               {/* Interactive Dashboard Content */}
-              <div className="p-6 bg-bg/95 min-h-[280px] flex flex-col justify-between">
+              <div className="p-6 bg-bg/95 min-h-[300px] flex flex-col justify-between">
                 
                 {/* 1. Explorer Tab */}
                 {activeTab === 'explorer' && (
                   <div className="space-y-4">
-                    <div className="flex items-center justify-between border-b border-border pb-2 text-[10px] font-semibold text-text-muted uppercase tracking-wider">
+                    <div className="flex items-center justify-between border-b border-border pb-2 text-xs font-semibold text-text-muted uppercase tracking-wider">
                       <span>Startup</span>
                       <span>Category</span>
                       <span>Status</span>
@@ -262,13 +262,13 @@ const LandingPage = () => {
                       { name: 'WeWork', industry: 'Real Estate', reason: 'Cash Burn', status: 'Failed' },
                       { name: 'Theranos', industry: 'Health Tech', reason: 'Product Fraud', status: 'Failed' }
                     ].map((item, idx) => (
-                      <div key={idx} className="flex items-center justify-between py-2 border-b border-border/60 last:border-0 text-xs">
+                      <div key={idx} className="flex items-center justify-between py-2 border-b border-border/60 last:border-0 text-sm">
                         <div className="flex items-center gap-2">
-                          <span className="w-1.5 h-1.5 rounded-full bg-accent" />
+                          <span className="w-2 h-2 rounded-full bg-accent" />
                           <span className="font-bold text-text-primary">{item.name}</span>
                         </div>
-                        <span className="text-text-secondary text-[11px]">{item.industry} — <strong className="text-accent-2 font-normal">{item.reason}</strong></span>
-                        <span className="text-[10px] font-data font-bold uppercase px-1.5 py-0.5 rounded bg-danger/10 text-danger border border-danger/20">{item.status}</span>
+                        <span className="text-text-secondary text-xs">{item.industry} — <strong className="text-accent-2 font-normal">{item.reason}</strong></span>
+                        <span className="text-xs font-data font-bold uppercase px-2 py-0.5 rounded bg-danger/10 text-danger border border-danger/20">{item.status}</span>
                       </div>
                     ))}
                   </div>
@@ -280,24 +280,24 @@ const LandingPage = () => {
                     {!scanResult ? (
                       <form onSubmit={handleSimulateScan} className="space-y-4">
                         <div className="grid grid-cols-2 gap-4">
-                          <div className="space-y-1">
-                            <label className="text-[10px] text-text-muted uppercase tracking-wider font-semibold">Sector</label>
+                          <div className="space-y-2">
+                            <label className="text-xs text-text-muted uppercase tracking-wider font-semibold">Sector</label>
                             <select
                               value={industry}
                               onChange={(e) => setIndustry(e.target.value)}
-                              className="w-full bg-surface-2 border border-border rounded-md px-2 py-1 text-xs text-text-primary focus:outline-none"
+                              className="w-full bg-surface-2 border border-border rounded-md px-3 py-1.5 text-sm text-text-primary focus:outline-none"
                             >
                               <option value="Grocery & Delivery">Grocery & Delivery</option>
                               <option value="FinTech">FinTech</option>
                               <option value="SaaS">SaaS / B2B</option>
                             </select>
                           </div>
-                          <div className="space-y-1">
-                            <label className="text-[10px] text-text-muted uppercase tracking-wider font-semibold">Burn Rate</label>
+                          <div className="space-y-2">
+                            <label className="text-xs text-text-muted uppercase tracking-wider font-semibold">Burn Rate</label>
                             <select
                               value={burn}
                               onChange={(e) => setBurn(e.target.value)}
-                              className="w-full bg-surface-2 border border-border rounded-md px-2 py-1 text-xs text-text-primary focus:outline-none"
+                              className="w-full bg-surface-2 border border-border rounded-md px-3 py-1.5 text-sm text-text-primary focus:outline-none"
                             >
                               <option value="Low">Low</option>
                               <option value="High">High</option>
@@ -307,7 +307,7 @@ const LandingPage = () => {
                         <button
                           type="submit"
                           disabled={isScanning}
-                          className="w-full py-2 bg-accent text-accent-contrast font-bold text-xs rounded-md transition-all uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer hover:bg-accent-2"
+                          className="w-full py-2.5 bg-accent text-accent-contrast font-bold text-sm rounded-md transition-all uppercase tracking-wider flex items-center justify-center gap-2 cursor-pointer hover:bg-accent-2"
                         >
                           {isScanning ? 'Analyzing Growth Hurdles...' : 'Scan Business Model'}
                         </button>
@@ -315,20 +315,20 @@ const LandingPage = () => {
                     ) : (
                       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="space-y-4">
                         <div className="flex items-center justify-between border-b border-border pb-2">
-                          <span className="text-xs font-semibold text-text-secondary uppercase">Risk Assessment</span>
-                          <button onClick={() => setScanResult(null)} className="text-[10px] text-accent font-semibold hover:underline uppercase tracking-wider">
+                          <span className="text-sm font-semibold text-text-secondary uppercase">Risk Assessment</span>
+                          <button onClick={() => setScanResult(null)} className="text-xs text-accent font-semibold hover:underline uppercase tracking-wider">
                             Reset Scanner
                           </button>
                         </div>
                         <div className="flex items-center gap-4 py-2">
-                          <div className="w-16 h-16 rounded-full border-4 border-border flex items-center justify-center shrink-0">
-                            <span className="font-data text-lg font-bold text-accent">{scanResult.score}%</span>
+                          <div className="w-18 h-18 rounded-full border-4 border-border flex items-center justify-center shrink-0">
+                            <span className="font-data text-xl font-bold text-accent">{scanResult.score}%</span>
                           </div>
                           <div>
-                            <div className={`text-xs font-bold ${scanResult.score > 70 ? 'text-danger' : 'text-success'}`}>
+                            <div className={`text-sm font-bold ${scanResult.score > 70 ? 'text-danger' : 'text-success'}`}>
                               {scanResult.score > 70 ? '⚠️ High Structural Risk' : '✅ Low/Moderate Risk'}
                             </div>
-                            <p className="text-[11px] text-text-secondary leading-relaxed mt-1">{scanResult.warning}</p>
+                            <p className="text-xs text-text-secondary leading-relaxed mt-1">{scanResult.warning}</p>
                           </div>
                         </div>
                       </motion.div>
@@ -338,8 +338,8 @@ const LandingPage = () => {
 
                 {/* 3. Heatmap Tab */}
                 {activeTab === 'heatmap' && (
-                  <div className="space-y-3">
-                    <div className="flex items-center justify-between text-[10px] font-semibold text-text-muted uppercase tracking-wider mb-1">
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between text-xs font-semibold text-text-muted uppercase tracking-wider mb-1">
                       <span>Sector</span>
                       <span>Failure Rate</span>
                     </div>
@@ -349,12 +349,12 @@ const LandingPage = () => {
                       { name: 'Consumer Hardware', rate: 69, color: 'bg-warning/80' },
                       { name: 'SaaS / B2B', rate: 32, color: 'bg-success' }
                     ].map((item, idx) => (
-                      <div key={idx} className="space-y-1.5">
-                        <div className="flex justify-between text-xs font-semibold">
+                      <div key={idx} className="space-y-2">
+                        <div className="flex justify-between text-sm font-semibold">
                           <span className="text-text-primary">{item.name}</span>
                           <span className="font-data text-text-secondary">{item.rate}%</span>
                         </div>
-                        <div className="w-full h-1.5 bg-surface-2 rounded-full overflow-hidden">
+                        <div className="w-full h-2 bg-surface-2 rounded-full overflow-hidden">
                           <div className={`h-full ${item.color}`} style={{ width: `${item.rate}%` }} />
                         </div>
                       </div>
@@ -363,7 +363,7 @@ const LandingPage = () => {
                 )}
 
                 {/* Simulation Notice Footer */}
-                <div className="text-[9px] font-data text-text-muted tracking-wide mt-4 border-t border-border pt-3">
+                <div className="text-[11px] font-data text-text-muted tracking-wide mt-4 border-t border-border pt-3">
                   // SIMULATION ENGINE v1.4.0 — LIVE INTEL FEED
                 </div>
 
@@ -375,12 +375,12 @@ const LandingPage = () => {
       </section>
 
       {/* 3. Social Proof Strip */}
-      <section className="border-y border-border bg-surface-2/30 py-8">
+      <section className="border-y border-border bg-surface-2/30 py-10">
         <div className="max-w-6xl mx-auto px-4 flex flex-col md:flex-row md:items-center justify-between gap-6">
-          <span className="text-[10px] font-data font-bold text-text-muted uppercase tracking-widest">
+          <span className="text-xs font-data font-bold text-text-muted uppercase tracking-widest">
             Used by founders at
           </span>
-          <div className="flex flex-wrap items-center gap-x-12 gap-y-4 text-xs sm:text-sm font-display font-semibold text-text-muted">
+          <div className="flex flex-wrap items-center gap-x-12 gap-y-4 text-sm sm:text-base font-display font-semibold text-text-muted">
             <span className="hover:text-text-secondary transition-colors">Y Combinator</span>
             <span className="hover:text-text-secondary transition-colors">Techstars</span>
             <span className="hover:text-text-secondary transition-colors">Sequoia Capital</span>
@@ -391,7 +391,7 @@ const LandingPage = () => {
       </section>
 
       {/* 4. Infinite Auto-Scrolling Ticker */}
-      <section className="py-16 overflow-hidden relative border-b border-border">
+      <section className="py-20 overflow-hidden relative border-b border-border">
         
         {/* Mask/Fade overlays for ticker */}
         <div className="absolute inset-y-0 left-0 w-24 bg-gradient-to-r from-bg to-transparent z-10 pointer-events-none" />
@@ -402,18 +402,18 @@ const LandingPage = () => {
           {[...tickerCards, ...tickerCards].map((card, idx) => (
             <div
               key={idx}
-              className="w-64 rounded-card border border-border bg-surface/50 p-5 shrink-0 flex flex-col justify-between h-36 hover:border-accent/30"
+              className="w-72 rounded-card border border-border bg-surface/50 p-6 shrink-0 flex flex-col justify-between h-40 hover:border-accent/30"
             >
               <div>
                 <div className="flex justify-between items-start">
-                  <h3 className="font-bold text-text-primary text-sm">{card.name}</h3>
-                  <span className="text-[9px] font-data font-bold uppercase px-1.5 py-0.5 rounded bg-danger/10 text-danger border border-danger/20">
+                  <h3 className="font-bold text-text-primary text-base">{card.name}</h3>
+                  <span className="text-xs font-data font-bold uppercase px-2 py-0.5 rounded bg-danger/10 text-danger border border-danger/20">
                     {card.status}
                   </span>
                 </div>
-                <p className="text-xs text-text-secondary mt-1">{card.category}</p>
+                <p className="text-sm text-text-secondary mt-1">{card.category}</p>
               </div>
-              <div className="flex justify-between items-center text-[10px] font-data text-text-muted border-t border-border pt-2">
+              <div className="flex justify-between items-center text-xs font-data text-text-muted border-t border-border pt-2">
                 <span>Raised</span>
                 <span className="text-accent">{card.raised}</span>
               </div>
@@ -423,15 +423,15 @@ const LandingPage = () => {
       </section>
 
       {/* 5. Features Grid */}
-      <section id="features" className="py-24 px-4 max-w-6xl mx-auto space-y-16">
-        <div className="text-center space-y-3">
-          <span className="font-data text-xs text-accent tracking-[0.25em] font-semibold uppercase">
+      <section id="features" className="py-28 px-4 max-w-6xl mx-auto space-y-20">
+        <div className="text-center space-y-4">
+          <span className="font-data text-sm text-accent tracking-[0.25em] font-semibold uppercase">
             FEATURES MATRIX
           </span>
-          <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-text-primary">
+          <h2 className="text-4xl sm:text-5xl font-display font-extrabold text-text-primary">
             Engineered to avoid failure.
           </h2>
-          <p className="text-sm sm:text-base text-text-secondary max-w-2xl mx-auto">
+          <p className="text-base sm:text-lg text-text-secondary max-w-2xl mx-auto leading-relaxed">
             Our platform provides full diagnostic capabilities built specifically to test growth logic.
           </p>
         </div>
@@ -442,19 +442,19 @@ const LandingPage = () => {
             return (
               <div
                 key={idx}
-                className="rounded-card border border-border bg-surface/50 p-8 flex flex-col justify-between h-72 transition-colors hover:bg-surface-2/40"
+                className="rounded-card border border-border bg-surface/50 p-8 flex flex-col justify-between h-80 transition-colors hover:bg-surface-2/40"
               >
                 <div>
                   <div className="flex justify-between items-start mb-6">
-                    <div className="w-10 h-10 rounded-lg bg-accent/10 flex items-center justify-center text-accent">
-                      <Icon className="w-5 h-5" />
+                    <div className="w-12 h-12 rounded-lg bg-accent/10 flex items-center justify-center text-accent">
+                      <Icon className="w-6 h-6" />
                     </div>
-                    <span className="text-[9px] font-data font-bold uppercase px-2 py-0.5 rounded border border-border bg-surface-2 text-text-muted">
+                    <span className="text-xs font-data font-bold uppercase px-2.5 py-0.5 rounded border border-border bg-surface-2 text-text-muted">
                       {feat.badge}
                     </span>
                   </div>
-                  <h3 className="font-bold text-text-primary text-base mb-2">{feat.title}</h3>
-                  <p className="text-xs text-text-secondary leading-relaxed">{feat.desc}</p>
+                  <h3 className="font-bold text-text-primary text-lg mb-2">{feat.title}</h3>
+                  <p className="text-sm text-text-secondary leading-relaxed">{feat.desc}</p>
                 </div>
               </div>
             );
@@ -463,13 +463,13 @@ const LandingPage = () => {
       </section>
 
       {/* 6. Testimonials Grid */}
-      <section className="py-24 border-t border-border bg-surface-2/10 px-4">
-        <div className="max-w-6xl mx-auto space-y-16">
-          <div className="text-center space-y-3">
-            <span className="font-data text-xs text-accent tracking-[0.25em] font-semibold uppercase">
+      <section className="py-28 border-t border-border bg-surface-2/10 px-4">
+        <div className="max-w-6xl mx-auto space-y-20">
+          <div className="text-center space-y-4">
+            <span className="font-data text-sm text-accent tracking-[0.25em] font-semibold uppercase">
               FOUNDER TESTIMONIALS
             </span>
-            <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-text-primary">
+            <h2 className="text-4xl sm:text-5xl font-display font-extrabold text-text-primary">
               Trusted by operators.
             </h2>
           </div>
@@ -480,16 +480,16 @@ const LandingPage = () => {
                 key={idx}
                 className="rounded-card border border-border bg-surface/50 p-8 flex flex-col justify-between"
               >
-                <p className="text-xs sm:text-sm text-text-secondary italic leading-relaxed mb-6">
+                <p className="text-sm sm:text-base text-text-secondary italic leading-relaxed mb-8">
                   "{t.quote}"
                 </p>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-accent/20 flex items-center justify-center text-xs font-bold text-accent font-data">
+                <div className="flex items-center gap-4">
+                  <div className="w-10 h-10 rounded-full bg-accent/20 flex items-center justify-center text-sm font-bold text-accent font-data">
                     {t.initials}
                   </div>
                   <div>
-                    <h4 className="font-bold text-text-primary text-xs">{t.name}</h4>
-                    <span className="text-[10px] text-text-muted mt-0.5 block">{t.role}</span>
+                    <h4 className="font-bold text-text-primary text-sm">{t.name}</h4>
+                    <span className="text-xs text-text-muted mt-0.5 block">{t.role}</span>
                   </div>
                 </div>
               </div>
@@ -499,49 +499,49 @@ const LandingPage = () => {
       </section>
 
       {/* 7. Centered CTA Section */}
-      <section className="py-28 px-4 max-w-4xl mx-auto relative">
+      <section className="py-32 px-4 max-w-4xl mx-auto relative">
         
         {/* Glow effect behind heading */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-80 h-80 bg-accent/5 rounded-full blur-[100px] pointer-events-none -z-10" />
+        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-96 h-96 bg-accent/5 rounded-full blur-[100px] pointer-events-none -z-10" />
 
-        <div className="rounded-card border border-border bg-surface/50 p-10 sm:p-12 text-center space-y-8 backdrop-blur-[12px]">
-          <h2 className="text-3xl sm:text-4xl font-display font-extrabold text-text-primary leading-tight">
+        <div className="rounded-card border border-border bg-surface/50 p-12 sm:p-16 text-center space-y-10 backdrop-blur-[12px]">
+          <h2 className="text-4xl sm:text-5xl font-display font-extrabold text-text-primary leading-tight">
             Stress-test your idea before scaling.
           </h2>
-          <p className="text-xs sm:text-sm text-text-secondary max-w-xl mx-auto leading-relaxed">
+          <p className="text-sm sm:text-base text-text-secondary max-w-xl mx-auto leading-relaxed">
             Join 12,000+ founders receiving our weekly failure analytics report and diagnostic checkups.
           </p>
 
-          <form onSubmit={(e) => e.preventDefault()} className="flex flex-col sm:flex-row justify-center gap-3 max-w-md mx-auto">
+          <form onSubmit={(e) => e.preventDefault()} className="flex flex-col sm:flex-row justify-center gap-4 max-w-lg mx-auto">
             <input
               type="email"
               placeholder="Enter your email"
               required
-              className="flex-1 bg-bg border border-border rounded-button px-4 py-3 text-xs text-text-primary focus:outline-none focus:border-accent"
+              className="flex-1 bg-bg border border-border rounded-button px-5 py-4 text-sm text-text-primary focus:outline-none focus:border-accent"
             />
             <button
               type="submit"
-              className="pv-btn-primary py-3 px-6 h-auto rounded-button font-bold text-xs transition-colors shrink-0 cursor-pointer"
+              className="pv-btn-primary py-4 px-8 h-auto rounded-button font-bold text-sm transition-colors shrink-0 cursor-pointer"
             >
               Get Failure Intel
             </button>
           </form>
           
-          <div className="text-[10px] text-text-muted">
+          <div className="text-xs text-text-muted">
             No spam. Unsubscribe at any time. Verified datasets only.
           </div>
         </div>
       </section>
 
       {/* 8. Footer */}
-      <footer className="border-t border-border py-8 bg-bg">
-        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-[10px] sm:text-xs text-text-muted font-semibold">
-          <div className="flex items-center gap-2">
-            <Skull className="w-4 h-4 text-accent" />
-            <span className="font-data font-bold tracking-tight text-text-primary uppercase">PV <span className="font-display lowercase tracking-normal text-text-secondary">PivotVault</span></span>
+      <footer className="border-t border-border py-10 bg-bg">
+        <div className="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs sm:text-sm text-text-muted font-semibold">
+          <div className="flex items-center gap-2.5">
+            <Skull className="w-5 h-5 text-accent" />
+            <span className="font-display font-extrabold tracking-tight text-text-primary">PivotVault</span>
           </div>
 
-          <div className="flex flex-wrap items-center gap-6">
+          <div className="flex flex-wrap items-center gap-8">
             <a href="#features" className="hover:text-text-secondary transition-colors">Features</a>
             <Link to="/pricing" className="hover:text-text-secondary transition-colors">Pricing</Link>
             <Link to="/confessions" className="hover:text-text-secondary transition-colors">Confessions</Link>

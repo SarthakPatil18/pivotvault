@@ -19,6 +19,7 @@ import HallOfGhosts from './pages/HallOfGhosts';
 import Sidebar from './components/Sidebar';
 import Header from './components/Header';
 import ProtectedRoute from './components/ProtectedRoute';
+import PricingPage from './pages/PricingPage';
 import ScrollToTop from './components/ScrollToTop';
 import PitchDeckAutopsy from './pages/PitchDeckAutopsy.jsx';
 import PivotVaultIntro from './components/loaders/PivotVaultIntro';
@@ -91,6 +92,7 @@ function AppContent() {
                 <Route path="/autopsy" element={<ProtectedRoute><PitchDeckAutopsy /></ProtectedRoute>} />
                 <Route path="/login" element={<Login />} />
                 <Route path="/signup" element={<Signup />} />
+                <Route path="/pricing" element={<PricingPage />} />
               </Routes>
             </main>
           </div>

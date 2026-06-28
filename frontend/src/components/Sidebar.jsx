@@ -4,7 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import {
   Skull, Search, Zap, BarChart2, MessageSquare, Share2, Menu, X, Sparkles,
   Bookmark, Brain, GitCompare, ClipboardCheck, Sun, Moon, LogOut, User,
-  FileText, PanelLeftClose, PanelLeft, Ghost
+  FileText, PanelLeftClose, PanelLeft, Ghost, DollarSign
 } from 'lucide-react';
 import { clsx } from 'clsx';
 import { useTheme } from '../context/ThemeContext';
@@ -91,6 +91,7 @@ const Sidebar = ({ isCollapsed, setIsCollapsed, isMobileOpen, setIsMobileOpen })
     { name: 'Risk Scanner', path: '/scan', icon: Zap },
     { name: 'Founder Playbook', path: '/playbook', icon: ClipboardCheck },
     { name: 'Bookmarks', path: '/bookmarks', icon: Bookmark },
+    { name: 'Pricing', path: '/pricing', icon: DollarSign },
   ];
 
   const analysisNav = [

@@ -57,6 +57,7 @@ const Header = () => {
     if (path === '/autopsy') return 'Pitch Deck Autopsy';
     if (path === '/login') return 'Login';
     if (path === '/signup') return 'Sign Up';
+    if (path === '/pricing') return 'Pricing Plans';
     return 'PivotVault';
   };
 

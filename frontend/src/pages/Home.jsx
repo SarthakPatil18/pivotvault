@@ -50,6 +50,7 @@ export function Home() {
   const [stats, setStats] = useState(null);
   const [featuredStartups, setFeaturedStartups] = useState([]);
   const [activeGhost, setActiveGhost] = useState('adam');
+  const [activeGhostQuestion, setActiveGhostQuestion] = useState('warning');
   const [activeGraphNode, setActiveGraphNode] = useState('wework');
   const [activeHeatmapCell, setActiveHeatmapCell] = useState({ vector: 'Unit Economics', industry: 'Hardware' });
   const [demoIdea, setDemoIdea] = useState('On-demand grocery delivery with 10-minute guarantee and subsidized courier fleet');
@@ -191,28 +192,151 @@ export function Home() {
     }
   };
 
-  // Ghost dialogues
+  // Reconstructed Ghost Persona Dialogues
   const ghostProfiles = {
     adam: {
       name: 'Adam Neumann',
       startup: 'WeWork',
-      stat: '$12.8B Evaporated',
-      quote: "The biggest signal wasn't the competition. It was our assumption that massive capital could bend unit economics into a tech multiple. We built 15-year lease obligations on 30-day member commitments.",
-      lesson: 'Never disguise real estate arbitrage as software recurring revenue.'
+      avatar: 'AN',
+      industry: 'PropTech',
+      stat: '$14.0B Raised • $40B+ Lost',
+      dialogues: {
+        warning: {
+          q: 'What warning signs did you miss before the collapse became irreversible?',
+          a: "The biggest warning wasn't the competition—it was our structural duration mismatch. We built multi-billion dollar, 15-year non-cancellable lease obligations on 30-day cancelable member desks. In a zero-interest-rate bull market with infinite venture subsidies, you can mask that gap. The instant market liquidity tightened, fixed rent engulfed all operational cash.",
+          lesson: 'Never disguise commercial real estate lease liabilities as high-margin recurring SaaS revenue.'
+        },
+        governance: {
+          q: 'Why did corporate governance and board oversight fail?',
+          a: 'Masa Son told me: "Don\'t be smart, be crazy. WeWork isn\'t big enough; make it 10x bigger." When lead investors offer billions to capture territory at all costs, it eliminates internal fiscal restraint. We granted 20-vote super shares and leased personal trademarks back to the company—liberties tolerated privately that public markets immediately rejected.',
+          lesson: 'When you take public or institutional capital, governance cannot be treated as founder theater.'
+        },
+        lesson: {
+          q: 'What is your core defensive takeaway for founders scaling today?',
+          a: 'Capital abundance is not a competitive moat; it is an accelerant that magnifies whatever flaws exist in your unit economics. If your business model requires continuous venture capital subsidies to avoid insolvency, you are running a financial treadmill.',
+          lesson: 'Achieve positive unit cash flows on early locations before expanding into the next ten.'
+        }
+      }
     },
     elizabeth: {
       name: 'Elizabeth Holmes',
       startup: 'Theranos',
-      stat: '$1.4B Evaporated',
-      quote: "We convinced ourselves that protecting the vision justified obfuscating the engineering timeline. The board had stellar political prestige but zero biomedical diagnostic forensic capability.",
-      lesson: 'Engineering truth always surfaces before clinical scale.'
+      avatar: 'EH',
+      industry: 'Biotech',
+      stat: '$945M Raised • $9.0B Lost',
+      dialogues: {
+        warning: {
+          q: 'What warning signs did you miss before the collapse became irreversible?',
+          a: 'The primary warning signs were internal biochemical signals: high hemolyzed blood rates from capillary fingerpricks, micro-fluidic clogs inside our Edison machines, and persistent failure to meet quality control standards. Rather than halting expansion, we diluted samples and ran them on third-party commercial analyzers in secret.',
+          lesson: 'Engineering and biological truth always surfaces before clinical scale.'
+        },
+        governance: {
+          q: 'Why did corporate governance and board oversight fail?',
+          a: 'We built a board of legendary statesmen—George Shultz, Henry Kissinger, General Mattis. They brought immense political prestige, but not a single one was a hematologist or biomedical engineer. They trusted my moral crusade, but lacked the domain expertise to audit our validation data.',
+          lesson: 'A prestigious board without relevant technical domain expertise provides dangerous false comfort.'
+        },
+        lesson: {
+          q: 'What is your core defensive takeaway for founders scaling today?',
+          a: 'In deeptech and life sciences, peer review is not competitive vulnerability—it is the only objective baseline of reality. If you must hide your operational benchmarks behind non-disclosure agreements and team compartmentalization, your technology does not work.',
+          lesson: 'Empirical peer validation must always precede commercial distribution.'
+        }
+      }
+    },
+    jeffrey: {
+      name: 'Jeffrey Katzenberg',
+      startup: 'Quibi',
+      avatar: 'JK',
+      industry: 'Streaming',
+      stat: '$1.75B Raised • $1.75B Lost',
+      dialogues: {
+        warning: {
+          q: 'What warning signs did you miss before the collapse became irreversible?',
+          a: 'Our content cost structure required seven million paying subscribers in Year 1 simply to amortize our $100K-per-minute Hollywood productions. In beta testing, users abandoned shows after two episodes, but we convinced ourselves that a $100M marketing blitz would manufacture product-market fit.',
+          lesson: 'Heavy advertising spend can buy app installs; it can never buy customer retention.'
+        },
+        governance: {
+          q: 'Why did corporate governance and board oversight fail?',
+          a: 'We approached mobile distribution through traditional Hollywood studio copyright instincts. We banned screenshots and clips to prevent piracy, inadvertently killing the only organic distribution engines on mobile: viral memes, TikTok loops, and social sharing.',
+          lesson: 'Imposing legacy industry habits against native platform mechanics guarantees distribution failure.'
+        },
+        lesson: {
+          q: 'What is your core defensive takeaway for founders scaling today?',
+          a: 'No matter your industry reputation, past box-office triumphs, or capital stockpile, you cannot force consumer behavior. A teenager on TikTok with a ring light generated 100x our engagement for zero production cost.',
+          lesson: 'Respect native user behavior over top-down prestige production.'
+        }
+      }
     },
     domm: {
       name: 'Domm Holland',
       startup: 'Fast',
-      stat: '$125M Evaporated',
-      quote: "We hired 400+ people before we proved merchants actually generated sustainable transaction volume. PR and hockey-stick headcount masked an 80:1 burn-to-revenue ratio.",
-      lesson: 'Headcount is a cost multiplier, not a traction metric.'
+      avatar: 'DH',
+      industry: 'FinTech',
+      stat: '$124.5M Raised • $120M+ Lost',
+      dialogues: {
+        warning: {
+          q: 'What warning signs did you miss before the collapse became irreversible?',
+          a: 'We believed we were in a winner-take-all land grab, so we hired 400 people and sponsored NASCAR while generating only $50K per month in gross revenue. An 80:1 burn-to-revenue ratio left zero margin for error when the macro fundraising environment tightened.',
+          lesson: 'Headcount and vanity marketing are expense multipliers, not validation of traction.'
+        },
+        governance: {
+          q: 'Why did corporate governance and board oversight fail?',
+          a: 'Enterprise ecommerce merchants guard their checkout funnel with religious intensity. They refused to hand over order routing to an unproven plugin, while Shopify had Shop Pay and Apple had TouchID built directly into the operating system.',
+          lesson: 'Standalone point solutions cannot survive against integrated platform distribution moats.'
+        },
+        lesson: {
+          q: 'What is your core defensive takeaway for founders scaling today?',
+          a: 'Never mistake venture capital in your bank account for product-market fit. High valuations and prestigious lead investors can subsidize an uneconomic business model, but they can never substitute for real paying customers.',
+          lesson: 'Prioritize merchant adoption economics over hyper-scaling headcount.'
+        }
+      }
+    },
+    doug: {
+      name: 'Doug Evans',
+      startup: 'Juicero',
+      avatar: 'DE',
+      industry: 'Hardware',
+      stat: '$118.5M Raised • $118.5M Lost',
+      dialogues: {
+        warning: {
+          q: 'What warning signs did you miss before the collapse became irreversible?',
+          a: 'We designed our press like an aerospace component with 400 custom parts, an aluminum gearbox, and four tons of pressure. That drove the retail price to $699. We completely ignored consumer willingness to pay until Bloomberg proved hands could squeeze the packs just as easily.',
+          lesson: 'Never engineer complex, expensive hardware where human simplicity already works.'
+        },
+        governance: {
+          q: 'Why did corporate governance and board oversight fail?',
+          a: 'Top venture firms poured over $100M into our vision of the "Tesla of Juicing" without ever testing whether consumers would accept DRM software locks and mandatory Wi-Fi just to drink raw fruit juice.',
+          lesson: 'Investor groupthink funding founder mythology is not a substitute for customer usability.'
+        },
+        lesson: {
+          q: 'What is your core defensive takeaway for founders scaling today?',
+          a: 'Build the simplest possible MVP that validates the core customer benefit. If your hardware does not provide a 10x cost reduction or 10x speed improvement over a manual alternative, you are engineering a monument to your own ego.',
+          lesson: 'Frugal simplicity beats over-engineered complexity every time.'
+        }
+      }
+    },
+    sam: {
+      name: 'Sam Bankman-Fried',
+      startup: 'FTX',
+      avatar: 'SBF',
+      industry: 'Crypto',
+      stat: '$1.8B Raised • $32.0B+ Lost',
+      dialogues: {
+        warning: {
+          q: 'What warning signs did you miss before the collapse became irreversible?',
+          a: 'Behind the trading dashboards, Alameda had a secret codebase flag ("allow_negative = true") exempting it from automated liquidations. It drew from customer deposits to fund illiquid venture bets, leaving an $8 billion hole when the market retreated and customers withdrew.',
+          lesson: 'Code exemptions and unhedged balance-sheet leverage will always trigger catastrophic bank runs.'
+        },
+        governance: {
+          q: 'Why did corporate governance and board oversight fail?',
+          a: 'We operated without an independent board of directors, a chief financial officer, or audited financials. Top venture funds invested hundreds of millions during Zoom calls while bypassing basic treasury verification out of fear of missing the round.',
+          lesson: 'FOMO-driven due diligence without independent board oversight enables unchecked disaster.'
+        },
+        lesson: {
+          q: 'What is your core defensive takeaway for founders scaling today?',
+          a: 'If your company stewards customer funds, risk management and segregated custody are not administrative burdens—they are the foundational premise of your business. Charisma can never replace audited ledgers.',
+          lesson: 'Segregate operational treasury and submit to independent, verifiable audits.'
+        }
+      }
     }
   };
 
@@ -1454,30 +1578,32 @@ export function Home() {
 
       {/* 10. Section: Hall of Ghosts Preview */}
       <section className="site-container py-12 border-t border-[#E5E5E5] dark:border-[#2A2A2A]">
-        <div className="p-8 lg:p-10 rounded-[8px] bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] shadow-sm">
+        <div className="p-6 sm:p-8 lg:p-10 rounded-[8px] bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] shadow-xs">
+          {/* Header Row */}
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
             <div>
-              <div className="inline-flex items-center gap-1.5 mb-2 px-2.5 py-1 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] text-[11px] font-bold tracking-wider uppercase">
+              <div className="inline-flex items-center gap-1.5 mb-2 px-2.5 py-1 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] text-[11px] font-bold tracking-wider uppercase font-mono">
                 <Users className="w-3.5 h-3.5" />
                 <span>Forensic AI Personas</span>
               </div>
               <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-black dark:text-white">
-                LEARN FROM THE PEOPLE WHO LIVED IT.
+                HALL OF GHOSTS
               </h2>
-              <p className="text-[14px] text-[#737373] dark:text-[#A3A3A3] mt-1">
-                AI-reconstructed founder personas built exclusively from public testimonies, SEC depositions, and post-mortem postmortems.
+              <p className="text-[14px] text-[#737373] dark:text-[#A3A3A3] mt-1 max-w-2xl">
+                Interactive dialogue with reconstructed founders synthesized exclusively from sworn court depositions, SEC enforcement dockets, and verified investigative post-mortems.
               </p>
             </div>
 
-            <div className="text-right">
-              <span className="inline-block px-2.5 py-1 rounded-[4px] text-[10px] font-bold uppercase tracking-wider bg-[#F5F5F5] dark:bg-[#1A1A1A] text-[#737373] dark:text-[#A3A3A3] border border-[#E5E5E5] dark:border-[#2A2A2A]">
-                AI-RECONSTRUCTED PERSONA • BASED ON PUBLIC EVIDENCE
+            <div className="text-left sm:text-right shrink-0">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[4px] text-[10px] font-mono font-bold uppercase tracking-wider bg-[#FAFAFA] dark:bg-[#111111] text-[#737373] dark:text-[#A3A3A3] border border-[#E5E5E5] dark:border-[#2A2A2A]">
+                <ShieldAlert className="w-3 h-3 text-emerald-600 dark:text-emerald-400" />
+                <span>Court & SEC Filings Compliant</span>
               </span>
             </div>
           </div>
 
-          {/* Persona Switcher Tabs */}
-          <div className="flex items-center gap-2 border-b border-[#E5E5E5] dark:border-[#2A2A2A] pb-3 mb-6 overflow-x-auto">
+          {/* Persona Switcher Selector */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-6">
             {Object.keys(ghostProfiles).map((key) => {
               const p = ghostProfiles[key];
               const isSelected = activeGhost === key;
@@ -1485,61 +1611,155 @@ export function Home() {
                 <button
                   key={key}
                   onClick={() => setActiveGhost(key)}
-                  className={`px-3.5 py-2 rounded-[6px] text-[13px] font-bold transition-all whitespace-nowrap flex items-center gap-2 cursor-pointer ${
+                  className={`p-3 rounded-[6px] text-left border transition-all cursor-pointer flex flex-col justify-between ${
                     isSelected 
-                      ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm' 
-                      : 'bg-[#F5F5F5] dark:bg-[#1A1A1A] text-[#737373] dark:text-[#A3A3A3] border border-[#E5E5E5] dark:border-[#2A2A2A] hover:text-black dark:hover:text-white'
+                      ? 'border-black dark:border-white bg-[#F5F5F5] dark:bg-[#181818] shadow-xs ring-1 ring-black dark:ring-white' 
+                      : 'border-[#E5E5E5] dark:border-[#2A2A2A] bg-white dark:bg-black hover:border-[#A3A3A3] dark:hover:border-[#525252]'
                   }`}
                 >
-                  <span>{p.name}</span>
-                  <span className="text-[11px] opacity-70">({p.startup})</span>
+                  <div className="flex items-center justify-between mb-1.5">
+                    <span className={`w-7 h-7 rounded-[4px] font-mono font-bold text-[11px] flex items-center justify-center shrink-0 border ${
+                      isSelected
+                        ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
+                        : 'bg-[#F0F0F0] dark:bg-[#1C1C1C] text-black dark:text-white border-[#E5E5E5] dark:border-[#2A2A2A]'
+                    }`}>
+                      {p.avatar}
+                    </span>
+                    <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-[3px] bg-[#F5F5F5] dark:bg-[#202020] text-[#737373] dark:text-[#A3A3A3]">
+                      {p.industry}
+                    </span>
+                  </div>
+                  <div>
+                    <div className="text-[13px] font-bold text-black dark:text-white leading-tight">
+                      {p.name.split(' ')[0]}
+                    </div>
+                    <div className="text-[11px] text-[#737373] dark:text-[#A3A3A3] font-mono">
+                      {p.startup}
+                    </div>
+                  </div>
                 </button>
               );
             })}
           </div>
 
-          {/* Dialogue Conversation Card */}
-          <div className="p-6 space-y-4 bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px]">
-            {/* User Query */}
-            <div className="flex items-start gap-3">
-              <div className="w-7 h-7 rounded-[4px] flex items-center justify-center font-bold text-[11px] shrink-0 bg-black text-white dark:bg-white dark:text-black">
-                YOU
-              </div>
-              <div className="p-3.5 text-[13px] font-medium bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[6px] text-black dark:text-white">
-                "What warning signs did you miss before the collapse became irreversible?"
-              </div>
-            </div>
+          {/* Interactive Dialogue Console */}
+          {(() => {
+            const currentProfile = ghostProfiles[activeGhost] || ghostProfiles.adam;
+            const currentDialogue = currentProfile.dialogues[activeGhostQuestion] || currentProfile.dialogues.warning;
 
-            {/* Ghost Response */}
-            <div className="flex items-start gap-3">
-              <div className="w-7 h-7 rounded-[4px] flex items-center justify-center font-bold text-[11px] shrink-0 bg-white dark:bg-black text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]">
-                AI
-              </div>
-              <div className="p-4 text-[14px] leading-relaxed space-y-2 bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[6px] text-black dark:text-white">
-                <div className="text-[11px] font-bold uppercase tracking-wider text-[#737373] dark:text-[#A3A3A3]">
-                  {ghostProfiles[activeGhost].name} ({ghostProfiles[activeGhost].startup} — {ghostProfiles[activeGhost].stat})
-                </div>
-                <p className="italic text-black dark:text-white">
-                  "{ghostProfiles[activeGhost].quote}"
-                </p>
-                <div className="pt-2 text-[12px] font-bold text-black dark:text-white">
-                  Core Lesson: {ghostProfiles[activeGhost].lesson}
-                </div>
-              </div>
-            </div>
+            return (
+              <div className="rounded-[8px] border border-[#E5E5E5] dark:border-[#2A2A2A] bg-[#FAFAFA] dark:bg-[#0D0D0D] overflow-hidden">
+                {/* Simulation Control Bar */}
+                <div className="px-4 py-3 border-b border-[#E5E5E5] dark:border-[#2A2A2A] bg-white dark:bg-black flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+                  <div className="flex items-center gap-2">
+                    <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
+                    <span className="font-mono text-xs font-bold text-black dark:text-white tracking-tight">
+                      Active Debrief: {currentProfile.name} ({currentProfile.startup})
+                    </span>
+                    <span className="text-[#D4D4D4] dark:text-[#404040] hidden sm:inline">•</span>
+                    <span className="text-[11px] font-mono text-rose-600 dark:text-rose-400 font-semibold hidden sm:inline">
+                      {currentProfile.stat}
+                    </span>
+                  </div>
 
-            <div className="flex items-center justify-between pt-3 border-t border-[#E5E5E5] dark:border-[#2A2A2A] text-[12px]">
-              <span className="text-[#737373] dark:text-[#A3A3A3]">
-                Persona generated from public evidence. Does not imply living founder participation.
-              </span>
-              <Link 
-                to="/hall-of-ghosts" 
-                className="btn-primary px-4 py-2 text-[12px] font-bold rounded-[6px] uppercase tracking-wider transition-all"
-              >
-                Interview All Personas →
-              </Link>
-            </div>
-          </div>
+                  {/* Interactive Question Pill Tabs */}
+                  <div className="flex items-center gap-1.5 overflow-x-auto pb-1 sm:pb-0 no-scrollbar">
+                    <span className="text-[10px] font-mono uppercase text-[#737373] mr-1 hidden md:inline">
+                      Probe Vector:
+                    </span>
+                    <button
+                      onClick={() => setActiveGhostQuestion('warning')}
+                      className={`px-2.5 py-1 text-[11px] font-mono font-medium rounded-[4px] border transition-colors shrink-0 cursor-pointer ${
+                        activeGhostQuestion === 'warning'
+                          ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white font-bold'
+                          : 'bg-[#F5F5F5] dark:bg-[#1A1A1A] text-[#737373] dark:text-[#A3A3A3] border-[#E5E5E5] dark:border-[#2A2A2A] hover:text-black dark:hover:text-white'
+                      }`}
+                    >
+                      Warning Signs
+                    </button>
+                    <button
+                      onClick={() => setActiveGhostQuestion('governance')}
+                      className={`px-2.5 py-1 text-[11px] font-mono font-medium rounded-[4px] border transition-colors shrink-0 cursor-pointer ${
+                        activeGhostQuestion === 'governance'
+                          ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white font-bold'
+                          : 'bg-[#F5F5F5] dark:bg-[#1A1A1A] text-[#737373] dark:text-[#A3A3A3] border-[#E5E5E5] dark:border-[#2A2A2A] hover:text-black dark:hover:text-white'
+                      }`}
+                    >
+                      Governance Breakdown
+                    </button>
+                    <button
+                      onClick={() => setActiveGhostQuestion('lesson')}
+                      className={`px-2.5 py-1 text-[11px] font-mono font-medium rounded-[4px] border transition-colors shrink-0 cursor-pointer ${
+                        activeGhostQuestion === 'lesson'
+                          ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white font-bold'
+                          : 'bg-[#F5F5F5] dark:bg-[#1A1A1A] text-[#737373] dark:text-[#A3A3A3] border-[#E5E5E5] dark:border-[#2A2A2A] hover:text-black dark:hover:text-white'
+                      }`}
+                    >
+                      Core Takeaway
+                    </button>
+                  </div>
+                </div>
+
+                {/* Conversation Body */}
+                <div className="p-5 sm:p-6 space-y-4">
+                  {/* User Question */}
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-[6px] flex items-center justify-center font-mono font-bold text-[11px] shrink-0 bg-black text-white dark:bg-white dark:text-black">
+                      YOU
+                    </div>
+                    <div className="p-3.5 text-[13px] font-medium bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] text-black dark:text-white shadow-xs max-w-2xl">
+                      "{currentDialogue.q}"
+                    </div>
+                  </div>
+
+                  {/* Reconstructed Ghost Response */}
+                  <div className="flex items-start gap-3">
+                    <div className="w-8 h-8 rounded-[6px] flex items-center justify-center font-mono font-bold text-[11px] shrink-0 bg-white dark:bg-black text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]">
+                      {currentProfile.avatar}
+                    </div>
+                    <div className="p-4 sm:p-5 text-[14px] leading-relaxed space-y-3 bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] text-black dark:text-white shadow-xs flex-1">
+                      <div className="flex flex-wrap items-center justify-between gap-2 pb-2 border-b border-[#F0F0F0] dark:border-[#1F1F1F]">
+                        <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#737373] dark:text-[#A3A3A3]">
+                          {currentProfile.name} • {currentProfile.startup} Testimony
+                        </span>
+                        <span className="text-[10px] font-mono text-[#737373] dark:text-[#A3A3A3]">
+                          Synthesized from Public Evidence
+                        </span>
+                      </div>
+
+                      <p className="text-[13px] sm:text-[14px] text-[#262626] dark:text-[#E5E5E5] leading-relaxed">
+                        "{currentDialogue.a}"
+                      </p>
+
+                      {/* Forensic Lesson Callout Box */}
+                      <div className="p-3 rounded-[6px] bg-[#FAFAFA] dark:bg-[#121212] border-l-2 border-black dark:border-white text-[12px]">
+                        <span className="font-bold text-black dark:text-white font-mono uppercase text-[11px] tracking-wider block mb-0.5">
+                          Core Forensic Lesson:
+                        </span>
+                        <span className="text-[#525252] dark:text-[#CCCCCC]">
+                          {currentDialogue.lesson}
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Bottom Action Footer */}
+                <div className="px-5 py-3.5 bg-white dark:bg-black border-t border-[#E5E5E5] dark:border-[#2A2A2A] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                  <span className="text-[#737373] dark:text-[#A3A3A3] text-[11px]">
+                    Reconstructed models derived from public trial records. Does not represent live statements by living founders.
+                  </span>
+                  <Link 
+                    to="/hall-of-ghosts" 
+                    className="inline-flex items-center gap-2 px-4 py-2 text-[12px] font-bold rounded-[6px] bg-black text-white dark:bg-white dark:text-black hover:opacity-90 transition-opacity uppercase tracking-wider shrink-0"
+                  >
+                    <span>Enter Hall of Ghosts (6 Personas)</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </Link>
+                </div>
+              </div>
+            );
+          })()}
         </div>
       </section>
 

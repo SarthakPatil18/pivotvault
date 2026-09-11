@@ -7,7 +7,7 @@ import { MobileMenu } from './MobileMenu';
 import { SearchModal } from '../common/SearchModal';
 import { useTheme } from '../../hooks/useTheme';
 import { useSearch } from '../../hooks/useSearch';
-import { Search, Sun, Moon, Settings } from 'lucide-react';
+import { Search, Sun, Moon } from 'lucide-react';
 
 export function Navbar() {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -58,20 +58,6 @@ export function Navbar() {
             >
               {isDark ? <Sun className="w-4 h-4 text-white" /> : <Moon className="w-4 h-4 text-black" />}
             </button>
-
-            {/* Settings & Disclosures Link */}
-            <Link
-              to="/settings"
-              className={`p-2 rounded-[5px] transition-colors ${
-                location.pathname === '/settings' 
-                  ? 'text-black dark:text-white bg-[#FAFAFA] dark:bg-[#1A1A1A]' 
-                  : 'text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white hover:bg-[#FAFAFA] dark:hover:bg-[#1A1A1A]'
-              }`}
-              title="Platform Settings & Disclosures"
-              aria-label="Platform Settings"
-            >
-              <Settings className="w-4 h-4" />
-            </Link>
 
             {/* Explore Archive CTA Button (hidden on mobile) */}
             <Link

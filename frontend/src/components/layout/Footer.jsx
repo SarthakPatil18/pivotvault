@@ -85,13 +85,13 @@ export function Footer() {
         <div className="mt-14 pt-8 border-t border-[#EFEFEF] dark:border-[#202020] flex flex-col md:flex-row items-center justify-between gap-4 text-[13px] text-[#555555] dark:text-white/50">
           <p>© {new Date().getFullYear()} PivotVault. All rights reserved. Bloomberg-style failure intelligence.</p>
           <div className="flex items-center gap-6">
-            <Link to="/settings" className="hover:text-black dark:hover:text-white transition-colors">
+            <Link to="/explore" className="hover:text-black dark:hover:text-white transition-colors">
               Platform Methodology
             </Link>
-            <Link to="/settings" className="hover:text-black dark:hover:text-white transition-colors">
+            <Link to="/explore" className="hover:text-black dark:hover:text-white transition-colors">
               Disclosures
             </Link>
-            <Link to="/settings" className="hover:text-black dark:hover:text-white transition-colors">
+            <Link to="/explore" className="hover:text-black dark:hover:text-white transition-colors">
               Legal & Privacy
             </Link>
           </div>

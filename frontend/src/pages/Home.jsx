@@ -4,7 +4,8 @@ import {
   Search, ShieldAlert, Sparkles, TrendingDown, ArrowRight, 
   Activity, Database, Flame, HelpCircle, Layers, Users, 
   FileText, BarChart3, Scale, Globe, CheckCircle2, ChevronRight,
-  AlertTriangle, Network, Cpu, ArrowUpRight, Lock, Eye, Compass
+  AlertTriangle, Network, Cpu, ArrowUpRight, Lock, Eye, Compass,
+  BookOpen, Gauge, Brain
 } from 'lucide-react';
 import { getInsights, getStartups } from '../lib/api';
 import { CURATED_STARTUPS } from '../lib/data/startupsData';
@@ -14,6 +15,37 @@ import { InsightCard } from '../components/common/InsightCard';
 import { FailureScoreBadge } from '../components/common/FailureScoreBadge';
 import { formatCurrency, formatNumber } from '../lib/utils';
 import { useBookmarks } from '../hooks/useBookmarks';
+
+function MiniSparkline({ data, stroke, fill, height = 30 }) {
+  if (!data || data.length < 2) return null;
+  const width = 80;
+  const min = Math.min(...data);
+  const max = Math.max(...data);
+  const range = max - min || 1;
+  const points = data
+    .map((val, i) => {
+      const x = (i / (data.length - 1)) * width;
+      const y = height - ((val - min) / range) * (height - 6) - 3;
+      return `${x},${y}`;
+    })
+    .join(' ');
+
+  const areaPoints = `${points} ${width},${height} 0,${height}`;
+
+  return (
+    <svg width={width} height={height} className="overflow-visible">
+      {fill && <polygon points={areaPoints} fill={fill} />}
+      <polyline
+        fill="none"
+        stroke={stroke}
+        strokeWidth="1.75"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        points={points}
+      />
+    </svg>
+  );
+}
 
 export function Home() {
   const [searchQuery, setSearchQuery] = useState('');
@@ -436,32 +468,141 @@ export function Home() {
         </div>
 
         {/* 4 Analytics Metric Cards */}
-        <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          <MetricCard
-            label="Documented Failures"
-            value="413+"
-            subtext="Curated post-mortems"
-            icon={Database}
-          />
-          <MetricCard
-            label="Capital Vaporized"
-            value="$26.8B+"
-            subtext="Tracked across dataset"
-            icon={Flame}
-            alert={true}
-          />
-          <MetricCard
-            label="Average Failure Score"
-            value="78 / 100"
-            subtext="High mortality baseline"
-            icon={Activity}
-          />
-          <MetricCard
-            label="Failure Taxonomies"
-            value="14 Vectors"
-            subtext="15 Industry sectors"
-            icon={Layers}
-          />
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+          {[
+            {
+              label: 'TOTAL FAILURES',
+              value: '413',
+              sub: 'This quarter',
+              badge: '+18',
+              badgeBg: 'rgba(234,34,97,0.10)',
+              badgeColor: '#ea2261',
+              iconBg: 'rgba(234,34,97,0.10)',
+              iconColor: '#ea2261',
+              stroke: '#ea2261',
+              fill: 'rgba(234,34,97,0.12)',
+              spark: [20, 32, 28, 45, 42, 58, 62, 55, 72, 75],
+              icon: AlertTriangle,
+            },
+            {
+              label: 'VAULTED STARTUPS',
+              value: '413',
+              sub: 'With postmortems',
+              badge: '+214',
+              badgeBg: '#b9b9f9',
+              badgeColor: '#4434d4',
+              iconBg: '#b9b9f9',
+              iconColor: '#533afd',
+              stroke: '#533afd',
+              fill: 'rgba(83,58,253,0.12)',
+              spark: [30, 34, 38, 42, 41, 46, 50, 54, 55, 60],
+              icon: BookOpen,
+            },
+            {
+              label: 'AVG RISK SCORE',
+              value: '68.4',
+              sub: 'All analyzed startups',
+              badge: '+3.2',
+              badgeBg: '#f5e9d4',
+              badgeColor: '#9b6829',
+              iconBg: 'rgba(155,104,41,0.12)',
+              iconColor: '#9b6829',
+              stroke: '#9b6829',
+              fill: 'rgba(155,104,41,0.12)',
+              spark: [55, 58, 60, 62, 61, 65, 66, 67, 68, 68.4],
+              icon: Gauge,
+            },
+            {
+              label: 'AI INSIGHTS GENERATED',
+              value: '48,209',
+              sub: 'Last 30 days',
+              badge: '+1204',
+              badgeBg: '#b9b9f9',
+              badgeColor: '#4434d4',
+              iconBg: '#b9b9f9',
+              iconColor: '#533afd',
+              stroke: '#533afd',
+              fill: 'rgba(83,58,253,0.12)',
+              spark: [10, 18, 22, 28, 32, 38, 45, 48, 52, 56],
+              icon: Brain,
+            },
+          ].map((k, i) => {
+            const Icon = k.icon;
+            return (
+              <div
+                key={i}
+                className="p-5 md:p-6 relative overflow-hidden"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e3e8ee',
+                  borderRadius: '18px',
+                  boxShadow: 'rgba(0, 55, 112, 0.08) 0px 1px 3px',
+                }}
+              >
+                <div className="flex items-start justify-between mb-4">
+                  <div className="flex items-center gap-2">
+                    <div
+                      className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                      style={{ backgroundColor: k.iconBg, color: k.iconColor }}
+                    >
+                      <Icon className="w-4 h-4" />
+                    </div>
+                    <span
+                      style={{
+                        color: '#64748d',
+                        letterSpacing: '0.1px',
+                        fontSize: '10px',
+                        fontWeight: 400,
+                      }}
+                      className="uppercase"
+                    >
+                      {k.label}
+                    </span>
+                  </div>
+                  <span
+                    style={{
+                      backgroundColor: k.badgeBg,
+                      color: k.badgeColor,
+                      borderRadius: '9999px',
+                      fontSize: '10px',
+                      fontWeight: 400,
+                      padding: '4px 8px',
+                      lineHeight: 1,
+                    }}
+                    className="inline-flex items-center justify-center font-normal"
+                  >
+                    {k.badge}
+                  </span>
+                </div>
+
+                <div className="flex items-end justify-between mb-3">
+                  <div
+                    style={{
+                      color: '#0d253d',
+                      fontSize: '34px',
+                      fontWeight: 'bold',
+                      fontFeatureSettings: '"tnum"',
+                      letterSpacing: '-0.42px',
+                      lineHeight: 1,
+                    }}
+                  >
+                    {k.value}
+                  </div>
+                  <MiniSparkline data={k.spark} stroke={k.stroke} fill={k.fill} height={30} />
+                </div>
+
+                <div
+                  className="pt-2"
+                  style={{
+                    color: '#64748d',
+                    fontSize: '12px',
+                  }}
+                >
+                  {k.sub}
+                </div>
+              </div>
+            );
+          })}
         </div>
 
         {/* 2-Column Dashboard: Left = Failure Vector Distribution, Right = Trend Line */}
@@ -937,34 +1078,34 @@ export function Home() {
             </div>
           </Link>
 
-          {/* Card 2: AI Assistant with Dual-Engine Response Snippet */}
-          <Link to="/ai-assistant" className="card-editorial !p-6 group flex flex-col justify-between">
+          {/* Card 2: Founder Playbook with Tactical Prescriptions */}
+          <Link to="/founder-playbook" className="card-editorial !p-6 group flex flex-col justify-between">
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="badge-soft-red text-[11px]">Dual-Engine</span>
-                <Sparkles className="w-5 h-5 text-black dark:text-white" />
+                <span className="badge-soft-red text-[11px]">Tactical Plays</span>
+                <BookOpen className="w-5 h-5 text-black dark:text-white" />
               </div>
               <h3 className="text-[18px] font-bold text-black dark:text-white group-hover:underline">
-                AI Assistant
+                Founder Playbook
               </h3>
               <p className="text-[13px] text-[#555555] dark:text-white/60 mt-1">
-                Ask forensic questions across 413+ startup autopsies and synthesis engines.
+                Defensive rules and counter-measures extracted from 413+ historical collapse post-mortems.
               </p>
 
-              {/* Mini AI Response UI */}
+              {/* Mini Playbook UI Preview */}
               <div className="mt-4 p-2.5 rounded bg-[#FAFAFA] dark:bg-[#161616] border border-[#EFEFEF] dark:border-[#242424] text-[11px] space-y-1">
                 <div className="font-bold text-black dark:text-white flex items-center gap-1">
                   <span className="w-1.5 h-1.5 rounded-full bg-[#FF6173]" />
-                  <span>Q: Why did Quibi fail in 6 months?</span>
+                  <span>Rule: Validate Margin Before Scale</span>
                 </div>
                 <p className="text-[#555555] dark:text-white/70 line-clamp-2">
-                  "Quibi ignored organic social distribution and prohibited screenshot sharing, rendering its $1.75B content invisible to viral acquisition."
+                  "Never subsidize gross unit economics with venture equity under the assumption of future operational scale."
                 </p>
               </div>
             </div>
 
             <div className="mt-5 pt-3 border-t border-[#EFEFEF] dark:border-[#202020] flex items-center justify-between text-[12px] font-bold text-black dark:text-white">
-              <span>Launch AI Query</span>
+              <span>Explore Playbook</span>
               <span className="group-hover:translate-x-1 transition-transform">→</span>
             </div>
           </Link>

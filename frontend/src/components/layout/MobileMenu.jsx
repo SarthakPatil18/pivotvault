@@ -113,13 +113,6 @@ export function MobileMenu({ isOpen, onClose, onOpenSearch }) {
             >
               Explore Full Archive →
             </Link>
-            <Link
-              to="/settings"
-              onClick={onClose}
-              className="block text-center py-2 text-[14px] font-bold text-[#555555] dark:text-white/60 hover:text-black dark:hover:text-white"
-            >
-              Settings & Disclosures
-            </Link>
           </div>
         </div>
 

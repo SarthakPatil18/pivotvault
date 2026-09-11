@@ -74,11 +74,11 @@ export function StartupDetail() {
 
           <div className="flex items-center gap-2">
             <Link
-              to={`/ai-assistant?q=Analyze+the+failure+of+${encodeURIComponent(startup.name)}`}
+              to={`/risk-scanner?q=${encodeURIComponent(startup.name)}`}
               className="text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1 font-semibold"
             >
-              <Sparkles className="w-3.5 h-3.5" />
-              <span>Ask AI Autopsy</span>
+              <ShieldAlert className="w-3.5 h-3.5" />
+              <span>Scan Related Risk</span>
             </Link>
           </div>
         </div>

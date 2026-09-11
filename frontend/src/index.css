@@ -22,6 +22,32 @@
     --pv-lemon: #9b6829;
     --pv-lemon-bg: rgba(155, 104, 41, 0.12);
 
+    /* Amplemarket Design Token System */
+    --am--primary-dark: #111111;
+    --am--primary-light: #f6f5f3;
+    --am--secondary-dark: #272625;
+    --am--secondary-light: #fbfaf9;
+    --am--secondary-white: #ffffff;
+    --am--neutral--neutral-02: #373634;
+    --am--neutral--neutral-03: #494846;
+    --am--neutral--neutral-04: #5e5c5a;
+    --am--neutral--neutral-05: #787673;
+    --am--neutral--neutral-06: #a7a6a4;
+    --am--neutral--neutral-07: #dcdbda;
+    --am--neutral--neutral-08: #ecebea;
+
+    --am--product-blue: #2d72f0;
+    --am--pillars-leadgen: #e16540;
+    --am--pillars-intelligence: #328efa;
+    --am--pillars-engagement: #fbc768;
+    --am--pillars-deliver: #47d096;
+
+    /* Frosted Navbar Tokens */
+    --am--nav-bg-light: rgba(251, 250, 249, 0.85);
+    --am--nav-bg-dark: rgba(39, 38, 37, 0.85);
+    --am--nav-border-dark: rgba(73, 72, 70, 0.85);
+    --am--border-white: rgba(255, 255, 255, 0.051);
+
     --color-ink: #0d253d;
     --color-ink-2: #273951;
     --color-ink-3: #64748d;

@@ -134,21 +134,21 @@ export function Explore() {
         actions={
           <button
             onClick={handleExportCSV}
-            className="flex items-center gap-1.5 transition-colors"
+            className="flex items-center gap-1.5 transition-colors shadow-xs"
             style={{
-              color: '#533afd',
-              border: '1px solid #b9b9f9',
+              color: '#2d72f0',
+              border: '1px solid #dcdbda',
               borderRadius: '9999px',
               backgroundColor: '#ffffff',
               padding: '6px 14px',
               fontSize: '13px',
               fontWeight: 500,
-              cursor: 'pointer'
             }}
-            title="Export currently filtered dataset as CSV"
+            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f6f5f3'}
+            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
           >
-            <Download className="w-3.5 h-3.5" />
-            <span>Export CSV</span>
+            {exported ? <Check className="w-3.5 h-3.5 text-[#47d096]" /> : <Download className="w-3.5 h-3.5" />}
+            <span>{exported ? 'Exported' : 'Export CSV'}</span>
           </button>
         }
       />
@@ -158,16 +158,16 @@ export function Explore() {
         <div 
           className="p-5 mb-8 space-y-4"
           style={{
-            backgroundColor: '#ffffff',
-            border: '1px solid #e3e8ee',
+            backgroundColor: '#fbfaf9',
+            border: '1px solid #dcdbda',
             borderRadius: '16px',
-            boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+            boxShadow: 'rgba(0, 0, 0, 0.04) 0px 2px 8px'
           }}
         >
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             {/* Search Input */}
             <div className="md:col-span-2 relative">
-              <Search className="w-4 h-4 text-[#64748d] absolute left-3 top-3.5" />
+              <Search className="w-4 h-4 text-[#787673] absolute left-3 top-3.5" />
               <input
                 type="text"
                 value={searchQuery}
@@ -180,9 +180,9 @@ export function Explore() {
                 className="w-full pl-9 pr-3 py-2 text-sm focus:outline-none transition-colors"
                 style={{
                   backgroundColor: '#ffffff',
-                  border: '1px solid #a8c3de',
+                  border: '1px solid #dcdbda',
                   borderRadius: '8px',
-                  color: '#0d253d',
+                  color: '#111111',
                 }}
               />
             </div>
@@ -199,9 +199,9 @@ export function Explore() {
                 className="w-full px-3 py-2 text-sm focus:outline-none transition-colors"
                 style={{
                   backgroundColor: '#ffffff',
-                  border: '1px solid #e3e8ee',
+                  border: '1px solid #dcdbda',
                   borderRadius: '8px',
-                  color: '#273951'
+                  color: '#373634'
                 }}
               >
                 {INDUSTRIES.map((ind) => (
@@ -222,9 +222,9 @@ export function Explore() {
                 className="w-full px-3 py-2 text-sm focus:outline-none transition-colors"
                 style={{
                   backgroundColor: '#ffffff',
-                  border: '1px solid #e3e8ee',
+                  border: '1px solid #dcdbda',
                   borderRadius: '8px',
-                  color: '#273951'
+                  color: '#373634'
                 }}
               >
                 {FAILURE_MODES.map((fm) => (
@@ -238,7 +238,7 @@ export function Explore() {
           <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#e3e8ee] text-xs">
             <div className="flex flex-wrap items-center gap-4">
               {/* Country Selector */}
-              <div className="flex items-center gap-1.5 font-sans" style={{ color: '#64748d', fontSize: '12px' }}>
+              <div className="flex items-center gap-1.5 font-sans" style={{ color: '#787673', fontSize: '12px' }}>
                 <span>Country:</span>
                 <select
                   value={selectedCountry}
@@ -250,9 +250,9 @@ export function Explore() {
                   className="px-2.5 py-1 rounded focus:outline-none"
                   style={{
                     backgroundColor: '#ffffff',
-                    border: '1px solid #e3e8ee',
+                    border: '1px solid #dcdbda',
                     borderRadius: '8px',
-                    color: '#0d253d',
+                    color: '#111111',
                     fontSize: '12px'
                   }}
                 >
@@ -263,8 +263,8 @@ export function Explore() {
               </div>
 
               {/* Sort Selector */}
-              <div className="flex items-center gap-1.5 font-sans" style={{ color: '#64748d', fontSize: '12px' }}>
-                <ArrowUpDown className="w-3.5 h-3.5 text-[#64748d]" />
+              <div className="flex items-center gap-1.5 font-sans" style={{ color: '#787673', fontSize: '12px' }}>
+                <ArrowUpDown className="w-3.5 h-3.5 text-[#787673]" />
                 <span>Sort:</span>
                 <select
                   value={sortOption}
@@ -275,9 +275,9 @@ export function Explore() {
                   className="px-2.5 py-1 rounded focus:outline-none"
                   style={{
                     backgroundColor: '#ffffff',
-                    border: '1px solid #e3e8ee',
+                    border: '1px solid #dcdbda',
                     borderRadius: '8px',
-                    color: '#0d253d',
+                    color: '#111111',
                     fontSize: '12px'
                   }}
                 >
@@ -294,8 +294,8 @@ export function Explore() {
               {(searchQuery || selectedIndustry !== 'All Industries' || selectedFailureMode !== 'All Failure Modes' || selectedCountry !== 'All Countries') && (
                 <button
                   onClick={handleResetFilters}
-                  className="flex items-center gap-1 hover:underline text-xs"
-                  style={{ color: '#ea2261' }}
+                  className="flex items-center gap-1 hover:underline text-xs font-medium"
+                  style={{ color: '#e16540' }}
                 >
                   <RotateCcw className="w-3 h-3" />
                   <span>Clear Filters</span>
@@ -305,21 +305,21 @@ export function Explore() {
 
             {/* Results Count & Grid/Table View Mode */}
             <div className="flex items-center gap-4">
-              <span className="text-xs" style={{ color: '#64748d' }}>
-                Showing <strong style={{ color: '#533afd', fontWeight: 600 }}>{pagination.totalRecords}</strong> failures
+              <span className="text-xs" style={{ color: '#787673' }}>
+                Showing <strong style={{ color: '#2d72f0', fontWeight: 600 }}>{pagination.totalRecords}</strong> failures
               </span>
 
-              <div className="flex items-center p-0.5 rounded bg-[#f6f9fc] border border-[#e3e8ee]">
+              <div className="flex items-center p-0.5 rounded bg-[#f6f5f3] border border-[#dcdbda]">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-1.5 rounded transition-colors ${viewMode === 'grid' ? 'bg-[#ffffff] text-[#0d253d] shadow-xs' : 'text-[#64748d]'}`}
+                  className={`p-1.5 rounded transition-colors ${viewMode === 'grid' ? 'bg-[#ffffff] text-[#111111] shadow-xs' : 'text-[#787673]'}`}
                   title="Grid View"
                 >
                   <Grid className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => setViewMode('table')}
-                  className={`p-1.5 rounded transition-colors ${viewMode === 'table' ? 'bg-[#ffffff] text-[#0d253d] shadow-xs' : 'text-[#64748d]'}`}
+                  className={`p-1.5 rounded transition-colors ${viewMode === 'table' ? 'bg-[#ffffff] text-[#111111] shadow-xs' : 'text-[#787673]'}`}
                   title="Table View"
                 >
                   <List className="w-3.5 h-3.5" />
@@ -364,16 +364,16 @@ export function Explore() {
           <div 
             className="overflow-x-auto"
             style={{
-              backgroundColor: '#ffffff',
-              border: '1px solid #e3e8ee',
+              backgroundColor: '#fbfaf9',
+              border: '1px solid #dcdbda',
               borderRadius: '16px',
-              boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+              boxShadow: 'rgba(0, 0, 0, 0.04) 0px 2px 8px'
             }}
           >
             <table className="w-full text-left text-xs">
               <thead 
-                className="border-b border-[#e3e8ee] font-sans text-[11px] uppercase tracking-wider"
-                style={{ backgroundColor: '#f6f9fc', color: '#64748d' }}
+                className="border-b border-[#dcdbda] font-sans text-[11px] uppercase tracking-wider"
+                style={{ backgroundColor: '#f6f5f3', color: '#787673' }}
               >
                 <tr>
                   <th className="py-3.5 px-4 font-semibold">Startup</th>
@@ -386,41 +386,41 @@ export function Explore() {
                   <th className="py-3.5 px-4 text-right font-semibold">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#e3e8ee] font-sans">
+              <tbody className="divide-y divide-[#ecebea] font-sans">
                 {startups.map((s) => (
-                  <tr key={s.id} className="hover:bg-[#f6f9fc] transition-colors">
-                    <td className="py-3.5 px-4 font-bold text-[#0d253d]">
-                      <Link to={`/startup/${s.id}`} className="hover:text-[#533afd] transition-colors flex items-center gap-2.5">
+                  <tr key={s.id} className="hover:bg-[#f6f5f3] transition-colors">
+                    <td className="py-3.5 px-4 font-bold text-[#111111]">
+                      <Link to={`/startup/${s.id}`} className="hover:text-[#2d72f0] transition-colors flex items-center gap-2.5">
                         <CompanyLogo startup={s} size="xs" />
                         <span>{s.name}</span>
                       </Link>
                     </td>
-                    <td className="py-3.5 px-4 text-[#273951]">
+                    <td className="py-3.5 px-4 text-[#373634]">
                       {s.industry}
                     </td>
-                    <td className="py-3.5 px-4 text-[#64748d]">
+                    <td className="py-3.5 px-4 text-[#787673]">
                       {s.country}
                     </td>
                     <td className="py-3.5 px-4">
                       <FailureScoreBadge score={s.failureScore} size="sm" />
                     </td>
                     <td 
-                      className="py-3.5 px-4 font-bold text-[#ea2261]"
+                      className="py-3.5 px-4 font-bold text-[#e16540]"
                       style={{ fontFeatureSettings: '"tnum"', letterSpacing: '-0.42px' }}
                     >
                       {formatCurrency(s.capitalRaised)}
                     </td>
-                    <td className="py-3.5 px-4 text-[#64748d]">
+                    <td className="py-3.5 px-4 text-[#787673]">
                       {s.foundedYear}–{s.failedYear}
                     </td>
-                    <td className="py-3.5 px-4 text-[#273951]">
+                    <td className="py-3.5 px-4 text-[#373634]">
                       {s.failureMode}
                     </td>
                     <td className="py-3.5 px-4 text-right">
                       <Link
                         to={`/startup/${s.id}`}
                         className="text-xs hover:underline font-semibold"
-                        style={{ color: '#533afd' }}
+                        style={{ color: '#2d72f0' }}
                       >
                         Autopsy →
                       </Link>

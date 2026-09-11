@@ -104,7 +104,7 @@ export function Insights() {
   ];
 
   return (
-    <div className="pb-20 bg-[#f6f9fc] min-h-screen">
+    <div className="pb-20 bg-[#f6f5f3] min-h-screen">
       <PageHeader
         title="Failure Intelligence & Distribution"
         subtitle="Patterns extracted across 413+ documented startup failures. Editorial analytics derived from verified corporate post-mortems and SEC filings."
@@ -115,7 +115,7 @@ export function Insights() {
           <Link 
             to="/insights" 
             className="font-medium text-sm hover:underline"
-            style={{ color: '#533afd' }}
+            style={{ color: '#2d72f0' }}
           >
             Macro Dashboard →
           </Link>
@@ -125,13 +125,13 @@ export function Insights() {
       <div className="vault-container space-y-8">
         {/* All 4 Stat Cards */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Card 1: TOTAL FAILURES */}
+          {/* Card 1: TOTAL FAILURES (Coral Leadgen Pillar) */}
           <div
             style={{
-              backgroundColor: '#ffffff',
-              border: '1px solid #e3e8ee',
+              backgroundColor: '#fbfaf9',
+              border: '1px solid #dcdbda',
               borderRadius: '16px',
-              boxShadow: 'rgba(0, 55, 112, 0.08) 0px 2px 12px',
+              boxShadow: 'rgba(0, 0, 0, 0.04) 0px 2px 12px',
               padding: '24px',
             }}
           >
@@ -139,13 +139,13 @@ export function Insights() {
               <div className="flex items-center gap-2">
                 <div
                   className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: 'rgba(234, 34, 97, 0.10)', color: '#ea2261' }}
+                  style={{ backgroundColor: 'rgba(225, 101, 64, 0.12)', color: '#e16540' }}
                 >
                   <AlertTriangle className="w-4 h-4" />
                 </div>
                 <span
                   style={{
-                    color: '#64748d',
+                    color: '#787673',
                     letterSpacing: '0.5px',
                     fontSize: '10px',
                     fontWeight: 600,
@@ -157,8 +157,8 @@ export function Insights() {
               </div>
               <span
                 style={{
-                  backgroundColor: 'rgba(234, 34, 97, 0.10)',
-                  color: '#ea2261',
+                  backgroundColor: 'rgba(225, 101, 64, 0.12)',
+                  color: '#e16540',
                   borderRadius: '9999px',
                   padding: '3px 8px',
                   fontSize: '10px',
@@ -171,7 +171,7 @@ export function Insights() {
             <div className="flex items-end justify-between mb-3">
               <div
                 style={{
-                  color: '#0d253d',
+                  color: '#111111',
                   fontSize: '34px',
                   fontWeight: 700,
                   fontFeatureSettings: '"tnum"',
@@ -183,22 +183,22 @@ export function Insights() {
               </div>
               <SparklineSVG
                 data={[20, 32, 28, 45, 42, 58, 62, 55, 72, 75]}
-                stroke="#ea2261"
-                fill="rgba(234, 34, 97, 0.12)"
+                stroke="#e16540"
+                fill="rgba(225, 101, 64, 0.12)"
               />
             </div>
-            <div style={{ color: '#64748d', fontSize: '11px' }}>
+            <div style={{ color: '#787673', fontSize: '11px' }}>
               This quarter
             </div>
           </div>
 
-          {/* Card 2: VAULTED STARTUPS */}
+          {/* Card 2: VAULTED STARTUPS (Blue Intelligence Pillar) */}
           <div
             style={{
-              backgroundColor: '#ffffff',
-              border: '1px solid #e3e8ee',
+              backgroundColor: '#fbfaf9',
+              border: '1px solid #dcdbda',
               borderRadius: '16px',
-              boxShadow: 'rgba(0, 55, 112, 0.08) 0px 2px 12px',
+              boxShadow: 'rgba(0, 0, 0, 0.04) 0px 2px 12px',
               padding: '24px',
             }}
           >
@@ -206,13 +206,13 @@ export function Insights() {
               <div className="flex items-center gap-2">
                 <div
                   className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: '#b9b9f9', color: '#533afd' }}
+                  style={{ backgroundColor: 'rgba(50, 142, 250, 0.12)', color: '#328efa' }}
                 >
                   <BookOpen className="w-4 h-4" />
                 </div>
                 <span
                   style={{
-                    color: '#64748d',
+                    color: '#787673',
                     fontSize: '10px',
                     fontWeight: 600,
                     letterSpacing: '0.5px'
@@ -224,8 +224,8 @@ export function Insights() {
               </div>
               <span
                 style={{
-                  backgroundColor: '#b9b9f9',
-                  color: '#4434d4',
+                  backgroundColor: 'rgba(50, 142, 250, 0.12)',
+                  color: '#328efa',
                   borderRadius: '9999px',
                   padding: '3px 8px',
                   fontSize: '10px',
@@ -238,7 +238,7 @@ export function Insights() {
             <div className="flex items-end justify-between mb-3">
               <div
                 style={{
-                  color: '#0d253d',
+                  color: '#111111',
                   fontSize: '34px',
                   fontWeight: 700,
                   fontFeatureSettings: '"tnum"',
@@ -250,22 +250,22 @@ export function Insights() {
               </div>
               <SparklineSVG
                 data={[30, 34, 38, 42, 41, 46, 50, 54, 55, 60]}
-                stroke="#533afd"
-                fill="rgba(83, 58, 253, 0.12)"
+                stroke="#328efa"
+                fill="rgba(50, 142, 250, 0.12)"
               />
             </div>
-            <div style={{ color: '#64748d', fontSize: '11px' }}>
+            <div style={{ color: '#787673', fontSize: '11px' }}>
               With postmortems
             </div>
           </div>
 
-          {/* Card 3: AVG RISK SCORE */}
+          {/* Card 3: AVG RISK SCORE (Warm Gold Engagement Pillar) */}
           <div
             style={{
-              backgroundColor: '#ffffff',
-              border: '1px solid #e3e8ee',
+              backgroundColor: '#fbfaf9',
+              border: '1px solid #dcdbda',
               borderRadius: '16px',
-              boxShadow: 'rgba(0, 55, 112, 0.08) 0px 2px 12px',
+              boxShadow: 'rgba(0, 0, 0, 0.04) 0px 2px 12px',
               padding: '24px',
             }}
           >
@@ -273,13 +273,13 @@ export function Insights() {
               <div className="flex items-center gap-2">
                 <div
                   className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: 'rgba(155, 104, 41, 0.12)', color: '#9b6829' }}
+                  style={{ backgroundColor: 'rgba(251, 199, 104, 0.18)', color: '#9b6829' }}
                 >
                   <Gauge className="w-4 h-4" />
                 </div>
                 <span
                   style={{
-                    color: '#64748d',
+                    color: '#787673',
                     fontSize: '10px',
                     fontWeight: 600,
                     letterSpacing: '0.5px'
@@ -291,7 +291,7 @@ export function Insights() {
               </div>
               <span
                 style={{
-                  backgroundColor: 'rgba(155, 104, 41, 0.12)',
+                  backgroundColor: 'rgba(251, 199, 104, 0.18)',
                   color: '#9b6829',
                   borderRadius: '9999px',
                   padding: '3px 8px',
@@ -305,7 +305,7 @@ export function Insights() {
             <div className="flex items-end justify-between mb-3">
               <div
                 style={{
-                  color: '#0d253d',
+                  color: '#111111',
                   fontSize: '34px',
                   fontWeight: 700,
                   fontFeatureSettings: '"tnum"',
@@ -317,22 +317,22 @@ export function Insights() {
               </div>
               <SparklineSVG
                 data={[55, 58, 60, 62, 61, 65, 66, 67, 68, 68.4]}
-                stroke="#9b6829"
-                fill="rgba(155, 104, 41, 0.12)"
+                stroke="#fbc768"
+                fill="rgba(251, 199, 104, 0.14)"
               />
             </div>
-            <div style={{ color: '#64748d', fontSize: '11px' }}>
+            <div style={{ color: '#787673', fontSize: '11px' }}>
               All analyzed startups
             </div>
           </div>
 
-          {/* Card 4: AI INSIGHTS */}
+          {/* Card 4: AI INSIGHTS (Mint Deliver Pillar) */}
           <div
             style={{
-              backgroundColor: '#ffffff',
-              border: '1px solid #e3e8ee',
+              backgroundColor: '#fbfaf9',
+              border: '1px solid #dcdbda',
               borderRadius: '16px',
-              boxShadow: 'rgba(0, 55, 112, 0.08) 0px 2px 12px',
+              boxShadow: 'rgba(0, 0, 0, 0.04) 0px 2px 12px',
               padding: '24px',
             }}
           >
@@ -340,13 +340,13 @@ export function Insights() {
               <div className="flex items-center gap-2">
                 <div
                   className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: '#b9b9f9', color: '#533afd' }}
+                  style={{ backgroundColor: 'rgba(71, 208, 150, 0.18)', color: '#2e7d32' }}
                 >
                   <Brain className="w-4 h-4" />
                 </div>
                 <span
                   style={{
-                    color: '#64748d',
+                    color: '#787673',
                     fontSize: '10px',
                     fontWeight: 600,
                     letterSpacing: '0.5px'
@@ -358,8 +358,8 @@ export function Insights() {
               </div>
               <span
                 style={{
-                  backgroundColor: '#b9b9f9',
-                  color: '#4434d4',
+                  backgroundColor: 'rgba(71, 208, 150, 0.18)',
+                  color: '#2e7d32',
                   borderRadius: '9999px',
                   padding: '3px 8px',
                   fontSize: '10px',
@@ -372,7 +372,7 @@ export function Insights() {
             <div className="flex items-end justify-between mb-3">
               <div
                 style={{
-                  color: '#0d253d',
+                  color: '#111111',
                   fontSize: '34px',
                   fontWeight: 700,
                   fontFeatureSettings: '"tnum"',
@@ -384,11 +384,11 @@ export function Insights() {
               </div>
               <SparklineSVG
                 data={[10, 18, 22, 28, 32, 38, 45, 48, 52, 56]}
-                stroke="#533afd"
-                fill="rgba(83, 58, 253, 0.12)"
+                stroke="#47d096"
+                fill="rgba(71, 208, 150, 0.14)"
               />
             </div>
-            <div style={{ color: '#64748d', fontSize: '11px' }}>
+            <div style={{ color: '#787673', fontSize: '11px' }}>
               Last 30 days
             </div>
           </div>
@@ -400,34 +400,34 @@ export function Insights() {
           <div 
             className="lg:col-span-6 p-6 space-y-4"
             style={{
-              backgroundColor: '#ffffff',
-              border: '1px solid #e3e8ee',
+              backgroundColor: '#fbfaf9',
+              border: '1px solid #dcdbda',
               borderRadius: '16px',
-              boxShadow: 'rgba(0, 55, 112, 0.08) 0px 2px 12px'
+              boxShadow: '0 2px 10px rgba(0,0,0,0.02)'
             }}
           >
-            <div className="flex items-center justify-between pb-3 border-b border-[#e3e8ee]">
+            <div className="flex items-center justify-between pb-3 border-b border-[#dcdbda]">
               <div>
                 <h3 
                   style={{
-                    color: '#0d253d',
+                    color: '#111111',
                     fontWeight: 700,
                     fontSize: '16px'
                   }}
                 >
                   FAILURE VECTOR DISTRIBUTION
                 </h3>
-                <p style={{ color: '#64748d', fontSize: '12px' }}>
+                <p style={{ color: '#787673', fontSize: '12px' }}>
                   Primary root causes across 413 autopsies
                 </p>
               </div>
               <span 
                 style={{
-                  backgroundColor: '#b9b9f9',
-                  color: '#4434d4',
+                  backgroundColor: 'rgba(45, 114, 240, 0.12)',
+                  color: '#2d72f0',
                   borderRadius: '9999px',
                   fontSize: '11px',
-                  fontWeight: 500,
+                  fontWeight: 600,
                   padding: '3px 10px'
                 }}
               >
@@ -442,24 +442,24 @@ export function Insights() {
                     <span 
                       className="flex items-center gap-2"
                       style={{
-                        color: vec.isHighRisk ? '#0d253d' : '#273951',
-                        fontWeight: vec.isHighRisk ? 600 : 400
+                        color: vec.isHighRisk ? '#111111' : '#373634',
+                        fontWeight: vec.isHighRisk ? 600 : 500
                       }}
                     >
                       {vec.isHighRisk && (
                         <span 
                           className="w-2 h-2 rounded-full"
-                          style={{ backgroundColor: '#ea2261' }}
+                          style={{ backgroundColor: '#e16540' }}
                         />
                       )}
                       {vec.label}
                     </span>
                     <div className="flex items-center gap-3 text-[12px]">
-                      <span style={{ color: '#64748d' }}>{vec.count} cases</span>
+                      <span style={{ color: '#787673' }}>{vec.count} cases</span>
                       <span 
                         style={{
-                          color: vec.isHighRisk ? '#ea2261' : '#64748d',
-                          fontWeight: vec.isHighRisk ? 600 : 400,
+                          color: vec.isHighRisk ? '#e16540' : '#787673',
+                          fontWeight: vec.isHighRisk ? 600 : 500,
                           fontFeatureSettings: '"tnum"'
                         }}
                       >
@@ -469,13 +469,13 @@ export function Insights() {
                   </div>
                   <div 
                     className="w-full rounded-full overflow-hidden"
-                    style={{ backgroundColor: '#f6f9fc', height: '4px' }}
+                    style={{ backgroundColor: '#ecebea', height: '4px' }}
                   >
                     <div 
                       className="h-full rounded-full transition-all duration-300"
                       style={{ 
                         width: `${vec.pct * 3}%`,
-                        backgroundColor: vec.isHighRisk ? '#ea2261' : '#0d253d'
+                        backgroundColor: vec.isHighRisk ? '#e16540' : '#373634'
                       }}
                     />
                   </div>
@@ -488,32 +488,32 @@ export function Insights() {
           <div 
             className="lg:col-span-6 p-6 flex flex-col justify-between"
             style={{
-              backgroundColor: '#ffffff',
-              border: '1px solid #e3e8ee',
+              backgroundColor: '#fbfaf9',
+              border: '1px solid #dcdbda',
               borderRadius: '16px',
-              boxShadow: 'rgba(0, 55, 112, 0.08) 0px 2px 12px'
+              boxShadow: '0 2px 10px rgba(0,0,0,0.02)'
             }}
           >
             <div>
-              <div className="flex items-center justify-between pb-3 border-b border-[#e3e8ee]">
+              <div className="flex items-center justify-between pb-3 border-b border-[#dcdbda]">
                 <div>
                   <h3 
                     style={{
-                      color: '#0d253d',
+                      color: '#111111',
                       fontWeight: 700,
                       fontSize: '16px'
                     }}
                   >
                     FAILURE EVENT TIMELINE
                   </h3>
-                  <p style={{ color: '#64748d', fontSize: '12px' }}>
+                  <p style={{ color: '#787673', fontSize: '12px' }}>
                     Annual collapse concentration (2016–2024)
                   </p>
                 </div>
                 <span 
                   style={{
-                    backgroundColor: 'rgba(234, 34, 97, 0.10)',
-                    color: '#ea2261',
+                    backgroundColor: 'rgba(225, 101, 64, 0.12)',
+                    color: '#e16540',
                     borderRadius: '9999px',
                     fontSize: '11px',
                     fontWeight: 600,
@@ -525,14 +525,14 @@ export function Insights() {
               </div>
 
               {/* Bar visualization */}
-              <div className="mt-6 pt-4 grid grid-cols-9 gap-2 h-48 items-end pb-2 border-b border-[#e3e8ee]">
+              <div className="mt-6 pt-4 grid grid-cols-9 gap-2 h-48 items-end pb-2 border-b border-[#dcdbda]">
                 {trendData.map((d) => {
                   const heightPct = Math.round((d.failures / 84) * 100);
                   return (
                     <div key={d.year} className="flex flex-col items-center gap-2 h-full justify-end group">
                       <span 
                         className="text-[10px] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
-                        style={{ color: '#64748d', fontFeatureSettings: '"tnum"' }}
+                        style={{ color: '#787673', fontFeatureSettings: '"tnum"' }}
                       >
                         {d.failures}
                       </span>
@@ -540,14 +540,14 @@ export function Insights() {
                         className="w-full rounded-t-[4px] transition-all"
                         style={{ 
                           height: `${heightPct}%`,
-                          backgroundColor: d.isPeak ? '#ea2261' : '#0d253d'
+                          backgroundColor: d.isPeak ? '#e16540' : '#373634'
                         }}
                       />
                       <span 
                         style={{
-                          color: d.isPeak ? '#ea2261' : '#64748d',
+                          color: d.isPeak ? '#e16540' : '#787673',
                           fontSize: '11px',
-                          fontWeight: d.isPeak ? 700 : 400
+                          fontWeight: d.isPeak ? 700 : 500
                         }}
                       >
                         {d.year.slice(2)}'
@@ -561,14 +561,14 @@ export function Insights() {
             <div 
               className="mt-6 p-3.5 rounded-[10px] flex items-center justify-between text-[12px]"
               style={{
-                backgroundColor: '#f6f9fc',
-                border: '1px solid #e3e8ee'
+                backgroundColor: '#f6f5f3',
+                border: '1px solid #dcdbda'
               }}
             >
-              <div style={{ color: '#273951' }}>
-                <strong style={{ color: '#0d253d' }}>Trend Insight:</strong> Zero-interest-rate policy (ZIRP) hangover drove record mortality spikes in 2022–2023.
+              <div style={{ color: '#373634' }}>
+                <strong style={{ color: '#111111' }}>Trend Insight:</strong> Zero-interest-rate policy (ZIRP) hangover drove record mortality spikes in 2022–2023.
               </div>
-              <span style={{ color: '#533afd', fontWeight: 500 }} className="shrink-0 ml-3">
+              <span style={{ color: '#2d72f0', fontWeight: 600 }} className="shrink-0 ml-3">
                 Verified
               </span>
             </div>
@@ -579,15 +579,15 @@ export function Insights() {
         <div 
           className="p-6"
           style={{
-            backgroundColor: '#ffffff',
-            border: '1px solid #e3e8ee',
+            backgroundColor: '#fbfaf9',
+            border: '1px solid #dcdbda',
             borderRadius: '16px',
-            boxShadow: 'rgba(0, 55, 112, 0.08) 0px 2px 12px'
+            boxShadow: '0 2px 10px rgba(0,0,0,0.02)'
           }}
         >
           <h3 
             style={{
-              color: '#0d253d',
+              color: '#111111',
               fontWeight: 700,
               fontSize: '16px',
               marginBottom: '4px'
@@ -595,33 +595,33 @@ export function Insights() {
           >
             Cumulative Capital Evaporation Curve ($ Billions)
           </h3>
-          <p style={{ color: '#64748d', fontSize: '12px', marginBottom: '24px' }}>
+          <p style={{ color: '#787673', fontSize: '12px', marginBottom: '24px' }}>
             Historical trajectory of venture capital lost across documented cases (2010–2024).
           </p>
 
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
               <LineChart data={timelineTrendData} margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#e3e8ee" />
-                <XAxis dataKey="year" stroke="#64748d" fontSize={11} />
-                <YAxis stroke="#64748d" fontSize={11} unit="B" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#dcdbda" />
+                <XAxis dataKey="year" stroke="#787673" fontSize={11} />
+                <YAxis stroke="#787673" fontSize={11} unit="B" />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: '#ffffff', 
-                    borderColor: '#e3e8ee',
-                    color: '#0d253d',
+                    backgroundColor: '#fbfaf9', 
+                    borderColor: '#dcdbda',
+                    color: '#111111',
                     fontSize: '12px',
                     borderRadius: '8px',
-                    boxShadow: 'rgba(0, 55, 112, 0.08) 0px 4px 12px'
+                    boxShadow: '0 4px 12px rgba(0,0,0,0.06)'
                   }}
                   formatter={(val) => [`$${val} Billion`, 'Capital Evaporated']}
                 />
                 <Line 
                   type="monotone" 
                   dataKey="capital" 
-                  stroke="#533afd" 
+                  stroke="#2d72f0" 
                   strokeWidth={2.5} 
-                  dot={{ fill: '#533afd', r: 4 }} 
+                  dot={{ fill: '#2d72f0', r: 4 }} 
                   activeDot={{ r: 6 }}
                 />
               </LineChart>

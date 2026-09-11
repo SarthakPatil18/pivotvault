@@ -17,7 +17,15 @@ export function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full bg-[#ffffff] border-b border-[#e3e8ee] transition-colors duration-150">
+      <header 
+        className="sticky top-0 z-50 w-full transition-colors duration-150"
+        style={{
+          backgroundColor: isDark ? 'rgba(39, 38, 37, 0.85)' : 'rgba(251, 250, 249, 0.85)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          borderBottom: isDark ? '1px solid rgba(73, 72, 70, 0.85)' : '1px solid #dcdbda',
+        }}
+      >
         <div className="site-container flex items-center justify-between h-[68px]">
           {/* Brand Logo */}
           <div className="flex items-center gap-6 lg:gap-8">
@@ -38,13 +46,26 @@ export function Navbar() {
             {/* Search Trigger Button */}
             <button
               onClick={openSearch}
-              className="flex items-center gap-2 px-3 py-2 text-[14px] text-[#64748d] hover:text-[#0d253d] bg-[#ffffff] border border-[#e3e8ee] rounded-[8px] transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-[14px] transition-colors"
+              style={{
+                backgroundColor: isDark ? '#373634' : '#ffffff',
+                color: isDark ? '#ecebea' : '#5e5c5a',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.051)' : '1px solid #dcdbda',
+                borderRadius: '8px',
+              }}
               title="Search startup intelligence (Cmd+K)"
               aria-label="Search startup intelligence"
             >
-              <Search className="w-4 h-4 text-[#64748d]" />
-              <span className="hidden lg:inline font-normal text-[#64748d]">Search archive...</span>
-              <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[11px] font-mono bg-[#f6f9fc] border border-[#e3e8ee] rounded text-[#64748d]">
+              <Search className="w-4 h-4" style={{ color: isDark ? '#a7a6a4' : '#787673' }} />
+              <span className="hidden lg:inline font-normal">Search archive...</span>
+              <kbd 
+                className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[11px] font-mono rounded"
+                style={{
+                  backgroundColor: isDark ? '#272625' : '#f6f5f3',
+                  border: isDark ? '1px solid #494846' : '1px solid #ecebea',
+                  color: isDark ? '#a7a6a4' : '#787673'
+                }}
+              >
                 ⌘K
               </kbd>
             </button>
@@ -52,26 +73,30 @@ export function Navbar() {
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="p-2 text-[#64748d] hover:text-[#0d253d] hover:bg-[#f6f9fc] rounded-[8px] transition-colors"
+              className="p-2 rounded-[8px] transition-colors"
+              style={{
+                color: isDark ? '#ecebea' : '#5e5c5a'
+              }}
               title={`Switch to ${isDark ? 'Light' : 'Dark'} mode`}
               aria-label="Toggle theme"
             >
-              {isDark ? <Sun className="w-4 h-4 text-[#64748d]" /> : <Moon className="w-4 h-4 text-[#64748d]" />}
+              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
             </button>
 
             {/* Explore Archive CTA Button (hidden on mobile) */}
             <Link
               to="/explore"
-              className="hidden lg:inline-flex items-center justify-center text-[14px] transition-colors"
+              className="hidden lg:inline-flex items-center justify-center text-[14px] transition-colors shadow-xs"
               style={{
-                backgroundColor: '#533afd',
+                backgroundColor: isDark ? '#373634' : '#2d72f0',
                 color: '#ffffff',
+                border: isDark ? '1px solid rgba(255, 255, 255, 0.051)' : '1px solid transparent',
                 borderRadius: '9999px',
                 padding: '8px 20px',
                 fontWeight: 500,
               }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#4434d4'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#533afd'}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = isDark ? '#494846' : '#1d5ec9'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = isDark ? '#373634' : '#2d72f0'}
             >
               Explore Archive →
             </Link>

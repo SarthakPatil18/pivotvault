@@ -16,17 +16,19 @@ export function StartupCard({ startup, compact = false }) {
     <div 
       className="flex flex-col justify-between h-full group transition-all duration-200"
       style={{
-        backgroundColor: '#ffffff',
-        border: '1px solid #e3e8ee',
+        backgroundColor: '#fbfaf9',
+        border: '1px solid #dcdbda',
         borderRadius: '12px',
         padding: '20px',
-        boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px',
+        boxShadow: 'rgba(0, 0, 0, 0.04) 0px 2px 8px',
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = 'rgba(0, 55, 112, 0.12) 0px 8px 24px';
+        e.currentTarget.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 8px 24px';
+        e.currentTarget.style.borderColor = '#a7a6a4';
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = 'rgba(0, 55, 112, 0.06) 0px 2px 8px';
+        e.currentTarget.style.boxShadow = 'rgba(0, 0, 0, 0.04) 0px 2px 8px';
+        e.currentTarget.style.borderColor = '#dcdbda';
       }}
     >
       <div>
@@ -35,9 +37,9 @@ export function StartupCard({ startup, compact = false }) {
           <div className="flex items-center gap-2 flex-wrap">
             <span 
               style={{
-                backgroundColor: '#f6f9fc',
-                color: '#273951',
-                border: '1px solid #e3e8ee',
+                backgroundColor: '#f6f5f3',
+                color: '#373634',
+                border: '1px solid #ecebea',
                 borderRadius: '9999px',
                 fontSize: '12px',
                 padding: '3px 10px',
@@ -48,7 +50,7 @@ export function StartupCard({ startup, compact = false }) {
             <span 
               style={{
                 background: 'transparent',
-                color: '#64748d',
+                color: '#787673',
                 fontSize: '12px',
               }}
             >
@@ -64,14 +66,14 @@ export function StartupCard({ startup, compact = false }) {
                 toggleBookmark(startup.id);
               }}
               className="p-1 transition-colors"
-              style={{ color: '#64748d' }}
+              style={{ color: '#787673' }}
               title={bookmarked ? "Remove bookmark" : "Save startup"}
               aria-label="Bookmark startup"
             >
               {bookmarked ? (
-                <BookmarkCheck className="w-4 h-4" style={{ color: '#533afd' }} />
+                <BookmarkCheck className="w-4 h-4" style={{ color: '#2d72f0' }} />
               ) : (
-                <Bookmark className="w-4 h-4 hover:text-[#0d253d]" />
+                <Bookmark className="w-4 h-4 hover:text-[#111111]" />
               )}
             </button>
           </div>
@@ -82,15 +84,15 @@ export function StartupCard({ startup, compact = false }) {
           <div className="flex items-center gap-3">
             <CompanyLogo startup={startup} size="md" />
             <h3 
-              className="flex items-center justify-between flex-1 group-hover:text-[#533afd] transition-colors"
+              className="flex items-center justify-between flex-1 group-hover:text-[#2d72f0] transition-colors"
               style={{
-                color: '#0d253d',
+                color: '#111111',
                 fontSize: '24px',
                 fontWeight: 700,
               }}
             >
               <span>{startup.name}</span>
-              <span className="text-[16px] text-[#533afd] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
+              <span className="text-[16px] text-[#2d72f0] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
                 →
               </span>
             </h3>
@@ -99,7 +101,7 @@ export function StartupCard({ startup, compact = false }) {
         <p 
           className="mt-2 line-clamp-2 leading-relaxed"
           style={{
-            color: '#64748d',
+            color: '#5e5c5a',
             fontSize: '14px',
           }}
         >
@@ -107,10 +109,10 @@ export function StartupCard({ startup, compact = false }) {
         </p>
 
         {/* Fatal Failure Mode */}
-        <div className="mt-4 pt-3 border-t border-[#e3e8ee]">
+        <div className="mt-4 pt-3 border-t border-[#ecebea]">
           <div 
             style={{
-              color: '#64748d',
+              color: '#787673',
               fontSize: '10px',
               fontWeight: 600,
               textTransform: 'uppercase',
@@ -123,7 +125,7 @@ export function StartupCard({ startup, compact = false }) {
           <div 
             className="line-clamp-1"
             style={{
-              color: '#0d253d',
+              color: '#111111',
               fontSize: '14px',
               fontWeight: 600,
             }}
@@ -134,7 +136,7 @@ export function StartupCard({ startup, compact = false }) {
             <p 
               className="mt-1 line-clamp-2"
               style={{
-                color: '#64748d',
+                color: '#787673',
                 fontSize: '13px',
                 fontStyle: 'italic',
               }}
@@ -146,11 +148,11 @@ export function StartupCard({ startup, compact = false }) {
       </div>
 
       {/* Card Footer: Metrics & Link */}
-      <div className="mt-5 pt-3 border-t border-[#e3e8ee] flex items-center justify-between text-[13px]">
+      <div className="mt-5 pt-3 border-t border-[#ecebea] flex items-center justify-between text-[13px]">
         <div className="flex items-center gap-2">
           <span 
             style={{
-              color: '#ea2261',
+              color: '#e16540',
               fontWeight: 600,
               fontFeatureSettings: '"tnum"',
               letterSpacing: '-0.42px',
@@ -158,8 +160,8 @@ export function StartupCard({ startup, compact = false }) {
           >
             {formatCurrency(startup.capitalRaised)} lost
           </span>
-          <span style={{ color: '#64748d' }}>•</span>
-          <span style={{ color: '#64748d', fontSize: '13px' }}>
+          <span style={{ color: '#dcdbda' }}>•</span>
+          <span style={{ color: '#787673', fontSize: '13px' }}>
             {startup.foundedYear}–{startup.failedYear}
           </span>
         </div>
@@ -168,7 +170,7 @@ export function StartupCard({ startup, compact = false }) {
           to={`/startup/${startup.id}`}
           className="hover:underline inline-flex items-center gap-1"
           style={{
-            color: '#533afd',
+            color: '#2d72f0',
             fontWeight: 500,
           }}
         >

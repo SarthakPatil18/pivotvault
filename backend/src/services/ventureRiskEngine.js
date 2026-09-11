@@ -94,18 +94,18 @@ function getWeightProfile(ventureType = '') {
 
 function formatDimensionLabel(key) {
   const map = {
-    productMarketFit: 'Product-Market Fit & Retention',
-    customerNeed: 'Customer Urgency & Pain',
-    differentiation: 'Differentiation & Moat',
-    competition: 'Competitive Pressure',
-    businessModel: 'Business Model & Monetization',
-    unitEconomics: 'Unit Economics & Margins',
-    executionComplexity: 'Execution & Operations',
-    scalability: 'Scalability & Growth Limits',
-    marketTiming: 'Market Timing & Adoption',
-    capitalIntensity: 'Capital Requirements & Burn',
-    regulatoryExposure: 'Regulatory & Legal Risk',
-    defensibility: 'Defensibility & Switching Barriers'
+    competition: 'Competition',
+    differentiation: 'Standing Out',
+    productMarketFit: 'Customer Demand',
+    unitEconomics: 'Making Money',
+    customerNeed: 'Urgent Need',
+    businessModel: 'Monetization Model',
+    executionComplexity: 'Building & Delivery',
+    scalability: 'Scaling & Growth',
+    marketTiming: 'Market Timing',
+    capitalIntensity: 'Funding & Costs',
+    regulatoryExposure: 'Regulations & Legal',
+    defensibility: 'Defensibility & Moat'
   };
   return map[key] || key;
 }

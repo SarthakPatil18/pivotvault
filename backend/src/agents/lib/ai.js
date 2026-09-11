@@ -22,7 +22,7 @@ async function gemini(prompt, { maxTokens = 1000, json = false, system = '' } = 
   return payload.candidates?.[0]?.content?.parts?.map((part) => part.text ?? '').join('') ?? null;
 }
 
-async function callGroq(prompt, { maxTokens = 1000, model = process.env.GROQ_MODEL || 'openai/gpt-oss-120b' } = {}) {
+async function callGroq(prompt, { maxTokens = 1000, model = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile' } = {}) {
   const config = await getConfig();
   if (!config.GROQ_API_KEY || config.GROQ_API_KEY.includes('mock')) throw new Error('GROQ_API_KEY is not configured or is mock.');
   const response = await fetch('https://api.groq.com/openai/v1/chat/completions', { 

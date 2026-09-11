@@ -23,8 +23,10 @@ const envSchema = z.object({
 
   // AI & External APIs
   GEMINI_API_KEY: z.string().default(''),
+  GEMINI_MODEL: z.string().default('gemini-1.5-flash'),
   GROQ_API_KEY: z.string().default(''),
   TAVILY_API_KEY: z.string().default(''),
+  ML_SERVICE_URL: z.string().url().default('http://127.0.0.1:8001'),
 
   // Auth & Security
   JWT_SECRET: z.string().default('pivotvault_default_secret_key_change_me'),

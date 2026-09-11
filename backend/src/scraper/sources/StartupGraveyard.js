@@ -85,10 +85,10 @@ async function scrapeStartupGraveyard() {
       }
     });
 
-    logger.info(`Discovered ${detailUrls.length} detail pages on ${BASE_URL}. Fetching top entries...`);
+    logger.info(`Discovered ${detailUrls.length} detail pages on ${BASE_URL}. Fetching all entries...`);
 
-    // Scrape top startup detail pages (limit to top 8 to stay within reasonable execution time)
-    const targetUrls = detailUrls.slice(0, 8);
+    // Scrape all startup detail pages found on startupgraveyard.io
+    const targetUrls = detailUrls;
     for (const url of targetUrls) {
       try {
         const detailRes = await axios.get(url, {

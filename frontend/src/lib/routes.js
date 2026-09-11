@@ -7,8 +7,7 @@ export const NAV_CATEGORIES = [
   {
     id: 'explore',
     name: 'Explore',
-    href: '/explore',
-    description: 'Browse the 413+ archive of documented startup failures.'
+    href: '/explore'
   },
   {
     id: 'intelligence',
@@ -23,7 +22,6 @@ export const NAV_CATEGORIES = [
     id: 'analysis',
     name: 'Analysis',
     href: '/pitch-deck-autopsy',
-    description: 'Pitch deck forensics and competitor post-mortem autopsy.',
     items: [
       { name: 'Pitch Deck Autopsy', href: '/pitch-deck-autopsy', description: 'Audit pitch decks against historical failure models.' },
       { name: 'Competitor Compare', href: '/competitor-compare', description: 'Compare failed competitors side-by-side.' }
@@ -33,7 +31,6 @@ export const NAV_CATEGORIES = [
     id: 'insights',
     name: 'Insights',
     href: '/insights',
-    description: 'Aggregate macro analytics and interactive structural graphs.',
     items: [
       { name: 'Insights Dashboard', href: '/insights', description: 'Macro analytics, failure causes, and capital loss patterns.' },
       { name: 'Knowledge Graph', href: '/startup-graph', description: 'Interactive network mapping founders, investors, and causes.' }
@@ -43,7 +40,6 @@ export const NAV_CATEGORIES = [
     id: 'learn',
     name: 'Stories & Personas',
     href: '/hall-of-ghosts',
-    description: 'Interactive founder stories and reconstructed personas.',
     items: [
       { name: 'Hall of Ghosts', href: '/hall-of-ghosts', description: 'AI-reconstructed founder personas based on public evidence.' },
       { name: 'Founder Confessions', href: '/founder-confessions', description: 'Editorial first-person post-mortems and candid lessons.' }

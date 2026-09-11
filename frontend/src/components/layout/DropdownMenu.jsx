@@ -86,14 +86,6 @@ export function DropdownMenu({ category }) {
           className="absolute top-full left-0 mt-1 w-72 bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] p-2 z-50 animate-slide-down shadow-dropdown"
           role="menu"
         >
-          {category.description && (
-            <div className="px-3 py-1.5 mb-1 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
-              <p className="text-[12px] text-[#737373] dark:text-[#A3A3A3]">
-                {category.description}
-              </p>
-            </div>
-          )}
-
           <div className="space-y-1">
             {category.items.map((item) => {
               const itemBasePath = item.href.split('?')[0];

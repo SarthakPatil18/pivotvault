@@ -23,7 +23,7 @@ export function Navbar() {
         <div className="site-container flex items-center justify-between h-[68px]">
           {/* Brand Logo */}
           <div className="flex items-center gap-6 lg:gap-8">
-            <Link to="/" className="flex items-center focus:outline-none" aria-label="PivotVault Home">
+            <Link to="/app" className="flex items-center focus:outline-none" aria-label="PivotVault Dashboard">
               <PivotVaultLogo />
             </Link>
 

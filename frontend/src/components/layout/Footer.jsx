@@ -99,7 +99,7 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-6 gap-10">
           {/* Brand Column (Spans 2 on large screens) */}
           <div className="lg:col-span-2 space-y-4">
-            <Link to="/" className="inline-block">
+            <Link to="/app" className="inline-block" aria-label="PivotVault Dashboard">
               <PivotVaultLogo />
             </Link>
             <p className="text-[13px] text-[#737373] dark:text-[#A3A3A3] leading-[22px] max-w-sm">

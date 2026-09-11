@@ -48,7 +48,9 @@ export const NAV_CATEGORIES = [
 ];
 
 export const ALL_ROUTES = [
-  { path: '/', name: 'Home' },
+  { path: '/', name: 'Landing Page' },
+  { path: '/app', name: 'Dashboard' },
+  { path: '/dashboard', name: 'Dashboard' },
   { path: '/explore', name: 'Failure Explorer' },
   { path: '/startup/:id', name: 'Startup Intelligence' },
   { path: '/risk-scanner', name: 'Risk Scanner' },

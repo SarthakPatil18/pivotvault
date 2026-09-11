@@ -36,6 +36,7 @@ build/
 .next/
 out/
 *.local
+*.tsbuildinfo
 
 # Python bytecode
 __pycache__/

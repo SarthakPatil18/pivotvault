@@ -22,7 +22,7 @@ export function PageHeader({
 
           {breadcrumbs.length > 0 && (
             <nav className="flex items-center gap-1.5 font-mono text-[11px]" aria-label="Breadcrumb">
-              <Link to="/" className="hover:text-black dark:hover:text-white transition-colors">
+              <Link to="/app" className="hover:text-black dark:hover:text-white transition-colors">
                 PivotVault
               </Link>
               {breadcrumbs.map((crumb, idx) => (

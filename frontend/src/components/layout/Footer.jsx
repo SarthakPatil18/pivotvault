@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import { PivotVaultLogo } from '../../assets/logo';
 import { 
   ArrowUp, Check, ShieldCheck, FileText, Database, 
-  ExternalLink, Sparkles, X, Info 
+  ExternalLink, Sparkles, X, Info, Mail, ArrowRight 
 } from 'lucide-react';
 
 export function Footer() {
@@ -24,44 +24,72 @@ export function Footer() {
   return (
     <footer className="w-full bg-white dark:bg-black border-t border-[#E5E5E5] dark:border-[#2A2A2A] text-black dark:text-white transition-colors">
       {/* Top Editorial CTA / Newsletter Section */}
-      <div className="border-b border-[#E5E5E5] dark:border-[#2A2A2A] py-12 md:py-16">
+      <div className="border-b border-[#E5E5E5] dark:border-[#2A2A2A] py-12 md:py-16 bg-neutral-50/60 dark:bg-[#0A0A0A]/60">
         <div className="site-container">
-          <div className="max-w-2xl">
-            <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 text-[11px] font-mono font-medium text-neutral-700 dark:text-neutral-300 mb-4">
-              <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-              <span>Weekly Forensic Post-Mortems</span>
+          <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-8 lg:gap-12">
+            {/* Left: Headline & Description */}
+            <div className="max-w-xl space-y-3">
+              <div className="inline-flex items-center gap-2 px-2.5 py-1 rounded-full bg-white dark:bg-[#141414] border border-neutral-200 dark:border-neutral-800 text-[11px] font-mono font-medium text-neutral-700 dark:text-neutral-300 shadow-xs">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
+                <span>FORENSIC VENTURE INTELLIGENCE</span>
+              </div>
+
+              <h3 className="text-[26px] sm:text-[30px] md:text-[34px] font-extrabold leading-[32px] sm:leading-[38px] md:leading-[42px] tracking-tight text-black dark:text-white">
+                Learn from 413+ startup failures before you build.
+              </h3>
+              <p className="text-[14px] md:text-[15px] text-[#737373] dark:text-[#A3A3A3] leading-[24px]">
+                Receive forensic failure breakdowns, court deposition highlights, unit economics stress tests, and defensive playbooks delivered weekly to your inbox.
+              </p>
             </div>
 
-            <h3 className="text-[26px] md:text-[32px] font-extrabold leading-[34px] md:leading-[40px] tracking-tight text-black dark:text-white">
-              Learn from 413+ startup failures before you build.
-            </h3>
-            <p className="mt-3 text-[14px] md:text-[15px] text-[#737373] dark:text-[#A3A3A3] leading-[24px]">
-              Receive forensic failure breakdowns, court deposition highlights, unit economics stress tests, and defensive playbooks delivered weekly to your inbox.
-            </p>
-
-            {subscribed ? (
-              <div className="mt-6 p-4 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 flex items-center gap-3 text-xs font-mono">
-                <Check className="w-4 h-4 text-emerald-600 shrink-0" />
-                <span>You are subscribed to PivotVault Intelligence. Check your inbox for the welcome dispatch.</span>
-              </div>
-            ) : (
-              <form onSubmit={handleSubscribe} className="mt-6 flex flex-col sm:flex-row gap-3 max-w-md">
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="Enter your work email..."
-                  className="input-editorial flex-1 text-xs font-mono"
-                />
-                <button
-                  type="submit"
-                  className="btn-primary whitespace-nowrap text-xs font-mono px-6 py-2.5"
-                >
-                  Join Archive →
-                </button>
-              </form>
-            )}
+            {/* Right: Interactive Newsletter Form Card */}
+            <div className="w-full lg:max-w-md bg-white dark:bg-[#0F0F0F] p-5 sm:p-6 rounded-xl border border-[#E5E5E5] dark:border-[#2A2A2A] shadow-xs">
+              {subscribed ? (
+                <div className="space-y-3">
+                  <div className="p-3.5 rounded-lg bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 text-emerald-800 dark:text-emerald-200 flex items-start gap-2.5 text-xs font-mono">
+                    <Check className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    <div>
+                      <span className="font-bold block">Dispatches activated for {email}</span>
+                      <span className="text-[11px] opacity-90">You will receive the weekly failure autopsy dispatch every Thursday morning.</span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={() => { setSubscribed(false); setEmail(''); }}
+                    className="text-[11px] font-mono text-neutral-500 hover:text-black dark:hover:text-white underline transition-colors"
+                  >
+                    Subscribe another email
+                  </button>
+                </div>
+              ) : (
+                <form onSubmit={handleSubscribe} className="space-y-3">
+                  <div className="relative flex items-center">
+                    <Mail className="w-4 h-4 text-neutral-400 dark:text-neutral-500 absolute left-3.5 pointer-events-none" />
+                    <input
+                      type="email"
+                      required
+                      value={email}
+                      onChange={(e) => setEmail(e.target.value)}
+                      placeholder="Enter your work email..."
+                      className="input-editorial pl-10 pr-3 text-xs font-mono h-11 w-full"
+                    />
+                  </div>
+                  <button
+                    type="submit"
+                    className="btn-primary w-full text-xs font-mono h-11 flex items-center justify-center gap-2 font-bold"
+                  >
+                    <span>Join Archive</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
+                  </button>
+                  <div className="flex items-center justify-between text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3] pt-1 px-1">
+                    <span className="flex items-center gap-1">
+                      <ShieldCheck className="w-3 h-3 text-emerald-600" /> Free weekly dispatch
+                    </span>
+                    <span>Zero spam • Unsubscribe anytime</span>
+                  </div>
+                </form>
+              )}
+            </div>
           </div>
         </div>
       </div>

@@ -864,7 +864,17 @@ function generateStartups(count = 404) {
 export const ALL_STARTUPS = generateStartups(404); // Total 418 startups
 
 export function getStartupById(id) {
-  return ALL_STARTUPS.find((s) => s.id === id || s.id === id.toLowerCase()) || null;
+  if (!id) return null;
+  const cleanId = String(id).toLowerCase().trim();
+  const strippedId = cleanId.replace(/[^a-z0-9]/g, '');
+  return ALL_STARTUPS.find((s) => 
+    s.id === id || 
+    s.id.toLowerCase() === cleanId || 
+    (s.slug && s.slug.toLowerCase() === cleanId) ||
+    s.name.toLowerCase() === cleanId ||
+    s.name.toLowerCase().replace(/[^a-z0-9]/g, '') === strippedId ||
+    (s.slug && s.slug.replace(/[^a-z0-9]/g, '') === strippedId)
+  ) || null;
 }
 
 export function getStartupStatistics() {

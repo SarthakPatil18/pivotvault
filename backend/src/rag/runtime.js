@@ -9,8 +9,8 @@ function configureRagRuntime({ prisma, config } = {}) {
 async function getPrisma() {
   if (prismaOverride) return prismaOverride;
   let module; try { module = require('../lib/prisma'); } catch { module = null; }
-  const client = module?.default ?? module?.prisma;
-  if (!client) throw new Error('Prisma client is unavailable. Configure the RAG runtime or provide src/lib/prisma.js.');
+  const client = module?.default ?? module?.prisma ?? module;
+  if (!client || typeof client.$queryRawUnsafe !== 'function') throw new Error('Prisma client is unavailable. Configure the RAG runtime or provide src/lib/prisma.js.');
   return client;
 }
 

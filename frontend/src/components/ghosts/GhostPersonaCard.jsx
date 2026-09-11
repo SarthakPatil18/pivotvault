@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ShieldAlert, MessageSquare, Send, Sparkles, AlertCircle, RotateCcw, Bot } from 'lucide-react';
 import { formatCurrency } from '../../lib/utils';
 import { CompanyLogo } from '../common/CompanyLogo';
+import { chatWithGhost } from '../../lib/api';
 
 export function GhostPersonaCard({ persona, onSelect, isSelected }) {
   return (
@@ -66,7 +67,7 @@ export function GhostChatInterface({ persona }) {
     ]);
   }, [persona.id]);
 
-  const handleSend = (textToSend) => {
+  const handleSend = async (textToSend) => {
     const query = textToSend || input;
     if (!query.trim()) return;
 
@@ -80,34 +81,52 @@ export function GhostChatInterface({ persona }) {
     if (!textToSend) setInput('');
     setIsTyping(true);
 
-    setTimeout(() => {
-      let replyText = persona.responses['default'];
-      const qLower = query.toLowerCase();
-
-      if (qLower.includes('peer') || qLower.includes('science') || qLower.includes('publish')) {
-        replyText = persona.responses['peer-review'] || replyText;
-      } else if (qLower.includes('board') || qLower.includes('governance') || qLower.includes('kissinger')) {
-        replyText = persona.responses['board'] || replyText;
-      } else if (qLower.includes('signal') || qLower.includes('warn') || qLower.includes('lab')) {
-        replyText = persona.responses['signals'] || replyText;
-      } else if (qLower.includes('tech') || qLower.includes('valuation') || qLower.includes('multiple')) {
-        replyText = persona.responses['tech'] || replyText;
-      } else if (qLower.includes('softbank') || qLower.includes('masa') || qLower.includes('billion')) {
-        replyText = persona.responses['softbank'] || replyText;
-      } else if (qLower.includes('mismatch') || qLower.includes('lease') || qLower.includes('rent')) {
-        replyText = persona.responses['mismatch'] || replyText;
-      } else if (qLower.includes('screenshot') || qLower.includes('share') || qLower.includes('virality')) {
-        replyText = persona.responses['screenshots'] || replyText;
-      } else if (qLower.includes('tiktok') || qLower.includes('creator') || qLower.includes('youtube')) {
-        replyText = persona.responses['tiktok'] || replyText;
-      } else if (qLower.includes('burn') || qLower.includes('rate') || qLower.includes('revenue')) {
-        replyText = persona.responses['burn'] || replyText;
-      } else if (qLower.includes('merchant') || qLower.includes('checkout') || qLower.includes('retail')) {
-        replyText = persona.responses['merchants'] || replyText;
-      } else if (qLower.includes('platform') || qLower.includes('shopify') || qLower.includes('apple')) {
-        replyText = persona.responses['platforms'] || replyText;
+    try {
+      const liveRes = await chatWithGhost(persona.id, query);
+      if (liveRes?.data?.reply) {
+        setMessages((prev) => [
+          ...prev,
+          {
+            sender: 'ghost',
+            text: liveRes.data.reply,
+            timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
+          }
+        ]);
+        setIsTyping(false);
+        return;
       }
+    } catch (e) {
+      // Graceful fallback to offline persona logic
+    }
 
+    let replyText = persona.responses['default'];
+    const qLower = query.toLowerCase();
+
+    if (qLower.includes('peer') || qLower.includes('science') || qLower.includes('publish')) {
+      replyText = persona.responses['peer-review'] || replyText;
+    } else if (qLower.includes('board') || qLower.includes('governance') || qLower.includes('kissinger')) {
+      replyText = persona.responses['board'] || replyText;
+    } else if (qLower.includes('signal') || qLower.includes('warn') || qLower.includes('lab')) {
+      replyText = persona.responses['signals'] || replyText;
+    } else if (qLower.includes('tech') || qLower.includes('valuation') || qLower.includes('multiple')) {
+      replyText = persona.responses['tech'] || replyText;
+    } else if (qLower.includes('softbank') || qLower.includes('masa') || qLower.includes('billion')) {
+      replyText = persona.responses['softbank'] || replyText;
+    } else if (qLower.includes('mismatch') || qLower.includes('lease') || qLower.includes('rent')) {
+      replyText = persona.responses['mismatch'] || replyText;
+    } else if (qLower.includes('screenshot') || qLower.includes('share') || qLower.includes('virality')) {
+      replyText = persona.responses['screenshots'] || replyText;
+    } else if (qLower.includes('tiktok') || qLower.includes('creator') || qLower.includes('youtube')) {
+      replyText = persona.responses['tiktok'] || replyText;
+    } else if (qLower.includes('burn') || qLower.includes('rate') || qLower.includes('revenue')) {
+      replyText = persona.responses['burn'] || replyText;
+    } else if (qLower.includes('merchant') || qLower.includes('checkout') || qLower.includes('retail')) {
+      replyText = persona.responses['merchants'] || replyText;
+    } else if (qLower.includes('platform') || qLower.includes('shopify') || qLower.includes('apple')) {
+      replyText = persona.responses['platforms'] || replyText;
+    }
+
+    setTimeout(() => {
       setMessages((prev) => [
         ...prev,
         {
@@ -117,7 +136,7 @@ export function GhostChatInterface({ persona }) {
         }
       ]);
       setIsTyping(false);
-    }, 600);
+    }, 400);
   };
 
   return (

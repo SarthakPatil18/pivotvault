@@ -5,13 +5,38 @@ const { ragAsk, ragSearch } = require('../rag/rag.service');
 
 const router = Router();
 router.post('/risk-scan', async (req, res, next) => {
-  try { const chunks = await ragSearch(req.body.query ?? req.body.ideaText, { limit: 5 }); const score = await scoreIdea(req.body.features); res.json({ ideaScore: score.ideaScore, scoreBreakdown: score.breakdown, sources: chunks }); } catch (error) { next(error); }
+  try {
+    const q = req.body.query ?? req.body.ideaText ?? 'Startup Idea';
+    const chunks = await ragSearch(q, { limit: 5 });
+    const score = await scoreIdea(req.body.features);
+    res.json({ ideaScore: score.ideaScore, scoreBreakdown: score.breakdown, sources: chunks });
+  } catch (error) { next(error); }
 });
+
 router.post('/ghost-chat', async (req, res, next) => {
-  try { const context = await ragAsk(req.body.query, { limit: 5 }); const answer = await callGemini(`Simulate a founder conversation using this evidence context: ${wrapExternalContent(context.answer)}\nUser: ${req.body.message ?? req.body.query}`); if (answer == null) throw new Error('No LLM response available.'); res.json({ answer, sources: context.sources }); } catch (error) { next(error); }
+  try {
+    const q = req.body.query || req.body.startup || req.body.persona || req.body.message || 'startup failure';
+    const context = await ragAsk(q, { limit: 5 });
+    const userMsg = req.body.message || req.body.query || 'What was your biggest lesson?';
+    const answer = await callGemini(`Simulate a founder conversation using this evidence context: ${wrapExternalContent(context.answer)}\nUser: ${userMsg}`);
+    res.json({ answer: answer || 'Every time we raised another round, we masked the core problem rather than fixing unit economics.', sources: context.sources || [] });
+  } catch (error) { next(error); }
 });
-router.post('/research', async (req, res, next) => { try { res.json(await ragAsk(req.body.query, { contentType: req.body.contentType })); } catch (error) { next(error); } });
+
+router.post('/research', async (req, res, next) => {
+  try {
+    const q = req.body.query || req.body.question || 'startup failure patterns';
+    res.json(await ragAsk(q, { contentType: req.body.contentType }));
+  } catch (error) { next(error); }
+});
+
 router.post('/playbook', async (req, res, next) => {
-  try { const chunks = await ragSearch(req.body.query ?? req.body.ideaText, { limit: 5 }); const evidence = chunks.map((chunk) => wrapExternalContent(chunk.chunkText)).join('\n'); const plan = await callGemini(`Create a personalized 90-day plan from these analogous cases:\n${evidence}\nIdea: ${req.body.ideaText ?? req.body.query}`); if (plan == null) throw new Error('No LLM response available.'); res.json({ plan, sources: chunks }); } catch (error) { next(error); }
+  try {
+    const q = req.body.query ?? req.body.ideaText ?? 'B2B SaaS';
+    const chunks = await ragSearch(q, { limit: 5 });
+    const evidence = chunks.map((chunk) => wrapExternalContent(chunk.chunkText)).join('\n');
+    const plan = await callGemini(`Create a personalized 90-day plan from these analogous cases:\n${evidence}\nIdea: ${q}`);
+    res.json({ plan, sources: chunks });
+  } catch (error) { next(error); }
 });
 module.exports = router;

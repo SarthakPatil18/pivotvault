@@ -62,7 +62,28 @@ export function MobileMenu({ isOpen, onClose, onOpenSearch }) {
         {/* Navigation Categories */}
         <div className="flex-1 overflow-y-auto p-5 space-y-4">
           {NAV_CATEGORIES.map((cat) => {
+            const hasItems = cat.items && cat.items.length > 0;
             const isExpanded = !!expandedCategories[cat.id];
+
+            if (!hasItems) {
+              const isActive = location.pathname === cat.href;
+              return (
+                <div key={cat.id} className="border-b border-[#E5E5E5] dark:border-[#2A2A2A] pb-3">
+                  <Link
+                    to={cat.href}
+                    onClick={onClose}
+                    className={`w-full flex items-center justify-between text-xs font-mono font-bold uppercase tracking-wider py-1 ${
+                      isActive 
+                        ? 'text-black dark:text-white' 
+                        : 'text-[#737373] dark:text-[#A3A3A3] hover:text-black dark:hover:text-white'
+                    }`}
+                  >
+                    <span>{cat.name}</span>
+                    <span className="text-[#A3A3A3] dark:text-[#737373]">→</span>
+                  </Link>
+                </div>
+              );
+            }
 
             return (
               <div key={cat.id} className="border-b border-[#E5E5E5] dark:border-[#2A2A2A] pb-3">

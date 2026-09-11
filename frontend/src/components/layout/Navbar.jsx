@@ -27,10 +27,24 @@ export function Navbar() {
               <PivotVaultLogo />
             </Link>
 
-            {/* Desktop Navigation Hover Dropdowns (visible >= md / 768px) */}
+            {/* Desktop Navigation Links / Dropdowns (visible >= md / 768px) */}
             <nav className="hidden md:flex items-center space-x-1" aria-label="Main Navigation">
               {NAV_CATEGORIES.map((category) => (
-                <DropdownMenu key={category.id} category={category} />
+                category.items && category.items.length > 0 ? (
+                  <DropdownMenu key={category.id} category={category} />
+                ) : (
+                  <Link
+                    key={category.id}
+                    to={category.href}
+                    className={`inline-flex items-center px-3 lg:px-4 py-2 text-[14px] font-medium leading-[20px] transition-colors duration-150 rounded-[6px] ${
+                      location.pathname === category.href
+                        ? 'text-black dark:text-white font-bold'
+                        : 'text-[#737373] dark:text-[#A3A3A3] hover:text-black dark:hover:text-white'
+                    }`}
+                  >
+                    {category.name}
+                  </Link>
+                )
               ))}
             </nav>
           </div>

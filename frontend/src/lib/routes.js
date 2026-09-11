@@ -8,12 +8,7 @@ export const NAV_CATEGORIES = [
     id: 'explore',
     name: 'Explore',
     href: '/explore',
-    description: 'Browse the 413+ archive of documented startup failures.',
-    items: [
-      { name: 'Failure Explorer', href: '/explore', description: 'Search, filter, and discover 413+ startup post-mortems.' },
-      { name: 'Recent Failures', href: '/explore?filter=recent', description: 'Recent post-mortems and pandemic-era collapses.' },
-      { name: 'Search Startups', href: '/explore?focus=search', description: 'Deep investigative search across industries and failure vectors.' }
-    ]
+    description: 'Browse the 413+ archive of documented startup failures.'
   },
   {
     id: 'intelligence',

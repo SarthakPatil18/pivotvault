@@ -66,16 +66,27 @@ export function Footer() {
                 {category.name}
               </h4>
               <ul className="space-y-2">
-                {category.items.map((item) => (
-                  <li key={item.href}>
+                {category.items && category.items.length > 0 ? (
+                  category.items.map((item) => (
+                    <li key={item.href}>
+                      <Link
+                        to={item.href}
+                        className="text-[13px] text-[#737373] dark:text-[#A3A3A3] hover:text-black dark:hover:text-white transition-colors"
+                      >
+                        {item.name}
+                      </Link>
+                    </li>
+                  ))
+                ) : (
+                  <li>
                     <Link
-                      to={item.href}
+                      to={category.href}
                       className="text-[13px] text-[#737373] dark:text-[#A3A3A3] hover:text-black dark:hover:text-white transition-colors"
                     >
-                      {item.name}
+                      {category.name} Archive
                     </Link>
                   </li>
-                ))}
+                )}
               </ul>
             </div>
           ))}

@@ -1,0 +1,179 @@
+// Prisma Schema for PivotVault
+// AI-Powered Startup Failure Intelligence Platform
+
+generator client {
+  provider        = "prisma-client-js"
+  previewFeatures = ["postgresqlExtensions"]
+}
+
+datasource db {
+  provider   = "postgresql"
+  url        = env("DATABASE_URL")
+  extensions = [vector]
+}
+
+enum ContentType {
+  POSTMORTEM
+  NEWS
+  INTERVIEW
+  FILING
+  IDEA
+}
+
+enum VerificationStatus {
+  VERIFIED
+  PARTIALLY_VERIFIED
+  CONFLICTING
+  UNVERIFIED
+}
+
+model Company {
+  id                String       @id @default(cuid())
+  name              String
+  slug              String       @unique
+  description       String       @db.Text
+  foundedYear       Int?
+  failureYear       Int?
+  industry          String
+  stage             String?      // e.g., "Series A", "Series D", "Bootstrapped"
+  totalFunding      Float?       // In USD
+  valuation         Float?       // Peak valuation in USD
+  website           String?
+  founders          String[]     @default([])
+  enriched          Boolean      @default(false) // Flag: true when indexed into RAG by Dev 2
+  failureReasons    String[]     @default([])
+  keyLessons        String[]     @default([])
+  postmortemSummary String?      @db.Text
+  
+  // Relations
+  evidence          Evidence[]
+  claims            Claim[]
+  embeddings        Embedding[]
+  riskScans         RiskScan[]
+
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
+
+  @@index([slug])
+  @@index([industry])
+  @@index([enriched])
+}
+
+model Evidence {
+  id             String       @id @default(cuid())
+  companyId      String?
+  company        Company?     @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  contentType    ContentType  @default(POSTMORTEM)
+  title          String
+  content        String       @db.Text
+  sourceUrl      String
+  sourceName     String       // e.g., "TechCrunch", "HackerNews", "Reddit", "Failory"
+  author         String?
+  publishedAt    DateTime?
+  scrapedAt      DateTime     @default(now())
+  metadata       Json?
+
+  // Relations
+  claims         Claim[]
+
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+
+  @@index([companyId])
+  @@index([contentType])
+  @@index([sourceName])
+}
+
+model Claim {
+  id                 String             @id @default(cuid())
+  evidenceId         String?
+  evidence           Evidence?          @relation(fields: [evidenceId], references: [id], onDelete: Cascade)
+  companyId          String?
+  company            Company?           @relation(fields: [companyId], references: [id], onDelete: Cascade)
+  claimText          String             @db.Text
+  category           String?            // "FINANCIAL", "MARKET", "PRODUCT", "TEAM", "LEGAL", "COMPETITION"
+  verificationStatus VerificationStatus @default(UNVERIFIED)
+  confidenceScore    Float              @default(0.0)
+  sources            Json?              // Supporting source snippets / URLs
+  verifiedAt         DateTime?
+
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@index([companyId])
+  @@index([evidenceId])
+  @@index([verificationStatus])
+}
+
+model Embedding {
+  id          String                   @id @default(cuid())
+  contentId   String                   // Company.id or Evidence.id
+  contentType String                   // postmortem | news | interview | filing | idea
+  text        String                   @db.Text
+  embedding   Unsupported("vector(768)")?
+  metadata    Json?                    // companyName, industry, failureYear, source, slug, etc.
+  companyId   String?
+  company     Company?                 @relation(fields: [companyId], references: [id], onDelete: Cascade)
+
+  createdAt   DateTime                 @default(now())
+  updatedAt   DateTime                 @updatedAt
+
+  @@index([contentId])
+  @@index([contentType])
+  @@index([companyId])
+}
+
+model FailurePattern {
+  id                       String    @id @default(cuid())
+  title                    String
+  slug                     String    @unique
+  description              String    @db.Text
+  frequency                Int       @default(1)
+  primaryFactors           String[]  @default([])
+  affectedIndustries       String[]  @default([])
+  representativeCompanyIds String[]  @default([])
+  preventionStrategy       String    @db.Text
+  severity                 String    @default("HIGH") // "CRITICAL", "HIGH", "MEDIUM", "LOW"
+
+  createdAt                DateTime  @default(now())
+  updatedAt                DateTime  @updatedAt
+
+  @@index([slug])
+}
+
+model AgentExecution {
+  id            String    @id @default(cuid())
+  agentName     String    // e.g., "supervisor", "marketIntel", "decisionCritic"
+  triggerType   String    // e.g., "manual", "pipeline", "scheduled"
+  inputPayload  Json
+  outputPayload Json?
+  status        String    // "SUCCESS", "FAILED", "RUNNING", "TIMEOUT"
+  durationMs    Int?
+  error         String?   @db.Text
+
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+
+  @@index([agentName])
+  @@index([status])
+}
+
+model RiskScan {
+  id                 String    @id @default(cuid())
+  userId             String?
+  companyId          String?
+  company            Company?  @relation(fields: [companyId], references: [id], onDelete: SetNull)
+  startupName        String
+  industry           String
+  riskScore          Float     // 0 to 100
+  survivalScore      Float?    // Calculated via weighted formula
+  verdict            String?   // "PROCEED", "CAUTION", "ABORT"
+  keyVulnerabilities Json?
+  recommendation     String?   @db.Text
+
+  createdAt          DateTime  @default(now())
+  updatedAt          DateTime  @updatedAt
+
+  @@index([companyId])
+  @@index([userId])
+}

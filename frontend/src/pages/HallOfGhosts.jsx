@@ -3,8 +3,7 @@ import { PageHeader } from '../components/layout/PageHeader';
 import { GhostPersonaCard, GhostChatInterface } from '../components/ghosts/GhostPersonaCard';
 import { getGhostPersonas } from '../lib/api';
 import { LoadingState } from '../components/common/InsightCard';
-import { ShieldCheck, Users, Search, Flame, DollarSign, Database, Sparkles } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Search } from 'lucide-react';
 
 export function HallOfGhosts() {
   const [personas, setPersonas] = useState([]);
@@ -70,70 +69,12 @@ export function HallOfGhosts() {
     <div className="pb-24 bg-white dark:bg-black text-black dark:text-white min-h-screen">
       <PageHeader
         title="Hall of Ghosts"
-        subtitle="Forensic debriefs with AI founder personas reconstructed exclusively from public trial transcripts, SEC enforcement filings, and verified investigative reporting."
         badge="Interactive Personas"
         tagline="HISTORICAL RECONSTRUCTIONS"
         breadcrumbs={[{ label: 'Intelligence' }, { label: 'Hall of Ghosts' }]}
       />
 
       <div className="site-container">
-        {/* Telemetry Summary Bar */}
-        <div className="grid grid-cols-2 sm:grid-cols-4 gap-3 mb-8">
-          <div className="p-3.5 rounded-[8px] border border-[#E5E5E5] dark:border-[#2A2A2A] bg-[#FAFAFA] dark:bg-[#0D0D0D]">
-            <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3]">
-              <Users className="w-3.5 h-3.5" />
-              <span>Personas Indexed</span>
-            </div>
-            <div className="text-xl font-bold font-mono text-black dark:text-white mt-1">
-              {personas.length} Reconstructed
-            </div>
-          </div>
-
-          <div className="p-3.5 rounded-[8px] border border-[#E5E5E5] dark:border-[#2A2A2A] bg-[#FAFAFA] dark:bg-[#0D0D0D]">
-            <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3]">
-              <DollarSign className="w-3.5 h-3.5" />
-              <span>Capital Evaporated</span>
-            </div>
-            <div className="text-xl font-bold font-mono text-rose-600 dark:text-rose-400 mt-1">
-              $85.0B+
-            </div>
-          </div>
-
-          <div className="p-3.5 rounded-[8px] border border-[#E5E5E5] dark:border-[#2A2A2A] bg-[#FAFAFA] dark:bg-[#0D0D0D]">
-            <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3]">
-              <Database className="w-3.5 h-3.5" />
-              <span>Evidence Fidelity</span>
-            </div>
-            <div className="text-xl font-bold font-mono text-black dark:text-white mt-1">
-              Court Dockets
-            </div>
-          </div>
-
-          <div className="p-3.5 rounded-[8px] border border-[#E5E5E5] dark:border-[#2A2A2A] bg-[#FAFAFA] dark:bg-[#0D0D0D]">
-            <div className="flex items-center gap-1.5 text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3]">
-              <ShieldCheck className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
-              <span>Living Participation</span>
-            </div>
-            <div className="text-xl font-bold font-mono text-black dark:text-white mt-1">
-              None (Synthetic)
-            </div>
-          </div>
-        </div>
-
-        {/* Ethical UX & Legal Integrity Disclosure */}
-        <div className="p-4 rounded-[8px] mb-8 bg-[#FAFAFA] dark:bg-[#0D0D0D] border border-[#E5E5E5] dark:border-[#2A2A2A] flex items-start gap-3.5">
-          <div className="p-1.5 rounded-[4px] bg-white dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] text-black dark:text-white shrink-0 mt-0.5">
-            <ShieldCheck className="w-4 h-4 text-emerald-600 dark:text-emerald-400" />
-          </div>
-          <div className="text-xs space-y-1">
-            <span className="font-bold uppercase tracking-wider font-mono text-[11px] text-black dark:text-white">
-              Forensic Persona Methodology & Legal Safeguards
-            </span>
-            <p className="text-[#737373] dark:text-[#A3A3A3] leading-relaxed">
-              These personas are AI-synthesized debrief models derived exclusively from sworn court depositions, SEC civil litigation releases, Congressional hearing transcripts, and published investigative post-mortems. They are designed for educational failure diagnostics and do not represent living statements.
-            </p>
-          </div>
-        </div>
 
         {/* 2-Column Responsive Layout */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">

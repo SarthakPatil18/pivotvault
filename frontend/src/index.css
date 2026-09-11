@@ -1,0 +1,362 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --color-ink: #000000;
+    --color-ink-2: rgba(0, 0, 0, 0.6);
+    --color-ink-3: #555555;
+    --color-paper: #ffffff;
+    --color-paper-2: #fafafa;
+    --color-line: #efefef;
+    --color-light-black: #0e0e0e;
+    --color-soft-green: #e7f6ea;
+    --color-strong-green: #52c46f;
+    --color-soft-red: #ffe8eb;
+    --color-strong-red: #ff6173;
+  }
+
+  .dark {
+    --color-ink: #ffffff;
+    --color-ink-2: rgba(255, 255, 255, 0.6);
+    --color-ink-3: #888888;
+    --color-paper: #000000;
+    --color-paper-2: #0e0e0e;
+    --color-line: #202020;
+    --color-light-black: #0e0e0e;
+  }
+
+  * {
+    box-sizing: border-box;
+  }
+
+  body {
+    font-family: "Open Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    background-color: var(--color-paper);
+    color: var(--color-ink);
+    margin: 0;
+    padding: 0;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+  }
+
+  /* Minimal custom scrollbar */
+  ::-webkit-scrollbar {
+    width: 6px;
+    height: 6px;
+  }
+  ::-webkit-scrollbar-track {
+    background: transparent;
+  }
+  ::-webkit-scrollbar-thumb {
+    background: #cccccc;
+    border-radius: 3px;
+  }
+  .dark ::-webkit-scrollbar-thumb {
+    background: #333333;
+  }
+  ::-webkit-scrollbar-thumb:hover {
+    background: #999999;
+  }
+}
+
+@layer components {
+  /* 1520px Wide Site Container for 1920x1080 Viewport Fill */
+  .site-container {
+    max-width: 1520px;
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+
+  @media (min-width: 1024px) {
+    .site-container {
+      padding-left: 36px;
+      padding-right: 36px;
+    }
+  }
+
+  @media (max-width: 479px) {
+    .site-container {
+      padding-left: 14px;
+      padding-right: 14px;
+    }
+  }
+
+  /* Primary Editorial Buttons */
+  .btn-primary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #000000;
+    color: #ffffff;
+    border-radius: 5px;
+    padding: 17px 30px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 20px;
+    cursor: pointer;
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    text-decoration: none;
+  }
+  .btn-primary:hover {
+    background-color: #0e0e0e;
+  }
+  .btn-primary:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  @media (max-width: 767px) {
+    .btn-primary {
+      padding: 13px 20px;
+    }
+  }
+
+  /* Inverted Button for Dark Sections */
+  .btn-inverted {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #ffffff;
+    color: #000000;
+    border-radius: 5px;
+    padding: 17px 30px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 20px;
+    cursor: pointer;
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    text-decoration: none;
+  }
+  .btn-inverted:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
+  @media (max-width: 767px) {
+    .btn-inverted {
+      padding: 13px 20px;
+    }
+  }
+
+  /* Nav Small CTA Button */
+  .btn-nav-cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 5px;
+    padding: 9px 15px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 20px;
+    background-color: #000000;
+    color: #ffffff;
+    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    border: none;
+    text-decoration: none;
+  }
+  .btn-nav-cta:hover {
+    background-color: #0e0e0e;
+  }
+  .dark .btn-nav-cta {
+    background-color: #ffffff;
+    color: #000000;
+  }
+  .dark .btn-nav-cta:hover {
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+
+  /* Link CTA with Arrow */
+  .btn-link-cta {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 16px;
+    font-weight: 700;
+    line-height: 22px;
+    color: #000000;
+    text-decoration: none;
+    transition: color 150ms cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+  }
+  .btn-link-cta:hover {
+    color: rgba(0, 0, 0, 0.7);
+  }
+  .dark .btn-link-cta {
+    color: #ffffff;
+  }
+  .dark .btn-link-cta:hover {
+    color: rgba(255, 255, 255, 0.7);
+  }
+
+  /* Standard Inputs */
+  .input-editorial {
+    height: 55px;
+    width: 100%;
+    padding: 15px;
+    border: 2px solid #000000;
+    border-radius: 5px;
+    background-color: #ffffff;
+    font-size: 16px;
+    font-weight: 400;
+    color: #333333;
+    outline: none;
+    transition: border-color 150ms ease;
+  }
+  .input-editorial::placeholder {
+    color: #999999;
+  }
+  .input-editorial:focus {
+    border-color: #3898ec;
+  }
+  .dark .input-editorial {
+    border: 2px solid #2d2d2d;
+    background-color: #1a1a1a;
+    color: #ffffff;
+  }
+  .dark .input-editorial:focus {
+    border-color: #ffffff;
+  }
+
+  /* Editorial Card */
+  .card-editorial {
+    background-color: #ffffff;
+    border: 1px solid #efefef;
+    border-radius: 12px;
+    padding: 24px;
+    transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card-editorial:hover {
+    transform: scale(1.02);
+  }
+  .dark .card-editorial {
+    background-color: #000000;
+    border-color: #202020;
+  }
+
+  /* Newsletter / Case Issue Card (Flat Style) */
+  .card-flat {
+    background: transparent;
+    border: none;
+    transition: transform 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .card-flat:hover {
+    transform: scale(1.02);
+  }
+
+  /* Badges from design.md */
+  .badge-soft-red {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    background-color: #ffe8eb;
+    color: #ff6173;
+    border: 1px solid rgba(255, 97, 115, 0.3);
+  }
+  .dark .badge-soft-red {
+    background-color: #26070a;
+    color: #ff6173;
+    border-color: #551119;
+  }
+
+  .badge-soft-green {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    background-color: #e7f6ea;
+    color: #52c46f;
+    border: 1px solid rgba(82, 196, 111, 0.3);
+  }
+  .dark .badge-soft-green {
+    background-color: #082410;
+    color: #52c46f;
+    border-color: #124d23;
+  }
+
+  .badge-neutral {
+    display: inline-flex;
+    align-items: center;
+    padding: 2px 8px;
+    border-radius: 5px;
+    font-size: 12px;
+    font-weight: 700;
+    line-height: 16px;
+    background-color: #fafafa;
+    color: #000000;
+    border: 1px solid #efefef;
+  }
+  .dark .badge-neutral {
+    background-color: #1a1a1a;
+    color: #ffffff;
+    border-color: #2d2d2d;
+  }
+
+  /* Table styles */
+  .failory-table {
+    width: 100%;
+    border: 1px solid #e5e5e5;
+    border-radius: 5px;
+    background: #ffffff;
+    border-collapse: collapse;
+    overflow: hidden;
+  }
+  .failory-table th {
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    padding: 10px 16px;
+    background-color: #fafafa;
+    border-bottom: 1px solid #e5e5e5;
+    color: #555555;
+    text-align: left;
+  }
+  .failory-table td {
+    font-size: 14px;
+    padding: 12px 16px;
+    border-bottom: 1px solid #e5e5e5;
+    color: #000000;
+  }
+  .failory-table tr:last-child td {
+    border-bottom: none;
+  }
+  .failory-table tr:nth-child(even) {
+    background-color: #f5f5f5;
+  }
+  .failory-table tr:hover {
+    background-color: #fafafa;
+  }
+  .dark .failory-table {
+    border-color: #2d2d2d;
+    background: #000000;
+  }
+  .dark .failory-table th {
+    background-color: #0e0e0e;
+    border-color: #2d2d2d;
+    color: #888888;
+  }
+  .dark .failory-table td {
+    border-color: #202020;
+    color: #ffffff;
+  }
+  .dark .failory-table tr:nth-child(even) {
+    background-color: #0e0e0e;
+  }
+  .dark .failory-table tr:hover {
+    background-color: #1a1a1a;
+  }
+}

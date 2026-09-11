@@ -105,14 +105,14 @@ export function Home() {
 
   // Failure vectors for horizontal bar visualization
   const failureVectors = [
-    { label: 'Unit Economics Collapse', pct: 28, count: 116, isHighRisk: true },
-    { label: 'Lack of Market Need / PMF', pct: 22, count: 91, isHighRisk: false },
-    { label: 'Execution & Operations', pct: 17, count: 70, isHighRisk: false },
-    { label: 'Competition & Moat Deficit', pct: 14, count: 58, isHighRisk: false },
-    { label: 'Runway Exhaustion / Burn', pct: 9, count: 37, isHighRisk: false },
-    { label: 'Fraud & Governance Failure', pct: 5, count: 21, isHighRisk: false },
-    { label: 'Hardware & Manufacturing', pct: 3, count: 12, isHighRisk: false },
-    { label: 'Regulatory & Legal Block', pct: 2, count: 8, isHighRisk: false },
+    { label: 'Unit Economics Collapse', pct: 28, count: 116, isHighRisk: true, color: 'from-rose-500 to-rose-600', dotColor: 'bg-rose-500', barBg: 'bg-rose-500' },
+    { label: 'Lack of Market Need / PMF', pct: 22, count: 91, isHighRisk: false, color: 'from-amber-500 to-amber-600', dotColor: 'bg-amber-500', barBg: 'bg-amber-500' },
+    { label: 'Execution & Operations', pct: 17, count: 70, isHighRisk: false, color: 'from-blue-500 to-blue-600', dotColor: 'bg-blue-500', barBg: 'bg-blue-500' },
+    { label: 'Competition & Moat Deficit', pct: 14, count: 58, isHighRisk: false, color: 'from-purple-500 to-purple-600', dotColor: 'bg-purple-500', barBg: 'bg-purple-500' },
+    { label: 'Runway Exhaustion / Burn', pct: 9, count: 37, isHighRisk: false, color: 'from-orange-500 to-orange-600', dotColor: 'bg-orange-500', barBg: 'bg-orange-500' },
+    { label: 'Fraud & Governance Failure', pct: 5, count: 21, isHighRisk: false, color: 'from-red-600 to-red-700', dotColor: 'bg-red-600', barBg: 'bg-red-600' },
+    { label: 'Hardware & Manufacturing', pct: 3, count: 12, isHighRisk: false, color: 'from-emerald-500 to-emerald-600', dotColor: 'bg-emerald-500', barBg: 'bg-emerald-500' },
+    { label: 'Regulatory & Legal Block', pct: 2, count: 8, isHighRisk: false, color: 'from-indigo-500 to-indigo-600', dotColor: 'bg-indigo-500', barBg: 'bg-indigo-500' },
   ];
 
   // Failure trend data by year
@@ -227,11 +227,11 @@ export function Home() {
             <span className="font-medium">413+ startup autopsies indexed across 14 failure vectors</span>
           </div>
           <div className="hidden md:flex items-center gap-4">
-            <span>Capital Evaporated: <strong className="text-black dark:text-white font-extrabold tabular-nums">$26.8B+</strong></span>
+            <span>Capital Evaporated: <strong className="text-rose-600 dark:text-rose-400 font-extrabold tabular-nums">$26.8B+</strong></span>
             <span className="text-[#D4D4D4] dark:text-[#404040]">•</span>
-            <span>Top Failure Vector: <strong className="text-black dark:text-white font-bold">Unit Economics (28%)</strong></span>
+            <span>Top Failure Vector: <strong className="text-amber-600 dark:text-amber-400 font-bold">Unit Economics (28%)</strong></span>
             <span className="text-[#D4D4D4] dark:text-[#404040]">•</span>
-            <span>AI Reasoning: <strong className="text-black dark:text-white font-bold">Active Dual-Layer</strong></span>
+            <span>AI Reasoning: <strong className="text-indigo-600 dark:text-indigo-400 font-bold">Active Dual-Layer</strong></span>
           </div>
           <Link 
             to="/insights" 
@@ -338,30 +338,30 @@ export function Home() {
 
               {/* 3 Metric Stat Blocks */}
               <div className="grid grid-cols-3 gap-2.5 text-center">
-                <div className="p-3 bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px]">
-                  <div className="text-[22px] leading-tight font-extrabold text-black dark:text-white tabular-nums">
+                <div className="p-3 bg-blue-50/80 dark:bg-blue-950/40 border border-blue-200/80 dark:border-blue-900/50 rounded-[8px] transition-all hover:scale-[1.02]">
+                  <div className="text-[22px] leading-tight font-extrabold text-blue-600 dark:text-blue-400 tabular-nums">
                     413+
                   </div>
-                  <div className="mt-0.5 uppercase text-[#737373] dark:text-[#A3A3A3] text-[11px] font-semibold">
+                  <div className="mt-0.5 uppercase text-blue-700/80 dark:text-blue-300/80 text-[11px] font-bold tracking-wider">
                     Startups
                   </div>
                 </div>
 
-                <div className="p-3 bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px]">
-                  <div className="text-[22px] leading-tight font-extrabold text-black dark:text-white tabular-nums">
+                <div className="p-3 bg-purple-50/80 dark:bg-purple-950/40 border border-purple-200/80 dark:border-purple-900/50 rounded-[8px] transition-all hover:scale-[1.02]">
+                  <div className="text-[22px] leading-tight font-extrabold text-purple-600 dark:text-purple-400 tabular-nums">
                     14
                   </div>
-                  <div className="mt-0.5 uppercase text-[#737373] dark:text-[#A3A3A3] text-[11px] font-semibold">
+                  <div className="mt-0.5 uppercase text-purple-700/80 dark:text-purple-300/80 text-[11px] font-bold tracking-wider">
                     Vectors
                   </div>
                 </div>
 
                 {/* Highlighted Stat Card ($26.8B+ EVAPORATED) */}
-                <div className="p-3 bg-black dark:bg-white border border-black dark:border-white rounded-[8px] text-white dark:text-black">
-                  <div className="text-[22px] leading-tight font-extrabold tabular-nums">
+                <div className="p-3 bg-gradient-to-br from-rose-600 to-rose-700 border border-rose-500 rounded-[8px] text-white shadow-sm transition-all hover:scale-[1.02]">
+                  <div className="text-[22px] leading-tight font-extrabold tabular-nums tracking-tight">
                     $26.8B+
                   </div>
-                  <div className="mt-0.5 uppercase text-[11px] font-bold tracking-wider opacity-80">
+                  <div className="mt-0.5 uppercase text-[11px] font-bold tracking-wider text-rose-100">
                     Evaporated
                   </div>
                 </div>
@@ -383,45 +383,54 @@ export function Home() {
                   <div>
                     <div className="flex items-center justify-between text-[13px] mb-1">
                       <span className="flex items-center gap-1.5 text-black dark:text-white text-[14px] font-bold">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#DC2626]" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
                         Unit Economics Collapse
                       </span>
-                      <span className="text-black dark:text-white font-extrabold tabular-nums">
+                      <span className="text-rose-600 dark:text-rose-400 font-extrabold tabular-nums">
                         28%
                       </span>
                     </div>
                     <div className="w-full rounded-full overflow-hidden bg-[#E5E5E5] dark:bg-[#2A2A2A] h-1.5">
-                      <div className="h-full rounded-full bg-black dark:bg-white" style={{ width: '28%' }} />
+                      <div className="h-full rounded-full bg-rose-500 dark:bg-rose-400" style={{ width: '28%' }} />
                     </div>
                   </div>
 
                   <div>
                     <div className="flex items-center justify-between text-[12px] mb-1">
-                      <span className="text-[#737373] dark:text-[#A3A3A3]">Product-Market Fit Deficit</span>
-                      <span className="text-black dark:text-white font-bold tabular-nums">22%</span>
+                      <span className="flex items-center gap-1.5 text-[#737373] dark:text-[#A3A3A3]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-amber-500" />
+                        Product-Market Fit Deficit
+                      </span>
+                      <span className="text-amber-600 dark:text-amber-400 font-bold tabular-nums">22%</span>
                     </div>
                     <div className="w-full rounded-full overflow-hidden bg-[#E5E5E5] dark:bg-[#2A2A2A] h-1.5">
-                      <div className="h-full rounded-full bg-[#404040] dark:bg-[#D4D4D4]" style={{ width: '22%' }} />
+                      <div className="h-full rounded-full bg-amber-500 dark:bg-amber-400" style={{ width: '22%' }} />
                     </div>
                   </div>
 
                   <div>
                     <div className="flex items-center justify-between text-[12px] mb-1">
-                      <span className="text-[#737373] dark:text-[#A3A3A3]">Execution Void</span>
-                      <span className="text-black dark:text-white font-bold tabular-nums">17%</span>
+                      <span className="flex items-center gap-1.5 text-[#737373] dark:text-[#A3A3A3]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-blue-500" />
+                        Execution Void
+                      </span>
+                      <span className="text-blue-600 dark:text-blue-400 font-bold tabular-nums">17%</span>
                     </div>
                     <div className="w-full rounded-full overflow-hidden bg-[#E5E5E5] dark:bg-[#2A2A2A] h-1.5">
-                      <div className="h-full rounded-full bg-[#737373] dark:bg-[#A3A3A3]" style={{ width: '17%' }} />
+                      <div className="h-full rounded-full bg-blue-500 dark:bg-blue-400" style={{ width: '17%' }} />
                     </div>
                   </div>
 
                   <div>
                     <div className="flex items-center justify-between text-[12px] mb-1">
-                      <span className="text-[#737373] dark:text-[#A3A3A3]">Competition & Platform Moat</span>
-                      <span className="text-black dark:text-white font-bold tabular-nums">14%</span>
+                      <span className="flex items-center gap-1.5 text-[#737373] dark:text-[#A3A3A3]">
+                        <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
+                        Competition & Platform Moat
+                      </span>
+                      <span className="text-purple-600 dark:text-purple-400 font-bold tabular-nums">14%</span>
                     </div>
                     <div className="w-full rounded-full overflow-hidden bg-[#E5E5E5] dark:bg-[#2A2A2A] h-1.5">
-                      <div className="h-full rounded-full bg-[#A3A3A3] dark:bg-[#737373]" style={{ width: '14%' }} />
+                      <div className="h-full rounded-full bg-purple-500 dark:bg-purple-400" style={{ width: '14%' }} />
                     </div>
                   </div>
                 </div>
@@ -515,125 +524,129 @@ export function Home() {
           </Link>
         </div>
 
-        {/* 4 Analytics Metric Cards - Strict B&W */}
+        {/* 4 Analytics Metric Cards - Colored Accent System */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
           {/* Card 1: TOTAL FAILURES */}
-          <div className="bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] p-6 shadow-sm hover:border-black dark:hover:border-white transition-all">
+          <div className="group bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] hover:border-rose-300 dark:hover:border-rose-800/60 rounded-[8px] p-6 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-[4px] flex items-center justify-center shrink-0 bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-[6px] flex items-center justify-center shrink-0 bg-rose-50 dark:bg-rose-950/40 text-rose-600 dark:text-rose-400 border border-rose-200/80 dark:border-rose-900/50">
                   <AlertTriangle className="w-4 h-4" />
                 </div>
                 <span className="text-[#737373] dark:text-[#A3A3A3] text-[11px] font-bold uppercase tracking-wider">
                   TOTAL FAILURES
                 </span>
               </div>
-              <span className="bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[4px] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
+              <span className="bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/40 rounded-[4px] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
                 +18
               </span>
             </div>
             <div className="flex items-end justify-between mb-3">
-              <div className="text-3xl sm:text-4xl font-extrabold text-black dark:text-white tabular-nums tracking-tight leading-none">
+              <div className="text-3xl sm:text-4xl font-extrabold text-black dark:text-white group-hover:text-rose-600 dark:group-hover:text-rose-400 tabular-nums tracking-tight leading-none transition-colors">
                 413
               </div>
               <MiniSparkline
                 data={[20, 32, 28, 45, 42, 58, 62, 55, 72, 75]}
-                stroke="#000000"
-                fill="rgba(0, 0, 0, 0.08)"
+                stroke="#E11D48"
+                fill="rgba(225, 29, 72, 0.12)"
               />
             </div>
-            <div className="text-[#737373] dark:text-[#A3A3A3] text-[12px] font-medium">
-              This quarter
+            <div className="text-[#737373] dark:text-[#A3A3A3] text-[12px] font-medium flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-rose-500 inline-block" />
+              <span>This quarter</span>
             </div>
           </div>
 
           {/* Card 2: VAULTED STARTUPS */}
-          <div className="bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] p-6 shadow-sm hover:border-black dark:hover:border-white transition-all">
+          <div className="group bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] hover:border-blue-300 dark:hover:border-blue-800/60 rounded-[8px] p-6 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-[4px] flex items-center justify-center shrink-0 bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-[6px] flex items-center justify-center shrink-0 bg-blue-50 dark:bg-blue-950/40 text-blue-600 dark:text-blue-400 border border-blue-200/80 dark:border-blue-900/50">
                   <BookOpen className="w-4 h-4" />
                 </div>
                 <span className="text-[#737373] dark:text-[#A3A3A3] text-[11px] font-bold uppercase tracking-wider">
                   VAULTED STARTUPS
                 </span>
               </div>
-              <span className="bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[4px] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
+              <span className="bg-blue-50 dark:bg-blue-950/40 text-blue-700 dark:text-blue-300 border border-blue-200/80 dark:border-blue-800/40 rounded-[4px] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
                 +214
               </span>
             </div>
             <div className="flex items-end justify-between mb-3">
-              <div className="text-3xl sm:text-4xl font-extrabold text-black dark:text-white tabular-nums tracking-tight leading-none">
+              <div className="text-3xl sm:text-4xl font-extrabold text-black dark:text-white group-hover:text-blue-600 dark:group-hover:text-blue-400 tabular-nums tracking-tight leading-none transition-colors">
                 413
               </div>
               <MiniSparkline
                 data={[30, 34, 38, 42, 41, 46, 50, 54, 55, 60]}
-                stroke="#404040"
-                fill="rgba(0, 0, 0, 0.05)"
+                stroke="#2563EB"
+                fill="rgba(37, 99, 235, 0.12)"
               />
             </div>
-            <div className="text-[#737373] dark:text-[#A3A3A3] text-[12px] font-medium">
-              With postmortems
+            <div className="text-[#737373] dark:text-[#A3A3A3] text-[12px] font-medium flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-blue-500 inline-block" />
+              <span>With verified postmortems</span>
             </div>
           </div>
 
           {/* Card 3: AVG RISK SCORE */}
-          <div className="bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] p-6 shadow-sm hover:border-black dark:hover:border-white transition-all">
+          <div className="group bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] hover:border-amber-300 dark:hover:border-amber-800/60 rounded-[8px] p-6 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-[4px] flex items-center justify-center shrink-0 bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-[6px] flex items-center justify-center shrink-0 bg-amber-50 dark:bg-amber-950/40 text-amber-600 dark:text-amber-400 border border-amber-200/80 dark:border-amber-900/50">
                   <Gauge className="w-4 h-4" />
                 </div>
                 <span className="text-[#737373] dark:text-[#A3A3A3] text-[11px] font-bold uppercase tracking-wider">
                   AVG RISK SCORE
                 </span>
               </div>
-              <span className="bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[4px] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
+              <span className="bg-amber-50 dark:bg-amber-950/40 text-amber-700 dark:text-amber-300 border border-amber-200/80 dark:border-amber-800/40 rounded-[4px] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
                 +3.2
               </span>
             </div>
             <div className="flex items-end justify-between mb-3">
-              <div className="text-3xl sm:text-4xl font-extrabold text-black dark:text-white tabular-nums tracking-tight leading-none">
+              <div className="text-3xl sm:text-4xl font-extrabold text-black dark:text-white group-hover:text-amber-600 dark:group-hover:text-amber-400 tabular-nums tracking-tight leading-none transition-colors">
                 68.4
               </div>
               <MiniSparkline
                 data={[55, 58, 60, 62, 61, 65, 66, 67, 68, 68.4]}
-                stroke="#737373"
-                fill="rgba(0, 0, 0, 0.04)"
+                stroke="#D97706"
+                fill="rgba(217, 119, 6, 0.12)"
               />
             </div>
-            <div className="text-[#737373] dark:text-[#A3A3A3] text-[12px] font-medium">
-              All analyzed startups
+            <div className="text-[#737373] dark:text-[#A3A3A3] text-[12px] font-medium flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-500 inline-block" />
+              <span>All analyzed startups</span>
             </div>
           </div>
 
           {/* Card 4: AI INSIGHTS GENERATED */}
-          <div className="bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] p-6 shadow-sm hover:border-black dark:hover:border-white transition-all">
+          <div className="group bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] hover:border-purple-300 dark:hover:border-purple-800/60 rounded-[8px] p-6 shadow-sm hover:shadow-md transition-all">
             <div className="flex items-start justify-between mb-4">
-              <div className="flex items-center gap-2">
-                <div className="w-8 h-8 rounded-[4px] flex items-center justify-center shrink-0 bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]">
+              <div className="flex items-center gap-2.5">
+                <div className="w-8 h-8 rounded-[6px] flex items-center justify-center shrink-0 bg-purple-50 dark:bg-purple-950/40 text-purple-600 dark:text-purple-400 border border-purple-200/80 dark:border-purple-900/50">
                   <Brain className="w-4 h-4" />
                 </div>
                 <span className="text-[#737373] dark:text-[#A3A3A3] text-[11px] font-bold uppercase tracking-wider">
                   AI INSIGHTS
                 </span>
               </div>
-              <span className="bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[4px] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
+              <span className="bg-purple-50 dark:bg-purple-950/40 text-purple-700 dark:text-purple-300 border border-purple-200/80 dark:border-purple-800/40 rounded-[4px] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
                 +1,204
               </span>
             </div>
             <div className="flex items-end justify-between mb-3">
-              <div className="text-3xl sm:text-4xl font-extrabold text-black dark:text-white tabular-nums tracking-tight leading-none">
+              <div className="text-3xl sm:text-4xl font-extrabold text-black dark:text-white group-hover:text-purple-600 dark:group-hover:text-purple-400 tabular-nums tracking-tight leading-none transition-colors">
                 48,209
               </div>
               <MiniSparkline
                 data={[10, 18, 22, 28, 32, 38, 45, 48, 52, 56]}
-                stroke="#1A1A1A"
-                fill="rgba(0, 0, 0, 0.05)"
+                stroke="#8B5CF6"
+                fill="rgba(139, 92, 246, 0.12)"
               />
             </div>
-            <div className="text-[#737373] dark:text-[#A3A3A3] text-[12px] font-medium">
-              Last 30 days
+            <div className="text-[#737373] dark:text-[#A3A3A3] text-[12px] font-medium flex items-center gap-1.5">
+              <span className="w-1.5 h-1.5 rounded-full bg-purple-500 inline-block" />
+              <span>Last 30 days</span>
             </div>
           </div>
         </div>
@@ -660,10 +673,8 @@ export function Home() {
               {failureVectors.map((vec) => (
                 <div key={vec.label}>
                   <div className="flex items-center justify-between text-[13px] mb-1.5">
-                    <span className={`flex items-center gap-2 ${vec.isHighRisk ? 'text-black dark:text-white font-bold' : 'text-[#737373] dark:text-[#A3A3A3] font-medium'}`}>
-                      {vec.isHighRisk && (
-                        <span className="w-2 h-2 rounded-full bg-[#DC2626]" />
-                      )}
+                    <span className={`flex items-center gap-2 ${vec.isHighRisk ? 'text-black dark:text-white font-bold' : 'text-[#525252] dark:text-[#D4D4D4] font-medium'}`}>
+                      <span className={`w-2 h-2 rounded-full ${vec.dotColor || 'bg-zinc-400'} shrink-0`} />
                       {vec.label}
                     </span>
                     <div className="flex items-center gap-3 text-[12px]">
@@ -673,9 +684,9 @@ export function Home() {
                       </span>
                     </div>
                   </div>
-                  <div className="w-full rounded-full bg-[#E5E5E5] dark:bg-[#2A2A2A] h-1.5 overflow-hidden">
+                  <div className="w-full rounded-full bg-[#E5E5E5] dark:bg-[#2A2A2A] h-2 overflow-hidden">
                     <div 
-                      className="h-full rounded-full transition-all duration-300 bg-black dark:bg-white"
+                      className={`h-full rounded-full transition-all duration-500 bg-gradient-to-r ${vec.color || 'from-zinc-500 to-zinc-700'}`}
                       style={{ width: `${vec.pct * 3}%` }}
                     />
                   </div>
@@ -696,25 +707,29 @@ export function Home() {
                     Annual collapse concentration (2016–2024)
                   </p>
                 </div>
-                <span className="bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[4px] px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider">
+                <span className="bg-rose-50 dark:bg-rose-950/40 text-rose-700 dark:text-rose-300 border border-rose-200/80 dark:border-rose-800/40 rounded-[4px] px-2 py-0.5 text-[11px] font-bold uppercase tracking-wider">
                   Peak: 2022 Crunch
                 </span>
               </div>
 
-              {/* Bar visualization of annual failures - Grayscale */}
+              {/* Bar visualization of annual failures */}
               <div className="mt-6 pt-4 grid grid-cols-9 gap-2 h-44 items-end pb-2 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
                 {trendData.map((d) => {
                   const heightPct = Math.round((d.failures / 84) * 100);
                   return (
                     <div key={d.year} className="flex flex-col items-center gap-2 group h-full justify-end">
-                      <span className="text-[10px] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap text-[#737373] dark:text-[#A3A3A3] tabular-nums">
+                      <span className={`text-[10px] transition-opacity whitespace-nowrap tabular-nums ${d.isPeak ? 'opacity-100 text-rose-600 dark:text-rose-400 font-extrabold' : 'opacity-0 group-hover:opacity-100 text-[#737373] dark:text-[#A3A3A3]'}`}>
                         {d.failures}
                       </span>
                       <div 
-                        className={`w-full rounded-t-[3px] transition-all ${d.isPeak ? 'bg-black dark:bg-white ring-1 ring-black dark:ring-white' : 'bg-[#737373] dark:bg-[#404040] hover:bg-black dark:hover:bg-white'}`}
+                        className={`w-full rounded-t-[4px] transition-all duration-300 ${
+                          d.isPeak 
+                            ? 'bg-gradient-to-t from-rose-600 to-rose-500 shadow-sm shadow-rose-500/30 ring-1 ring-rose-400' 
+                            : 'bg-blue-500/40 hover:bg-blue-600 dark:bg-blue-600/30 dark:hover:bg-blue-500'
+                        }`}
                         style={{ height: `${heightPct}%` }}
                       />
-                      <span className={`text-[11px] font-bold ${d.isPeak ? 'text-black dark:text-white underline' : 'text-[#737373] dark:text-[#A3A3A3]'}`}>
+                      <span className={`text-[11px] font-bold ${d.isPeak ? 'text-rose-600 dark:text-rose-400 underline decoration-rose-400 font-extrabold' : 'text-[#737373] dark:text-[#A3A3A3]'}`}>
                         {d.year.slice(2)}'
                       </span>
                     </div>
@@ -740,10 +755,11 @@ export function Home() {
         <div className="p-8 lg:p-10 rounded-[8px] bg-black dark:bg-[#0A0A0A] text-white border border-[#2A2A2A] shadow-lg">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             <div className="lg:col-span-5 space-y-3">
-              <span className="inline-block px-2 py-0.5 rounded-[4px] bg-white/10 text-white border border-white/20 text-[10px] font-bold uppercase tracking-wider">
+              <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-[4px] bg-rose-500/10 text-rose-300 border border-rose-500/30 text-[10px] font-bold uppercase tracking-wider">
+                <span className="w-1.5 h-1.5 rounded-full bg-rose-500 animate-pulse" />
                 DATASET-DERIVED METRIC
               </span>
-              <div className="text-5xl sm:text-6xl font-extrabold text-white tabular-nums tracking-tight">
+              <div className="text-5xl sm:text-6xl font-black tabular-nums tracking-tight bg-gradient-to-r from-rose-500 via-rose-400 to-amber-300 bg-clip-text text-transparent">
                 $26.8B+
               </div>
               <h3 className="text-xl font-bold text-white tracking-tight">CAPITAL EVAPORATED</h3>
@@ -753,7 +769,7 @@ export function Home() {
               <div className="pt-2">
                 <Link 
                   to="/explore" 
-                  className="inline-flex items-center justify-center px-5 py-2.5 text-[13px] font-bold rounded-[6px] bg-white text-black hover:bg-[#E5E5E5] transition-colors"
+                  className="inline-flex items-center justify-center px-5 py-2.5 text-[13px] font-bold rounded-[6px] bg-white text-black hover:bg-rose-50 hover:text-rose-600 transition-colors shadow-sm"
                 >
                   Audit Financial Sinks →
                 </Link>
@@ -762,28 +778,32 @@ export function Home() {
 
             <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               {[
-                { name: 'WeWork', lost: '$12.8B', sector: 'PropTech', cause: 'Lease arbitrage vs 30-day flex' },
-                { name: 'Quibi', lost: '$1.75B', sector: 'Streaming', cause: 'Hardware-agnostic mobile lock-in' },
-                { name: 'Theranos', lost: '$1.4B', sector: 'HealthTech', cause: 'Unverified medical diagnostics' },
-                { name: 'Better Place', lost: '$900M', sector: 'CleanTech', cause: 'EV battery-swap capex trap' },
-                { name: 'Fast', lost: '$125M', sector: 'FinTech', cause: '$10M/mo burn with $50k ARR' },
-                { name: 'Juicero', lost: '$120M', sector: 'Hardware', cause: '$400 press with hand-squeezable bag' }
+                { name: 'WeWork', lost: '$12.8B', sector: 'PropTech', sectorColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30', cause: 'Lease arbitrage vs 30-day flex' },
+                { name: 'Quibi', lost: '$1.75B', sector: 'Streaming', sectorColor: 'bg-purple-500/15 text-purple-300 border-purple-500/30', cause: 'Hardware-agnostic mobile lock-in' },
+                { name: 'Theranos', lost: '$1.4B', sector: 'HealthTech', sectorColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30', cause: 'Unverified medical diagnostics' },
+                { name: 'Better Place', lost: '$900M', sector: 'CleanTech', sectorColor: 'bg-teal-500/15 text-teal-300 border-teal-500/30', cause: 'EV battery-swap capex trap' },
+                { name: 'Fast', lost: '$125M', sector: 'FinTech', sectorColor: 'bg-blue-500/15 text-blue-300 border-blue-500/30', cause: '$10M/mo burn with $50k ARR' },
+                { name: 'Juicero', lost: '$120M', sector: 'Hardware', sectorColor: 'bg-rose-500/15 text-rose-300 border-rose-500/30', cause: '$400 press with hand-squeezable bag' }
               ].map((item) => (
                 <div 
                   key={item.name} 
-                  className="p-3.5 bg-[#1A1A1A] border border-[#2A2A2A] rounded-[6px] hover:border-white/40 transition-colors"
+                  className="p-3.5 bg-[#141414] border border-[#2A2A2A] rounded-[6px] hover:border-rose-500/40 transition-colors group"
                 >
                   <div className="flex items-center justify-between">
                     <div className="flex items-center gap-2">
                       <CompanyLogo name={item.name} size="xs" />
                       <span className="font-bold text-white text-[14px]">{item.name}</span>
                     </div>
-                    <span className="font-extrabold text-white text-[14px] tabular-nums">
+                    <span className="font-extrabold text-rose-400 text-[14px] tabular-nums group-hover:text-rose-300 transition-colors">
                       {item.lost}
                     </span>
                   </div>
-                  <div className="text-[10px] text-[#A3A3A3] font-bold uppercase tracking-wider mt-1">{item.sector}</div>
-                  <div className="text-[12px] text-[#D4D4D4] mt-1 line-clamp-1">{item.cause}</div>
+                  <div className="mt-1.5 flex items-center gap-2">
+                    <span className={`inline-block px-1.5 py-0.5 rounded-[3px] text-[10px] font-bold uppercase tracking-wider border ${item.sectorColor}`}>
+                      {item.sector}
+                    </span>
+                  </div>
+                  <div className="text-[12px] text-[#A3A3A3] mt-1.5 line-clamp-1">{item.cause}</div>
                 </div>
               ))}
             </div>
@@ -829,24 +849,24 @@ export function Home() {
                     const industry = heatmapIndustries[idx];
                     const isSelected = activeHeatmapCell.vector === row.name && activeHeatmapCell.industry === industry;
                     
-                    // Grayscale intensity ramp
-                    let cellBg = 'bg-[#F5F5F5] text-black dark:bg-[#1A1A1A] dark:text-[#A3A3A3]';
+                    // Color intensity risk ramp
+                    let cellBg = 'bg-slate-100 text-slate-700 dark:bg-zinc-800/80 dark:text-zinc-300';
                     if (intensity === 5) {
-                      cellBg = 'bg-black text-white dark:bg-white dark:text-black';
+                      cellBg = 'bg-rose-600 text-white shadow-sm shadow-rose-600/30 font-extrabold';
                     } else if (intensity === 4) {
-                      cellBg = 'bg-[#404040] text-white';
+                      cellBg = 'bg-rose-500/85 text-white font-bold';
                     } else if (intensity === 3) {
-                      cellBg = 'bg-[#737373] text-white';
+                      cellBg = 'bg-amber-500 text-white font-bold';
                     } else if (intensity === 2) {
-                      cellBg = 'bg-[#D4D4D4] text-black';
+                      cellBg = 'bg-amber-100 text-amber-900 dark:bg-amber-950/60 dark:text-amber-200 font-medium';
                     }
 
                     return (
                       <td key={industry} className="py-2.5 px-2 text-center">
                         <button
                           onClick={() => setActiveHeatmapCell({ vector: row.name, industry, detail: row.detail })}
-                          className={`w-10 h-8 rounded-[4px] text-[11px] font-bold transition-transform hover:scale-105 inline-flex items-center justify-center cursor-pointer ${cellBg} ${
-                            isSelected ? 'ring-2 ring-black dark:ring-white scale-105' : ''
+                          className={`w-10 h-8 rounded-[4px] text-[11px] transition-all hover:scale-105 inline-flex items-center justify-center cursor-pointer ${cellBg} ${
+                            isSelected ? 'ring-2 ring-rose-500 shadow-md scale-105' : ''
                           }`}
                           title={`${row.name} × ${industry}: Risk Level ${intensity}/5`}
                         >
@@ -1632,59 +1652,71 @@ export function Home() {
 
             <div className="p-6 space-y-5 bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] shadow-sm">
               <div className="grid grid-cols-3 gap-3 text-center">
-                <div className="p-3 bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[6px]">
-                  <div className="text-2xl font-extrabold text-black dark:text-white tabular-nums">413+</div>
-                  <div className="text-[10px] font-bold uppercase text-[#737373] dark:text-[#A3A3A3] tracking-wider mt-0.5">Startups</div>
+                <div className="p-3 bg-blue-50/70 dark:bg-blue-950/30 border border-blue-200/60 dark:border-blue-900/40 rounded-[6px]">
+                  <div className="text-2xl font-extrabold text-blue-600 dark:text-blue-400 tabular-nums">413+</div>
+                  <div className="text-[10px] font-bold uppercase text-blue-700 dark:text-blue-300 tracking-wider mt-0.5">Startups</div>
                 </div>
-                <div className="p-3 bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[6px]">
-                  <div className="text-2xl font-extrabold text-black dark:text-white tabular-nums">40+</div>
-                  <div className="text-[10px] font-bold uppercase text-[#737373] dark:text-[#A3A3A3] tracking-wider mt-0.5">Countries</div>
+                <div className="p-3 bg-purple-50/70 dark:bg-purple-950/30 border border-purple-200/60 dark:border-purple-900/40 rounded-[6px]">
+                  <div className="text-2xl font-extrabold text-purple-600 dark:text-purple-400 tabular-nums">40+</div>
+                  <div className="text-[10px] font-bold uppercase text-purple-700 dark:text-purple-300 tracking-wider mt-0.5">Countries</div>
                 </div>
-                <div className="p-3 bg-black dark:bg-white text-white dark:text-black rounded-[6px]">
+                <div className="p-3 bg-gradient-to-br from-rose-600 to-rose-700 text-white rounded-[6px] shadow-sm">
                   <div className="text-2xl font-extrabold tabular-nums">14</div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider mt-0.5 opacity-80">Vectors</div>
+                  <div className="text-[10px] font-bold uppercase tracking-wider mt-0.5 text-rose-100">Vectors</div>
                 </div>
               </div>
 
-              {/* Regional Concentration Bars - Grayscale */}
+              {/* Regional Concentration Bars */}
               <div className="space-y-3 pt-1">
                 <div>
                   <div className="flex justify-between text-[12px] font-medium mb-1 text-black dark:text-white">
-                    <span>North America (Silicon Valley, NY, Austin)</span>
-                    <span className="font-bold tabular-nums">68%</span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-blue-500 shrink-0" />
+                      North America (Silicon Valley, NY, Austin)
+                    </span>
+                    <span className="font-bold tabular-nums text-blue-600 dark:text-blue-400">68%</span>
                   </div>
                   <div className="w-full h-2 rounded-full overflow-hidden bg-[#E5E5E5] dark:bg-[#2A2A2A]">
-                    <div className="h-full rounded-full bg-black dark:bg-white" style={{ width: '68%' }} />
+                    <div className="h-full rounded-full bg-gradient-to-r from-blue-500 to-blue-600" style={{ width: '68%' }} />
                   </div>
                 </div>
 
                 <div>
                   <div className="flex justify-between text-[12px] font-medium mb-1 text-black dark:text-white">
-                    <span>Europe (London, Berlin, Paris)</span>
-                    <span className="font-bold tabular-nums">18%</span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-purple-500 shrink-0" />
+                      Europe (London, Berlin, Paris)
+                    </span>
+                    <span className="font-bold tabular-nums text-purple-600 dark:text-purple-400">18%</span>
                   </div>
                   <div className="w-full h-2 rounded-full overflow-hidden bg-[#E5E5E5] dark:bg-[#2A2A2A]">
-                    <div className="h-full rounded-full bg-[#525252] dark:bg-[#A3A3A3]" style={{ width: '18%' }} />
+                    <div className="h-full rounded-full bg-gradient-to-r from-purple-500 to-purple-600" style={{ width: '18%' }} />
                   </div>
                 </div>
 
                 <div>
                   <div className="flex justify-between text-[12px] font-medium mb-1 text-black dark:text-white">
-                    <span>Asia-Pacific (Bengaluru, Singapore, Sydney)</span>
-                    <span className="font-bold tabular-nums">11%</span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-emerald-500 shrink-0" />
+                      Asia-Pacific (Bengaluru, Singapore, Sydney)
+                    </span>
+                    <span className="font-bold tabular-nums text-emerald-600 dark:text-emerald-400">11%</span>
                   </div>
                   <div className="w-full h-2 rounded-full overflow-hidden bg-[#E5E5E5] dark:bg-[#2A2A2A]">
-                    <div className="h-full rounded-full bg-[#737373] dark:bg-[#737373]" style={{ width: '11%' }} />
+                    <div className="h-full rounded-full bg-gradient-to-r from-emerald-500 to-emerald-600" style={{ width: '11%' }} />
                   </div>
                 </div>
 
                 <div>
                   <div className="flex justify-between text-[12px] font-medium mb-1 text-black dark:text-white">
-                    <span>Latin America & Rest of World</span>
-                    <span className="font-bold tabular-nums">3%</span>
+                    <span className="flex items-center gap-1.5">
+                      <span className="w-2 h-2 rounded-full bg-amber-500 shrink-0" />
+                      Latin America & Rest of World
+                    </span>
+                    <span className="font-bold tabular-nums text-amber-600 dark:text-amber-400">3%</span>
                   </div>
                   <div className="w-full h-2 rounded-full overflow-hidden bg-[#E5E5E5] dark:bg-[#2A2A2A]">
-                    <div className="h-full rounded-full bg-[#A3A3A3] dark:bg-[#525252]" style={{ width: '3%' }} />
+                    <div className="h-full rounded-full bg-gradient-to-r from-amber-500 to-amber-600" style={{ width: '3%' }} />
                   </div>
                 </div>
               </div>

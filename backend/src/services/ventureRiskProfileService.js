@@ -208,7 +208,7 @@ Return a strict JSON object with this exact structure:
 }`;
 
   try {
-    const raw = await callGroq(prompt, { maxTokens: 1200, model: 'llama-3.3-70b-versatile' })
+    const raw = await callGroq(prompt, { maxTokens: 1200, model: process.env.GROQ_MODEL || 'openai/gpt-oss-120b' })
       .catch(() => callGemini(prompt, { maxTokens: 1200, json: true }));
     
     const parsed = parseJSON(raw);

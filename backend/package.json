@@ -1,6 +1,6 @@
 {
   "name": "pivotvault-backend",
-  "version": "1.0.0",
+  "version": "3.0.0",
   "description": "PivotVault Backend — AI-powered startup failure intelligence platform",
   "main": "src/index.js",
   "scripts": {

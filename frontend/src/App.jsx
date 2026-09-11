@@ -39,6 +39,7 @@ export function App() {
               <Route path="/insights" element={<Insights />} />
               <Route path="/startup-graph" element={<StartupGraph />} />
               <Route path="/founder-confessions" element={<FounderConfessions />} />
+              <Route path="/hall-of-confessions" element={<Navigate to="/founder-confessions" replace />} />
               <Route path="/hall-of-ghosts" element={<HallOfGhosts />} />
               <Route path="/ai-assistant" element={<AIAssistant />} />
 

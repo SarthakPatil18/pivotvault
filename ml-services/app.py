@@ -129,3 +129,8 @@ def score(request: ScoreRequest) -> ScoreResponse:
         idea_score,
     )
     return ScoreResponse(ideaScore=idea_score, raw=raw, modelVersion=model_version)
+
+
+@app.post("/predict", response_model=ScoreResponse)
+def predict(request: ScoreRequest) -> ScoreResponse:
+    return score(request)

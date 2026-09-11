@@ -55,7 +55,10 @@ async function scoreIdea(features) {
   try {
     const url = await serviceUrl();
     await checkHealth(url);
-    const response = await timeoutFetch(`${url}/score`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ features }) });
+    let response = await timeoutFetch(`${url}/predict`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ features }) });
+    if (!response.ok) {
+      response = await timeoutFetch(`${url}/score`, { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ features }) });
+    }
     if (!response.ok) throw new Error(`Status ${response.status}`);
     const payload = await response.json();
     if (Number.isFinite(payload.ideaScore) && payload.ideaScore >= 0 && payload.ideaScore <= 100) {

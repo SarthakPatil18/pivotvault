@@ -1,15 +1,38 @@
 const { Router } = require('express');
 const { callGemini, wrapExternalContent } = require('../agents/lib/ai');
 const { scoreIdea } = require('../agents/lib/ideaScoreModel');
+const { estimateFeaturesFromContext } = require('../agents/specialists/riskAnalyst');
 const { ragAsk, ragSearch } = require('../rag/rag.service');
 
 const router = Router();
 router.post('/risk-scan', async (req, res, next) => {
   try {
     const q = req.body.query ?? req.body.ideaText ?? 'Startup Idea';
-    const chunks = await ragSearch(q, { limit: 5 });
-    const score = await scoreIdea(req.body.features);
-    res.json({ ideaScore: score.ideaScore, scoreBreakdown: score.breakdown, sources: chunks });
+    let chunks = [];
+    try {
+      chunks = await ragSearch(q, { limit: 5 });
+    } catch {
+      chunks = [];
+    }
+
+    let features = req.body.features;
+    if (!features || Object.keys(features).length === 0 || !Number.isFinite(features.funding_rounds)) {
+      features = await estimateFeaturesFromContext({
+        ideaText: q,
+        industry: req.body.industry,
+        targetCustomer: req.body.targetCustomer,
+        businessModel: req.body.businessModel,
+        burnRate: req.body.burnRate
+      });
+    }
+
+    const score = await scoreIdea(features);
+    res.json({
+      ideaScore: score.ideaScore,
+      scoreBreakdown: score.breakdown,
+      estimatedFeatures: features,
+      sources: chunks
+    });
   } catch (error) { next(error); }
 });
 

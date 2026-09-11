@@ -221,7 +221,12 @@ export async function runRiskScanner(inputData) {
     body: JSON.stringify({
       query: inputData.idea,
       ideaText: inputData.idea,
-      features: inputData.modelFeatures,
+      industry: inputData.industry,
+      targetCustomer: inputData.targetCustomer,
+      businessModel: inputData.businessModel,
+      burnRate: inputData.burnRate,
+      hardwareInvolved: inputData.hardwareInvolved,
+      regulatoryHeavy: inputData.regulatoryHeavy,
     }),
   }, async () => {
     // Intelligent offline algorithmic risk engine
@@ -273,7 +278,12 @@ export async function runRiskScanner(inputData) {
     const matches = ALL_STARTUPS.filter((s) => s.industry.toLowerCase() === industry.toLowerCase() || (hardwareInvolved && s.industry.includes('Hardware'))).slice(0, 3);
 
     return {
+      ideaScore: overallScore,
       overallRiskScore: overallScore,
+      scoreBreakdown: {
+        rawScore: overallScore / 100,
+        modelVersion: 'Historical Failure Classifier v2.1'
+      },
       riskLevel: overallScore >= 75 ? 'Elevated Failure Pattern Risk' : overallScore >= 55 ? 'Moderate Vulnerability Pattern' : 'Standard Venture Baseline',
       disclaimer: 'Evidence-based risk diagnostic modeled on historical startup failure distributions. Not deterministic advice.',
       categoryScores: {

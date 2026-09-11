@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { ShieldAlert, MessageSquare, Send, Sparkles, AlertCircle, RotateCcw, Bot } from 'lucide-react';
 import { formatCurrency } from '../../lib/utils';
+import { CompanyLogo } from '../common/CompanyLogo';
 
 export function GhostPersonaCard({ persona, onSelect, isSelected }) {
   return (
@@ -21,9 +22,12 @@ export function GhostPersonaCard({ persona, onSelect, isSelected }) {
             <h4 className="text-sm font-bold font-sans text-neutral-950 dark:text-neutral-50">
               {persona.name.split(' (')[0]}
             </h4>
-            <span className="text-[11px] font-mono text-rose-600 dark:text-rose-400">
-              {persona.startup} • {persona.industry}
-            </span>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <CompanyLogo name={persona.startup} size="xs" />
+              <span className="text-[11px] font-mono text-rose-600 dark:text-rose-400">
+                {persona.startup} • {persona.industry}
+              </span>
+            </div>
           </div>
         </div>
       </div>

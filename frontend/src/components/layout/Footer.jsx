@@ -5,15 +5,15 @@ import { NAV_CATEGORIES } from '../../lib/routes';
 
 export function Footer() {
   return (
-    <footer className="w-full bg-white dark:bg-black border-t border-[#EFEFEF] dark:border-[#202020] text-black dark:text-white transition-colors">
+    <footer className="w-full bg-[#ffffff] border-t border-[#e3e8ee] text-[#273951] transition-colors">
       {/* Top Editorial CTA / Newsletter Section */}
-      <div className="border-b border-[#EFEFEF] dark:border-[#202020] py-14">
+      <div className="border-b border-[#e3e8ee] py-14">
         <div className="site-container">
           <div className="max-w-2xl">
-            <h3 className="text-[28px] md:text-[34px] font-extrabold leading-[38px] md:leading-[44px] tracking-tight">
+            <h3 className="text-[28px] md:text-[34px] font-bold leading-[38px] md:leading-[44px] tracking-tight text-[#0d253d]">
               Learn from 413+ startup failures before you build.
             </h3>
-            <p className="mt-3 text-[16px] text-[#555555] dark:text-white/60 leading-[24px]">
+            <p className="mt-3 text-[16px] text-[#64748d] leading-[24px]">
               Receive forensic failure breakdowns, post-mortem dissections, and risk models delivered weekly to your inbox.
             </p>
             <form 
@@ -28,10 +28,28 @@ export function Footer() {
                 required
                 placeholder="Enter your work email..."
                 className="input-editorial flex-1 text-[15px]"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #a8c3de',
+                  borderRadius: '8px',
+                  color: '#0d253d',
+                  padding: '10px 14px'
+                }}
               />
               <button
                 type="submit"
-                className="btn-primary whitespace-nowrap text-[15px] px-6"
+                className="whitespace-nowrap text-[15px] px-6 transition-colors"
+                style={{
+                  backgroundColor: '#533afd',
+                  color: '#ffffff',
+                  borderRadius: '9999px',
+                  padding: '10px 24px',
+                  fontWeight: 500,
+                  border: 'none',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#4434d4'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#533afd'}
               >
                 Join Archive
               </button>
@@ -46,14 +64,14 @@ export function Footer() {
           {/* Brand Info */}
           <div className="lg:col-span-2 space-y-4">
             <PivotVaultLogo />
-            <p className="text-[14px] text-[#555555] dark:text-white/60 leading-[22px] max-w-sm">
+            <p className="text-[14px] text-[#64748d] leading-[22px] max-w-sm">
               PivotVault is an independent Startup Intelligence Platform cataloging historical failure vectors, burn rates, and market collisions to help founders make resilient decisions.
             </p>
             <div className="pt-2 flex items-center gap-3">
-              <span className="badge-neutral text-[11px] font-bold">
+              <span className="badge-neutral text-[11px] font-medium">
                 413+ Documented Failures
               </span>
-              <span className="badge-neutral text-[11px] font-bold">
+              <span className="badge-neutral text-[11px] font-medium">
                 $26.8B+ Lost Capital Mapped
               </span>
             </div>
@@ -62,7 +80,7 @@ export function Footer() {
           {/* Navigation Columns */}
           {NAV_CATEGORIES.map((category) => (
             <div key={category.id} className="space-y-3">
-              <h4 className="text-[13px] font-extrabold uppercase tracking-wider text-black dark:text-white">
+              <h4 className="text-[12px] font-bold uppercase tracking-wider text-[#0d253d]">
                 {category.name}
               </h4>
               <ul className="space-y-2">
@@ -70,7 +88,7 @@ export function Footer() {
                   <li key={item.href}>
                     <Link
                       to={item.href}
-                      className="text-[14px] text-[#555555] dark:text-white/60 hover:text-black dark:hover:text-white transition-colors"
+                      className="text-[14px] text-[#64748d] hover:text-[#0d253d] transition-colors"
                     >
                       {item.name}
                     </Link>
@@ -82,16 +100,16 @@ export function Footer() {
         </div>
 
         {/* Bottom Disclosures & Copyright */}
-        <div className="mt-14 pt-8 border-t border-[#EFEFEF] dark:border-[#202020] flex flex-col md:flex-row items-center justify-between gap-4 text-[13px] text-[#555555] dark:text-white/50">
+        <div className="mt-14 pt-8 border-t border-[#e3e8ee] flex flex-col md:flex-row items-center justify-between gap-4 text-[13px] text-[#64748d]">
           <p>© {new Date().getFullYear()} PivotVault. All rights reserved. Bloomberg-style failure intelligence.</p>
           <div className="flex items-center gap-6">
-            <Link to="/explore" className="hover:text-black dark:hover:text-white transition-colors">
+            <Link to="/explore" className="hover:text-[#0d253d] transition-colors">
               Platform Methodology
             </Link>
-            <Link to="/explore" className="hover:text-black dark:hover:text-white transition-colors">
+            <Link to="/explore" className="hover:text-[#0d253d] transition-colors">
               Disclosures
             </Link>
-            <Link to="/explore" className="hover:text-black dark:hover:text-white transition-colors">
+            <Link to="/explore" className="hover:text-[#0d253d] transition-colors">
               Legal & Privacy
             </Link>
           </div>

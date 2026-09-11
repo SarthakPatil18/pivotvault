@@ -11,53 +11,87 @@ export function PageHeader({
   tagline
 }) {
   return (
-    <div className="py-8 sm:py-10 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/20 mb-8 transition-colors">
+    <div className="py-8 sm:py-10 border-b border-[#e3e8ee] bg-[#f6f9fc] mb-8 transition-colors">
       <div className="vault-container">
-        {/* Breadcrumbs */}
-        {breadcrumbs.length > 0 && (
-          <nav className="flex items-center gap-1.5 text-xs font-mono text-neutral-400 mb-3" aria-label="Breadcrumb">
-            <Link to="/" className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">
-              PivotVault
-            </Link>
-            {breadcrumbs.map((crumb, idx) => (
-              <React.Fragment key={crumb.label + idx}>
-                <ChevronRight className="w-3 h-3 text-neutral-400" />
-                {crumb.href ? (
-                  <Link to={crumb.href} className="hover:text-neutral-900 dark:hover:text-neutral-100 transition-colors">
-                    {crumb.label}
-                  </Link>
-                ) : (
-                  <span className="text-neutral-700 dark:text-neutral-300 font-medium">
-                    {crumb.label}
-                  </span>
-                )}
-              </React.Fragment>
-            ))}
-          </nav>
-        )}
+        {/* Breadcrumbs & Tagline */}
+        <div className="flex items-center gap-2 text-[12px] text-[#64748d] mb-3 flex-wrap">
+          {badge && (
+            <span 
+              style={{
+                backgroundColor: '#b9b9f9',
+                color: '#4434d4',
+                borderRadius: '9999px',
+                fontSize: '11px',
+                fontWeight: 500,
+                padding: '4px 12px',
+                display: 'inline-flex',
+                alignItems: 'center'
+              }}
+            >
+              {badge}
+            </span>
+          )}
 
-        {/* Title and Badges */}
+          {breadcrumbs.length > 0 && (
+            <nav className="flex items-center gap-1.5 font-sans" aria-label="Breadcrumb">
+              <Link to="/" className="hover:text-[#0d253d] transition-colors">
+                PivotVault
+              </Link>
+              {breadcrumbs.map((crumb, idx) => (
+                <React.Fragment key={crumb.label + idx}>
+                  <span className="text-[#e3e8ee]">//</span>
+                  {crumb.href ? (
+                    <Link to={crumb.href} className="hover:text-[#0d253d] transition-colors">
+                      {crumb.label}
+                    </Link>
+                  ) : (
+                    <span className="text-[#273951] font-medium">
+                      {crumb.label}
+                    </span>
+                  )}
+                </React.Fragment>
+              ))}
+            </nav>
+          )}
+
+          {tagline && (
+            <div className="flex items-center gap-1.5">
+              <span className="text-[#e3e8ee]">//</span>
+              <span 
+                style={{
+                  color: '#533afd',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  textTransform: 'uppercase'
+                }}
+              >
+                {tagline}
+              </span>
+            </div>
+          )}
+        </div>
+
+        {/* Title and Subtitle */}
         <div className="flex flex-col md:flex-row md:items-end justify-between gap-4">
           <div>
-            <div className="flex items-center gap-2.5 flex-wrap mb-1.5">
-              {badge && (
-                <span className="vault-badge vault-badge-red text-[11px]">
-                  {badge}
-                </span>
-              )}
-              {tagline && (
-                <span className="text-xs font-mono text-neutral-500 dark:text-neutral-400">
-                  // {tagline}
-                </span>
-              )}
-            </div>
-
-            <h1 className="text-2xl sm:text-3xl font-bold font-sans tracking-tight text-neutral-950 dark:text-neutral-50">
+            <h1 
+              className="text-2xl sm:text-3xl lg:text-4xl tracking-tight"
+              style={{
+                color: '#0d253d',
+                fontWeight: 700
+              }}
+            >
               {title}
             </h1>
 
             {subtitle && (
-              <p className="mt-2 text-sm text-neutral-600 dark:text-neutral-400 max-w-3xl leading-relaxed">
+              <p 
+                className="mt-2 max-w-3xl leading-relaxed"
+                style={{
+                  color: '#64748d',
+                  fontSize: '15px'
+                }}
+              >
                 {subtitle}
               </p>
             )}

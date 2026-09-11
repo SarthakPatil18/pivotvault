@@ -1,5 +1,6 @@
 import React from 'react';
 import { FailureScoreBadge } from '../common/FailureScoreBadge';
+import { CompanyLogo } from '../common/CompanyLogo';
 import { formatCurrency } from '../../lib/utils';
 import { Building, Globe, Calendar, DollarSign, Bookmark, BookmarkCheck, Share2 } from 'lucide-react';
 import { useBookmarks } from '../../hooks/useBookmarks';
@@ -34,13 +35,16 @@ export function StartupHeader({ startup }) {
             </span>
           </div>
 
-          <div>
-            <h1 className="text-3xl sm:text-4xl font-bold font-sans tracking-tight text-neutral-950 dark:text-neutral-50">
-              {startup.name}
-            </h1>
-            <p className="mt-2 text-base text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans">
-              {startup.tagline}
-            </p>
+          <div className="flex items-start gap-4">
+            <CompanyLogo startup={startup} size="xl" className="shadow-sm mt-1" />
+            <div>
+              <h1 className="text-3xl sm:text-4xl font-bold font-sans tracking-tight text-neutral-950 dark:text-neutral-50">
+                {startup.name}
+              </h1>
+              <p className="mt-2 text-base text-neutral-600 dark:text-neutral-300 leading-relaxed font-sans">
+                {startup.tagline}
+              </p>
+            </div>
           </div>
 
           <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed border-l-2 border-neutral-300 dark:border-neutral-700 pl-3 py-1">

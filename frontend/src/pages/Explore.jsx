@@ -3,6 +3,7 @@ import { useSearchParams } from 'react-router-dom';
 import { PageHeader } from '../components/layout/PageHeader';
 import { StartupCard } from '../components/common/StartupCard';
 import { FailureScoreBadge } from '../components/common/FailureScoreBadge';
+import { CompanyLogo } from '../components/common/CompanyLogo';
 import { LoadingState, EmptyState } from '../components/common/InsightCard';
 import { getStartups } from '../lib/api';
 import { INDUSTRIES, FAILURE_MODES, COUNTRIES } from '../lib/data/startupsData';
@@ -123,7 +124,7 @@ export function Explore() {
   };
 
   return (
-    <div className="pb-20">
+    <div className="pb-20 bg-[#f6f9fc] min-h-screen">
       <PageHeader
         title="Startup Failure Archive"
         subtitle="Search, filter, and analyze 413+ verified startup failure post-mortems across 15 industries and 12 failure vectors."
@@ -133,7 +134,17 @@ export function Explore() {
         actions={
           <button
             onClick={handleExportCSV}
-            className="vault-btn-secondary text-xs flex items-center gap-1.5"
+            className="flex items-center gap-1.5 transition-colors"
+            style={{
+              color: '#533afd',
+              border: '1px solid #b9b9f9',
+              borderRadius: '9999px',
+              backgroundColor: '#ffffff',
+              padding: '6px 14px',
+              fontSize: '13px',
+              fontWeight: 500,
+              cursor: 'pointer'
+            }}
             title="Export currently filtered dataset as CSV"
           >
             <Download className="w-3.5 h-3.5" />
@@ -144,11 +155,19 @@ export function Explore() {
 
       <div className="vault-container">
         {/* Search & Filter Controls Bar */}
-        <div className="vault-card p-5 mb-8 space-y-4">
+        <div 
+          className="p-5 mb-8 space-y-4"
+          style={{
+            backgroundColor: '#ffffff',
+            border: '1px solid #e3e8ee',
+            borderRadius: '16px',
+            boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+          }}
+        >
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             {/* Search Input */}
             <div className="md:col-span-2 relative">
-              <Search className="w-4 h-4 text-neutral-400 absolute left-3 top-3" />
+              <Search className="w-4 h-4 text-[#64748d] absolute left-3 top-3.5" />
               <input
                 type="text"
                 value={searchQuery}
@@ -158,7 +177,13 @@ export function Explore() {
                   updateFilters({ q: e.target.value, page: 1 });
                 }}
                 placeholder="Search by company, founder, investor, root cause..."
-                className="vault-input pl-9"
+                className="w-full pl-9 pr-3 py-2 text-sm focus:outline-none transition-colors"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #a8c3de',
+                  borderRadius: '8px',
+                  color: '#0d253d',
+                }}
               />
             </div>
 
@@ -171,7 +196,13 @@ export function Explore() {
                   setCurrentPage(1);
                   updateFilters({ industry: e.target.value, page: 1 });
                 }}
-                className="vault-input"
+                className="w-full px-3 py-2 text-sm focus:outline-none transition-colors"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e3e8ee',
+                  borderRadius: '8px',
+                  color: '#273951'
+                }}
               >
                 {INDUSTRIES.map((ind) => (
                   <option key={ind} value={ind}>{ind}</option>
@@ -188,7 +219,13 @@ export function Explore() {
                   setCurrentPage(1);
                   updateFilters({ failureMode: e.target.value, page: 1 });
                 }}
-                className="vault-input"
+                className="w-full px-3 py-2 text-sm focus:outline-none transition-colors"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e3e8ee',
+                  borderRadius: '8px',
+                  color: '#273951'
+                }}
               >
                 {FAILURE_MODES.map((fm) => (
                   <option key={fm} value={fm}>{fm}</option>
@@ -198,10 +235,10 @@ export function Explore() {
           </div>
 
           {/* Secondary Filter Row: Country, Sort, View Mode & Reset */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-neutral-100 dark:border-neutral-800 text-xs">
-            <div className="flex flex-wrap items-center gap-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#e3e8ee] text-xs">
+            <div className="flex flex-wrap items-center gap-4">
               {/* Country Selector */}
-              <div className="flex items-center gap-1.5 font-mono text-neutral-500">
+              <div className="flex items-center gap-1.5 font-sans" style={{ color: '#64748d', fontSize: '12px' }}>
                 <span>Country:</span>
                 <select
                   value={selectedCountry}
@@ -210,7 +247,14 @@ export function Explore() {
                     setCurrentPage(1);
                     updateFilters({ country: e.target.value, page: 1 });
                   }}
-                  className="px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded border border-neutral-200 dark:border-neutral-700 text-xs text-neutral-800 dark:text-neutral-200 focus:outline-none"
+                  className="px-2.5 py-1 rounded focus:outline-none"
+                  style={{
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #e3e8ee',
+                    borderRadius: '8px',
+                    color: '#0d253d',
+                    fontSize: '12px'
+                  }}
                 >
                   {COUNTRIES.map((c) => (
                     <option key={c} value={c}>{c}</option>
@@ -219,8 +263,8 @@ export function Explore() {
               </div>
 
               {/* Sort Selector */}
-              <div className="flex items-center gap-1.5 font-mono text-neutral-500">
-                <ArrowUpDown className="w-3.5 h-3.5 text-neutral-400" />
+              <div className="flex items-center gap-1.5 font-sans" style={{ color: '#64748d', fontSize: '12px' }}>
+                <ArrowUpDown className="w-3.5 h-3.5 text-[#64748d]" />
                 <span>Sort:</span>
                 <select
                   value={sortOption}
@@ -228,7 +272,14 @@ export function Explore() {
                     setSortOption(e.target.value);
                     updateFilters({ sort: e.target.value });
                   }}
-                  className="px-2 py-1 bg-neutral-100 dark:bg-neutral-800 rounded border border-neutral-200 dark:border-neutral-700 text-xs text-neutral-800 dark:text-neutral-200 focus:outline-none"
+                  className="px-2.5 py-1 rounded focus:outline-none"
+                  style={{
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #e3e8ee',
+                    borderRadius: '8px',
+                    color: '#0d253d',
+                    fontSize: '12px'
+                  }}
                 >
                   <option value="score_desc">Highest Failure Score</option>
                   <option value="score_asc">Lowest Failure Score</option>
@@ -243,7 +294,8 @@ export function Explore() {
               {(searchQuery || selectedIndustry !== 'All Industries' || selectedFailureMode !== 'All Failure Modes' || selectedCountry !== 'All Countries') && (
                 <button
                   onClick={handleResetFilters}
-                  className="flex items-center gap-1 text-rose-600 dark:text-rose-400 hover:underline font-mono text-xs"
+                  className="flex items-center gap-1 hover:underline text-xs"
+                  style={{ color: '#ea2261' }}
                 >
                   <RotateCcw className="w-3 h-3" />
                   <span>Clear Filters</span>
@@ -253,21 +305,21 @@ export function Explore() {
 
             {/* Results Count & Grid/Table View Mode */}
             <div className="flex items-center gap-4">
-              <span className="font-mono text-xs text-neutral-500">
-                Showing <strong className="text-neutral-900 dark:text-neutral-100">{pagination.totalRecords}</strong> failures
+              <span className="text-xs" style={{ color: '#64748d' }}>
+                Showing <strong style={{ color: '#533afd', fontWeight: 600 }}>{pagination.totalRecords}</strong> failures
               </span>
 
-              <div className="flex items-center p-0.5 rounded bg-neutral-100 dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700">
+              <div className="flex items-center p-0.5 rounded bg-[#f6f9fc] border border-[#e3e8ee]">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-1 rounded ${viewMode === 'grid' ? 'bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 shadow-xs' : 'text-neutral-400'}`}
+                  className={`p-1.5 rounded transition-colors ${viewMode === 'grid' ? 'bg-[#ffffff] text-[#0d253d] shadow-xs' : 'text-[#64748d]'}`}
                   title="Grid View"
                 >
                   <Grid className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => setViewMode('table')}
-                  className={`p-1 rounded ${viewMode === 'table' ? 'bg-white dark:bg-neutral-900 text-neutral-900 dark:text-neutral-100 shadow-xs' : 'text-neutral-400'}`}
+                  className={`p-1.5 rounded transition-colors ${viewMode === 'table' ? 'bg-[#ffffff] text-[#0d253d] shadow-xs' : 'text-[#64748d]'}`}
                   title="Table View"
                 >
                   <List className="w-3.5 h-3.5" />
@@ -300,7 +352,7 @@ export function Explore() {
 
         {/* Grid View Rendering */}
         {!loading && !error && startups.length > 0 && viewMode === 'grid' && (
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {startups.map((startup) => (
               <StartupCard key={startup.id} startup={startup} />
             ))}
@@ -309,50 +361,66 @@ export function Explore() {
 
         {/* Table View Rendering */}
         {!loading && !error && startups.length > 0 && viewMode === 'table' && (
-          <div className="vault-card overflow-x-auto">
+          <div 
+            className="overflow-x-auto"
+            style={{
+              backgroundColor: '#ffffff',
+              border: '1px solid #e3e8ee',
+              borderRadius: '16px',
+              boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+            }}
+          >
             <table className="w-full text-left text-xs">
-              <thead className="bg-neutral-100 dark:bg-neutral-900/80 border-b border-neutral-200 dark:border-neutral-800 font-mono text-[11px] text-neutral-500 uppercase tracking-wider">
+              <thead 
+                className="border-b border-[#e3e8ee] font-sans text-[11px] uppercase tracking-wider"
+                style={{ backgroundColor: '#f6f9fc', color: '#64748d' }}
+              >
                 <tr>
-                  <th className="py-3 px-4">Startup</th>
-                  <th className="py-3 px-4">Industry</th>
-                  <th className="py-3 px-4">Country</th>
-                  <th className="py-3 px-4">Failure Score</th>
-                  <th className="py-3 px-4">Capital Lost</th>
-                  <th className="py-3 px-4">Lifespan</th>
-                  <th className="py-3 px-4">Primary Failure Mode</th>
-                  <th className="py-3 px-4 text-right">Action</th>
+                  <th className="py-3.5 px-4 font-semibold">Startup</th>
+                  <th className="py-3.5 px-4 font-semibold">Industry</th>
+                  <th className="py-3.5 px-4 font-semibold">Country</th>
+                  <th className="py-3.5 px-4 font-semibold">Failure Score</th>
+                  <th className="py-3.5 px-4 font-semibold">Capital Lost</th>
+                  <th className="py-3.5 px-4 font-semibold">Lifespan</th>
+                  <th className="py-3.5 px-4 font-semibold">Primary Failure Mode</th>
+                  <th className="py-3.5 px-4 text-right font-semibold">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-neutral-100 dark:divide-neutral-800 font-sans">
+              <tbody className="divide-y divide-[#e3e8ee] font-sans">
                 {startups.map((s) => (
-                  <tr key={s.id} className="hover:bg-neutral-50 dark:hover:bg-neutral-850/60 transition-colors">
-                    <td className="py-3.5 px-4 font-semibold text-neutral-900 dark:text-neutral-100">
-                      <Link to={`/startup/${s.id}`} className="hover:text-rose-600 transition-colors">
-                        {s.name}
+                  <tr key={s.id} className="hover:bg-[#f6f9fc] transition-colors">
+                    <td className="py-3.5 px-4 font-bold text-[#0d253d]">
+                      <Link to={`/startup/${s.id}`} className="hover:text-[#533afd] transition-colors flex items-center gap-2.5">
+                        <CompanyLogo startup={s} size="xs" />
+                        <span>{s.name}</span>
                       </Link>
                     </td>
-                    <td className="py-3.5 px-4 text-neutral-600 dark:text-neutral-400">
+                    <td className="py-3.5 px-4 text-[#273951]">
                       {s.industry}
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-neutral-500">
+                    <td className="py-3.5 px-4 text-[#64748d]">
                       {s.country}
                     </td>
                     <td className="py-3.5 px-4">
                       <FailureScoreBadge score={s.failureScore} size="sm" />
                     </td>
-                    <td className="py-3.5 px-4 font-mono font-bold text-neutral-800 dark:text-neutral-200">
+                    <td 
+                      className="py-3.5 px-4 font-bold text-[#ea2261]"
+                      style={{ fontFeatureSettings: '"tnum"', letterSpacing: '-0.42px' }}
+                    >
                       {formatCurrency(s.capitalRaised)}
                     </td>
-                    <td className="py-3.5 px-4 font-mono text-neutral-500">
+                    <td className="py-3.5 px-4 text-[#64748d]">
                       {s.foundedYear}–{s.failedYear}
                     </td>
-                    <td className="py-3.5 px-4 text-neutral-700 dark:text-neutral-300">
+                    <td className="py-3.5 px-4 text-[#273951]">
                       {s.failureMode}
                     </td>
                     <td className="py-3.5 px-4 text-right">
                       <Link
                         to={`/startup/${s.id}`}
-                        className="font-mono text-xs text-neutral-900 dark:text-neutral-100 hover:text-rose-600 font-semibold"
+                        className="text-xs hover:underline font-semibold"
+                        style={{ color: '#533afd' }}
                       >
                         Autopsy →
                       </Link>
@@ -366,8 +434,8 @@ export function Explore() {
 
         {/* Pagination Controls */}
         {!loading && !error && pagination.totalPages > 1 && (
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-neutral-200 dark:border-neutral-800 text-xs font-mono">
-            <div className="text-neutral-500">
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-[#e3e8ee] text-xs">
+            <div style={{ color: '#64748d' }}>
               Page {pagination.currentPage} of {pagination.totalPages} ({pagination.totalRecords} records)
             </div>
 
@@ -408,10 +476,10 @@ export function Explore() {
                         updateFilters({ page: pNum });
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
-                      className={`w-8 h-8 rounded text-xs transition-colors ${
+                      className={`w-8 h-8 rounded-full text-xs transition-colors ${
                         currentPage === pNum
-                          ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 font-bold'
-                          : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200'
+                          ? 'bg-[#0d253d] text-white font-bold'
+                          : 'bg-[#ffffff] text-[#273951] border border-[#e3e8ee] hover:bg-[#f6f9fc]'
                       }`}
                     >
                       {pNum}

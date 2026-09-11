@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { PageHeader } from '../components/layout/PageHeader';
 import { getFounderConfessions } from '../lib/api';
 import { LoadingState } from '../components/common/InsightCard';
+import { CompanyLogo } from '../components/common/CompanyLogo';
 import { Heart, MessageSquare, BookOpen, Quote, CheckCircle2, ChevronDown, ChevronUp } from 'lucide-react';
 
 export function FounderConfessions() {
@@ -70,8 +71,11 @@ export function FounderConfessions() {
                       <h3 className="text-base font-bold font-sans text-neutral-950 dark:text-neutral-50">
                         {confession.founder}
                       </h3>
-                      <div className="flex items-center gap-2 text-xs font-mono text-neutral-500">
-                        <span className="text-rose-600 dark:text-rose-400">{confession.startup}</span>
+                      <div className="flex items-center gap-2 text-xs font-mono text-neutral-500 mt-1">
+                        <div className="flex items-center gap-1.5">
+                          <CompanyLogo name={confession.startup.replace(/\s*\(.*\)/, '')} size="xs" />
+                          <span className="text-rose-600 dark:text-rose-400 font-medium">{confession.startup}</span>
+                        </div>
                         <span>•</span>
                         <span>{confession.year}</span>
                         <span>•</span>

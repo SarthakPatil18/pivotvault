@@ -15,11 +15,12 @@ import { Insights } from './pages/Insights';
 import { StartupGraph } from './pages/StartupGraph';
 import { FounderConfessions } from './pages/FounderConfessions';
 import { HallOfGhosts } from './pages/HallOfGhosts';
+import { AIAssistant } from './pages/AIAssistant';
 
 export function App() {
   return (
     <BrowserRouter>
-      <div className="min-h-screen flex flex-col bg-white text-neutral-900 dark:bg-neutral-950 dark:text-neutral-100 transition-colors">
+      <div className="min-h-screen flex flex-col bg-[#f6f9fc] text-[#0d253d] transition-colors">
         {/* Persistent Top Navigation Bar */}
         <Navbar />
 
@@ -37,6 +38,7 @@ export function App() {
             <Route path="/startup-graph" element={<StartupGraph />} />
             <Route path="/founder-confessions" element={<FounderConfessions />} />
             <Route path="/hall-of-ghosts" element={<HallOfGhosts />} />
+            <Route path="/ai-assistant" element={<AIAssistant />} />
             
             {/* Catch-all fallback */}
             <Route path="*" element={<Navigate to="/" replace />} />

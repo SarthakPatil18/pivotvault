@@ -29,16 +29,16 @@ export function PivotVaultIcon({ className = "w-6 h-6", color = "currentColor" }
 export function PivotVaultLogo({ 
   className = "h-7", 
   showWordmark = true, 
-  wordmarkClass = "text-[20px] font-extrabold tracking-tight",
+  wordmarkClass = "text-[20px] font-semibold tracking-tight text-[#0d253d]",
   iconClass = "w-6 h-6"
 }) {
   return (
-    <div className={`inline-flex items-center gap-2.5 select-none text-black dark:text-white ${className}`}>
+    <div className={`inline-flex items-center gap-2.5 select-none text-[#0d253d] ${className}`}>
       <div className="relative flex items-center justify-center shrink-0">
-        <PivotVaultIcon className={iconClass} color="currentColor" />
+        <PivotVaultIcon className={iconClass} color="#0d253d" />
       </div>
       {showWordmark && (
-        <span className={`font-sans text-black dark:text-white leading-none ${wordmarkClass}`}>
+        <span className={`font-sans text-[#0d253d] leading-none ${wordmarkClass}`}>
           PivotVault
         </span>
       )}

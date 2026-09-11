@@ -17,7 +17,7 @@ export function Navbar() {
 
   return (
     <>
-      <header className="sticky top-0 z-50 w-full bg-white dark:bg-black border-b border-[#EFEFEF] dark:border-[#202020] transition-colors duration-150">
+      <header className="sticky top-0 z-50 w-full bg-[#ffffff] border-b border-[#e3e8ee] transition-colors duration-150">
         <div className="site-container flex items-center justify-between h-[68px]">
           {/* Brand Logo */}
           <div className="flex items-center gap-6 lg:gap-8">
@@ -33,18 +33,18 @@ export function Navbar() {
             </nav>
           </div>
 
-          {/* Right Action Tools: Search, Theme, Settings, Explore CTA, Mobile Hamburger */}
+          {/* Right Action Tools: Search, Theme, Explore CTA, Mobile Hamburger */}
           <div className="flex items-center gap-2 sm:gap-3">
             {/* Search Trigger Button */}
             <button
               onClick={openSearch}
-              className="flex items-center gap-2 px-3 py-2 text-[14px] text-[#555555] dark:text-white/60 hover:text-black dark:hover:text-white bg-[#FAFAFA] dark:bg-[#1A1A1A] border border-[#EFEFEF] dark:border-[#2D2D2D] rounded-[5px] transition-colors"
+              className="flex items-center gap-2 px-3 py-2 text-[14px] text-[#64748d] hover:text-[#0d253d] bg-[#ffffff] border border-[#e3e8ee] rounded-[8px] transition-colors"
               title="Search startup intelligence (Cmd+K)"
               aria-label="Search startup intelligence"
             >
-              <Search className="w-4 h-4" />
-              <span className="hidden lg:inline font-normal">Search archive...</span>
-              <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[11px] font-mono bg-white dark:bg-black border border-[#EFEFEF] dark:border-[#2D2D2D] rounded text-[#555555] dark:text-white/60">
+              <Search className="w-4 h-4 text-[#64748d]" />
+              <span className="hidden lg:inline font-normal text-[#64748d]">Search archive...</span>
+              <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[11px] font-mono bg-[#f6f9fc] border border-[#e3e8ee] rounded text-[#64748d]">
                 ⌘K
               </kbd>
             </button>
@@ -52,22 +52,31 @@ export function Navbar() {
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="p-2 text-black/70 dark:text-white/70 hover:text-black dark:hover:text-white hover:bg-[#FAFAFA] dark:hover:bg-[#1A1A1A] rounded-[5px] transition-colors"
+              className="p-2 text-[#64748d] hover:text-[#0d253d] hover:bg-[#f6f9fc] rounded-[8px] transition-colors"
               title={`Switch to ${isDark ? 'Light' : 'Dark'} mode`}
               aria-label="Toggle theme"
             >
-              {isDark ? <Sun className="w-4 h-4 text-white" /> : <Moon className="w-4 h-4 text-black" />}
+              {isDark ? <Sun className="w-4 h-4 text-[#64748d]" /> : <Moon className="w-4 h-4 text-[#64748d]" />}
             </button>
 
             {/* Explore Archive CTA Button (hidden on mobile) */}
             <Link
               to="/explore"
-              className="hidden lg:inline-flex btn-nav-cta text-[15px]"
+              className="hidden lg:inline-flex items-center justify-center text-[14px] transition-colors"
+              style={{
+                backgroundColor: '#533afd',
+                color: '#ffffff',
+                borderRadius: '9999px',
+                padding: '8px 20px',
+                fontWeight: 500,
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#4434d4'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#533afd'}
             >
               Explore Archive →
             </Link>
 
-            {/* Hamburger Button (md:hidden) from design.md: 68x68px touch area, 26x3px bars */}
+            {/* Hamburger Button (md:hidden) */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               className="md:hidden flex flex-col items-center justify-center w-[48px] h-[48px] p-2 focus:outline-none"
@@ -75,17 +84,17 @@ export function Navbar() {
               aria-expanded={mobileMenuOpen}
             >
               <span 
-                className={`block w-[26px] h-[3px] bg-black dark:bg-white rounded-sm transition-transform duration-150 ${
+                className={`block w-[26px] h-[3px] bg-[#0d253d] rounded-sm transition-transform duration-150 ${
                   mobileMenuOpen ? 'rotate-45 translate-y-[9px]' : ''
                 }`}
               />
               <span 
-                className={`block w-[26px] h-[3px] bg-black dark:bg-white rounded-sm my-[6px] transition-opacity duration-150 ${
+                className={`block w-[26px] h-[3px] bg-[#0d253d] rounded-sm my-[6px] transition-opacity duration-150 ${
                   mobileMenuOpen ? 'opacity-0' : 'opacity-100'
                 }`}
               />
               <span 
-                className={`block w-[26px] h-[3px] bg-black dark:bg-white rounded-sm transition-transform duration-150 ${
+                className={`block w-[26px] h-[3px] bg-[#0d253d] rounded-sm transition-transform duration-150 ${
                   mobileMenuOpen ? '-rotate-45 -translate-y-[9px]' : ''
                 }`}
               />
@@ -108,4 +117,3 @@ export function Navbar() {
 }
 
 export default Navbar;
-

@@ -39,36 +39,36 @@ export function getFailureScoreColor(score) {
   const num = Number(score) || 0;
   if (num >= 85) {
     return {
-      text: 'text-[#FF6173]',
-      bg: 'bg-[#FFE8EB] dark:bg-[#26070A]',
-      border: 'border-[#FF6173]/30 dark:border-[#551119]',
-      fill: '#FF6173',
+      text: 'text-[#ea2261]',
+      bg: 'bg-[rgba(234,34,97,0.10)]',
+      border: 'border-[rgba(234,34,97,0.20)]',
+      fill: '#ea2261',
       label: 'Catastrophic',
     };
   }
   if (num >= 70) {
     return {
-      text: 'text-black dark:text-white',
-      bg: 'bg-[#FAFAFA] dark:bg-[#1A1A1A]',
-      border: 'border-[#EFEFEF] dark:border-[#2D2D2D]',
-      fill: '#000000',
+      text: 'text-[#ea2261]',
+      bg: 'bg-[rgba(234,34,97,0.08)]',
+      border: 'border-[rgba(234,34,97,0.15)]',
+      fill: '#ea2261',
       label: 'Severe',
     };
   }
   if (num >= 50) {
     return {
-      text: 'text-[#555555] dark:text-white/70',
-      bg: 'bg-[#FAFAFA] dark:bg-[#1A1A1A]',
-      border: 'border-[#EFEFEF] dark:border-[#2D2D2D]',
-      fill: '#555555',
+      text: 'text-[#9b6829]',
+      bg: 'bg-[rgba(155,104,41,0.12)]',
+      border: 'border-[rgba(155,104,41,0.20)]',
+      fill: '#9b6829',
       label: 'Moderate',
     };
   }
   return {
-    text: 'text-[#52C46F]',
-    bg: 'bg-[#E7F6EA] dark:bg-[#082410]',
-    border: 'border-[#52C46F]/30 dark:border-[#124D23]',
-    fill: '#52C46F',
+    text: 'text-[#4434d4]',
+    bg: 'bg-[#b9b9f9]',
+    border: 'border-[#b9b9f9]',
+    fill: '#4434d4',
     label: 'Low Risk',
   };
 }

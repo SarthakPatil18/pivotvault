@@ -10,9 +10,7 @@ import {
 import { getInsights, getStartups } from '../lib/api';
 import { CURATED_STARTUPS } from '../lib/data/startupsData';
 import { StartupCard } from '../components/common/StartupCard';
-import { MetricCard } from '../components/common/MetricCard';
-import { InsightCard } from '../components/common/InsightCard';
-import { FailureScoreBadge } from '../components/common/FailureScoreBadge';
+import { CompanyLogo } from '../components/common/CompanyLogo';
 import { formatCurrency, formatNumber } from '../lib/utils';
 import { useBookmarks } from '../hooks/useBookmarks';
 
@@ -38,7 +36,7 @@ function MiniSparkline({ data, stroke, fill, height = 30 }) {
       <polyline
         fill="none"
         stroke={stroke}
-        strokeWidth="1.75"
+        strokeWidth="2"
         strokeLinecap="round"
         strokeLinejoin="round"
         points={points}
@@ -219,23 +217,39 @@ export function Home() {
   };
 
   return (
-    <div className="space-y-16 lg:space-y-24 pb-20">
+    <div className="space-y-16 lg:space-y-24 pb-20 bg-[#f6f9fc]">
       {/* 1. Live System Telemetry Ticker */}
-      <div className="border-b border-[#EFEFEF] dark:border-[#202020] bg-[#FAFAFA] dark:bg-[#0E0E0E] py-2.5">
-        <div className="site-container flex items-center justify-between text-[12px] text-[#555555] dark:text-white/60 overflow-x-auto gap-6 whitespace-nowrap">
+      <div 
+        className="py-2.5"
+        style={{
+          backgroundColor: '#f6f9fc',
+          borderBottom: '1px solid #e3e8ee',
+        }}
+      >
+        <div 
+          className="site-container flex items-center justify-between overflow-x-auto gap-6 whitespace-nowrap"
+          style={{ color: '#64748d', fontSize: '12px' }}
+        >
           <div className="flex items-center gap-2">
-            <span className="w-2 h-2 rounded-full bg-[#FF6173] animate-pulse" />
-            <span className="font-bold text-black dark:text-white">SYSTEM TELEMETRY:</span>
+            <span 
+              className="w-2 h-2 rounded-full shrink-0" 
+              style={{ backgroundColor: '#ea2261' }}
+            />
+            <span style={{ fontWeight: 600, color: '#0d253d' }}>SYSTEM TELEMETRY:</span>
             <span>413+ startup autopsies indexed across 14 failure vectors</span>
           </div>
           <div className="hidden md:flex items-center gap-4">
-            <span>Capital Evaporated: <strong className="text-black dark:text-white">$26.8B+</strong></span>
-            <span>•</span>
-            <span>Top Failure Vector: <strong className="text-[#FF6173]">Unit Economics (28%)</strong></span>
-            <span>•</span>
-            <span>AI Reasoning: <strong className="text-black dark:text-white">Active Dual-Layer</strong></span>
+            <span>Capital Evaporated: <strong style={{ color: '#533afd', fontWeight: 600, fontFeatureSettings: '"tnum"' }}>$26.8B+</strong></span>
+            <span style={{ color: '#e3e8ee' }}>•</span>
+            <span>Top Failure Vector: <strong style={{ color: '#533afd', fontWeight: 600 }}>Unit Economics (28%)</strong></span>
+            <span style={{ color: '#e3e8ee' }}>•</span>
+            <span>AI Reasoning: <strong style={{ color: '#533afd', fontWeight: 600 }}>Active Dual-Layer</strong></span>
           </div>
-          <Link to="/insights" className="font-bold text-black dark:text-white hover:underline flex items-center gap-1">
+          <Link 
+            to="/insights" 
+            className="hover:underline flex items-center gap-1 font-medium"
+            style={{ color: '#533afd' }}
+          >
             <span>Macro Dashboard</span>
             <span>→</span>
           </Link>
@@ -246,51 +260,104 @@ export function Home() {
       <section className="site-container pt-4 sm:pt-8 min-h-[85vh] lg:min-h-[88vh] flex flex-col justify-center">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-center">
           
-          {/* Left Column (60%): Editorial Headline, 72px Search, CTAs */}
+          {/* Left Column (60%): Editorial Headline, Search, CTAs */}
           <div className="lg:col-span-7 flex flex-col justify-center text-left">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-[5px] text-[12px] font-bold bg-[#FAFAFA] dark:bg-[#1A1A1A] border border-[#EFEFEF] dark:border-[#2D2D2D] text-black dark:text-white mb-4 w-fit">
-              <span className="w-2 h-2 rounded-full bg-[#FF6173]" />
+            <div 
+              className="inline-flex items-center gap-2 mb-4 w-fit"
+              style={{
+                backgroundColor: '#b9b9f9',
+                color: '#4434d4',
+                borderRadius: '9999px',
+                fontSize: '11px',
+                fontWeight: 500,
+                padding: '4px 12px',
+              }}
+            >
               <span>STARTUP INTELLIGENCE PLATFORM</span>
             </div>
 
-            <h1 className="text-4xl sm:text-6xl xl:text-[76px] font-extrabold tracking-tight text-black dark:text-white leading-[1.04]">
+            <h1 
+              className="text-4xl sm:text-6xl xl:text-[72px] tracking-tight leading-[1.06]"
+              style={{
+                color: '#0d253d',
+                fontWeight: 700,
+              }}
+            >
               Learn from startup failures. <br />
-              <span className="text-[#555555] dark:text-white/60">Make better decisions before you build.</span>
+              <span style={{ color: '#64748d', fontWeight: 700 }}>
+                Make better decisions before you build.
+              </span>
             </h1>
 
-            <p className="mt-5 text-[16px] sm:text-[19px] text-[#555555] dark:text-white/70 max-w-2xl leading-relaxed">
+            <p 
+              className="mt-5 max-w-2xl leading-relaxed"
+              style={{
+                color: '#64748d',
+                fontSize: '16px',
+              }}
+            >
               PivotVault synthesizes 413+ historical startup autopsies, forensic post-mortems, and knowledge graphs into defensive intelligence for founders and investors.
             </p>
 
             {/* 72px Search Bar */}
             <div className="mt-8 max-w-2xl">
-              <form onSubmit={handleHeroSearch} className="relative flex items-center rounded-[5px] overflow-hidden border-2 border-black dark:border-white bg-white dark:bg-[#1A1A1A] h-[70px] shadow-sm">
-                <div className="pl-5 text-[#555555] dark:text-white/60">
-                  <Search className="w-6 h-6" />
+              <form 
+                onSubmit={handleHeroSearch} 
+                className="relative flex items-center overflow-hidden h-[68px]"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #a8c3de',
+                  borderRadius: '12px',
+                  boxShadow: 'rgba(0, 55, 112, 0.08) 0px 4px 16px',
+                }}
+              >
+                <div className="pl-5" style={{ color: '#64748d' }}>
+                  <Search className="w-5 h-5" />
                 </div>
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Search by startup (Theranos, WeWork), industry, or failure mode..."
-                  className="w-full px-4 text-[16px] sm:text-[17px] text-black dark:text-white bg-transparent placeholder-[#888888] focus:outline-none font-medium"
+                  className="w-full px-4 text-[15px] sm:text-[16px] bg-transparent focus:outline-none font-medium"
+                  style={{
+                    color: '#0d253d',
+                  }}
                 />
                 <button
                   type="submit"
-                  className="mr-2.5 btn-primary !py-3 !px-6 text-[15px] font-bold shrink-0"
+                  className="mr-2.5 shrink-0 transition-colors"
+                  style={{
+                    backgroundColor: '#533afd',
+                    color: '#ffffff',
+                    borderRadius: '9999px',
+                    padding: '10px 22px',
+                    fontSize: '14px',
+                    fontWeight: 500,
+                    border: 'none',
+                    cursor: 'pointer'
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#4434d4'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#533afd'}
                 >
                   Analyze
                 </button>
               </form>
 
               {/* Popular Search Chips */}
-              <div className="mt-3.5 flex items-center gap-2 flex-wrap text-[13px] text-[#555555] dark:text-white/60">
-                <span className="font-bold text-black dark:text-white">Popular:</span>
+              <div 
+                className="mt-3.5 flex items-center gap-2 flex-wrap text-[13px]"
+                style={{ color: '#64748d' }}
+              >
+                <span style={{ color: '#0d253d', fontWeight: 600 }}>Popular:</span>
                 {['Unit Economics', 'Theranos', 'WeWork', 'Quibi', 'Fast', 'Hardware Defect'].map((tag) => (
                   <button
                     key={tag}
                     onClick={() => navigate(`/explore?q=${encodeURIComponent(tag)}`)}
-                    className="hover:text-black dark:hover:text-white hover:underline transition-colors font-medium"
+                    className="hover:underline transition-colors font-medium"
+                    style={{ color: '#64748d' }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#533afd'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#64748d'}
                   >
                     {tag},
                   </button>
@@ -299,12 +366,34 @@ export function Home() {
 
               {/* Dual Action CTAs */}
               <div className="mt-7 flex items-center gap-4 flex-wrap">
-                <Link to="/explore" className="btn-primary !px-8 !py-4 text-[16px]">
+                <Link 
+                  to="/explore" 
+                  className="transition-colors inline-flex items-center justify-center text-[15px]"
+                  style={{
+                    backgroundColor: '#533afd',
+                    color: '#ffffff',
+                    borderRadius: '9999px',
+                    padding: '12px 28px',
+                    fontWeight: 500,
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#4434d4'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#533afd'}
+                >
                   Explore 413+ Failures →
                 </Link>
                 <Link 
                   to="/risk-scanner" 
-                  className="inline-flex items-center justify-center px-7 py-4 rounded-[5px] text-[16px] font-bold border-2 border-black dark:border-white text-black dark:text-white hover:bg-[#FAFAFA] dark:hover:bg-[#1A1A1A] transition-colors"
+                  className="inline-flex items-center justify-center text-[15px] transition-colors"
+                  style={{
+                    border: '1px solid #e3e8ee',
+                    backgroundColor: '#ffffff',
+                    color: '#0d253d',
+                    borderRadius: '9999px',
+                    padding: '12px 26px',
+                    fontWeight: 500,
+                  }}
+                  onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f6f9fc'}
+                  onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
                 >
                   Scan Startup Risk
                 </Link>
@@ -312,133 +401,343 @@ export function Home() {
             </div>
           </div>
 
-          {/* Right Column (40%): Live Failure Intelligence Interactive Panel */}
+          {/* Right Column (40%): Live Failure Intelligence Panel */}
           <div className="lg:col-span-5">
-            <div className="card-editorial !p-6 bg-white dark:bg-[#111111] border border-[#EFEFEF] dark:border-[#202020] shadow-md space-y-5">
+            <div 
+              className="space-y-5"
+              style={{
+                backgroundColor: '#ffffff',
+                border: '1px solid #e3e8ee',
+                borderRadius: '16px',
+                boxShadow: 'rgba(0, 55, 112, 0.08) 0px 8px 24px',
+                padding: '24px',
+              }}
+            >
               {/* Panel Header */}
-              <div className="flex items-center justify-between pb-3 border-b border-[#EFEFEF] dark:border-[#202020]">
+              <div className="flex items-center justify-between pb-3 border-b border-[#e3e8ee]">
                 <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-[#FF6173] animate-ping" />
-                  <h3 className="text-[13px] font-extrabold uppercase tracking-wider text-black dark:text-white">
+                  <span 
+                    className="w-2.5 h-2.5 rounded-full" 
+                    style={{ backgroundColor: '#ea2261' }}
+                  />
+                  <h3 
+                    style={{
+                      color: '#64748d',
+                      fontSize: '11px',
+                      fontWeight: 600,
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px',
+                    }}
+                  >
                     FAILURE INTELLIGENCE PANEL
                   </h3>
                 </div>
-                <span className="badge-neutral text-[11px] font-mono">LIVE FEED</span>
+                <span 
+                  style={{
+                    backgroundColor: 'rgba(234, 34, 97, 0.10)',
+                    color: '#ea2261',
+                    borderRadius: '9999px',
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    padding: '3px 8px',
+                  }}
+                >
+                  LIVE FEED
+                </span>
               </div>
 
               {/* 3 Metric Stat Blocks */}
               <div className="grid grid-cols-3 gap-2.5 text-center">
-                <div className="p-3 rounded-[5px] bg-[#FAFAFA] dark:bg-[#181818] border border-[#EFEFEF] dark:border-[#242424]">
-                  <div className="text-[22px] font-extrabold text-black dark:text-white leading-tight">413+</div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-[#777777] dark:text-white/50 mt-0.5">Startups</div>
+                <div 
+                  className="p-3"
+                  style={{
+                    backgroundColor: '#f6f9fc',
+                    border: '1px solid #e3e8ee',
+                    borderRadius: '10px',
+                  }}
+                >
+                  <div 
+                    className="text-[22px] leading-tight"
+                    style={{
+                      color: '#0d253d',
+                      fontWeight: 700,
+                      fontFeatureSettings: '"tnum"',
+                    }}
+                  >
+                    413+
+                  </div>
+                  <div 
+                    className="mt-0.5 uppercase"
+                    style={{
+                      color: '#64748d',
+                      fontSize: '11px',
+                    }}
+                  >
+                    Startups
+                  </div>
                 </div>
-                <div className="p-3 rounded-[5px] bg-[#FAFAFA] dark:bg-[#181818] border border-[#EFEFEF] dark:border-[#242424]">
-                  <div className="text-[22px] font-extrabold text-black dark:text-white leading-tight">14</div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-[#777777] dark:text-white/50 mt-0.5">Vectors</div>
+
+                <div 
+                  className="p-3"
+                  style={{
+                    backgroundColor: '#f6f9fc',
+                    border: '1px solid #e3e8ee',
+                    borderRadius: '10px',
+                  }}
+                >
+                  <div 
+                    className="text-[22px] leading-tight"
+                    style={{
+                      color: '#0d253d',
+                      fontWeight: 700,
+                      fontFeatureSettings: '"tnum"',
+                    }}
+                  >
+                    14
+                  </div>
+                  <div 
+                    className="mt-0.5 uppercase"
+                    style={{
+                      color: '#64748d',
+                      fontSize: '11px',
+                    }}
+                  >
+                    Vectors
+                  </div>
                 </div>
-                <div className="p-3 rounded-[5px] bg-[#FFE8EB] dark:bg-[#2A1115] border border-[#FF6173]/30">
-                  <div className="text-[22px] font-extrabold text-[#FF6173] leading-tight">$26.8B+</div>
-                  <div className="text-[10px] font-bold uppercase tracking-wider text-[#FF6173] mt-0.5">Evaporated</div>
+
+                {/* Highlighted Stat Card ($26.8B+ EVAPORATED) */}
+                <div 
+                  className="p-3"
+                  style={{
+                    backgroundColor: '#b9b9f9',
+                    border: '1px solid #b9b9f9',
+                    borderRadius: '10px',
+                  }}
+                >
+                  <div 
+                    className="text-[22px] leading-tight"
+                    style={{
+                      color: '#533afd',
+                      fontWeight: 700,
+                      fontFeatureSettings: '"tnum"',
+                    }}
+                  >
+                    $26.8B+
+                  </div>
+                  <div 
+                    className="mt-0.5 uppercase"
+                    style={{
+                      color: '#4434d4',
+                      fontSize: '11px',
+                    }}
+                  >
+                    Evaporated
+                  </div>
                 </div>
               </div>
 
-              {/* Horizontal Bar Breakdown */}
+              {/* TOP FAILURE VECTORS section */}
               <div className="space-y-3 pt-1">
-                <div className="flex items-center justify-between text-[12px]">
-                  <span className="font-bold text-black dark:text-white">TOP FAILURE VECTORS</span>
-                  <span className="text-[#777777] dark:text-white/50 text-[11px]">413 Sample Size</span>
+                <div className="flex items-center justify-between">
+                  <span 
+                    style={{
+                      color: '#64748d',
+                      fontSize: '11px',
+                      textTransform: 'uppercase',
+                      fontWeight: 600,
+                    }}
+                  >
+                    TOP FAILURE VECTORS
+                  </span>
+                  <span style={{ color: '#64748d', fontSize: '11px' }}>
+                    413 Sample Size
+                  </span>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2.5">
+                  {/* Active Unit Economics Collapse */}
                   <div>
-                    <div className="flex items-center justify-between text-[12px] mb-1">
-                      <span className="font-semibold text-black dark:text-white flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#FF6173]" />
+                    <div className="flex items-center justify-between text-[13px] mb-1">
+                      <span 
+                        className="flex items-center gap-1.5"
+                        style={{ color: '#0d253d', fontSize: '14px', fontWeight: 600 }}
+                      >
+                        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#ea2261' }} />
                         Unit Economics Collapse
                       </span>
-                      <span className="font-mono font-bold text-[#FF6173]">28%</span>
+                      <span 
+                        style={{
+                          color: '#ea2261',
+                          fontWeight: 600,
+                          fontFeatureSettings: '"tnum"',
+                        }}
+                      >
+                        28%
+                      </span>
                     </div>
-                    <div className="w-full h-2 bg-[#EFEFEF] dark:bg-[#202020] rounded-full overflow-hidden">
-                      <div className="h-full bg-[#FF6173] rounded-full" style={{ width: '28%' }} />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center justify-between text-[12px] mb-1">
-                      <span className="font-semibold text-black dark:text-white">Product-Market Fit Deficit</span>
-                      <span className="font-mono font-bold text-black dark:text-white">22%</span>
-                    </div>
-                    <div className="w-full h-2 bg-[#EFEFEF] dark:bg-[#202020] rounded-full overflow-hidden">
-                      <div className="h-full bg-black dark:bg-white rounded-full" style={{ width: '22%' }} />
-                    </div>
-                  </div>
-
-                  <div>
-                    <div className="flex items-center justify-between text-[12px] mb-1">
-                      <span className="font-semibold text-black dark:text-white">Execution Void</span>
-                      <span className="font-mono font-bold text-black dark:text-white">17%</span>
-                    </div>
-                    <div className="w-full h-2 bg-[#EFEFEF] dark:bg-[#202020] rounded-full overflow-hidden">
-                      <div className="h-full bg-[#555555] dark:bg-[#888888] rounded-full" style={{ width: '17%' }} />
+                    <div 
+                      className="w-full rounded-full overflow-hidden"
+                      style={{ backgroundColor: '#e3e8ee', height: '6px' }}
+                    >
+                      <div 
+                        className="h-full rounded-full" 
+                        style={{ width: '28%', backgroundColor: '#ea2261' }} 
+                      />
                     </div>
                   </div>
 
                   <div>
                     <div className="flex items-center justify-between text-[12px] mb-1">
-                      <span className="font-semibold text-black dark:text-white">Competition & Platform Moat</span>
-                      <span className="font-mono font-bold text-black dark:text-white">14%</span>
+                      <span style={{ color: '#64748d' }}>Product-Market Fit Deficit</span>
+                      <span style={{ color: '#64748d', fontFeatureSettings: '"tnum"' }}>22%</span>
                     </div>
-                    <div className="w-full h-2 bg-[#EFEFEF] dark:bg-[#202020] rounded-full overflow-hidden">
-                      <div className="h-full bg-[#888888] dark:bg-[#555555] rounded-full" style={{ width: '14%' }} />
+                    <div 
+                      className="w-full rounded-full overflow-hidden"
+                      style={{ backgroundColor: '#e3e8ee', height: '6px' }}
+                    >
+                      <div 
+                        className="h-full rounded-full" 
+                        style={{ width: '22%', backgroundColor: '#e3e8ee' }} 
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between text-[12px] mb-1">
+                      <span style={{ color: '#64748d' }}>Execution Void</span>
+                      <span style={{ color: '#64748d', fontFeatureSettings: '"tnum"' }}>17%</span>
+                    </div>
+                    <div 
+                      className="w-full rounded-full overflow-hidden"
+                      style={{ backgroundColor: '#e3e8ee', height: '6px' }}
+                    >
+                      <div 
+                        className="h-full rounded-full" 
+                        style={{ width: '17%', backgroundColor: '#e3e8ee' }} 
+                      />
+                    </div>
+                  </div>
+
+                  <div>
+                    <div className="flex items-center justify-between text-[12px] mb-1">
+                      <span style={{ color: '#64748d' }}>Competition & Platform Moat</span>
+                      <span style={{ color: '#64748d', fontFeatureSettings: '"tnum"' }}>14%</span>
+                    </div>
+                    <div 
+                      className="w-full rounded-full overflow-hidden"
+                      style={{ backgroundColor: '#e3e8ee', height: '6px' }}
+                    >
+                      <div 
+                        className="h-full rounded-full" 
+                        style={{ width: '14%', backgroundColor: '#e3e8ee' }} 
+                      />
                     </div>
                   </div>
                 </div>
               </div>
 
-              {/* Mini Knowledge Graph Interactive Node Preview */}
-              <div className="p-3.5 rounded-[5px] bg-[#FAFAFA] dark:bg-[#181818] border border-[#EFEFEF] dark:border-[#242424]">
+              {/* KNOWLEDGE GRAPH CONNECTOR */}
+              <div 
+                className="p-3.5"
+                style={{
+                  backgroundColor: '#f6f9fc',
+                  border: '1px solid #e3e8ee',
+                  borderRadius: '10px',
+                }}
+              >
                 <div className="flex items-center justify-between mb-2">
-                  <span className="text-[11px] font-bold uppercase tracking-wider text-[#777777] dark:text-white/50 flex items-center gap-1.5">
-                    <Network className="w-3.5 h-3.5" />
+                  <span 
+                    className="flex items-center gap-1.5"
+                    style={{
+                      color: '#64748d',
+                      fontSize: '11px',
+                      textTransform: 'uppercase',
+                      fontWeight: 600,
+                    }}
+                  >
+                    <Network className="w-3.5 h-3.5 text-[#533afd]" />
                     KNOWLEDGE GRAPH CONNECTOR
                   </span>
-                  <Link to="/startup-graph" className="text-[11px] font-bold text-black dark:text-white hover:underline flex items-center">
+                  <Link 
+                    to="/startup-graph" 
+                    className="hover:underline flex items-center font-medium"
+                    style={{ color: '#533afd', fontSize: '11px' }}
+                  >
                     Full Graph →
                   </Link>
                 </div>
                 
                 <div className="flex items-center justify-between gap-1 py-1">
-                  {['wework', 'theranos', 'fast', 'quibi'].map((key) => (
-                    <button
-                      key={key}
-                      onClick={() => setActiveGraphNode(key)}
-                      className={`px-2.5 py-1 rounded-[4px] text-[11px] font-bold capitalize transition-colors ${
-                        activeGraphNode === key 
-                          ? 'bg-black text-white dark:bg-white dark:text-black' 
-                          : 'bg-white dark:bg-[#222222] text-[#555555] dark:text-white/70 border border-[#EFEFEF] dark:border-[#333333]'
-                      }`}
-                    >
-                      {key}
-                    </button>
-                  ))}
+                  {['wework', 'theranos', 'fast', 'quibi'].map((key) => {
+                    const isActive = activeGraphNode === key;
+                    return (
+                      <button
+                        key={key}
+                        onClick={() => setActiveGraphNode(key)}
+                        className="px-2.5 py-1 text-[11px] font-medium capitalize transition-colors"
+                        style={{
+                          backgroundColor: isActive ? '#0d253d' : 'transparent',
+                          color: isActive ? '#ffffff' : '#64748d',
+                          borderRadius: '6px',
+                        }}
+                      >
+                        {key}
+                      </button>
+                    );
+                  })}
                 </div>
 
-                <div className="mt-2 text-[12px] text-black dark:text-white bg-white dark:bg-[#111111] p-2.5 rounded border border-[#EFEFEF] dark:border-[#282828]">
-                  <div className="flex items-center justify-between font-bold">
-                    <span>{graphEntities[activeGraphNode].name}</span>
-                    <span className="text-[#FF6173] text-[11px]">{graphEntities[activeGraphNode].type}</span>
+                <div 
+                  className="mt-2 p-2.5"
+                  style={{
+                    backgroundColor: '#ffffff',
+                    border: '1px solid #e3e8ee',
+                    borderRadius: '8px',
+                  }}
+                >
+                  <div className="flex items-center justify-between">
+                    <div className="flex items-center gap-2">
+                      <CompanyLogo name={graphEntities[activeGraphNode].name} size="xs" />
+                      <span style={{ color: '#0d253d', fontWeight: 600, fontSize: '13px' }}>
+                        {graphEntities[activeGraphNode].name}
+                      </span>
+                    </div>
+                    <span 
+                      style={{
+                        color: '#ea2261',
+                        fontWeight: 500,
+                        fontSize: '11px',
+                      }}
+                    >
+                      {graphEntities[activeGraphNode].type}
+                    </span>
                   </div>
-                  <p className="text-[11px] text-[#666666] dark:text-white/60 mt-1 line-clamp-1">
+                  <p 
+                    className="mt-1 line-clamp-1"
+                    style={{
+                      color: '#64748d',
+                      fontSize: '13px',
+                    }}
+                  >
                     {graphEntities[activeGraphNode].description}
                   </p>
                 </div>
               </div>
 
               {/* AI Signal Banner */}
-              <div className="flex items-start gap-2.5 p-3 rounded-[5px] bg-[#FAFAFA] dark:bg-[#161616] border border-[#EFEFEF] dark:border-[#262626] text-[12px]">
-                <Cpu className="w-4 h-4 text-black dark:text-white shrink-0 mt-0.5" />
-                <div className="text-[#555555] dark:text-white/70 leading-snug">
-                  <strong className="text-black dark:text-white">AI SIGNAL:</strong> Unit economics deterioration correlates with 84% of consumer hardware casualties.
+              <div 
+                className="flex items-start gap-2.5 p-3 text-[12px]"
+                style={{
+                  backgroundColor: '#f6f9fc',
+                  border: '1px solid #e3e8ee',
+                  borderRadius: '10px',
+                  color: '#64748d',
+                }}
+              >
+                <Cpu className="w-4 h-4 text-[#533afd] shrink-0 mt-0.5" />
+                <div className="leading-snug">
+                  <strong style={{ color: '#0d253d' }}>AI SIGNAL:</strong> Unit economics deterioration correlates with 84% of consumer hardware casualties.
                 </div>
               </div>
             </div>
@@ -447,200 +746,403 @@ export function Home() {
       </section>
 
       {/* 3. Section: Live Failure Intelligence (Charts & Distributions) */}
-      <section className="site-container pt-8 border-t border-[#EFEFEF] dark:border-[#202020]">
+      <section className="site-container pt-8 border-t border-[#e3e8ee]">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded text-[11px] font-bold bg-[#FAFAFA] dark:bg-[#1A1A1A] border border-[#EFEFEF] dark:border-[#2D2D2D] text-black dark:text-white mb-2">
-              <Activity className="w-3 h-3 text-[#FF6173]" />
+            <div 
+              className="inline-flex items-center gap-2 mb-2 w-fit"
+              style={{
+                backgroundColor: '#b9b9f9',
+                color: '#4434d4',
+                borderRadius: '9999px',
+                fontSize: '11px',
+                fontWeight: 500,
+                padding: '4px 12px',
+              }}
+            >
+              <Activity className="w-3 h-3 text-[#533afd]" />
               <span>FORENSIC DATASET</span>
             </div>
-            <h2 className="text-2xl sm:text-4xl font-extrabold tracking-tight text-black dark:text-white">
+            <h2 
+              className="text-2xl sm:text-4xl tracking-tight"
+              style={{
+                color: '#0d253d',
+                fontWeight: 700,
+              }}
+            >
               Failure Intelligence & Distribution
             </h2>
-            <p className="text-[14px] sm:text-[15px] text-[#555555] dark:text-white/60 mt-1 max-w-2xl">
+            <p 
+              className="text-[14px] sm:text-[15px] mt-1 max-w-2xl"
+              style={{ color: '#64748d' }}
+            >
               Patterns extracted across 413+ documented startup failures. Editorial analytics derived from verified corporate post-mortems and SEC filings.
             </p>
           </div>
-          <Link to="/insights" className="btn-link-cta shrink-0 font-bold">
+          <Link 
+            to="/insights" 
+            className="shrink-0 font-medium hover:underline"
+            style={{ color: '#533afd' }}
+          >
             <span>Macro Dashboard</span>
             <span>→</span>
           </Link>
         </div>
 
         {/* 4 Analytics Metric Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-          {[
-            {
-              label: 'TOTAL FAILURES',
-              value: '413',
-              sub: 'This quarter',
-              badge: '+18',
-              badgeBg: 'rgba(234,34,97,0.10)',
-              badgeColor: '#ea2261',
-              iconBg: 'rgba(234,34,97,0.10)',
-              iconColor: '#ea2261',
-              stroke: '#ea2261',
-              fill: 'rgba(234,34,97,0.12)',
-              spark: [20, 32, 28, 45, 42, 58, 62, 55, 72, 75],
-              icon: AlertTriangle,
-            },
-            {
-              label: 'VAULTED STARTUPS',
-              value: '413',
-              sub: 'With postmortems',
-              badge: '+214',
-              badgeBg: '#b9b9f9',
-              badgeColor: '#4434d4',
-              iconBg: '#b9b9f9',
-              iconColor: '#533afd',
-              stroke: '#533afd',
-              fill: 'rgba(83,58,253,0.12)',
-              spark: [30, 34, 38, 42, 41, 46, 50, 54, 55, 60],
-              icon: BookOpen,
-            },
-            {
-              label: 'AVG RISK SCORE',
-              value: '68.4',
-              sub: 'All analyzed startups',
-              badge: '+3.2',
-              badgeBg: '#f5e9d4',
-              badgeColor: '#9b6829',
-              iconBg: 'rgba(155,104,41,0.12)',
-              iconColor: '#9b6829',
-              stroke: '#9b6829',
-              fill: 'rgba(155,104,41,0.12)',
-              spark: [55, 58, 60, 62, 61, 65, 66, 67, 68, 68.4],
-              icon: Gauge,
-            },
-            {
-              label: 'AI INSIGHTS GENERATED',
-              value: '48,209',
-              sub: 'Last 30 days',
-              badge: '+1204',
-              badgeBg: '#b9b9f9',
-              badgeColor: '#4434d4',
-              iconBg: '#b9b9f9',
-              iconColor: '#533afd',
-              stroke: '#533afd',
-              fill: 'rgba(83,58,253,0.12)',
-              spark: [10, 18, 22, 28, 32, 38, 45, 48, 52, 56],
-              icon: Brain,
-            },
-          ].map((k, i) => {
-            const Icon = k.icon;
-            return (
-              <div
-                key={i}
-                className="p-5 md:p-6 relative overflow-hidden"
-                style={{
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #e3e8ee',
-                  borderRadius: '18px',
-                  boxShadow: 'rgba(0, 55, 112, 0.08) 0px 1px 3px',
-                }}
-              >
-                <div className="flex items-start justify-between mb-4">
-                  <div className="flex items-center gap-2">
-                    <div
-                      className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
-                      style={{ backgroundColor: k.iconBg, color: k.iconColor }}
-                    >
-                      <Icon className="w-4 h-4" />
-                    </div>
-                    <span
-                      style={{
-                        color: '#64748d',
-                        letterSpacing: '0.1px',
-                        fontSize: '10px',
-                        fontWeight: 400,
-                      }}
-                      className="uppercase"
-                    >
-                      {k.label}
-                    </span>
-                  </div>
-                  <span
-                    style={{
-                      backgroundColor: k.badgeBg,
-                      color: k.badgeColor,
-                      borderRadius: '9999px',
-                      fontSize: '10px',
-                      fontWeight: 400,
-                      padding: '4px 8px',
-                      lineHeight: 1,
-                    }}
-                    className="inline-flex items-center justify-center font-normal"
-                  >
-                    {k.badge}
-                  </span>
-                </div>
-
-                <div className="flex items-end justify-between mb-3">
-                  <div
-                    style={{
-                      color: '#0d253d',
-                      fontSize: '34px',
-                      fontWeight: 'bold',
-                      fontFeatureSettings: '"tnum"',
-                      letterSpacing: '-0.42px',
-                      lineHeight: 1,
-                    }}
-                  >
-                    {k.value}
-                  </div>
-                  <MiniSparkline data={k.spark} stroke={k.stroke} fill={k.fill} height={30} />
-                </div>
-
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+          {/* Card 1: TOTAL FAILURES */}
+          <div
+            style={{
+              backgroundColor: '#ffffff',
+              border: '1px solid #e3e8ee',
+              borderRadius: '16px',
+              boxShadow: 'rgba(0, 55, 112, 0.08) 0px 2px 12px',
+              padding: '24px',
+            }}
+          >
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-2">
                 <div
-                  className="pt-2"
+                  className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: 'rgba(234, 34, 97, 0.10)', color: '#ea2261' }}
+                >
+                  <AlertTriangle className="w-4 h-4" />
+                </div>
+                <span
                   style={{
                     color: '#64748d',
-                    fontSize: '12px',
+                    letterSpacing: '0.5px',
+                    fontSize: '10px',
+                    fontWeight: 600,
                   }}
+                  className="uppercase"
                 >
-                  {k.sub}
-                </div>
+                  TOTAL FAILURES
+                </span>
               </div>
-            );
-          })}
+              <span
+                style={{
+                  backgroundColor: 'rgba(234, 34, 97, 0.10)',
+                  color: '#ea2261',
+                  borderRadius: '9999px',
+                  padding: '3px 8px',
+                  fontSize: '10px',
+                  fontWeight: 700,
+                }}
+              >
+                +18
+              </span>
+            </div>
+            <div className="flex items-end justify-between mb-3">
+              <div
+                style={{
+                  color: '#0d253d',
+                  fontSize: '34px',
+                  fontWeight: 700,
+                  fontFeatureSettings: '"tnum"',
+                  letterSpacing: '-0.42px',
+                  lineHeight: 1,
+                }}
+              >
+                413
+              </div>
+              <MiniSparkline
+                data={[20, 32, 28, 45, 42, 58, 62, 55, 72, 75]}
+                stroke="#ea2261"
+                fill="rgba(234, 34, 97, 0.12)"
+              />
+            </div>
+            <div style={{ color: '#64748d', fontSize: '11px' }}>
+              This quarter
+            </div>
+          </div>
+
+          {/* Card 2: VAULTED STARTUPS */}
+          <div
+            style={{
+              backgroundColor: '#ffffff',
+              border: '1px solid #e3e8ee',
+              borderRadius: '16px',
+              boxShadow: 'rgba(0, 55, 112, 0.08) 0px 2px 12px',
+              padding: '24px',
+            }}
+          >
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: '#b9b9f9', color: '#533afd' }}
+                >
+                  <BookOpen className="w-4 h-4" />
+                </div>
+                <span
+                  style={{
+                    color: '#64748d',
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    letterSpacing: '0.5px'
+                  }}
+                  className="uppercase"
+                >
+                  VAULTED STARTUPS
+                </span>
+              </div>
+              <span
+                style={{
+                  backgroundColor: '#b9b9f9',
+                  color: '#4434d4',
+                  borderRadius: '9999px',
+                  padding: '3px 8px',
+                  fontSize: '10px',
+                  fontWeight: 700,
+                }}
+              >
+                +214
+              </span>
+            </div>
+            <div className="flex items-end justify-between mb-3">
+              <div
+                style={{
+                  color: '#0d253d',
+                  fontSize: '34px',
+                  fontWeight: 700,
+                  fontFeatureSettings: '"tnum"',
+                  letterSpacing: '-0.42px',
+                  lineHeight: 1,
+                }}
+              >
+                413
+              </div>
+              <MiniSparkline
+                data={[30, 34, 38, 42, 41, 46, 50, 54, 55, 60]}
+                stroke="#533afd"
+                fill="rgba(83, 58, 253, 0.12)"
+              />
+            </div>
+            <div style={{ color: '#64748d', fontSize: '11px' }}>
+              With postmortems
+            </div>
+          </div>
+
+          {/* Card 3: AVG RISK SCORE */}
+          <div
+            style={{
+              backgroundColor: '#ffffff',
+              border: '1px solid #e3e8ee',
+              borderRadius: '16px',
+              boxShadow: 'rgba(0, 55, 112, 0.08) 0px 2px 12px',
+              padding: '24px',
+            }}
+          >
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: 'rgba(155, 104, 41, 0.12)', color: '#9b6829' }}
+                >
+                  <Gauge className="w-4 h-4" />
+                </div>
+                <span
+                  style={{
+                    color: '#64748d',
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    letterSpacing: '0.5px'
+                  }}
+                  className="uppercase"
+                >
+                  AVG RISK SCORE
+                </span>
+              </div>
+              <span
+                style={{
+                  backgroundColor: 'rgba(155, 104, 41, 0.12)',
+                  color: '#9b6829',
+                  borderRadius: '9999px',
+                  padding: '3px 8px',
+                  fontSize: '10px',
+                  fontWeight: 700,
+                }}
+              >
+                +3.2
+              </span>
+            </div>
+            <div className="flex items-end justify-between mb-3">
+              <div
+                style={{
+                  color: '#0d253d',
+                  fontSize: '34px',
+                  fontWeight: 700,
+                  fontFeatureSettings: '"tnum"',
+                  letterSpacing: '-0.42px',
+                  lineHeight: 1,
+                }}
+              >
+                68.4
+              </div>
+              <MiniSparkline
+                data={[55, 58, 60, 62, 61, 65, 66, 67, 68, 68.4]}
+                stroke="#9b6829"
+                fill="rgba(155, 104, 41, 0.12)"
+              />
+            </div>
+            <div style={{ color: '#64748d', fontSize: '11px' }}>
+              All analyzed startups
+            </div>
+          </div>
+
+          {/* Card 4: AI INSIGHTS GENERATED */}
+          <div
+            style={{
+              backgroundColor: '#ffffff',
+              border: '1px solid #e3e8ee',
+              borderRadius: '16px',
+              boxShadow: 'rgba(0, 55, 112, 0.08) 0px 2px 12px',
+              padding: '24px',
+            }}
+          >
+            <div className="flex items-start justify-between mb-4">
+              <div className="flex items-center gap-2">
+                <div
+                  className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
+                  style={{ backgroundColor: '#b9b9f9', color: '#533afd' }}
+                >
+                  <Brain className="w-4 h-4" />
+                </div>
+                <span
+                  style={{
+                    color: '#64748d',
+                    fontSize: '10px',
+                    fontWeight: 600,
+                    letterSpacing: '0.5px'
+                  }}
+                  className="uppercase"
+                >
+                  AI INSIGHTS GENERATED
+                </span>
+              </div>
+              <span
+                style={{
+                  backgroundColor: '#b9b9f9',
+                  color: '#4434d4',
+                  borderRadius: '9999px',
+                  padding: '3px 8px',
+                  fontSize: '10px',
+                  fontWeight: 700,
+                }}
+              >
+                +1204
+              </span>
+            </div>
+            <div className="flex items-end justify-between mb-3">
+              <div
+                style={{
+                  color: '#0d253d',
+                  fontSize: '34px',
+                  fontWeight: 700,
+                  fontFeatureSettings: '"tnum"',
+                  letterSpacing: '-0.42px',
+                  lineHeight: 1,
+                }}
+              >
+                48,209
+              </div>
+              <MiniSparkline
+                data={[10, 18, 22, 28, 32, 38, 45, 48, 52, 56]}
+                stroke="#533afd"
+                fill="rgba(83, 58, 253, 0.12)"
+              />
+            </div>
+            <div style={{ color: '#64748d', fontSize: '11px' }}>
+              Last 30 days
+            </div>
+          </div>
         </div>
 
         {/* 2-Column Dashboard: Left = Failure Vector Distribution, Right = Trend Line */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-          
-          {/* Left (6 cols): Horizontal Bar Chart */}
-          <div className="lg:col-span-6 card-editorial !p-6 space-y-4">
-            <div className="flex items-center justify-between pb-3 border-b border-[#EFEFEF] dark:border-[#202020]">
+          {/* Left: FAILURE VECTOR DISTRIBUTION Card */}
+          <div 
+            className="lg:col-span-6 p-6 space-y-4"
+            style={{
+              backgroundColor: '#ffffff',
+              border: '1px solid #e3e8ee',
+              borderRadius: '16px',
+              boxShadow: 'rgba(0, 55, 112, 0.08) 0px 2px 12px',
+            }}
+          >
+            <div className="flex items-center justify-between pb-3 border-b border-[#e3e8ee]">
               <div>
-                <h3 className="text-[16px] font-bold text-black dark:text-white">FAILURE VECTOR DISTRIBUTION</h3>
-                <p className="text-[12px] text-[#555555] dark:text-white/60">Primary root causes across 413 autopsies</p>
+                <h3 
+                  style={{
+                    color: '#0d253d',
+                    fontWeight: 700,
+                    fontSize: '16px'
+                  }}
+                >
+                  FAILURE VECTOR DISTRIBUTION
+                </h3>
+                <p style={{ color: '#64748d', fontSize: '12px' }}>
+                  Primary root causes across 413 autopsies
+                </p>
               </div>
-              <span className="badge-neutral text-[11px]">Ranked</span>
+              <span 
+                style={{
+                  backgroundColor: '#b9b9f9',
+                  color: '#4434d4',
+                  borderRadius: '9999px',
+                  fontSize: '11px',
+                  fontWeight: 500,
+                  padding: '3px 10px'
+                }}
+              >
+                Ranked
+              </span>
             </div>
 
-            <div className="space-y-3 pt-2">
+            <div className="space-y-4 pt-2">
               {failureVectors.map((vec) => (
-                <div key={vec.label} className="group">
-                  <div className="flex items-center justify-between text-[13px] mb-1">
-                    <span className="font-semibold text-black dark:text-white flex items-center gap-2">
-                      {vec.isHighRisk && <span className="w-2 h-2 rounded-full bg-[#FF6173]" />}
+                <div key={vec.label}>
+                  <div className="flex items-center justify-between text-[13px] mb-1.5">
+                    <span 
+                      className="flex items-center gap-2"
+                      style={{
+                        color: vec.isHighRisk ? '#0d253d' : '#273951',
+                        fontWeight: vec.isHighRisk ? 600 : 400
+                      }}
+                    >
+                      {vec.isHighRisk && (
+                        <span 
+                          className="w-2 h-2 rounded-full"
+                          style={{ backgroundColor: '#ea2261' }}
+                        />
+                      )}
                       {vec.label}
                     </span>
-                    <div className="flex items-center gap-3 font-mono text-[12px]">
-                      <span className="text-[#888888] dark:text-white/50">{vec.count} cases</span>
-                      <span className={`font-bold ${vec.isHighRisk ? 'text-[#FF6173]' : 'text-black dark:text-white'}`}>
+                    <div className="flex items-center gap-3 text-[12px]">
+                      <span style={{ color: '#64748d' }}>{vec.count} cases</span>
+                      <span 
+                        style={{
+                          color: vec.isHighRisk ? '#ea2261' : '#64748d',
+                          fontWeight: vec.isHighRisk ? 600 : 400,
+                          fontFeatureSettings: '"tnum"'
+                        }}
+                      >
                         {vec.pct}%
                       </span>
                     </div>
                   </div>
-                  <div className="w-full h-2.5 bg-[#EFEFEF] dark:bg-[#202020] rounded-full overflow-hidden">
+                  <div 
+                    className="w-full rounded-full overflow-hidden"
+                    style={{ backgroundColor: '#f6f9fc', height: '4px' }}
+                  >
                     <div 
-                      className={`h-full rounded-full transition-all duration-300 ${
-                        vec.isHighRisk 
-                          ? 'bg-[#FF6173]' 
-                          : 'bg-black dark:bg-white group-hover:bg-[#555555] dark:group-hover:bg-[#CCCCCC]'
-                      }`}
-                      style={{ width: `${vec.pct * 3}%` }}
+                      className="h-full rounded-full transition-all duration-300"
+                      style={{ 
+                        width: `${vec.pct * 3}%`,
+                        backgroundColor: vec.isHighRisk ? '#ea2261' : '#0d253d'
+                      }}
                     />
                   </div>
                 </div>
@@ -648,35 +1150,72 @@ export function Home() {
             </div>
           </div>
 
-          {/* Right (6 cols): Chronological Failure Trend */}
-          <div className="lg:col-span-6 card-editorial !p-6 flex flex-col justify-between">
+          {/* Right: FAILURE EVENT TIMELINE Chart */}
+          <div 
+            className="lg:col-span-6 p-6 flex flex-col justify-between"
+            style={{
+              backgroundColor: '#ffffff',
+              border: '1px solid #e3e8ee',
+              borderRadius: '16px',
+              boxShadow: 'rgba(0, 55, 112, 0.08) 0px 2px 12px',
+            }}
+          >
             <div>
-              <div className="flex items-center justify-between pb-3 border-b border-[#EFEFEF] dark:border-[#202020]">
+              <div className="flex items-center justify-between pb-3 border-b border-[#e3e8ee]">
                 <div>
-                  <h3 className="text-[16px] font-bold text-black dark:text-white">FAILURE EVENT TIMELINE & VOLUME</h3>
-                  <p className="text-[12px] text-[#555555] dark:text-white/60">Annual collapse concentration (2016–2024)</p>
+                  <h3 
+                    style={{
+                      color: '#0d253d',
+                      fontWeight: 700,
+                      fontSize: '16px'
+                    }}
+                  >
+                    FAILURE EVENT TIMELINE
+                  </h3>
+                  <p style={{ color: '#64748d', fontSize: '12px' }}>
+                    Annual collapse concentration (2016–2024)
+                  </p>
                 </div>
-                <span className="badge-soft-red text-[11px]">Peak: 2022 Crunch</span>
+                <span 
+                  style={{
+                    backgroundColor: 'rgba(234, 34, 97, 0.10)',
+                    color: '#ea2261',
+                    borderRadius: '9999px',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    padding: '3px 10px'
+                  }}
+                >
+                  Peak: 2022 Crunch
+                </span>
               </div>
 
               {/* Bar visualization of annual failures */}
-              <div className="mt-6 pt-4 grid grid-cols-9 gap-2 h-44 items-end pb-2 border-b border-[#EFEFEF] dark:border-[#202020]">
+              <div className="mt-6 pt-4 grid grid-cols-9 gap-2 h-44 items-end pb-2 border-b border-[#e3e8ee]">
                 {trendData.map((d) => {
                   const heightPct = Math.round((d.failures / 84) * 100);
                   return (
                     <div key={d.year} className="flex flex-col items-center gap-2 group h-full justify-end">
-                      <span className="text-[10px] font-mono text-[#888888] dark:text-white/50 opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
+                      <span 
+                        className="text-[10px] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
+                        style={{ color: '#64748d', fontFeatureSettings: '"tnum"' }}
+                      >
                         {d.failures}
                       </span>
                       <div 
-                        className={`w-full rounded-t-[3px] transition-all ${
-                          d.isPeak 
-                            ? 'bg-[#FF6173]' 
-                            : 'bg-black dark:bg-white group-hover:bg-[#555555] dark:group-hover:bg-[#CCCCCC]'
-                        }`}
-                        style={{ height: `${heightPct}%` }}
+                        className="w-full rounded-t-[4px] transition-all"
+                        style={{ 
+                          height: `${heightPct}%`,
+                          backgroundColor: d.isPeak ? '#ea2261' : '#0d253d'
+                        }}
                       />
-                      <span className={`text-[11px] font-mono ${d.isPeak ? 'font-bold text-[#FF6173]' : 'text-[#777777] dark:text-white/60'}`}>
+                      <span 
+                        style={{
+                          color: d.isPeak ? '#ea2261' : '#64748d',
+                          fontSize: '11px',
+                          fontWeight: d.isPeak ? 700 : 400
+                        }}
+                      >
                         {d.year.slice(2)}'
                       </span>
                     </div>
@@ -685,11 +1224,17 @@ export function Home() {
               </div>
             </div>
 
-            <div className="mt-4 p-3.5 rounded-[5px] bg-[#FAFAFA] dark:bg-[#181818] border border-[#EFEFEF] dark:border-[#242424] flex items-center justify-between text-[12px]">
-              <div className="text-[#555555] dark:text-white/70">
-                <strong className="text-black dark:text-white">Trend Insight:</strong> Zero-interest-rate policy (ZIRP) hangover drove record mortality spikes in 2022–2023.
+            <div 
+              className="mt-4 p-3.5 rounded-[10px] flex items-center justify-between text-[12px]"
+              style={{
+                backgroundColor: '#f6f9fc',
+                border: '1px solid #e3e8ee'
+              }}
+            >
+              <div style={{ color: '#273951' }}>
+                <strong style={{ color: '#0d253d' }}>Trend Insight:</strong> Zero-interest-rate policy (ZIRP) hangover drove record mortality spikes in 2022–2023.
               </div>
-              <Link to="/insights" className="font-bold text-black dark:text-white hover:underline shrink-0 ml-3">
+              <Link to="/insights" className="font-medium hover:underline shrink-0 ml-3" style={{ color: '#533afd' }}>
                 Details →
               </Link>
             </div>
@@ -699,14 +1244,38 @@ export function Home() {
 
       {/* 4. Section: Capital Evaporated Metric & Breakdown */}
       <section className="site-container">
-        <div className="card-editorial !p-8 lg:!p-10 bg-black text-white dark:bg-[#0E0E0E] dark:border-[#202020]">
+        <div 
+          className="p-8 lg:p-10"
+          style={{
+            backgroundColor: '#1c1e54',
+            borderRadius: '16px',
+            color: '#ffffff',
+            border: '1px solid #273951',
+          }}
+        >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
             
             <div className="lg:col-span-5 space-y-3">
-              <span className="text-[11px] font-bold uppercase tracking-wider text-[#FF6173]">
+              <span 
+                style={{
+                  color: '#ea2261',
+                  fontSize: '11px',
+                  fontWeight: 700,
+                  textTransform: 'uppercase',
+                  letterSpacing: '1px'
+                }}
+              >
                 DATASET-DERIVED METRIC
               </span>
-              <div className="text-5xl sm:text-7xl font-extrabold tracking-tight text-white">
+              <div 
+                className="text-5xl sm:text-7xl tracking-tight"
+                style={{
+                  color: '#ffffff',
+                  fontWeight: 700,
+                  fontFeatureSettings: '"tnum"',
+                  letterSpacing: '-0.42px',
+                }}
+              >
                 $26.8B+
               </div>
               <h3 className="text-xl font-bold text-white">CAPITAL EVAPORATED</h3>
@@ -714,7 +1283,16 @@ export function Home() {
                 Total aggregate equity, debt, and venture capital associated with verified failure post-mortems in the PivotVault database.
               </p>
               <div className="pt-2">
-                <Link to="/explore" className="btn-inverted !px-6 !py-3 text-[14px]">
+                <Link 
+                  to="/explore" 
+                  className="btn-inverted !px-6 !py-3 text-[14px]"
+                  style={{
+                    backgroundColor: '#ffffff',
+                    color: '#0d253d',
+                    borderRadius: '9999px',
+                    fontWeight: 600,
+                  }}
+                >
                   Audit Financial Sinks →
                 </Link>
               </div>
@@ -729,10 +1307,26 @@ export function Home() {
                 { name: 'Fast', lost: '$125M', sector: 'FinTech', cause: '$10M/mo burn with $50k ARR' },
                 { name: 'Juicero', lost: '$120M', sector: 'Hardware', cause: '$400 press with hand-squeezable bag' }
               ].map((item) => (
-                <div key={item.name} className="p-3.5 rounded-[5px] bg-[#161616] border border-[#2D2D2D] hover:border-white/40 transition-colors">
+                <div 
+                  key={item.name} 
+                  className="p-3.5 transition-colors"
+                  style={{
+                    backgroundColor: 'rgba(255, 255, 255, 0.05)',
+                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                    borderRadius: '10px'
+                  }}
+                >
                   <div className="flex items-center justify-between">
-                    <span className="font-bold text-white text-[15px]">{item.name}</span>
-                    <span className="font-mono font-bold text-[#FF6173] text-[14px]">{item.lost}</span>
+                    <div className="flex items-center gap-2">
+                      <CompanyLogo name={item.name} size="xs" />
+                      <span className="font-bold text-white text-[15px]">{item.name}</span>
+                    </div>
+                    <span 
+                      className="font-bold text-[14px]"
+                      style={{ color: '#ea2261', fontFeatureSettings: '"tnum"', letterSpacing: '-0.42px' }}
+                    >
+                      {item.lost}
+                    </span>
                   </div>
                   <div className="text-[11px] text-white/50 uppercase mt-0.5">{item.sector}</div>
                   <div className="text-[12px] text-white/70 mt-1 line-clamp-1">{item.cause}</div>
@@ -747,25 +1341,46 @@ export function Home() {
       {/* 5. Section: Failure Pattern Matrix (Heatmap) */}
       <section className="site-container">
         <div className="mb-6">
-          <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded text-[11px] font-bold bg-[#FAFAFA] dark:bg-[#1A1A1A] border border-[#EFEFEF] dark:border-[#2D2D2D] text-black dark:text-white mb-2">
-            <Compass className="w-3 h-3 text-[#FF6173]" />
+          <div 
+            className="inline-flex items-center gap-2 mb-2 w-fit"
+            style={{
+              backgroundColor: '#b9b9f9',
+              color: '#4434d4',
+              borderRadius: '9999px',
+              fontSize: '11px',
+              fontWeight: 500,
+              padding: '4px 12px',
+            }}
+          >
+            <Compass className="w-3 h-3 text-[#533afd]" />
             <span>CROSS-INDUSTRY MATRIX</span>
           </div>
-          <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-black dark:text-white">
+          <h2 
+            className="text-2xl sm:text-3xl tracking-tight"
+            style={{ color: '#0d253d', fontWeight: 700 }}
+          >
             Failure Pattern Matrix
           </h2>
-          <p className="text-[14px] text-[#555555] dark:text-white/60 mt-1">
-            Grayscale intensity indicates failure concentration across industries and root cause vectors. Click any cell to inspect.
+          <p className="text-[14px] mt-1" style={{ color: '#64748d' }}>
+            Intensity indicates failure concentration across industries and root cause vectors. Click any cell to inspect.
           </p>
         </div>
 
-        <div className="card-editorial !p-6 overflow-x-auto">
+        <div 
+          className="p-6 overflow-x-auto"
+          style={{
+            backgroundColor: '#ffffff',
+            border: '1px solid #e3e8ee',
+            borderRadius: '16px',
+            boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+          }}
+        >
           <table className="w-full min-w-[700px] border-collapse text-left text-[13px]">
             <thead>
-              <tr className="border-b border-[#EFEFEF] dark:border-[#202020]">
-                <th className="py-3 px-4 font-bold text-black dark:text-white w-44">Failure Vector</th>
+              <tr className="border-b border-[#e3e8ee]">
+                <th className="py-3 px-4 font-bold w-44" style={{ color: '#0d253d' }}>Failure Vector</th>
                 {heatmapIndustries.map((ind) => (
-                  <th key={ind} className="py-3 px-3 font-bold text-center text-black dark:text-white">
+                  <th key={ind} className="py-3 px-3 font-bold text-center" style={{ color: '#0d253d' }}>
                     {ind}
                   </th>
                 ))}
@@ -773,8 +1388,8 @@ export function Home() {
             </thead>
             <tbody>
               {heatmapVectors.map((row) => (
-                <tr key={row.name} className="border-b border-[#EFEFEF]/60 dark:border-[#202020]/60 hover:bg-[#FAFAFA] dark:hover:bg-[#161616]">
-                  <td className="py-3.5 px-4 font-semibold text-black dark:text-white">
+                <tr key={row.name} className="border-b border-[#e3e8ee]/60 hover:bg-[#f6f9fc]">
+                  <td className="py-3.5 px-4 font-semibold" style={{ color: '#0d253d' }}>
                     {row.name}
                   </td>
                   {row.values.map((intensity, idx) => {
@@ -782,24 +1397,25 @@ export function Home() {
                     const isSelected = activeHeatmapCell.vector === row.name && activeHeatmapCell.industry === industry;
                     const isHighestRisk = intensity === 5;
                     
-                    // Monochrome intensity styles
-                    const bgClass = isHighestRisk
-                      ? 'bg-[#FFE8EB] text-[#FF6173] font-bold border border-[#FF6173]/40'
-                      : intensity === 4
-                      ? 'bg-black text-white dark:bg-white dark:text-black font-bold'
-                      : intensity === 3
-                      ? 'bg-[#888888] text-white dark:bg-[#555555] dark:text-white'
-                      : intensity === 2
-                      ? 'bg-[#DCDCDC] text-black dark:bg-[#333333] dark:text-white/80'
-                      : 'bg-[#F2F2F2] text-[#888888] dark:bg-[#202020] dark:text-white/40';
+                    let bgStyle = { backgroundColor: '#f6f9fc', color: '#64748d', border: '1px solid #e3e8ee' };
+                    if (isHighestRisk) {
+                      bgStyle = { backgroundColor: 'rgba(234, 34, 97, 0.10)', color: '#ea2261', border: '1px solid rgba(234, 34, 97, 0.3)' };
+                    } else if (intensity === 4) {
+                      bgStyle = { backgroundColor: '#0d253d', color: '#ffffff', border: 'none' };
+                    } else if (intensity === 3) {
+                      bgStyle = { backgroundColor: '#533afd', color: '#ffffff', border: 'none' };
+                    } else if (intensity === 2) {
+                      bgStyle = { backgroundColor: '#b9b9f9', color: '#4434d4', border: 'none' };
+                    }
 
                     return (
                       <td key={industry} className="py-2.5 px-2 text-center">
                         <button
                           onClick={() => setActiveHeatmapCell({ vector: row.name, industry, detail: row.detail })}
-                          className={`w-10 h-8 rounded-[4px] text-[11px] transition-transform hover:scale-105 inline-flex items-center justify-center ${bgClass} ${
-                            isSelected ? 'ring-2 ring-black dark:ring-white scale-105' : ''
+                          className={`w-10 h-8 rounded-[6px] text-[11px] font-semibold transition-transform hover:scale-105 inline-flex items-center justify-center ${
+                            isSelected ? 'ring-2 ring-[#ea2261] scale-105' : ''
                           }`}
+                          style={bgStyle}
                           title={`${row.name} × ${industry}: Risk Level ${intensity}/5`}
                         >
                           {intensity}★
@@ -813,64 +1429,104 @@ export function Home() {
           </table>
 
           {/* Active Cell Inspector */}
-          <div className="mt-4 p-4 rounded-[5px] bg-[#FAFAFA] dark:bg-[#161616] border border-[#EFEFEF] dark:border-[#242424] flex items-center justify-between text-[13px]">
+          <div 
+            className="mt-4 p-4 rounded-[10px] flex items-center justify-between text-[13px]"
+            style={{
+              backgroundColor: '#f6f9fc',
+              border: '1px solid #e3e8ee'
+            }}
+          >
             <div>
-              <span className="font-bold text-black dark:text-white">Selected Intersection: </span>
-              <strong className="text-[#FF6173]">{activeHeatmapCell.vector}</strong> × <strong>{activeHeatmapCell.industry}</strong>
-              <span className="text-[#666666] dark:text-white/60 ml-2">
+              <span className="font-bold" style={{ color: '#0d253d' }}>Selected Intersection: </span>
+              <strong style={{ color: '#ea2261' }}>{activeHeatmapCell.vector}</strong> × <strong style={{ color: '#0d253d' }}>{activeHeatmapCell.industry}</strong>
+              <span className="ml-2" style={{ color: '#64748d' }}>
                 — {activeHeatmapCell.detail || 'High structural vulnerability observed in capital-intensive rollout models.'}
               </span>
             </div>
-            <Link to={`/explore?q=${encodeURIComponent(activeHeatmapCell.vector)}`} className="btn-link-cta shrink-0 ml-4 font-bold text-[12px]">
+            <Link 
+              to={`/explore?q=${encodeURIComponent(activeHeatmapCell.vector)}`} 
+              className="shrink-0 ml-4 font-medium text-[12px] hover:underline"
+              style={{ color: '#533afd' }}
+            >
               Explore Cases →
             </Link>
           </div>
         </div>
       </section>
 
-      {/* 6. Section: The Startup Failure Network (Knowledge Graph Preview) */}
+      {/* 6. Section: The Startup Failure Network */}
       <section className="site-container">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
           <div>
-            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded text-[11px] font-bold bg-[#FAFAFA] dark:bg-[#1A1A1A] border border-[#EFEFEF] dark:border-[#2D2D2D] text-black dark:text-white mb-2">
-              <Network className="w-3 h-3 text-[#FF6173]" />
+            <div 
+              className="inline-flex items-center gap-2 mb-2 w-fit"
+              style={{
+                backgroundColor: '#b9b9f9',
+                color: '#4434d4',
+                borderRadius: '9999px',
+                fontSize: '11px',
+                fontWeight: 500,
+                padding: '4px 12px',
+              }}
+            >
+              <Network className="w-3 h-3 text-[#533afd]" />
               <span>RELATIONAL TOPOLOGY</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-black dark:text-white">
+            <h2 
+              className="text-2xl sm:text-3xl tracking-tight"
+              style={{ color: '#0d253d', fontWeight: 700 }}
+            >
               The Startup Failure Network
             </h2>
-            <p className="text-[14px] text-[#555555] dark:text-white/60 mt-1">
+            <p className="text-[14px] mt-1" style={{ color: '#64748d' }}>
               Connect startups, founders, investors, markets, and failure causes. Explore cross-entity contagion.
             </p>
           </div>
-          <Link to="/startup-graph" className="btn-link-cta shrink-0 font-bold">
+          <Link 
+            to="/startup-graph" 
+            className="shrink-0 font-medium hover:underline"
+            style={{ color: '#533afd' }}
+          >
             <span>Launch Full Graph Engine</span>
             <span>→</span>
           </Link>
         </div>
 
-        <div className="card-editorial !p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
-          
-          {/* Interactive Graph Node Canvas Simulation (Left 7 cols) */}
-          <div className="lg:col-span-7 bg-[#FAFAFA] dark:bg-[#141414] border border-[#EFEFEF] dark:border-[#222222] rounded-[5px] p-6 relative min-h-[340px] flex flex-col justify-between">
-            <div className="flex items-center justify-between text-[11px] font-mono text-[#777777] dark:text-white/50 pb-2 border-b border-[#EFEFEF] dark:border-[#222222]">
+        <div 
+          className="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center"
+          style={{
+            backgroundColor: '#ffffff',
+            border: '1px solid #e3e8ee',
+            borderRadius: '16px',
+            boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+          }}
+        >
+          {/* Node Canvas Simulation */}
+          <div 
+            className="lg:col-span-7 p-6 relative min-h-[340px] flex flex-col justify-between"
+            style={{
+              backgroundColor: '#f6f9fc',
+              border: '1px solid #e3e8ee',
+              borderRadius: '12px'
+            }}
+          >
+            <div className="flex items-center justify-between text-[11px] pb-2 border-b border-[#e3e8ee]" style={{ color: '#64748d' }}>
               <span>INTERACTIVE CLUSTER VIEW</span>
               <span>413 NODES • 890 EDGES</span>
             </div>
 
-            {/* Central Node Display */}
             <div className="py-6 flex flex-col items-center justify-center text-center space-y-4">
-              <div className="flex items-center gap-4 flex-wrap justify-center">
+              <div className="flex items-center gap-3 flex-wrap justify-center">
                 {Object.keys(graphEntities).map((key) => {
                   const isSelected = activeGraphNode === key;
                   return (
                     <button
                       key={key}
                       onClick={() => setActiveGraphNode(key)}
-                      className={`px-4 py-2 rounded-[5px] text-[13px] font-extrabold uppercase transition-all shadow-sm ${
+                      className={`px-4 py-2 rounded-[8px] text-[13px] font-bold uppercase transition-all ${
                         isSelected 
-                          ? 'bg-black text-white dark:bg-white dark:text-black scale-105 ring-2 ring-[#FF6173]' 
-                          : 'bg-white dark:bg-[#202020] text-black dark:text-white border border-[#EFEFEF] dark:border-[#333333] hover:bg-[#F0F0F0]'
+                          ? 'bg-[#0d253d] text-white scale-105 ring-2 ring-[#533afd]' 
+                          : 'bg-[#ffffff] text-[#273951] border border-[#e3e8ee] hover:bg-[#f6f9fc]'
                       }`}
                     >
                       {graphEntities[key].name}
@@ -879,474 +1535,710 @@ export function Home() {
                 })}
               </div>
 
-              {/* Connected Visual Links */}
               <div className="w-full max-w-md pt-2">
-                <div className="text-[11px] font-bold uppercase tracking-wider text-[#777777] dark:text-white/50 mb-2">
+                <div className="text-[11px] font-semibold uppercase tracking-wider mb-2" style={{ color: '#64748d' }}>
                   DIRECTLY LINKED EDGES:
                 </div>
                 <div className="grid grid-cols-2 gap-2 text-left">
                   {graphEntities[activeGraphNode].connections.map((c, i) => (
-                    <div key={i} className="p-2 rounded bg-white dark:bg-[#1C1C1C] border border-[#EFEFEF] dark:border-[#2A2A2A] text-[11px]">
-                      <div className="font-bold text-black dark:text-white line-clamp-1">{c.name}</div>
-                      <div className="text-[#777777] dark:text-white/50 text-[10px]">{c.role}</div>
+                    <div 
+                      key={i} 
+                      className="p-2.5 text-[11px]"
+                      style={{
+                        backgroundColor: '#ffffff',
+                        border: '1px solid #e3e8ee',
+                        borderRadius: '8px'
+                      }}
+                    >
+                      <div className="font-bold line-clamp-1" style={{ color: '#0d253d' }}>{c.name}</div>
+                      <div style={{ color: '#64748d', fontSize: '10px' }}>{c.role}</div>
                     </div>
                   ))}
                 </div>
               </div>
             </div>
 
-            <div className="text-[11px] text-[#777777] dark:text-white/50 flex items-center justify-between pt-2 border-t border-[#EFEFEF] dark:border-[#222222]">
+            <div className="text-[11px] flex items-center justify-between pt-2 border-t border-[#e3e8ee]" style={{ color: '#64748d' }}>
               <span>Click node to reveal relationship mapping</span>
-              <span className="font-mono text-[#FF6173]">Selected: {graphEntities[activeGraphNode].name}</span>
+              <span className="font-semibold" style={{ color: '#533afd' }}>Selected: {graphEntities[activeGraphNode].name}</span>
             </div>
           </div>
 
-          {/* Node Inspector Detail Panel (Right 5 cols) */}
+          {/* Node Inspector Detail Panel */}
           <div className="lg:col-span-5 space-y-4">
-            <div className="p-3 rounded-[5px] bg-[#FAFAFA] dark:bg-[#161616] border border-[#EFEFEF] dark:border-[#242424]">
-              <span className="badge-soft-red text-[11px] mb-2 inline-block">Entity Dossier</span>
-              <h3 className="text-[20px] font-extrabold text-black dark:text-white">
+            <div 
+              className="p-4"
+              style={{
+                backgroundColor: '#f6f9fc',
+                border: '1px solid #e3e8ee',
+                borderRadius: '12px'
+              }}
+            >
+              <span 
+                className="mb-2 inline-block"
+                style={{
+                  backgroundColor: 'rgba(234, 34, 97, 0.10)',
+                  color: '#ea2261',
+                  borderRadius: '9999px',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  padding: '2px 8px'
+                }}
+              >
+                Entity Dossier
+              </span>
+              <h3 className="text-[20px] font-bold" style={{ color: '#0d253d' }}>
                 {graphEntities[activeGraphNode].name}
               </h3>
-              <div className="text-[12px] font-mono text-[#FF6173] font-bold mb-2">
+              <div 
+                className="text-[12px] font-semibold mb-2"
+                style={{ color: '#ea2261' }}
+              >
                 {graphEntities[activeGraphNode].type}
               </div>
-              <p className="text-[13px] text-[#555555] dark:text-white/70 leading-relaxed">
+              <p className="text-[13px] leading-relaxed" style={{ color: '#64748d' }}>
                 {graphEntities[activeGraphNode].description}
               </p>
             </div>
 
-            <div className="space-y-2">
-              <h4 className="text-[12px] font-bold uppercase tracking-wider text-black dark:text-white">
+            <div className="space-y-1.5">
+              <h4 className="text-[12px] font-bold uppercase tracking-wider" style={{ color: '#0d253d' }}>
                 Network Contagion Analysis
               </h4>
-              <p className="text-[12px] text-[#666666] dark:text-white/60 leading-relaxed">
+              <p className="text-[12px] leading-relaxed" style={{ color: '#64748d' }}>
                 Founders and lead investors who repeat high-burn strategies across portfolio companies carry a 2.4x higher repeat failure correlation.
               </p>
             </div>
 
             <div className="pt-2 flex items-center gap-3">
-              <Link to="/startup-graph" className="btn-primary !py-2.5 !px-5 text-[13px]">
+              <Link 
+                to="/startup-graph" 
+                className="transition-colors text-[13px]"
+                style={{
+                  backgroundColor: '#533afd',
+                  color: '#ffffff',
+                  borderRadius: '9999px',
+                  padding: '10px 20px',
+                  fontWeight: 500,
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#4434d4'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#533afd'}
+              >
                 Explore in 3D Graph →
               </Link>
-              <Link to={`/startup/${activeGraphNode}`} className="btn-secondary !py-2.5 !px-4 text-[13px]">
+              <Link 
+                to={`/startup/${activeGraphNode}`} 
+                className="text-[13px] transition-colors"
+                style={{
+                  border: '1px solid #e3e8ee',
+                  backgroundColor: '#ffffff',
+                  color: '#0d253d',
+                  borderRadius: '9999px',
+                  padding: '10px 18px',
+                  fontWeight: 500,
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f6f9fc'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
+              >
                 Read Autopsy
               </Link>
             </div>
           </div>
-
         </div>
       </section>
 
-      {/* 7. Section: "From Failure to Insight" Horizontal Process Flow */}
+      {/* 7. Section: Process Flow */}
       <section className="site-container">
-        <div className="card-editorial !p-8 bg-[#FAFAFA] dark:bg-[#0E0E0E] border border-[#EFEFEF] dark:border-[#202020]">
+        <div 
+          className="p-8"
+          style={{
+            backgroundColor: '#ffffff',
+            border: '1px solid #e3e8ee',
+            borderRadius: '16px',
+            boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+          }}
+        >
           <div className="text-center mb-8">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#FF6173] block mb-1">
+            <span 
+              className="block mb-1 font-bold uppercase tracking-wider"
+              style={{ color: '#533afd', fontSize: '11px' }}
+            >
               PLATFORM ARCHITECTURE
             </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-black dark:text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold" style={{ color: '#0d253d' }}>
               From Failure Evidence to Founder Action
             </h2>
-            <p className="text-[14px] text-[#555555] dark:text-white/60 mt-1 max-w-xl mx-auto">
+            <p className="text-[14px] mt-1 max-w-xl mx-auto" style={{ color: '#64748d' }}>
               How PivotVault transforms raw corporate wreckage into defensible strategic foresight.
             </p>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-5 gap-4 text-center">
-            
-            <div className="p-4 rounded-[5px] bg-white dark:bg-[#161616] border border-[#EFEFEF] dark:border-[#222222] flex flex-col justify-between">
-              <div>
-                <span className="text-[11px] font-mono font-bold text-[#888888] dark:text-white/40 block mb-1">01. COLLECT</span>
-                <h4 className="text-[15px] font-extrabold text-black dark:text-white">Public Evidence</h4>
-                <p className="text-[12px] text-[#555555] dark:text-white/60 mt-2 leading-relaxed">
-                  SEC filings, court dockets, post-mortems & liquidation reports.
-                </p>
+            {[
+              { num: '01. COLLECT', title: 'Public Evidence', desc: 'SEC filings, court dockets, post-mortems & liquidation reports.' },
+              { num: '02. ENRICH', title: 'AI Extraction', desc: 'Dual-engine extraction of cash burn velocity & fatal pivots.' },
+              { num: '03. CONNECT', title: 'Knowledge Graph', desc: 'Map cross-entity founder, investor, and failure vector relationships.' },
+              { num: '04. ANALYZE', title: 'Failure Patterns', desc: 'Calculate Failure Scores (0–100) and multi-factor risk meters.' },
+              { num: '05. ACT', title: 'Founder Action', desc: 'Audit pitch decks, scan business models, and pivot safely.', highlight: true },
+            ].map((step, idx) => (
+              <div 
+                key={idx}
+                className="p-4 flex flex-col justify-between"
+                style={{
+                  backgroundColor: step.highlight ? '#1c1e54' : '#f6f9fc',
+                  color: step.highlight ? '#ffffff' : '#273951',
+                  border: `1px solid ${step.highlight ? '#273951' : '#e3e8ee'}`,
+                  borderRadius: '12px'
+                }}
+              >
+                <div>
+                  <span 
+                    className="block mb-1 text-[11px] font-mono font-bold"
+                    style={{ color: step.highlight ? '#b9b9f9' : '#64748d' }}
+                  >
+                    {step.num}
+                  </span>
+                  <h4 
+                    className="text-[15px] font-bold"
+                    style={{ color: step.highlight ? '#ffffff' : '#0d253d' }}
+                  >
+                    {step.title}
+                  </h4>
+                  <p 
+                    className="text-[12px] mt-2 leading-relaxed"
+                    style={{ color: step.highlight ? 'rgba(255, 255, 255, 0.7)' : '#64748d' }}
+                  >
+                    {step.desc}
+                  </p>
+                </div>
+                <div 
+                  className="mt-3 text-[16px]"
+                  style={{ color: step.highlight ? '#533afd' : '#64748d' }}
+                >
+                  {step.highlight ? '★' : '↓'}
+                </div>
               </div>
-              <div className="mt-3 text-black dark:text-white text-[16px]">↓</div>
-            </div>
-
-            <div className="p-4 rounded-[5px] bg-white dark:bg-[#161616] border border-[#EFEFEF] dark:border-[#222222] flex flex-col justify-between">
-              <div>
-                <span className="text-[11px] font-mono font-bold text-[#888888] dark:text-white/40 block mb-1">02. ENRICH</span>
-                <h4 className="text-[15px] font-extrabold text-black dark:text-white">AI Extraction</h4>
-                <p className="text-[12px] text-[#555555] dark:text-white/60 mt-2 leading-relaxed">
-                  Dual-engine extraction of cash burn velocity & fatal pivots.
-                </p>
-              </div>
-              <div className="mt-3 text-black dark:text-white text-[16px]">↓</div>
-            </div>
-
-            <div className="p-4 rounded-[5px] bg-white dark:bg-[#161616] border border-[#EFEFEF] dark:border-[#222222] flex flex-col justify-between">
-              <div>
-                <span className="text-[11px] font-mono font-bold text-[#888888] dark:text-white/40 block mb-1">03. CONNECT</span>
-                <h4 className="text-[15px] font-extrabold text-black dark:text-white">Knowledge Graph</h4>
-                <p className="text-[12px] text-[#555555] dark:text-white/60 mt-2 leading-relaxed">
-                  Map cross-entity founder, investor, and failure vector relationships.
-                </p>
-              </div>
-              <div className="mt-3 text-black dark:text-white text-[16px]">↓</div>
-            </div>
-
-            <div className="p-4 rounded-[5px] bg-white dark:bg-[#161616] border border-[#EFEFEF] dark:border-[#222222] flex flex-col justify-between">
-              <div>
-                <span className="text-[11px] font-mono font-bold text-[#888888] dark:text-white/40 block mb-1">04. ANALYZE</span>
-                <h4 className="text-[15px] font-extrabold text-black dark:text-white">Failure Patterns</h4>
-                <p className="text-[12px] text-[#555555] dark:text-white/60 mt-2 leading-relaxed">
-                  Calculate Failure Scores (0–100) and multi-factor risk meters.
-                </p>
-              </div>
-              <div className="mt-3 text-black dark:text-white text-[16px]">↓</div>
-            </div>
-
-            <div className="p-4 rounded-[5px] bg-black text-white dark:bg-white dark:text-black border border-black dark:border-white flex flex-col justify-between">
-              <div>
-                <span className="text-[11px] font-mono font-bold text-[#FF6173] block mb-1">05. ACT</span>
-                <h4 className="text-[15px] font-extrabold">Founder Action</h4>
-                <p className="text-[12px] text-white/70 dark:text-black/70 mt-2 leading-relaxed">
-                  Audit pitch decks, scan business models, and pivot safely.
-                </p>
-              </div>
-              <div className="mt-3 text-[#FF6173] text-[16px]">★</div>
-            </div>
-
+            ))}
           </div>
         </div>
       </section>
 
-      {/* 8. Section: 6-Feature Asymmetric Grid with Distinct Visual Treatments */}
+      {/* 8. Section: Core Platform Modules */}
       <section className="site-container">
         <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-8">
           <div>
-            <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded text-[11px] font-bold bg-[#FAFAFA] dark:bg-[#1A1A1A] border border-[#EFEFEF] dark:border-[#2D2D2D] text-black dark:text-white mb-2">
-              <Layers className="w-3 h-3 text-[#FF6173]" />
+            <div 
+              className="inline-flex items-center gap-2 mb-2 w-fit"
+              style={{
+                backgroundColor: '#b9b9f9',
+                color: '#4434d4',
+                borderRadius: '9999px',
+                fontSize: '11px',
+                fontWeight: 500,
+                padding: '4px 12px',
+              }}
+            >
+              <Layers className="w-3 h-3 text-[#533afd]" />
               <span>CORE PLATFORM MODULES</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-black dark:text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold" style={{ color: '#0d253d' }}>
               Intelligence Feature Suite
             </h2>
-            <p className="text-[14px] text-[#555555] dark:text-white/60 mt-1">
+            <p className="text-[14px] mt-1" style={{ color: '#64748d' }}>
               Every tool is engineered with distinct diagnostic capabilities to deconstruct risk.
             </p>
           </div>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          
-          {/* Card 1: Failure Archive with Mini Table Preview */}
-          <Link to="/explore" className="card-editorial !p-6 group flex flex-col justify-between">
+          {/* Card 1: Failure Archive */}
+          <Link 
+            to="/explore" 
+            className="p-6 group flex flex-col justify-between transition-all"
+            style={{
+              backgroundColor: '#ffffff',
+              border: '1px solid #e3e8ee',
+              borderRadius: '16px',
+              boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+            }}
+          >
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span className="badge-neutral text-[11px]">413+ Dossiers</span>
-                <Database className="w-5 h-5 text-black dark:text-white" />
+                <Database className="w-5 h-5 text-[#533afd]" />
               </div>
-              <h3 className="text-[18px] font-bold text-black dark:text-white group-hover:underline">
+              <h3 className="text-[18px] font-bold group-hover:text-[#533afd] transition-colors" style={{ color: '#0d253d' }}>
                 Failure Archive
               </h3>
-              <p className="text-[13px] text-[#555555] dark:text-white/60 mt-1">
+              <p className="text-[13px] mt-1" style={{ color: '#64748d' }}>
                 Forensic post-mortems with capital loss figures, timelines, and root cause tags.
               </p>
 
-              {/* Mini Table UI Preview */}
-              <div className="mt-4 p-2.5 rounded bg-[#FAFAFA] dark:bg-[#161616] border border-[#EFEFEF] dark:border-[#242424] text-[11px] space-y-1.5 font-mono">
-                <div className="flex justify-between font-bold text-black dark:text-white border-b border-[#EFEFEF] dark:border-[#262626] pb-1">
+              <div 
+                className="mt-4 p-3 rounded-[8px] text-[11px] space-y-1.5"
+                style={{ backgroundColor: '#f6f9fc', border: '1px solid #e3e8ee' }}
+              >
+                <div className="flex justify-between font-bold border-b border-[#e3e8ee] pb-1" style={{ color: '#0d253d' }}>
                   <span>STARTUP</span>
                   <span>FS SCORE</span>
                   <span>CAPITAL</span>
                 </div>
-                <div className="flex justify-between text-[#555555] dark:text-white/70">
-                  <span>Theranos</span>
-                  <span className="text-[#FF6173]">98</span>
-                  <span>$1.4B</span>
+                <div className="flex justify-between items-center" style={{ color: '#273951' }}>
+                  <div className="flex items-center gap-1.5">
+                    <CompanyLogo name="Theranos" size="xs" />
+                    <span>Theranos</span>
+                  </div>
+                  <span style={{ color: '#ea2261', fontWeight: 600 }}>98</span>
+                  <span style={{ fontFeatureSettings: '"tnum"' }}>$1.4B</span>
                 </div>
-                <div className="flex justify-between text-[#555555] dark:text-white/70">
-                  <span>WeWork</span>
-                  <span className="text-[#FF6173]">92</span>
-                  <span>$12.8B</span>
+                <div className="flex justify-between items-center" style={{ color: '#273951' }}>
+                  <div className="flex items-center gap-1.5">
+                    <CompanyLogo name="WeWork" size="xs" />
+                    <span>WeWork</span>
+                  </div>
+                  <span style={{ color: '#ea2261', fontWeight: 600 }}>92</span>
+                  <span style={{ fontFeatureSettings: '"tnum"' }}>$12.8B</span>
                 </div>
-                <div className="flex justify-between text-[#555555] dark:text-white/70">
-                  <span>Fast</span>
-                  <span className="text-[#FF6173]">88</span>
-                  <span>$125M</span>
+                <div className="flex justify-between items-center" style={{ color: '#273951' }}>
+                  <div className="flex items-center gap-1.5">
+                    <CompanyLogo name="Fast" size="xs" />
+                    <span>Fast</span>
+                  </div>
+                  <span style={{ color: '#ea2261', fontWeight: 600 }}>88</span>
+                  <span style={{ fontFeatureSettings: '"tnum"' }}>$125M</span>
                 </div>
               </div>
             </div>
 
-            <div className="mt-5 pt-3 border-t border-[#EFEFEF] dark:border-[#202020] flex items-center justify-between text-[12px] font-bold text-black dark:text-white">
+            <div className="mt-5 pt-3 border-t border-[#e3e8ee] flex items-center justify-between text-[12px] font-medium" style={{ color: '#533afd' }}>
               <span>Explore Archive</span>
               <span className="group-hover:translate-x-1 transition-transform">→</span>
             </div>
           </Link>
 
-          {/* Card 2: Founder Playbook with Tactical Prescriptions */}
-          <Link to="/founder-playbook" className="card-editorial !p-6 group flex flex-col justify-between">
+          {/* Card 2: Founder Playbook */}
+          <Link 
+            to="/founder-playbook" 
+            className="p-6 group flex flex-col justify-between transition-all"
+            style={{
+              backgroundColor: '#ffffff',
+              border: '1px solid #e3e8ee',
+              borderRadius: '16px',
+              boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+            }}
+          >
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="badge-soft-red text-[11px]">Tactical Plays</span>
-                <BookOpen className="w-5 h-5 text-black dark:text-white" />
+                <span 
+                  style={{
+                    backgroundColor: 'rgba(234, 34, 97, 0.10)',
+                    color: '#ea2261',
+                    borderRadius: '9999px',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    padding: '2px 8px'
+                  }}
+                >
+                  Tactical Plays
+                </span>
+                <BookOpen className="w-5 h-5 text-[#533afd]" />
               </div>
-              <h3 className="text-[18px] font-bold text-black dark:text-white group-hover:underline">
+              <h3 className="text-[18px] font-bold group-hover:text-[#533afd] transition-colors" style={{ color: '#0d253d' }}>
                 Founder Playbook
               </h3>
-              <p className="text-[13px] text-[#555555] dark:text-white/60 mt-1">
+              <p className="text-[13px] mt-1" style={{ color: '#64748d' }}>
                 Defensive rules and counter-measures extracted from 413+ historical collapse post-mortems.
               </p>
 
-              {/* Mini Playbook UI Preview */}
-              <div className="mt-4 p-2.5 rounded bg-[#FAFAFA] dark:bg-[#161616] border border-[#EFEFEF] dark:border-[#242424] text-[11px] space-y-1">
-                <div className="font-bold text-black dark:text-white flex items-center gap-1">
-                  <span className="w-1.5 h-1.5 rounded-full bg-[#FF6173]" />
+              <div 
+                className="mt-4 p-3 rounded-[8px] text-[11px] space-y-1"
+                style={{ backgroundColor: '#f6f9fc', border: '1px solid #e3e8ee' }}
+              >
+                <div className="font-bold flex items-center gap-1" style={{ color: '#0d253d' }}>
+                  <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: '#ea2261' }} />
                   <span>Rule: Validate Margin Before Scale</span>
                 </div>
-                <p className="text-[#555555] dark:text-white/70 line-clamp-2">
+                <p className="line-clamp-2" style={{ color: '#64748d' }}>
                   "Never subsidize gross unit economics with venture equity under the assumption of future operational scale."
                 </p>
               </div>
             </div>
 
-            <div className="mt-5 pt-3 border-t border-[#EFEFEF] dark:border-[#202020] flex items-center justify-between text-[12px] font-bold text-black dark:text-white">
+            <div className="mt-5 pt-3 border-t border-[#e3e8ee] flex items-center justify-between text-[12px] font-medium" style={{ color: '#533afd' }}>
               <span>Explore Playbook</span>
               <span className="group-hover:translate-x-1 transition-transform">→</span>
             </div>
           </Link>
 
-          {/* Card 3: Risk Scanner with Gauge & Risk Meters */}
-          <Link to="/risk-scanner" className="card-editorial !p-6 group flex flex-col justify-between">
+          {/* Card 3: Risk Scanner */}
+          <Link 
+            to="/risk-scanner" 
+            className="p-6 group flex flex-col justify-between transition-all"
+            style={{
+              backgroundColor: '#ffffff',
+              border: '1px solid #e3e8ee',
+              borderRadius: '16px',
+              boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+            }}
+          >
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span className="badge-neutral text-[11px]">Defensive Tool</span>
-                <ShieldAlert className="w-5 h-5 text-black dark:text-white" />
+                <ShieldAlert className="w-5 h-5 text-[#533afd]" />
               </div>
-              <h3 className="text-[18px] font-bold text-black dark:text-white group-hover:underline">
+              <h3 className="text-[18px] font-bold group-hover:text-[#533afd] transition-colors" style={{ color: '#0d253d' }}>
                 Risk Scanner
               </h3>
-              <p className="text-[13px] text-[#555555] dark:text-white/60 mt-1">
+              <p className="text-[13px] mt-1" style={{ color: '#64748d' }}>
                 Stress-test your startup idea against historical failure distributions.
               </p>
 
-              {/* Mini Risk Gauge UI */}
-              <div className="mt-4 p-2.5 rounded bg-[#FAFAFA] dark:bg-[#161616] border border-[#EFEFEF] dark:border-[#242424] text-[11px] space-y-1.5">
+              <div 
+                className="mt-4 p-3 rounded-[8px] text-[11px] space-y-1.5"
+                style={{ backgroundColor: '#f6f9fc', border: '1px solid #e3e8ee' }}
+              >
                 <div className="flex justify-between items-center font-bold">
-                  <span>CALCULATED RISK SCORE</span>
-                  <span className="text-[#FF6173] font-mono">72 / 100</span>
+                  <span style={{ color: '#0d253d' }}>CALCULATED RISK SCORE</span>
+                  <span style={{ color: '#ea2261', fontFeatureSettings: '"tnum"' }}>72 / 100</span>
                 </div>
-                <div className="w-full h-1.5 bg-[#EFEFEF] dark:bg-[#282828] rounded-full overflow-hidden">
-                  <div className="h-full bg-[#FF6173] rounded-full" style={{ width: '72%' }} />
+                <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: '#e3e8ee' }}>
+                  <div className="h-full rounded-full" style={{ width: '72%', backgroundColor: '#ea2261' }} />
                 </div>
-                <div className="flex justify-between text-[10px] text-[#777777] dark:text-white/50">
+                <div className="flex justify-between text-[10px]" style={{ color: '#64748d' }}>
                   <span>Unit Economics: HIGH</span>
                   <span>Competition: HIGH</span>
                 </div>
               </div>
             </div>
 
-            <div className="mt-5 pt-3 border-t border-[#EFEFEF] dark:border-[#202020] flex items-center justify-between text-[12px] font-bold text-black dark:text-white">
+            <div className="mt-5 pt-3 border-t border-[#e3e8ee] flex items-center justify-between text-[12px] font-medium" style={{ color: '#533afd' }}>
               <span>Run Risk Scan</span>
               <span className="group-hover:translate-x-1 transition-transform">→</span>
             </div>
           </Link>
 
-          {/* Card 4: Pitch Deck Autopsy with Diagnostic Slide Audit */}
-          <Link to="/pitch-deck-autopsy" className="card-editorial !p-6 group flex flex-col justify-between">
+          {/* Card 4: Pitch Deck Autopsy */}
+          <Link 
+            to="/pitch-deck-autopsy" 
+            className="p-6 group flex flex-col justify-between transition-all"
+            style={{
+              backgroundColor: '#ffffff',
+              border: '1px solid #e3e8ee',
+              borderRadius: '16px',
+              boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+            }}
+          >
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span className="badge-neutral text-[11px]">Pre-Seed / Seed</span>
-                <FileText className="w-5 h-5 text-black dark:text-white" />
+                <FileText className="w-5 h-5 text-[#533afd]" />
               </div>
-              <h3 className="text-[18px] font-bold text-black dark:text-white group-hover:underline">
+              <h3 className="text-[18px] font-bold group-hover:text-[#533afd] transition-colors" style={{ color: '#0d253d' }}>
                 Pitch Deck Autopsy
               </h3>
-              <p className="text-[13px] text-[#555555] dark:text-white/60 mt-1">
+              <p className="text-[13px] mt-1" style={{ color: '#64748d' }}>
                 Audit pitch decks against historical failure traps and valuation fallacies.
               </p>
 
-              {/* Mini Slide Diagnostic UI */}
-              <div className="mt-4 p-2.5 rounded bg-[#FAFAFA] dark:bg-[#161616] border border-[#EFEFEF] dark:border-[#242424] text-[11px] space-y-1.5">
-                <div className="flex items-center gap-1.5 text-[#FF6173] font-bold">
+              <div 
+                className="mt-4 p-3 rounded-[8px] text-[11px] space-y-1.5"
+                style={{ backgroundColor: '#f6f9fc', border: '1px solid #e3e8ee' }}
+              >
+                <div className="flex items-center gap-1.5 font-bold" style={{ color: '#ea2261' }}>
                   <AlertTriangle className="w-3.5 h-3.5 shrink-0" />
                   <span>Slide 4: Unit Economics Trap</span>
                 </div>
-                <p className="text-[10px] text-[#666666] dark:text-white/60">
+                <p className="text-[11px]" style={{ color: '#64748d' }}>
                   CAC calculation omits sales overhead, creating false margin projections.
                 </p>
               </div>
             </div>
 
-            <div className="mt-5 pt-3 border-t border-[#EFEFEF] dark:border-[#202020] flex items-center justify-between text-[12px] font-bold text-black dark:text-white">
+            <div className="mt-5 pt-3 border-t border-[#e3e8ee] flex items-center justify-between text-[12px] font-medium" style={{ color: '#533afd' }}>
               <span>Audit Pitch Deck</span>
               <span className="group-hover:translate-x-1 transition-transform">→</span>
             </div>
           </Link>
 
-          {/* Card 5: Knowledge Graph with Mini Network View */}
-          <Link to="/startup-graph" className="card-editorial !p-6 group flex flex-col justify-between">
+          {/* Card 5: Knowledge Graph */}
+          <Link 
+            to="/startup-graph" 
+            className="p-6 group flex flex-col justify-between transition-all"
+            style={{
+              backgroundColor: '#ffffff',
+              border: '1px solid #e3e8ee',
+              borderRadius: '16px',
+              boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+            }}
+          >
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span className="badge-neutral text-[11px]">Relational Graph</span>
-                <Network className="w-5 h-5 text-black dark:text-white" />
+                <Network className="w-5 h-5 text-[#533afd]" />
               </div>
-              <h3 className="text-[18px] font-bold text-black dark:text-white group-hover:underline">
+              <h3 className="text-[18px] font-bold group-hover:text-[#533afd] transition-colors" style={{ color: '#0d253d' }}>
                 Knowledge Graph
               </h3>
-              <p className="text-[13px] text-[#555555] dark:text-white/60 mt-1">
+              <p className="text-[13px] mt-1" style={{ color: '#64748d' }}>
                 Explore relational topologies between investors, founders, and root causes.
               </p>
 
-              {/* Mini Network Visual Preview */}
-              <div className="mt-4 p-2.5 rounded bg-[#FAFAFA] dark:bg-[#161616] border border-[#EFEFEF] dark:border-[#242424] text-[11px] flex items-center justify-center gap-2 font-mono">
-                <span className="p-1 px-1.5 rounded bg-black text-white dark:bg-white dark:text-black font-bold">Startup</span>
-                <span className="text-[#888888]">───</span>
-                <span className="p-1 px-1.5 rounded bg-[#FFE8EB] text-[#FF6173] font-bold">Cause</span>
-                <span className="text-[#888888]">───</span>
-                <span className="p-1 px-1.5 rounded bg-white dark:bg-[#202020] border border-[#CCCCCC] dark:border-[#333333]">Investor</span>
+              <div 
+                className="mt-4 p-3 rounded-[8px] text-[11px] flex items-center justify-center gap-2"
+                style={{ backgroundColor: '#f6f9fc', border: '1px solid #e3e8ee' }}
+              >
+                <span className="p-1 px-2 rounded font-bold" style={{ backgroundColor: '#0d253d', color: '#ffffff' }}>Startup</span>
+                <span style={{ color: '#a8c3de' }}>───</span>
+                <span className="p-1 px-2 rounded font-bold" style={{ backgroundColor: 'rgba(234, 34, 97, 0.10)', color: '#ea2261' }}>Cause</span>
+                <span style={{ color: '#a8c3de' }}>───</span>
+                <span className="p-1 px-2 rounded" style={{ backgroundColor: '#ffffff', color: '#273951', border: '1px solid #e3e8ee' }}>Investor</span>
               </div>
             </div>
 
-            <div className="mt-5 pt-3 border-t border-[#EFEFEF] dark:border-[#202020] flex items-center justify-between text-[12px] font-bold text-black dark:text-white">
+            <div className="mt-5 pt-3 border-t border-[#e3e8ee] flex items-center justify-between text-[12px] font-medium" style={{ color: '#533afd' }}>
               <span>Launch Graph</span>
               <span className="group-hover:translate-x-1 transition-transform">→</span>
             </div>
           </Link>
 
-          {/* Card 6: Hall of Ghosts with Reconstructed Dialogues */}
-          <Link to="/hall-of-ghosts" className="card-editorial !p-6 group flex flex-col justify-between">
+          {/* Card 6: Hall of Ghosts */}
+          <Link 
+            to="/hall-of-ghosts" 
+            className="p-6 group flex flex-col justify-between transition-all"
+            style={{
+              backgroundColor: '#ffffff',
+              border: '1px solid #e3e8ee',
+              borderRadius: '16px',
+              boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+            }}
+          >
             <div>
               <div className="flex items-center justify-between mb-3">
-                <span className="badge-soft-red text-[11px]">AI Debrief</span>
-                <Users className="w-5 h-5 text-black dark:text-white" />
+                <span 
+                  style={{
+                    backgroundColor: 'rgba(234, 34, 97, 0.10)',
+                    color: '#ea2261',
+                    borderRadius: '9999px',
+                    fontSize: '11px',
+                    fontWeight: 600,
+                    padding: '2px 8px'
+                  }}
+                >
+                  AI Debrief
+                </span>
+                <Users className="w-5 h-5 text-[#533afd]" />
               </div>
-              <h3 className="text-[18px] font-bold text-black dark:text-white group-hover:underline">
+              <h3 className="text-[18px] font-bold group-hover:text-[#533afd] transition-colors" style={{ color: '#0d253d' }}>
                 Hall of Ghosts
               </h3>
-              <p className="text-[13px] text-[#555555] dark:text-white/60 mt-1">
+              <p className="text-[13px] mt-1" style={{ color: '#64748d' }}>
                 Interview AI personas reconstructed from court records and post-mortem testimonies.
               </p>
 
-              {/* Mini Dialogue Preview */}
-              <div className="mt-4 p-2.5 rounded bg-[#FAFAFA] dark:bg-[#161616] border border-[#EFEFEF] dark:border-[#242424] text-[11px] space-y-1">
-                <div className="font-bold text-black dark:text-white">
+              <div 
+                className="mt-4 p-3 rounded-[8px] text-[11px] space-y-1"
+                style={{ backgroundColor: '#f6f9fc', border: '1px solid #e3e8ee' }}
+              >
+                <div className="font-bold" style={{ color: '#0d253d' }}>
                   Ghost: Adam Neumann (WeWork)
                 </div>
-                <p className="text-[#555555] dark:text-white/70 italic line-clamp-1">
+                <p className="italic line-clamp-1" style={{ color: '#64748d' }}>
                   "We mistook access to unlimited venture capital for structural market validation."
                 </p>
               </div>
             </div>
 
-            <div className="mt-5 pt-3 border-t border-[#EFEFEF] dark:border-[#202020] flex items-center justify-between text-[12px] font-bold text-black dark:text-white">
+            <div className="mt-5 pt-3 border-t border-[#e3e8ee] flex items-center justify-between text-[12px] font-medium" style={{ color: '#533afd' }}>
               <span>Enter Hall of Ghosts</span>
               <span className="group-hover:translate-x-1 transition-transform">→</span>
             </div>
           </Link>
-
         </div>
       </section>
 
-      {/* 9. Section: Risk Scanner Live Interactive Preview (Split Section) */}
+      {/* 9. Section: Risk Scanner Live Interactive Preview */}
       <section className="site-container">
-        <div className="card-editorial !p-8 lg:!p-10 border-2 border-black dark:border-white">
+        <div 
+          className="p-8 lg:p-10"
+          style={{
+            backgroundColor: '#ffffff',
+            border: '1px solid #e3e8ee',
+            borderRadius: '16px',
+            boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+          }}
+        >
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
-            {/* Left Column: Interactive Input */}
+            {/* Left Column */}
             <div className="lg:col-span-6 space-y-4">
-              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded text-[11px] font-bold bg-[#FFE8EB] text-[#FF6173] border border-[#FF6173]/30">
+              <div 
+                className="inline-flex items-center gap-2 mb-1 w-fit"
+                style={{
+                  backgroundColor: 'rgba(234, 34, 97, 0.10)',
+                  color: '#ea2261',
+                  borderRadius: '9999px',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  padding: '3px 10px'
+                }}
+              >
                 <ShieldAlert className="w-3.5 h-3.5" />
                 <span>RISK SCANNER DEMO</span>
               </div>
               
-              <h2 className="text-3xl sm:text-4xl font-extrabold tracking-tight text-black dark:text-white">
+              <h2 className="text-3xl sm:text-4xl font-bold tracking-tight" style={{ color: '#0d253d' }}>
                 Scan Your Startup Idea
               </h2>
               
-              <p className="text-[15px] text-[#555555] dark:text-white/70 leading-relaxed">
+              <p className="text-[15px] leading-relaxed" style={{ color: '#64748d' }}>
                 How does your business model compare with historical failures? Stress-test your assumptions against 413+ autopsy distributions.
               </p>
 
               <div className="space-y-3 pt-2">
-                <label className="text-[12px] font-bold uppercase tracking-wider text-black dark:text-white block">
+                <label className="text-[12px] font-bold uppercase tracking-wider block" style={{ color: '#0d253d' }}>
                   Describe Your Startup Model:
                 </label>
                 <textarea
                   value={demoIdea}
                   onChange={(e) => setDemoIdea(e.target.value)}
                   rows={3}
-                  className="w-full p-3.5 text-[14px] text-black dark:text-white bg-[#FAFAFA] dark:bg-[#161616] border border-[#EFEFEF] dark:border-[#2D2D2D] rounded-[5px] focus:outline-none focus:border-black dark:focus:border-white"
+                  className="w-full p-3.5 text-[14px] focus:outline-none"
+                  style={{
+                    backgroundColor: '#f6f9fc',
+                    border: '1px solid #a8c3de',
+                    borderRadius: '8px',
+                    color: '#0d253d'
+                  }}
                 />
 
                 <div className="flex items-center gap-3">
                   <button
                     onClick={handleRunDemoScan}
                     disabled={isScanning}
-                    className="btn-primary !py-3 !px-6 text-[14px] font-bold"
+                    className="transition-colors"
+                    style={{
+                      backgroundColor: '#533afd',
+                      color: '#ffffff',
+                      borderRadius: '9999px',
+                      padding: '12px 24px',
+                      fontSize: '14px',
+                      fontWeight: 500,
+                      border: 'none',
+                      cursor: 'pointer'
+                    }}
+                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#4434d4'}
+                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#533afd'}
                   >
                     {isScanning ? 'Analyzing Patterns...' : 'RUN RISK SCAN →'}
                   </button>
-                  <Link to="/risk-scanner" className="text-[13px] font-bold text-black dark:text-white hover:underline">
+                  <Link to="/risk-scanner" className="text-[13px] font-medium hover:underline" style={{ color: '#533afd' }}>
                     Full Scanner Suite →
                   </Link>
                 </div>
               </div>
             </div>
 
-            {/* Right Column: Calculated Diagnostic Result Panel */}
-            <div className="lg:col-span-6 bg-[#FAFAFA] dark:bg-[#141414] border border-[#EFEFEF] dark:border-[#242424] rounded-[5px] p-6 space-y-5">
-              <div className="flex items-center justify-between pb-3 border-b border-[#EFEFEF] dark:border-[#222222]">
-                <span className="text-[12px] font-bold uppercase tracking-wider text-black dark:text-white">
+            {/* Right Column */}
+            <div 
+              className="lg:col-span-6 p-6 space-y-5"
+              style={{
+                backgroundColor: '#f6f9fc',
+                border: '1px solid #e3e8ee',
+                borderRadius: '12px'
+              }}
+            >
+              <div className="flex items-center justify-between pb-3 border-b border-[#e3e8ee]">
+                <span className="text-[12px] font-bold uppercase tracking-wider" style={{ color: '#0d253d' }}>
                   DIAGNOSTIC RISK RESULT
                 </span>
-                <span className="badge-soft-red text-[11px] font-mono font-bold">
+                <span 
+                  style={{
+                    backgroundColor: 'rgba(234, 34, 97, 0.10)',
+                    color: '#ea2261',
+                    borderRadius: '9999px',
+                    fontSize: '11px',
+                    fontWeight: 700,
+                    padding: '2px 8px'
+                  }}
+                >
                   {scanResult.rating}
                 </span>
               </div>
 
               <div className="flex items-center justify-between">
                 <div>
-                  <div className="text-[11px] uppercase tracking-wider text-[#777777] dark:text-white/50 font-bold">
+                  <div className="text-[11px] uppercase tracking-wider font-bold" style={{ color: '#64748d' }}>
                     FAILURE RISK INDEX
                   </div>
-                  <div className="text-4xl font-extrabold text-[#FF6173]">
-                    {scanResult.score} <span className="text-xl text-[#777777] dark:text-white/50">/ 100</span>
+                  <div 
+                    className="text-4xl font-bold"
+                    style={{ color: '#ea2261', fontFeatureSettings: '"tnum"' }}
+                  >
+                    {scanResult.score} <span className="text-xl" style={{ color: '#64748d' }}>/ 100</span>
                   </div>
                 </div>
-                <div className="text-right text-[12px] text-[#555555] dark:text-white/60">
-                  <span>Confidence: <strong>94%</strong></span> <br />
-                  <span>Autopsy Correlates: <strong>3 Matches</strong></span>
+                <div className="text-right text-[12px]" style={{ color: '#64748d' }}>
+                  <span>Confidence: <strong style={{ color: '#0d253d' }}>94%</strong></span> <br />
+                  <span>Autopsy Correlates: <strong style={{ color: '#0d253d' }}>3 Matches</strong></span>
                 </div>
               </div>
 
-              {/* 4 Category Risk Meters */}
+              {/* Category Risk Meters */}
               <div className="grid grid-cols-2 gap-3 pt-1">
                 {scanResult.breakdown.map((item) => (
-                  <div key={item.label} className="p-2.5 rounded bg-white dark:bg-[#1A1A1A] border border-[#EFEFEF] dark:border-[#282828] text-[12px]">
-                    <div className="flex justify-between font-bold text-black dark:text-white mb-1">
+                  <div 
+                    key={item.label} 
+                    className="p-2.5 text-[12px]"
+                    style={{
+                      backgroundColor: '#ffffff',
+                      border: '1px solid #e3e8ee',
+                      borderRadius: '8px'
+                    }}
+                  >
+                    <div className="flex justify-between font-medium mb-1" style={{ color: '#0d253d' }}>
                       <span>{item.label}</span>
-                      <span className={item.level === 'HIGH' ? 'text-[#FF6173]' : 'text-black dark:text-white'}>
+                      <span style={{ color: item.level === 'HIGH' ? '#ea2261' : '#0d253d', fontWeight: 600 }}>
                         {item.level}
                       </span>
                     </div>
-                    <div className="w-full h-1.5 bg-[#EFEFEF] dark:bg-[#282828] rounded-full overflow-hidden">
+                    <div className="w-full h-1.5 rounded-full overflow-hidden" style={{ backgroundColor: '#f6f9fc' }}>
                       <div 
-                        className={`h-full rounded-full ${item.level === 'HIGH' ? 'bg-[#FF6173]' : 'bg-black dark:bg-white'}`}
-                        style={{ width: `${item.val}%` }}
+                        className="h-full rounded-full"
+                        style={{ 
+                          width: `${item.val}%`,
+                          backgroundColor: item.level === 'HIGH' ? '#ea2261' : '#0d253d'
+                        }}
                       />
                     </div>
                   </div>
                 ))}
               </div>
 
-              {/* 3 Historical Matches */}
-              <div className="pt-2 border-t border-[#EFEFEF] dark:border-[#222222]">
-                <div className="text-[11px] font-bold uppercase tracking-wider text-[#777777] dark:text-white/50 mb-2">
+              {/* Historical Matches */}
+              <div className="pt-2 border-t border-[#e3e8ee]">
+                <div className="text-[11px] font-bold uppercase tracking-wider mb-2" style={{ color: '#64748d' }}>
                   TOP 3 HISTORICAL AUTOPSY MATCHES:
                 </div>
                 <div className="space-y-1.5">
                   {scanResult.matches.map((m) => (
-                    <div key={m.name} className="flex items-center justify-between text-[12px] p-2 rounded bg-white dark:bg-[#1A1A1A] border border-[#EFEFEF] dark:border-[#282828]">
+                    <div 
+                      key={m.name} 
+                      className="flex items-center justify-between text-[12px] p-2"
+                      style={{
+                        backgroundColor: '#ffffff',
+                        border: '1px solid #e3e8ee',
+                        borderRadius: '6px'
+                      }}
+                    >
                       <div className="flex items-center gap-2">
-                        <span className="font-bold text-black dark:text-white">{m.name}</span>
-                        <span className="text-[#777777] dark:text-white/50 text-[11px]">— {m.cause}</span>
+                        <span className="font-bold" style={{ color: '#0d253d' }}>{m.name}</span>
+                        <span style={{ color: '#64748d', fontSize: '11px' }}>— {m.cause}</span>
                       </div>
-                      <span className="font-mono font-bold text-[#FF6173] text-[11px]">{m.similarity} Match</span>
+                      <span 
+                        className="font-bold text-[11px]"
+                        style={{ color: '#ea2261', fontFeatureSettings: '"tnum"' }}
+                      >
+                        {m.similarity} Match
+                      </span>
                     </div>
                   ))}
                 </div>
@@ -1359,30 +2251,48 @@ export function Home() {
 
       {/* 10. Section: Hall of Ghosts Preview */}
       <section className="site-container">
-        <div className="card-editorial !p-8 lg:!p-10 bg-white dark:bg-[#0E0E0E] border border-[#EFEFEF] dark:border-[#202020]">
+        <div 
+          className="p-8 lg:p-10"
+          style={{
+            backgroundColor: '#ffffff',
+            border: '1px solid #e3e8ee',
+            borderRadius: '16px',
+            boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+          }}
+        >
           <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
             <div>
-              <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded text-[11px] font-bold bg-[#FAFAFA] dark:bg-[#1A1A1A] border border-[#EFEFEF] dark:border-[#2D2D2D] text-black dark:text-white mb-2">
-                <Users className="w-3 h-3 text-[#FF6173]" />
+              <div 
+                className="inline-flex items-center gap-2 mb-2 w-fit"
+                style={{
+                  backgroundColor: '#b9b9f9',
+                  color: '#4434d4',
+                  borderRadius: '9999px',
+                  fontSize: '11px',
+                  fontWeight: 500,
+                  padding: '4px 12px',
+                }}
+              >
+                <Users className="w-3 h-3 text-[#533afd]" />
                 <span>FORENSIC AI PERSONAS</span>
               </div>
-              <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-black dark:text-white">
+              <h2 className="text-2xl sm:text-3xl font-bold tracking-tight" style={{ color: '#0d253d' }}>
                 LEARN FROM THE PEOPLE WHO LIVED IT.
               </h2>
-              <p className="text-[14px] text-[#555555] dark:text-white/60 mt-1">
+              <p className="text-[14px] mt-1" style={{ color: '#64748d' }}>
                 AI-reconstructed founder personas built exclusively from public testimonies, SEC depositions, and post-mortem postmortems.
               </p>
             </div>
 
             <div className="text-right">
-              <span className="badge-neutral text-[10px] font-mono">
+              <span className="badge-neutral text-[10px]">
                 AI-RECONSTRUCTED PERSONA • BASED ON PUBLIC EVIDENCE
               </span>
             </div>
           </div>
 
           {/* Persona Switcher Tabs */}
-          <div className="flex items-center gap-2 border-b border-[#EFEFEF] dark:border-[#202020] pb-3 mb-6 overflow-x-auto">
+          <div className="flex items-center gap-2 border-b border-[#e3e8ee] pb-3 mb-6 overflow-x-auto">
             {Object.keys(ghostProfiles).map((key) => {
               const p = ghostProfiles[key];
               const isSelected = activeGhost === key;
@@ -1390,11 +2300,12 @@ export function Home() {
                 <button
                   key={key}
                   onClick={() => setActiveGhost(key)}
-                  className={`px-4 py-2 rounded-[5px] text-[13px] font-bold transition-colors whitespace-nowrap flex items-center gap-2 ${
-                    isSelected
-                      ? 'bg-black text-white dark:bg-white dark:text-black'
-                      : 'bg-[#FAFAFA] dark:bg-[#1A1A1A] text-[#555555] dark:text-white/70 hover:text-black dark:hover:text-white'
-                  }`}
+                  className="px-4 py-2 rounded-full text-[13px] font-medium transition-colors whitespace-nowrap flex items-center gap-2"
+                  style={{
+                    backgroundColor: isSelected ? '#0d253d' : '#f6f9fc',
+                    color: isSelected ? '#ffffff' : '#64748d',
+                    border: isSelected ? 'none' : '1px solid #e3e8ee',
+                  }}
                 >
                   <span>{p.name}</span>
                   <span className="text-[11px] opacity-70">({p.startup})</span>
@@ -1404,41 +2315,85 @@ export function Home() {
           </div>
 
           {/* Dialogue Conversation Card */}
-          <div className="p-6 rounded-[5px] bg-[#FAFAFA] dark:bg-[#141414] border border-[#EFEFEF] dark:border-[#242424] space-y-4">
-            
+          <div 
+            className="p-6 space-y-4"
+            style={{
+              backgroundColor: '#f6f9fc',
+              border: '1px solid #e3e8ee',
+              borderRadius: '12px'
+            }}
+          >
             {/* User Query */}
             <div className="flex items-start gap-3">
-              <div className="w-7 h-7 rounded-[4px] bg-black text-white dark:bg-white dark:text-black flex items-center justify-center font-bold text-[11px] shrink-0">
+              <div 
+                className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-[11px] shrink-0"
+                style={{ backgroundColor: '#0d253d', color: '#ffffff' }}
+              >
                 YOU
               </div>
-              <div className="p-3 rounded-[5px] bg-white dark:bg-[#1C1C1C] border border-[#EFEFEF] dark:border-[#2A2A2A] text-[13px] font-medium text-black dark:text-white">
+              <div 
+                className="p-3 text-[13px] font-medium"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e3e8ee',
+                  borderRadius: '8px',
+                  color: '#0d253d'
+                }}
+              >
                 "What warning signs did you miss before the collapse became irreversible?"
               </div>
             </div>
 
             {/* Ghost Response */}
             <div className="flex items-start gap-3">
-              <div className="w-7 h-7 rounded-[4px] bg-[#FFE8EB] text-[#FF6173] border border-[#FF6173]/30 flex items-center justify-center font-bold text-[11px] shrink-0">
+              <div 
+                className="w-7 h-7 rounded-full flex items-center justify-center font-bold text-[11px] shrink-0"
+                style={{
+                  backgroundColor: 'rgba(234, 34, 97, 0.10)',
+                  color: '#ea2261',
+                  border: '1px solid rgba(234, 34, 97, 0.20)'
+                }}
+              >
                 AI
               </div>
-              <div className="p-4 rounded-[5px] bg-white dark:bg-[#1C1C1C] border border-[#EFEFEF] dark:border-[#2A2A2A] text-[14px] text-[#333333] dark:text-white/90 leading-relaxed space-y-2">
-                <div className="text-[11px] font-mono text-[#777777] dark:text-white/50 font-bold uppercase">
+              <div 
+                className="p-4 text-[14px] leading-relaxed space-y-2"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e3e8ee',
+                  borderRadius: '8px',
+                  color: '#273951'
+                }}
+              >
+                <div className="text-[11px] font-semibold uppercase" style={{ color: '#64748d' }}>
                   {ghostProfiles[activeGhost].name} ({ghostProfiles[activeGhost].startup} — {ghostProfiles[activeGhost].stat})
                 </div>
                 <p className="italic">
                   "{ghostProfiles[activeGhost].quote}"
                 </p>
-                <div className="pt-2 text-[12px] font-bold text-[#FF6173]">
+                <div className="pt-2 text-[12px] font-bold" style={{ color: '#ea2261' }}>
                   Core Lesson: {ghostProfiles[activeGhost].lesson}
                 </div>
               </div>
             </div>
 
-            <div className="flex items-center justify-between pt-3 border-t border-[#EFEFEF] dark:border-[#222222] text-[12px]">
-              <span className="text-[#777777] dark:text-white/50">
+            <div className="flex items-center justify-between pt-3 border-t border-[#e3e8ee] text-[12px]">
+              <span style={{ color: '#64748d' }}>
                 Persona generated from public evidence. Does not imply living founder participation.
               </span>
-              <Link to="/hall-of-ghosts" className="btn-primary !py-2 !px-4 text-[12px]">
+              <Link 
+                to="/hall-of-ghosts" 
+                className="transition-colors text-[12px]"
+                style={{
+                  backgroundColor: '#533afd',
+                  color: '#ffffff',
+                  borderRadius: '9999px',
+                  padding: '8px 18px',
+                  fontWeight: 500,
+                }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#4434d4'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#533afd'}
+              >
                 Interview All Personas →
               </Link>
             </div>
@@ -1453,24 +2408,25 @@ export function Home() {
             <div className="flex items-center gap-2 mb-1">
               <span className="badge-neutral text-[11px]">Recent Autopsies</span>
             </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-black dark:text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold tracking-tight" style={{ color: '#0d253d' }}>
               Recently Vaulted Startups
             </h2>
-            <p className="text-[14px] text-[#555555] dark:text-white/60 mt-1">
+            <p className="text-[14px] mt-1" style={{ color: '#64748d' }}>
               Examining the most instructive multi-million and multi-billion dollar startup collapses.
             </p>
           </div>
 
           <Link
             to="/explore"
-            className="btn-link-cta shrink-0 font-bold"
+            className="shrink-0 font-medium hover:underline"
+            style={{ color: '#533afd' }}
           >
             <span>Explore All 413+ Records</span>
             <span>→</span>
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {featuredStartups.map((startup) => (
             <StartupCard key={startup.id} startup={startup} />
           ))}
@@ -1480,153 +2436,212 @@ export function Home() {
       {/* 12. Section: AI Signals & Global Failure Intelligence */}
       <section className="site-container">
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
-          
-          {/* Left Column (6 cols): AI Signals Live Feed */}
+          {/* Left Column: AI Signals */}
           <div className="lg:col-span-6 space-y-4">
             <div className="flex items-center justify-between mb-2">
               <div>
-                <h3 className="text-xl font-extrabold text-black dark:text-white">AI SIGNALS FEED</h3>
-                <p className="text-[13px] text-[#555555] dark:text-white/60">Live heuristic alerts generated across the archive</p>
+                <h3 className="text-xl font-bold" style={{ color: '#0d253d' }}>AI SIGNALS FEED</h3>
+                <p className="text-[13px]" style={{ color: '#64748d' }}>Live heuristic alerts generated across the archive</p>
               </div>
               <span className="badge-neutral text-[11px]">Real-Time Rules</span>
             </div>
 
             <div className="space-y-3">
-              <div className="p-4 rounded-[5px] bg-white dark:bg-[#141414] border border-[#EFEFEF] dark:border-[#222222] hover:border-black dark:hover:border-white transition-colors">
+              <div 
+                className="p-4 transition-colors"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e3e8ee',
+                  borderRadius: '12px'
+                }}
+              >
                 <div className="flex items-center justify-between text-[11px] font-bold uppercase mb-1">
-                  <span className="text-[#FF6173] flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#FF6173]" />
+                  <span className="flex items-center gap-1.5" style={{ color: '#ea2261' }}>
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#ea2261' }} />
                     PATTERN DETECTED
                   </span>
-                  <span className="text-[#777777] dark:text-white/40 font-mono">10m ago</span>
+                  <span style={{ color: '#64748d' }}>10m ago</span>
                 </div>
-                <h4 className="text-[14px] font-bold text-black dark:text-white">
+                <h4 className="text-[14px] font-bold" style={{ color: '#0d253d' }}>
                   Hardware Unit Economics Threshold
                 </h4>
-                <p className="text-[12px] text-[#555555] dark:text-white/70 mt-1 leading-relaxed">
+                <p className="text-[12px] mt-1 leading-relaxed" style={{ color: '#64748d' }}>
                   Unit economics deterioration appears repeatedly across documented consumer hardware failures (Juicero, Pebble, Lily Robotics).
                 </p>
               </div>
 
-              <div className="p-4 rounded-[5px] bg-white dark:bg-[#141414] border border-[#EFEFEF] dark:border-[#222222] hover:border-black dark:hover:border-white transition-colors">
+              <div 
+                className="p-4 transition-colors"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e3e8ee',
+                  borderRadius: '12px'
+                }}
+              >
                 <div className="flex items-center justify-between text-[11px] font-bold uppercase mb-1">
-                  <span className="text-black dark:text-white flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-black dark:bg-white" />
+                  <span className="flex items-center gap-1.5" style={{ color: '#533afd' }}>
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#533afd' }} />
                     HISTORICAL PARALLEL
                   </span>
-                  <span className="text-[#777777] dark:text-white/40 font-mono">1h ago</span>
+                  <span style={{ color: '#64748d' }}>1h ago</span>
                 </div>
-                <h4 className="text-[14px] font-bold text-black dark:text-white">
+                <h4 className="text-[14px] font-bold" style={{ color: '#0d253d' }}>
                   On-Demand Delivery Margin Compression
                 </h4>
-                <p className="text-[12px] text-[#555555] dark:text-white/70 mt-1 leading-relaxed">
+                <p className="text-[12px] mt-1 leading-relaxed" style={{ color: '#64748d' }}>
                   Current quick-commerce subsidies mirror 1999–2001 dot-com logistics collapses (Webvan, Kozmo).
                 </p>
               </div>
 
-              <div className="p-4 rounded-[5px] bg-white dark:bg-[#141414] border border-[#EFEFEF] dark:border-[#222222] hover:border-black dark:hover:border-white transition-colors">
+              <div 
+                className="p-4 transition-colors"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e3e8ee',
+                  borderRadius: '12px'
+                }}
+              >
                 <div className="flex items-center justify-between text-[11px] font-bold uppercase mb-1">
-                  <span className="text-[#FF6173] flex items-center gap-1.5">
-                    <span className="w-2 h-2 rounded-full bg-[#FF6173]" />
+                  <span className="flex items-center gap-1.5" style={{ color: '#ea2261' }}>
+                    <span className="w-2 h-2 rounded-full" style={{ backgroundColor: '#ea2261' }} />
                     RISK SIGNAL
                   </span>
-                  <span className="text-[#777777] dark:text-white/40 font-mono">3h ago</span>
+                  <span style={{ color: '#64748d' }}>3h ago</span>
                 </div>
-                <h4 className="text-[14px] font-bold text-black dark:text-white">
+                <h4 className="text-[14px] font-bold" style={{ color: '#0d253d' }}>
                   Extreme Customer Acquisition Burn
                 </h4>
-                <p className="text-[12px] text-[#555555] dark:text-white/70 mt-1 leading-relaxed">
+                <p className="text-[12px] mt-1 leading-relaxed" style={{ color: '#64748d' }}>
                   Startups spending &gt;80% of venture equity on paid marketing without organic retention suffer 92% mortality when funding dries up.
                 </p>
               </div>
             </div>
           </div>
 
-          {/* Right Column (6 cols): Global Failure Intelligence */}
+          {/* Right Column: Global Footprint */}
           <div className="lg:col-span-6 space-y-4">
             <div className="flex items-center justify-between mb-2">
               <div>
-                <h3 className="text-xl font-extrabold text-black dark:text-white">GLOBAL FAILURE INTELLIGENCE</h3>
-                <p className="text-[13px] text-[#555555] dark:text-white/60">Geographic footprint of 413+ startup post-mortems</p>
+                <h3 className="text-xl font-bold" style={{ color: '#0d253d' }}>GLOBAL FAILURE INTELLIGENCE</h3>
+                <p className="text-[13px]" style={{ color: '#64748d' }}>Geographic footprint of 413+ startup post-mortems</p>
               </div>
-              <Globe className="w-5 h-5 text-black dark:text-white" />
+              <Globe className="w-5 h-5 text-[#533afd]" />
             </div>
 
-            <div className="card-editorial !p-6 bg-[#FAFAFA] dark:bg-[#141414] border border-[#EFEFEF] dark:border-[#222222] space-y-5">
+            <div 
+              className="p-6 space-y-5"
+              style={{
+                backgroundColor: '#ffffff',
+                border: '1px solid #e3e8ee',
+                borderRadius: '16px',
+                boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+              }}
+            >
               <div className="grid grid-cols-3 gap-3 text-center">
-                <div className="p-3 bg-white dark:bg-[#1C1C1C] rounded border border-[#EFEFEF] dark:border-[#282828]">
-                  <div className="text-2xl font-extrabold text-black dark:text-white">413+</div>
-                  <div className="text-[10px] font-bold text-[#777777] dark:text-white/50 uppercase">Startups</div>
+                <div 
+                  className="p-3"
+                  style={{
+                    backgroundColor: '#f6f9fc',
+                    border: '1px solid #e3e8ee',
+                    borderRadius: '8px'
+                  }}
+                >
+                  <div className="text-2xl font-bold" style={{ color: '#0d253d', fontFeatureSettings: '"tnum"' }}>413+</div>
+                  <div className="text-[10px] font-semibold uppercase" style={{ color: '#64748d' }}>Startups</div>
                 </div>
-                <div className="p-3 bg-white dark:bg-[#1C1C1C] rounded border border-[#EFEFEF] dark:border-[#282828]">
-                  <div className="text-2xl font-extrabold text-black dark:text-white">40+</div>
-                  <div className="text-[10px] font-bold text-[#777777] dark:text-white/50 uppercase">Countries</div>
+                <div 
+                  className="p-3"
+                  style={{
+                    backgroundColor: '#f6f9fc',
+                    border: '1px solid #e3e8ee',
+                    borderRadius: '8px'
+                  }}
+                >
+                  <div className="text-2xl font-bold" style={{ color: '#0d253d', fontFeatureSettings: '"tnum"' }}>40+</div>
+                  <div className="text-[10px] font-semibold uppercase" style={{ color: '#64748d' }}>Countries</div>
                 </div>
-                <div className="p-3 bg-white dark:bg-[#1C1C1C] rounded border border-[#EFEFEF] dark:border-[#282828]">
-                  <div className="text-2xl font-extrabold text-[#FF6173]">14</div>
-                  <div className="text-[10px] font-bold text-[#FF6173] uppercase">Vectors</div>
+                <div 
+                  className="p-3"
+                  style={{
+                    backgroundColor: 'rgba(234, 34, 97, 0.10)',
+                    border: '1px solid rgba(234, 34, 97, 0.20)',
+                    borderRadius: '8px'
+                  }}
+                >
+                  <div className="text-2xl font-bold" style={{ color: '#ea2261', fontFeatureSettings: '"tnum"' }}>14</div>
+                  <div className="text-[10px] font-semibold uppercase" style={{ color: '#ea2261' }}>Vectors</div>
                 </div>
               </div>
 
               {/* Regional Concentration Bars */}
-              <div className="space-y-2.5 pt-1">
+              <div className="space-y-3 pt-1">
                 <div>
-                  <div className="flex justify-between text-[12px] font-semibold text-black dark:text-white mb-1">
+                  <div className="flex justify-between text-[12px] font-medium mb-1" style={{ color: '#0d253d' }}>
                     <span>North America (Silicon Valley, NY, Austin)</span>
-                    <span className="font-mono font-bold">68%</span>
+                    <span style={{ fontFeatureSettings: '"tnum"', fontWeight: 600 }}>68%</span>
                   </div>
-                  <div className="w-full h-2 bg-[#EFEFEF] dark:bg-[#282828] rounded-full overflow-hidden">
-                    <div className="h-full bg-black dark:bg-white rounded-full" style={{ width: '68%' }} />
+                  <div className="w-full h-2 rounded-full overflow-hidden" style={{ backgroundColor: '#f6f9fc' }}>
+                    <div className="h-full rounded-full" style={{ width: '68%', backgroundColor: '#0d253d' }} />
                   </div>
                 </div>
 
                 <div>
-                  <div className="flex justify-between text-[12px] font-semibold text-black dark:text-white mb-1">
+                  <div className="flex justify-between text-[12px] font-medium mb-1" style={{ color: '#0d253d' }}>
                     <span>Europe (London, Berlin, Paris)</span>
-                    <span className="font-mono font-bold">18%</span>
+                    <span style={{ fontFeatureSettings: '"tnum"', fontWeight: 600 }}>18%</span>
                   </div>
-                  <div className="w-full h-2 bg-[#EFEFEF] dark:bg-[#282828] rounded-full overflow-hidden">
-                    <div className="h-full bg-[#666666] dark:bg-[#888888] rounded-full" style={{ width: '18%' }} />
+                  <div className="w-full h-2 rounded-full overflow-hidden" style={{ backgroundColor: '#f6f9fc' }}>
+                    <div className="h-full rounded-full" style={{ width: '18%', backgroundColor: '#533afd' }} />
                   </div>
                 </div>
 
                 <div>
-                  <div className="flex justify-between text-[12px] font-semibold text-black dark:text-white mb-1">
+                  <div className="flex justify-between text-[12px] font-medium mb-1" style={{ color: '#0d253d' }}>
                     <span>Asia-Pacific (Bengaluru, Singapore, Sydney)</span>
-                    <span className="font-mono font-bold">11%</span>
+                    <span style={{ fontFeatureSettings: '"tnum"', fontWeight: 600 }}>11%</span>
                   </div>
-                  <div className="w-full h-2 bg-[#EFEFEF] dark:bg-[#282828] rounded-full overflow-hidden">
-                    <div className="h-full bg-[#999999] dark:bg-[#666666] rounded-full" style={{ width: '11%' }} />
+                  <div className="w-full h-2 rounded-full overflow-hidden" style={{ backgroundColor: '#f6f9fc' }}>
+                    <div className="h-full rounded-full" style={{ width: '11%', backgroundColor: '#64748d' }} />
                   </div>
                 </div>
 
                 <div>
-                  <div className="flex justify-between text-[12px] font-semibold text-black dark:text-white mb-1">
+                  <div className="flex justify-between text-[12px] font-medium mb-1" style={{ color: '#0d253d' }}>
                     <span>Latin America & Rest of World</span>
-                    <span className="font-mono font-bold">3%</span>
+                    <span style={{ fontFeatureSettings: '"tnum"', fontWeight: 600 }}>3%</span>
                   </div>
-                  <div className="w-full h-2 bg-[#EFEFEF] dark:bg-[#282828] rounded-full overflow-hidden">
-                    <div className="h-full bg-[#CCCCCC] dark:bg-[#444444] rounded-full" style={{ width: '3%' }} />
+                  <div className="w-full h-2 rounded-full overflow-hidden" style={{ backgroundColor: '#f6f9fc' }}>
+                    <div className="h-full rounded-full" style={{ width: '3%', backgroundColor: '#a8c3de' }} />
                   </div>
                 </div>
               </div>
             </div>
           </div>
-
         </div>
       </section>
 
-      {/* 13. Section: Built on Public Evidence (Data Trust Grid) */}
+      {/* 13. Section: Built on Public Evidence */}
       <section className="site-container">
-        <div className="card-editorial !p-8 bg-[#FAFAFA] dark:bg-[#0E0E0E] border border-[#EFEFEF] dark:border-[#202020]">
+        <div 
+          className="p-8"
+          style={{
+            backgroundColor: '#ffffff',
+            border: '1px solid #e3e8ee',
+            borderRadius: '16px',
+            boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
+          }}
+        >
           <div className="text-center mb-8">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-[#FF6173] block mb-1">
+            <span 
+              className="block mb-1 font-bold uppercase tracking-wider"
+              style={{ color: '#533afd', fontSize: '11px' }}
+            >
               TRUST & VERIFIABILITY
             </span>
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-black dark:text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold" style={{ color: '#0d253d' }}>
               BUILT ON PUBLIC EVIDENCE
             </h2>
-            <p className="text-[14px] text-[#555555] dark:text-white/60 mt-1 max-w-xl mx-auto">
+            <p className="text-[14px] mt-1 max-w-xl mx-auto" style={{ color: '#64748d' }}>
               PivotVault does not rely on anonymous gossip. Every failure score, timeline, and metric is anchored in verifiable records.
             </p>
           </div>
@@ -1640,10 +2655,18 @@ export function Home() {
               { label: 'COMPANY HISTORY', desc: 'Incorporation & cap table filings' },
               { label: 'MARKET DATA', desc: 'Public trading & macro benchmark data' }
             ].map((source) => (
-              <div key={source.label} className="p-3.5 rounded-[5px] bg-white dark:bg-[#161616] border border-[#EFEFEF] dark:border-[#222222]">
-                <CheckCircle2 className="w-4 h-4 text-black dark:text-white mx-auto mb-2" />
-                <h4 className="text-[12px] font-extrabold text-black dark:text-white uppercase">{source.label}</h4>
-                <p className="text-[10px] text-[#777777] dark:text-white/50 mt-1">{source.desc}</p>
+              <div 
+                key={source.label} 
+                className="p-3.5"
+                style={{
+                  backgroundColor: '#f6f9fc',
+                  border: '1px solid #e3e8ee',
+                  borderRadius: '10px'
+                }}
+              >
+                <CheckCircle2 className="w-4 h-4 text-[#533afd] mx-auto mb-2" />
+                <h4 className="text-[11px] font-bold uppercase" style={{ color: '#0d253d' }}>{source.label}</h4>
+                <p className="text-[10px] mt-1" style={{ color: '#64748d' }}>{source.desc}</p>
               </div>
             ))}
           </div>
@@ -1651,13 +2674,13 @@ export function Home() {
       </section>
 
       {/* 14. Section: FAQ Section */}
-      <section className="site-container pt-8 border-t border-[#EFEFEF] dark:border-[#202020]">
+      <section className="site-container pt-8 border-t border-[#e3e8ee]">
         <div className="max-w-4xl mx-auto space-y-6">
           <div className="text-center mb-8">
-            <h2 className="text-2xl sm:text-3xl font-extrabold text-black dark:text-white">
+            <h2 className="text-2xl sm:text-3xl font-bold" style={{ color: '#0d253d' }}>
               Frequently Asked Questions
             </h2>
-            <p className="mt-1 text-[14px] text-[#555555] dark:text-white/60">
+            <p className="mt-1 text-[14px]" style={{ color: '#64748d' }}>
               Understanding PivotVault's failure taxonomy and research methodology
             </p>
           </div>
@@ -1681,12 +2704,21 @@ export function Home() {
                 a: 'Hall of Ghosts reconstructs historical founder personas exclusively from verified public testimonies, regulatory filings, and post-mortems, enabling interactive diagnostic debriefs.'
               }
             ].map((faq, idx) => (
-              <div key={idx} className="card-editorial !p-5">
-                <h4 className="text-[16px] font-bold text-black dark:text-white flex items-center gap-2">
-                  <span className="text-[#FF6173]">Q:</span>
+              <div 
+                key={idx} 
+                className="p-5"
+                style={{
+                  backgroundColor: '#ffffff',
+                  border: '1px solid #e3e8ee',
+                  borderRadius: '12px',
+                  boxShadow: 'rgba(0, 55, 112, 0.04) 0px 1px 3px'
+                }}
+              >
+                <h4 className="text-[16px] font-bold flex items-center gap-2" style={{ color: '#0d253d' }}>
+                  <span style={{ color: '#ea2261' }}>Q:</span>
                   <span>{faq.q}</span>
                 </h4>
-                <p className="mt-2 text-[14px] text-[#555555] dark:text-white/70 leading-relaxed pl-5">
+                <p className="mt-2 text-[14px] leading-relaxed pl-5" style={{ color: '#273951' }}>
                   {faq.a}
                 </p>
               </div>
@@ -1695,23 +2727,59 @@ export function Home() {
         </div>
       </section>
 
-      {/* 15. Section: Final CTA (Inverted Black Section) */}
+      {/* 15. Section: Final CTA */}
       <section className="site-container">
-        <div className="card-editorial !p-10 lg:!p-14 bg-black text-white dark:bg-[#0E0E0E] text-center dark:border-[#202020]">
-          <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#FF6173] block mb-2">
+        <div 
+          className="p-10 lg:p-14 text-center"
+          style={{
+            backgroundColor: '#1c1e54',
+            borderRadius: '16px',
+            color: '#ffffff',
+            border: '1px solid #273951'
+          }}
+        >
+          <span 
+            className="block mb-2 text-[11px] font-mono font-bold uppercase tracking-widest"
+            style={{ color: '#b9b9f9' }}
+          >
             THE SURVIVAL MANDATE
           </span>
-          <h2 className="text-3xl sm:text-5xl font-extrabold text-white max-w-3xl mx-auto leading-tight">
+          <h2 className="text-3xl sm:text-5xl font-bold text-white max-w-3xl mx-auto leading-tight">
             DON'T REPEAT HISTORY.
           </h2>
           <p className="mt-4 text-[16px] sm:text-[18px] text-white/70 max-w-2xl mx-auto leading-relaxed">
             Explore the failures. Understand the patterns. Make the next decision better before writing code or raising capital.
           </p>
           <div className="mt-8 flex items-center justify-center gap-4 flex-wrap">
-            <Link to="/explore" className="btn-inverted !px-8 !py-4 text-[16px]">
+            <Link 
+              to="/explore" 
+              className="text-[15px] transition-colors"
+              style={{
+                backgroundColor: '#533afd',
+                color: '#ffffff',
+                borderRadius: '9999px',
+                padding: '14px 32px',
+                fontWeight: 500,
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#4434d4'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#533afd'}
+            >
               EXPLORE FAILURE ARCHIVE →
             </Link>
-            <Link to="/risk-scanner" className="inline-flex items-center justify-center px-8 py-4 rounded-[5px] text-[16px] font-bold border-2 border-white text-white hover:bg-white/10 transition-colors">
+            <Link 
+              to="/risk-scanner" 
+              className="inline-flex items-center justify-center text-[15px] transition-colors"
+              style={{
+                border: '1px solid rgba(255, 255, 255, 0.4)',
+                backgroundColor: 'rgba(255, 255, 255, 0.1)',
+                color: '#ffffff',
+                borderRadius: '9999px',
+                padding: '14px 32px',
+                fontWeight: 500,
+              }}
+              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.2)'}
+              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'rgba(255, 255, 255, 0.1)'}
+            >
               SCAN YOUR STARTUP →
             </Link>
           </div>

@@ -1,40 +1,34 @@
 import React from 'react';
-import { getFailureScoreColor } from '../../lib/utils';
 import { AlertTriangle, AlertCircle, ShieldAlert } from 'lucide-react';
 
 export function FailureScoreBadge({ score, size = 'md', showIcon = true, showLabel = false }) {
-  const colorData = getFailureScoreColor(score);
+  const isHighRisk = (Number(score) || 0) >= 70;
   
-  const sizeClasses = {
-    sm: 'px-1.5 py-0.5 text-xs',
-    md: 'px-2 py-0.5 text-xs',
-    lg: 'px-2.5 py-1 text-sm font-semibold',
-  };
-
-  const iconSizes = {
-    sm: 'w-3 h-3 mr-1',
-    md: 'w-3.5 h-3.5 mr-1.5',
-    lg: 'w-4 h-4 mr-1.5',
-  };
-
   return (
     <span 
-      className={`inline-flex items-center font-mono border rounded-md transition-colors ${colorData.bg} ${colorData.text} ${colorData.border} ${sizeClasses[size] || sizeClasses.md}`}
-      title={`Failure Score: ${score}/100 (${colorData.label})`}
+      className="inline-flex items-center font-mono"
+      style={{
+        backgroundColor: isHighRisk ? 'rgba(234, 34, 97, 0.08)' : 'rgba(155, 104, 41, 0.10)',
+        color: isHighRisk ? '#ea2261' : '#9b6829',
+        border: `1px solid ${isHighRisk ? 'rgba(234, 34, 97, 0.20)' : 'rgba(155, 104, 41, 0.20)'}`,
+        borderRadius: '8px',
+        fontSize: '12px',
+        fontWeight: 700,
+        padding: '4px 10px',
+      }}
+      title={`Failure Score: ${score}/100`}
     >
       {showIcon && (
         score >= 85 ? (
-          <ShieldAlert className={iconSizes[size] || iconSizes.md} />
-        ) : score >= 70 ? (
-          <AlertTriangle className={iconSizes[size] || iconSizes.md} />
+          <ShieldAlert className="w-3.5 h-3.5 mr-1.5" style={{ color: isHighRisk ? '#ea2261' : '#9b6829' }} />
         ) : (
-          <AlertCircle className={iconSizes[size] || iconSizes.md} />
+          <AlertTriangle className="w-3.5 h-3.5 mr-1.5" style={{ color: isHighRisk ? '#ea2261' : '#9b6829' }} />
         )
       )}
-      <span>FS {score}</span>
+      <span style={{ fontFeatureSettings: '"tnum"' }}>FS {score}</span>
       {showLabel && (
         <span className="ml-1 opacity-75 text-[10px] uppercase font-sans font-medium">
-          • {colorData.label}
+          • {score >= 85 ? 'Catastrophic' : score >= 70 ? 'Severe' : 'Moderate'}
         </span>
       )}
     </span>

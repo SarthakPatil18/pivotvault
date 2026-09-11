@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { PageHeader } from '../components/layout/PageHeader';
 import { CURATED_STARTUPS, getStartupById } from '../lib/data/startupsData';
 import { FailureScoreBadge } from '../components/common/FailureScoreBadge';
+import { CompanyLogo } from '../components/common/CompanyLogo';
 import { formatCurrency } from '../lib/utils';
 import { ArrowLeftRight, CheckCircle2, XCircle, AlertTriangle, ShieldAlert } from 'lucide-react';
 import { Link } from 'react-router-dom';
@@ -97,11 +98,14 @@ export function CompetitorCompare() {
           {/* Column A */}
           <div className="vault-card p-6 space-y-5 border-neutral-300 dark:border-neutral-700">
             <div className="flex items-center justify-between pb-3 border-b border-neutral-100 dark:border-neutral-800">
-              <div>
-                <h3 className="text-xl font-bold font-sans text-neutral-950 dark:text-neutral-50">
-                  {startupA.name}
-                </h3>
-                <span className="text-xs font-mono text-neutral-500">{startupA.industry}</span>
+              <div className="flex items-center gap-3">
+                <CompanyLogo startup={startupA} size="lg" />
+                <div>
+                  <h3 className="text-xl font-bold font-sans text-neutral-950 dark:text-neutral-50">
+                    {startupA.name}
+                  </h3>
+                  <span className="text-xs font-mono text-neutral-500">{startupA.industry}</span>
+                </div>
               </div>
               <FailureScoreBadge score={startupA.failureScore} size="md" />
             </div>
@@ -142,11 +146,14 @@ export function CompetitorCompare() {
           {/* Column B */}
           <div className="vault-card p-6 space-y-5 border-neutral-300 dark:border-neutral-700">
             <div className="flex items-center justify-between pb-3 border-b border-neutral-100 dark:border-neutral-800">
-              <div>
-                <h3 className="text-xl font-bold font-sans text-neutral-950 dark:text-neutral-50">
-                  {startupB.name}
-                </h3>
-                <span className="text-xs font-mono text-neutral-500">{startupB.industry}</span>
+              <div className="flex items-center gap-3">
+                <CompanyLogo startup={startupB} size="lg" />
+                <div>
+                  <h3 className="text-xl font-bold font-sans text-neutral-950 dark:text-neutral-50">
+                    {startupB.name}
+                  </h3>
+                  <span className="text-xs font-mono text-neutral-500">{startupB.industry}</span>
+                </div>
               </div>
               <FailureScoreBadge score={startupB.failureScore} size="md" />
             </div>

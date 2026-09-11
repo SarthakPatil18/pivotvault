@@ -14,7 +14,6 @@ export const NAV_CATEGORIES = [
     id: 'intelligence',
     name: 'Intelligence',
     href: '/risk-scanner',
-    description: 'AI reasoning, risk scanning, and defensive founder playbooks.',
     items: [
       { name: 'Risk Scanner', href: '/risk-scanner', description: 'Scan your startup idea against historical failure distributions.' },
       { name: 'Founder Playbook', href: '/founder-playbook', description: 'Convert historical failure lessons into defensive plays.' }

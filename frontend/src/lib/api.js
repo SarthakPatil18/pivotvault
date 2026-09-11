@@ -19,7 +19,8 @@ const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 async function fetchWithFallback(endpoint, options = {}, fallbackFn) {
   try {
     const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), 2000); // 2 second timeout for fast fallback
+    const timeoutMs = options.timeout || 25000; // default 25s for deep analytical reasoning
+    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
     
     const response = await fetch(`${BASE_URL}${endpoint}`, {
       ...options,
@@ -218,9 +219,9 @@ export async function getRelatedStartups(id) {
 export async function runRiskScanner(inputData) {
   const result = await fetchWithFallback('/ai/risk-scan', {
     method: 'POST',
+    timeout: 30000,
     body: JSON.stringify({
-      query: inputData.idea,
-      ideaText: inputData.idea,
+      ideaText: inputData.idea || inputData.ideaText,
       industry: inputData.industry,
       targetCustomer: inputData.targetCustomer,
       businessModel: inputData.businessModel,
@@ -229,136 +230,130 @@ export async function runRiskScanner(inputData) {
       regulatoryHeavy: inputData.regulatoryHeavy,
     }),
   }, async () => {
-    // Intelligent offline algorithmic risk engine
+    // Intelligent offline fallback structured identically
     const {
       idea = '',
       industry = 'SaaS & Enterprise',
       targetCustomer = 'B2B',
       businessModel = 'Subscription',
-      monetizationStage = 'Pre-revenue',
       burnRate = '$20k - $50k/mo',
       hardwareInvolved = false,
       regulatoryHeavy = false
     } = inputData;
 
-    // Calculate realistic category risk scores
-    let pRisk = 45;
-    let mRisk = 40;
-    let bmRisk = 50;
-    let cRisk = 55;
-    let eRisk = 50;
+    let pRisk = 62;
+    let mRisk = 58;
+    let bmRisk = 54;
+    let cRisk = 65;
+    let eRisk = hardwareInvolved ? 85 : 52;
+    let rRisk = regulatoryHeavy ? 88 : 35;
+    let capRisk = (burnRate.includes('150k') || burnRate.includes('500k')) ? 84 : 45;
 
-    if (hardwareInvolved) {
-      pRisk += 25;
-      eRisk += 20;
-    }
-    if (regulatoryHeavy || industry.includes('Health') || industry.includes('FinTech') || industry.includes('Crypto')) {
-      eRisk += 25;
-      bmRisk += 15;
-    }
-    if (targetCustomer === 'B2C' || industry.includes('Social') || industry.includes('Media')) {
-      mRisk += 25;
-      bmRisk += 20;
-    }
-    if (monetizationStage === 'Pre-revenue' && (burnRate.includes('100k') || burnRate.includes('500k'))) {
-      bmRisk += 30;
-      eRisk += 15;
-    }
+    const vScore = Math.round((pRisk * 0.2) + (mRisk * 0.15) + (bmRisk * 0.15) + (cRisk * 0.15) + (eRisk * 0.15) + (rRisk * 0.1) + (capRisk * 0.1));
+    const hScore = 65;
+    const finalRiskScore = Math.round(vScore * 0.71 + hScore * 0.29);
 
-    // Clamp values 0-99
-    pRisk = Math.min(96, Math.max(25, pRisk));
-    mRisk = Math.min(96, Math.max(20, mRisk));
-    bmRisk = Math.min(96, Math.max(25, bmRisk));
-    cRisk = Math.min(96, Math.max(30, cRisk));
-    eRisk = Math.min(96, Math.max(25, eRisk));
-
-    const overallScore = Math.round((pRisk * 0.25) + (mRisk * 0.25) + (bmRisk * 0.2) + (cRisk * 0.15) + (eRisk * 0.15));
-
-    // Find historical matches from the 413+ dataset
     const matches = ALL_STARTUPS.filter((s) => s.industry.toLowerCase() === industry.toLowerCase() || (hardwareInvolved && s.industry.includes('Hardware'))).slice(0, 3);
 
     return {
-      ideaScore: overallScore,
-      overallRiskScore: overallScore,
-      scoreBreakdown: {
-        rawScore: overallScore / 100,
-        modelVersion: 'Historical Failure Classifier v2.1'
-      },
-      riskLevel: overallScore >= 75 ? 'Elevated Failure Pattern Risk' : overallScore >= 55 ? 'Moderate Vulnerability Pattern' : 'Standard Venture Baseline',
-      disclaimer: 'Evidence-based risk diagnostic modeled on historical startup failure distributions. Not deterministic advice.',
-      categoryScores: {
-        productRisk: pRisk,
-        marketRisk: mRisk,
-        businessModelRisk: bmRisk,
-        competitionRisk: cRisk,
-        executionRisk: eRisk
-      },
-      topRiskFactors: [
-        `High vulnerability to customer acquisition cost surges in ${industry}.`,
-        hardwareInvolved ? 'Capital-intensive prototype-to-manufacturing defect exposure.' : 'Platform dependency and disintermediation risks.',
-        'Premature burn rate scaling before establishing repeatable per-unit contribution margins.'
-      ],
-      historicalMatches: matches.length > 0 ? matches : CURATED_STARTUPS.slice(0, 3),
-      evidenceSummary: `Historical data across ${matches.length} comparable ${industry} collapses indicates an average failure lifespan of 3.4 years when unit economics are not locked within the first 14 months.`,
-      recommendations: [
-        'Secure 5 design-partner pre-commitments with upfront cash deposits before building custom infrastructure.',
-        'Cap monthly burn at under 1/24th of verified liquid treasury.',
-        'Build defensive proprietary workflows or data flywheels rather than competing solely on feature breadth.'
-      ],
-      potentialPivots: [
-        {
-          name: 'Narrow Wedge Verticalization',
-          description: `Pivot from broad ${industry} platform to a single mission-critical compliance or workflow problem for high-ACV buyers.`
-        },
-        {
-          name: 'Software-Only Architecture',
-          description: hardwareInvolved ? 'License algorithm and telemetry software to existing tier-1 hardware OEMs rather than manufacturing custom devices.' : 'Shift to programmatic API middleware to capture transactional volume without direct consumer acquisition overhead.'
+      finalRiskScore,
+      riskLevel: finalRiskScore >= 75 ? 'CRITICAL / HIGH RISK' : finalRiskScore >= 50 ? 'MODERATE RISK' : 'LOW / CONTROLLED RISK',
+      confidence: 88,
+      ventureProfile: {
+        ventureType: hardwareInvolved ? 'Consumer Hardware' : (regulatoryHeavy ? 'Regulated Venture' : `${industry} Venture`),
+        businessModel,
+        targetCustomer,
+        coreValueProposition: (idea || 'Venture Concept').slice(0, 140),
+        dimensions: {
+          productMarketFit: pRisk,
+          customerNeed: mRisk,
+          differentiation: 62,
+          competition: cRisk,
+          businessModel: bmRisk,
+          unitEconomics: bmRisk + 10,
+          executionComplexity: eRisk,
+          scalability: 60,
+          marketTiming: 55,
+          capitalIntensity: capRisk,
+          regulatoryExposure: rRisk,
+          defensibility: 60
         }
+      },
+      scoring: {
+        ventureRiskScore: vScore,
+        historicalSimilarityScore: hScore,
+        mlBenchmarkScore: null,
+        mlBenchmarkStatus: 'Unavailable (Pre-launch)',
+        mlBenchmarkReason: 'Pre-launch concepts lack historical venture financing rounds required by the 5-feature capitalization model.',
+        weightsUsed: { ventureRisk: 0.71, historicalSimilarity: 0.29, mlBenchmark: 0.00 }
+      },
+      primaryFailureVectors: [
+        { name: 'Unit Economics Collapse', associationScore: 78, associationLevel: 'HIGH', rationale: 'Projected burn rate risks outrunning contribution margin recovery.' },
+        { name: 'Outcompeted by Incumbents', associationScore: 68, associationLevel: 'MEDIUM', rationale: 'Incumbents possess established distribution flywheels.' },
+        { name: 'Runway Exhaustion / Burn Rate', associationScore: 65, associationLevel: 'MEDIUM', rationale: 'Requires disciplined cash management before product-market fit.' }
+      ],
+      riskDrivers: [
+        { name: 'Execution & Operational Complexity', score: eRisk },
+        { name: 'Competitive Headwinds', score: cRisk },
+        { name: 'Unit Economics & Margins', score: bmRisk + 10 }
+      ],
+      positiveSignals: [
+        { name: 'Recognizable Monetization Mechanics', score: 40, reasoning: 'Clear commercial model rather than unmonetized traffic.' }
+      ],
+      assumptions: [
+        'Target customers possess immediate discretionary budget for this solution.',
+        'Customer acquisition costs remain below 1/3rd of first-year lifetime value.'
+      ],
+      unknowns: [
+        'Verified customer willingness to pay without initial discounting.',
+        'Organic 60-day customer retention and net revenue expansion rate.'
+      ],
+      historicalMatches: matches.map(m => ({
+        id: m.id,
+        name: m.name,
+        industry: m.industry,
+        failureMode: m.failureMode,
+        failedYear: m.failedYear,
+        capitalRaised: m.capitalRaised,
+        relevanceScore: 75,
+        whyRelevant: `Parallels in ${m.failureMode} within ${m.industry}.`,
+        keyLesson: m.lessons?.[0] || 'Enforce positive unit margins before scaling.',
+        evidenceCount: 12
+      })),
+      evidenceSummary: {
+        matchedCompaniesCount: matches.length,
+        totalEvidenceCount: matches.length * 8
+      },
+      explanation: `Evaluated as a ${industry} venture. Primary structural vulnerability maps to Unit Economics Collapse, driven by competitive headwinds and operational friction.`,
+      recommendations: [
+        'Secure 3–5 signed non-refundable pilot prepayments before committing engineering sprint hours.',
+        'Enforce positive unit contribution margin from day one before scaling marketing.',
+        'Maintain a minimum 18-month cash runway covenant.'
       ]
     };
   });
 
-  if (!result.isLive) return result;
-  const { ideaScore, scoreBreakdown = {}, sources = [] } = result.data;
-  
-  // Synthesize top risk factors and recommendations from retrieved sources if present
-  const enrichedRiskFactors = sources.length > 0
-    ? sources.slice(0, 3).map(s => `Vulnerability cited in ${s.metadata?.companyName || 'historical record'}: ${s.chunkText?.slice(0, 120)}...`)
-    : [
-        `High vulnerability to customer acquisition cost surges in venture model.`,
-        `Premature scaling before locking positive unit contribution margins.`,
-        `Capital lock-in and liquidity timing exposure during bridge funding rounds.`
-      ];
+  if (result.isLive && result.data) {
+    const d = result.data.data || result.data;
+    return {
+      ...result,
+      data: {
+        ...d,
+        ideaScore: d.finalRiskScore,
+        overallRiskScore: d.finalRiskScore,
+        categoryScores: {
+          productRisk: d.ventureProfile?.dimensions?.productMarketFit || 60,
+          marketRisk: d.ventureProfile?.dimensions?.customerNeed || 55,
+          businessModelRisk: d.ventureProfile?.dimensions?.unitEconomics || 65,
+          competitionRisk: d.ventureProfile?.dimensions?.competition || 60,
+          executionRisk: d.ventureProfile?.dimensions?.executionComplexity || 55
+        },
+        topRiskFactors: d.riskDrivers?.map(r => `${r.name}: ${r.reasoning || `${r.score}/100 vulnerability`}`) || []
+      }
+    };
+  }
 
-  const enrichedRecommendations = [
-    'Enforce positive unit contribution margin from day one before investing into paid customer acquisition.',
-    'Secure non-refundable pilot pre-payments or signed LOIs to validate true willingness-to-pay.',
-    'Maintain a minimum 18-month cash runway covenant and stress-test burn against zero follow-on venture rounds.'
-  ];
-
-  const scoreVal = typeof ideaScore === 'number' ? ideaScore : 50;
-
-  return {
-    ...result,
-    data: {
-      ideaScore: scoreVal,
-      overallRiskScore: scoreVal,
-      riskLevel: scoreVal >= 75 ? 'Elevated Failure Pattern Risk' : scoreVal >= 55 ? 'Moderate Vulnerability Pattern' : 'Standard Venture Baseline',
-      scoreBreakdown: scoreBreakdown || { rawScore: scoreVal / 100, modelVersion: 'v2.1-calibrated' },
-      categoryScores: {
-        productRisk: Math.min(96, Math.max(25, Math.round(scoreVal * 0.95))),
-        marketRisk: Math.min(96, Math.max(25, Math.round(scoreVal * 0.9))),
-        businessModelRisk: Math.min(96, Math.max(25, Math.round(scoreVal * 1.05))),
-        competitionRisk: Math.min(96, Math.max(25, Math.round(scoreVal * 0.85))),
-        executionRisk: Math.min(96, Math.max(25, Math.round(scoreVal * 0.92)))
-      },
-      topRiskFactors: enrichedRiskFactors,
-      recommendations: enrichedRecommendations,
-      historicalMatches: CURATED_STARTUPS.slice(0, 3),
-      sources,
-      disclaimer: 'Evidence-based risk diagnostic modeled on historical startup failure distributions and calibrated ML heuristics.'
-    },
-  };
+  return result;
 }
 
 /**

@@ -4,36 +4,33 @@ const { scoreIdea } = require('../agents/lib/ideaScoreModel');
 const { estimateFeaturesFromContext } = require('../agents/specialists/riskAnalyst');
 const { ragAsk, ragSearch } = require('../rag/rag.service');
 
+const { evaluateVenture } = require('../services/riskScannerService');
+
 const router = Router();
 router.post('/risk-scan', async (req, res, next) => {
   try {
-    const q = req.body.query ?? req.body.ideaText ?? 'Startup Idea';
-    let chunks = [];
-    try {
-      chunks = await ragSearch(q, { limit: 5 });
-    } catch {
-      chunks = [];
-    }
+    const input = {
+      ideaText: req.body.ideaText || req.body.query || req.body.idea || '',
+      industry: req.body.industry || 'SaaS & Enterprise',
+      targetCustomer: req.body.targetCustomer || 'B2B',
+      businessModel: req.body.businessModel || 'Subscription',
+      burnRate: req.body.burnRate || '$20k - $50k/mo',
+      hardwareInvolved: Boolean(req.body.hardwareInvolved),
+      regulatoryHeavy: Boolean(req.body.regulatoryHeavy),
+      modelFeatures: req.body.features || req.body.modelFeatures || null
+    };
 
-    let features = req.body.features;
-    if (!features || Object.keys(features).length === 0 || !Number.isFinite(features.funding_rounds)) {
-      features = await estimateFeaturesFromContext({
-        ideaText: q,
-        industry: req.body.industry,
-        targetCustomer: req.body.targetCustomer,
-        businessModel: req.body.businessModel,
-        burnRate: req.body.burnRate
-      });
-    }
+    const result = await evaluateVenture(input);
 
-    const score = await scoreIdea(features);
+    // Return structured payload compliant with Section 13
     res.json({
-      ideaScore: score.ideaScore,
-      scoreBreakdown: score.breakdown,
-      estimatedFeatures: features,
-      sources: chunks
+      success: true,
+      ...result.data,
+      data: result.data
     });
-  } catch (error) { next(error); }
+  } catch (error) {
+    next(error);
+  }
 });
 
 router.post('/ghost-chat', async (req, res, next) => {

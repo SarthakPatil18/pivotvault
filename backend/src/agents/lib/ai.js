@@ -14,7 +14,7 @@ async function gemini(prompt, { maxTokens = 1000, json = false, system = '' } = 
   const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/${config.GEMINI_MODEL ?? 'gemini-1.5-flash'}:generateContent?key=${config.GEMINI_API_KEY}`, {
     method: 'POST', 
     headers: { 'content-type': 'application/json' },
-    signal: AbortSignal.timeout(2000),
+    signal: AbortSignal.timeout(25000),
     body: JSON.stringify({ systemInstruction: system ? { parts: [{ text: system }] } : undefined, contents: [{ role: 'user', parts: [{ text: prompt }] }], generationConfig: { maxOutputTokens: maxTokens, responseMimeType: json ? 'application/json' : 'text/plain' } }),
   });
   if (!response.ok) throw new Error(`Gemini request failed (${response.status}): ${await response.text()}`);
@@ -22,13 +22,13 @@ async function gemini(prompt, { maxTokens = 1000, json = false, system = '' } = 
   return payload.candidates?.[0]?.content?.parts?.map((part) => part.text ?? '').join('') ?? null;
 }
 
-async function callGroq(prompt, { maxTokens = 1000, model = 'llama3-70b-8192' } = {}) {
+async function callGroq(prompt, { maxTokens = 1000, model = 'llama-3.3-70b-versatile' } = {}) {
   const config = await getConfig();
   if (!config.GROQ_API_KEY || config.GROQ_API_KEY.includes('mock')) throw new Error('GROQ_API_KEY is not configured or is mock.');
   const response = await fetch('https://api.groq.com/openai/v1/chat/completions', { 
     method: 'POST', 
     headers: { 'content-type': 'application/json', authorization: `Bearer ${config.GROQ_API_KEY}` }, 
-    signal: AbortSignal.timeout(2000),
+    signal: AbortSignal.timeout(25000),
     body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: 'user', content: prompt }] }) 
   });
   if (!response.ok) throw new Error(`Groq request failed (${response.status}): ${await response.text()}`);

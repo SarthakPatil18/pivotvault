@@ -1,14 +1,10 @@
 /**
  * PivotVault Risk Scanner Orchestrator Service
  * Master coordinator for the Venture Risk Intelligence Engine.
- * Integrates:
- * 1. Groq Venture Risk Profiler (Understanding & Structuring)
- * 2. PivotVault Venture Risk Engine (Deterministic Adaptive Scoring)
- * 3. Canonical 11-Vector Failure Taxonomy Mapping
- * 4. Zero-Fabrication Historical Failure Retrieval & Similarity
- * 5. Transparent ML Benchmark
- * 6. Multi-Factor Independent Confidence Calculation
- * 7. Executive Forensic Diagnosis & Pre-Launch Actions
+ * 
+ * CORE RESPONSIBILITY:
+ * Integrates profiling, deterministic scoring, failure taxonomy, historical evidence,
+ * and produces a founder-friendly, human-readable diagnostic report.
  */
 
 const { extractVentureProfile } = require('./ventureRiskProfileService');
@@ -18,109 +14,90 @@ const { retrieveHistoricalFailures } = require('./historicalSimilarityService');
 const { evaluateMLBenchmark } = require('./mlBenchmark');
 
 /**
- * Computes an independent confidence score (0-100%) reflecting evidence depth,
- * input completeness, and signal agreement.
+ * Computes an honest confidence score (0-100%) reflecting evidence depth,
+ * input detail, and whether relevant historical post-mortems were found.
  */
 function calculateConfidence({ input, ventureProfile, historicalResult, mlResult }) {
-  let confidence = 50; // Neutral starting confidence
+  const ideaText = (input.ideaText || '').trim();
+  const ideaLength = ideaText.length;
 
-  // 1. Input completeness (up to +15)
-  const ideaLen = (input.ideaText || '').trim().length;
-  if (ideaLen > 80) confidence += 10;
-  if (ideaLen > 200) confidence += 5;
+  let base = 50;
 
-  // 2. Evidence coverage & match strength (up to +25)
-  const matchCount = historicalResult.evidenceSummary?.matchedCompaniesCount || 0;
-  if (matchCount >= 2) confidence += 15;
-  if (matchCount >= 3) confidence += 10;
-
-  // 3. Signal congruence between Venture Engine and Historical Similarity (up to +15)
-  const vScore = ventureProfile.ventureRiskScore || 50;
-  const hScore = historicalResult.historicalSimilarityScore || 50;
-  const delta = Math.abs(vScore - hScore);
-  if (delta <= 15) confidence += 15;
-  else if (delta <= 25) confidence += 8;
-  else confidence -= 10; // Significant disagreement lowers confidence
-
-  // 4. Unknowns penalty (up to -15)
-  const unknownCount = ventureProfile.unknowns?.length || 0;
-  if (unknownCount >= 4) confidence -= 10;
-  else if (unknownCount <= 2) confidence += 5;
-
-  // 5. ML Benchmark availability (+5)
-  if (mlResult.available) confidence += 5;
-
-  return Math.min(95, Math.max(35, Math.round(confidence)));
-}
-
-/**
- * Generates concise executive diagnosis explaining WHY the score exists.
- */
-function generateExecutiveExplanation({ ventureProfile, ventureEngine, failureTaxonomy, historicalResult, finalScore }) {
-  const primaryVector = failureTaxonomy.primaryVectors?.[0];
-  const secondaryVector = failureTaxonomy.primaryVectors?.[1];
-  const primaryDriver = ventureEngine.primaryRiskDrivers?.[0];
-  const topMatch = historicalResult.historicalMatches?.[0];
-
-  const lines = [];
-
-  lines.push(`Evaluated as a ${ventureProfile.ventureType} model.`);
-
-  if (primaryVector) {
-    lines.push(`Primary structural vulnerability maps to ${primaryVector.name} (${primaryVector.associationScore}% association), driven by ${primaryDriver ? primaryDriver.name.toLowerCase() : 'operational friction'}.`);
+  // Detail depth of input
+  if (ideaLength < 40) {
+    base = 40; // Very brief description yields lower confidence
+  } else if (ideaLength > 120) {
+    base += 15;
+  } else {
+    base += 5;
   }
 
-  if (secondaryVector) {
-    lines.push(`Secondary exposure identified in ${secondaryVector.name}.`);
+  // Historical evidence availability
+  if (historicalResult.hasStrongMatches && historicalResult.historicalMatches?.[0]?.relevanceScore >= 50) {
+    base += 20;
+  } else {
+    base -= 10; // Honest lower confidence when no strong parallels exist in archive
   }
 
-  if (topMatch && topMatch.name !== 'No sufficiently relevant historical failure found') {
-    lines.push(`Historical parallels in PivotVault's verified records (e.g. ${topMatch.name}) demonstrate that ventures sharing this unit architecture experienced distress when ${topMatch.keyLesson.toLowerCase()}`);
+  // Unknown count
+  const unknownsCount = ventureProfile.unknowns?.length || 0;
+  if (unknownsCount >= 4) {
+    base -= 5;
   }
 
-  return lines.join(' ');
+  // Benchmark available
+  if (mlResult.available) {
+    base += 5;
+  }
+
+  return Math.min(92, Math.max(35, Math.round(base)));
 }
 
 /**
  * Generates actionable pre-launch defensive recommendations.
  */
 function generateRecommendations({ ventureProfile, failureTaxonomy }) {
-  const recs = [];
+  if (Array.isArray(ventureProfile.validateFirst) && ventureProfile.validateFirst.length > 0) {
+    return ventureProfile.validateFirst;
+  }
+
   const primaryId = failureTaxonomy.primaryVectors?.[0]?.id;
+  const recs = [];
 
   switch (primaryId) {
-    case 'unit_economics':
-      recs.push('Enforce positive per-unit gross contribution margin from day one before investing into paid customer acquisition.');
-      recs.push('Calculate fully loaded Customer Acquisition Cost (CAC) including founder time, third-party APIs, and payment processing take-rates.');
-      recs.push('Secure 3–5 upfront non-refundable pilot deposits or prepayments to prove commercial willingness to pay without subsidization.');
+    case 'competition':
+      recs.push('Interview 10 target users to uncover what they dislike most about existing tools and what would genuinely force them to switch.');
+      recs.push('Define a tight, narrow beachhead niche (e.g. freelance writers, boutique agencies) rather than attempting to serve everyone initially.');
+      recs.push('Test your positioning with a simple landing page and see if users click a "Pre-order" or "Request Access" button.');
       break;
 
     case 'market_need':
-      recs.push('Conduct 15 customer discovery interviews focused strictly on frequency of pain rather than feature enthusiasm.');
-      recs.push('Verify that target buyers have active line-item budget allocated to solve this problem today.');
-      recs.push('Test value proposition with a manual concierge prototype before building custom engineering features.');
+      recs.push('Run 15 customer discovery calls focused on how frequently they experience this problem today and what they currently pay to solve it.');
+      recs.push('Offer to solve the problem manually for 3 customers before writing custom software to verify actual demand.');
+      recs.push('Test whether users would recommend the tool to a peer after trying an early wireframe or prototype.');
       break;
 
-    case 'burn_runway':
-      recs.push('Establish a strict 18-month cash runway covenant: freeze non-core headcount until organic retention exceeds 30%.');
-      recs.push('Stress-test monthly operating burn against a scenario with zero revenue and zero follow-on venture rounds for 12 months.');
+    case 'unit_economics':
+      recs.push('Calculate your estimated cost to acquire a single customer (CAC) and compare it against your expected 6-month gross margin.');
+      recs.push('Avoid relying solely on paid ads; identify at least one organic or community distribution loop.');
+      recs.push('Validate upfront pricing with paid pilot commitments before building automated self-serve billing.');
       break;
 
     case 'hardware_manufacturing':
-      recs.push('Verify manufacturing bill of materials (BOM) with multiple contract suppliers to identify single-source component bottlenecks.');
-      recs.push('Budget for a 20% initial warranty/defect reserve before committing to high-volume injection tooling.');
-      recs.push('Test whether a software-only or off-the-shelf hardware partnership can validate customer demand faster.');
+      recs.push('Build a functional off-the-shelf prototype before ordering custom tooling or molds.');
+      recs.push('Get quotes from at least 3 contract manufacturers to estimate realistic minimum order quantities and defect rates.');
+      recs.push('Collect pre-orders with refundable deposits to confirm strong demand before committing inventory capital.');
       break;
 
     case 'regulatory_legal':
-      recs.push('Engage regulatory counsel early to draft clear compliance protocols and terms before commercial launch.');
-      recs.push('Construct operational firewalls around customer fund handling or sensitive clinical data.');
+      recs.push('Consult an industry attorney to verify licensing requirements, data privacy compliance, and terms of service.');
+      recs.push('Map out compliance milestones required before accepting paying customers or handling sensitive data.');
       break;
 
     default:
-      recs.push('Secure non-refundable customer pre-commitments to validate pricing power before expanding development scope.');
-      recs.push('Cap monthly burn at under 1/24th of verified liquid capital to guarantee minimum 24-month survival window.');
-      recs.push('Build defensible proprietary workflow locks or data assets rather than competing solely on feature breadth.');
+      recs.push('Speak directly to 10 potential customers about their existing workflow before writing code.');
+      recs.push('Validate willingness to pay with a pre-launch landing page or paid pilot agreement.');
+      recs.push('Focus on one core killer feature that solves a clear pain point better than existing options.');
   }
 
   return recs;
@@ -130,20 +107,17 @@ function generateRecommendations({ ventureProfile, failureTaxonomy }) {
  * Master Evaluation Function
  */
 async function evaluateVenture(inputData) {
-  // 1. Structured Venture Profiling (Groq / Llama 3)
+  // 1. Structured Venture Profiling (Idea-First, Contradiction-Aware)
   const ventureProfile = await extractVentureProfile(inputData);
 
-  // 2. PivotVault Deterministic Venture Risk Engine
+  // 2. PivotVault Deterministic Venture Risk Engine (Adaptive Dimensions)
   const ventureEngine = calculateVentureRisk(ventureProfile);
 
-  // 3. Mapping to 11 Canonical Failure Vectors
+  // 3. Mapping to 11 Canonical Failure Vectors (Guarded against false alarms)
   const failureTaxonomy = mapToFailureTaxonomy(ventureProfile, inputData);
 
-  // 4. Historical Failure Retrieval & Similarity Engine
-  const historicalResult = await retrieveHistoricalFailures({
-    ...ventureProfile,
-    primaryVectors: failureTaxonomy.primaryVectors
-  }, inputData);
+  // 4. Historical Failure Retrieval & Similarity Engine (Strict Relevance)
+  const historicalResult = await retrieveHistoricalFailures(ventureProfile, inputData);
 
   // 5. Historical ML Benchmark
   const mlResult = await evaluateMLBenchmark(inputData.modelFeatures);
@@ -182,10 +156,10 @@ async function evaluateVenture(inputData) {
 
   // Determine Risk Level
   const riskLevel = finalRiskScore >= 75
-    ? 'CRITICAL / HIGH RISK'
+    ? 'HIGH RISK'
     : finalRiskScore >= 50
       ? 'MODERATE RISK'
-      : 'LOW / CONTROLLED RISK';
+      : 'LOW RISK';
 
   // 7. Multi-Factor Confidence Score
   const confidence = calculateConfidence({
@@ -195,15 +169,7 @@ async function evaluateVenture(inputData) {
     mlResult
   });
 
-  // 8. Executive Explanation & Recommendations
-  const explanation = generateExecutiveExplanation({
-    ventureProfile,
-    ventureEngine,
-    failureTaxonomy,
-    historicalResult,
-    finalScore: finalRiskScore
-  });
-
+  // 8. Plain-English Executive Diagnosis & Actions
   const recommendations = generateRecommendations({
     ventureProfile,
     failureTaxonomy
@@ -217,13 +183,24 @@ async function evaluateVenture(inputData) {
       riskLevel,
       confidence,
 
+      // Structured 4-Part Diagnosis
+      diagnosis: {
+        whatWeThink: ventureProfile.whatWeThink,
+        whyItIsRisky: ventureProfile.whyItIsRisky,
+        whatLooksPromising: ventureProfile.whatLooksPromising,
+        validateFirst: ventureProfile.validateFirst,
+        practicalQuestions: ventureProfile.practicalQuestions
+      },
+
       ventureProfile: {
         ventureType: ventureProfile.ventureType,
+        industry: ventureProfile.industry,
         businessModel: ventureProfile.businessModel,
         targetCustomer: ventureProfile.targetCustomer,
         coreValueProposition: ventureProfile.coreValueProposition,
         dimensions: ventureProfile.dimensions,
-        sources: ventureProfile.sources,
+        dimensionStatus: ventureProfile.dimensionStatus,
+        applicableDimensions: ventureProfile.applicableDimensions,
         dimensionReasoning: ventureProfile.dimensionReasoning
       },
 
@@ -236,19 +213,22 @@ async function evaluateVenture(inputData) {
         weightsUsed
       },
 
+      // Relevant failure vectors
       failureVectors: failureTaxonomy.allVectors,
       primaryFailureVectors: failureTaxonomy.primaryVectors,
 
+      // Top active risk drivers
       riskDrivers: ventureEngine.primaryRiskDrivers,
-      secondaryRiskDrivers: ventureEngine.secondaryRiskDrivers,
+      activeDimensions: ventureEngine.activeDimensions,
       positiveSignals: ventureProfile.positiveSignals,
       assumptions: ventureProfile.primaryAssumptions,
       unknowns: ventureProfile.unknowns,
 
+      // Strictly relevant historical matches
       historicalMatches: historicalResult.historicalMatches,
+      hasStrongMatches: historicalResult.hasStrongMatches,
       evidenceSummary: historicalResult.evidenceSummary,
 
-      explanation,
       recommendations
     }
   };

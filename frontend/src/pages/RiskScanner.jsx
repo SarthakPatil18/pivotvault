@@ -6,33 +6,34 @@ import { INDUSTRIES } from '../lib/data/startupsData';
 import { 
   ShieldAlert, Sparkles, CheckCircle2, AlertTriangle, 
   RotateCcw, Lightbulb, HelpCircle, Layers, Building2,
-  ExternalLink, FileText, Activity, Compass, ArrowUpRight
+  ExternalLink, FileText, Activity, Compass, ArrowUpRight,
+  ChevronDown, ChevronUp
 } from 'lucide-react';
 
 const SCAN_STAGES = [
-  'Understanding venture architecture & unit economics...',
-  'Evaluating 12 venture risk dimensions...',
-  'Mapping against 11 canonical failure vectors...',
-  'Retrieving analogous post-mortems from 413+ failure corpus...',
-  'Comparing historical patterns & checking ML benchmark...',
-  'Calculating PivotVault Venture Risk Score...',
-  'Synthesizing executive diagnostic report...'
+  'Analyzing core problem and target audience...',
+  'Identifying venture archetype and business model...',
+  'Evaluating active risk factors (filtering out non-applicable)...',
+  'Searching verified historical post-mortems in PivotVault archive...',
+  'Calculating calibrated PivotVault Risk Score...',
+  'Preparing clear founder diagnostic report...'
 ];
 
 export function RiskScanner() {
   const [formData, setFormData] = useState({
-    idea: 'An AI-powered automated bookkeeping platform for SMBs with real-time tax filing guarantees.',
-    industry: 'FinTech & Crypto',
+    idea: 'A lightweight AI-powered daily to-do list and task scheduler for remote software developers and designers.',
+    industry: 'SaaS & Enterprise',
     targetCustomer: 'B2B',
     businessModel: 'Subscription',
-    burnRate: '$20k - $50k/mo',
+    burnRate: '<$10k/mo',
     hardwareInvolved: false,
-    regulatoryHeavy: true,
+    regulatoryHeavy: false,
   });
 
   const [loading, setLoading] = useState(false);
   const [stageIndex, setStageIndex] = useState(0);
   const [result, setResult] = useState(null);
+  const [showAllDimensions, setShowAllDimensions] = useState(false);
 
   // Animate loading through real analytical stages
   useEffect(() => {
@@ -41,7 +42,7 @@ export function RiskScanner() {
       setStageIndex(0);
       timer = setInterval(() => {
         setStageIndex((prev) => (prev < SCAN_STAGES.length - 1 ? prev + 1 : prev));
-      }, 700);
+      }, 750);
     } else {
       setStageIndex(0);
     }
@@ -54,7 +55,7 @@ export function RiskScanner() {
     try {
       const res = await runRiskScanner(formData);
       setResult(res.data);
-      window.scrollTo({ top: 400, behavior: 'smooth' });
+      window.scrollTo({ top: 380, behavior: 'smooth' });
     } catch (err) {
       console.error('Risk scanner error:', err);
     } finally {
@@ -69,79 +70,71 @@ export function RiskScanner() {
       industry: 'SaaS & Enterprise',
       targetCustomer: 'B2B',
       businessModel: 'Subscription',
-      burnRate: '$10k - $20k/mo',
+      burnRate: '<$10k/mo',
       hardwareInvolved: false,
       regulatoryHeavy: false,
     });
   };
 
-  const dimensionLabels = {
-    productMarketFit: 'Product-Market Fit',
-    customerNeed: 'Customer Urgency & Need',
-    differentiation: 'Defensive Differentiation',
-    competition: 'Competitive Headwinds',
-    businessModel: 'Business Model Viability',
-    unitEconomics: 'Unit Economics & Margins',
-    executionComplexity: 'Execution & Operational Friction',
-    scalability: 'Structural Scalability',
-    marketTiming: 'Market Timing & Adoption',
-    capitalIntensity: 'Capital Intensity & Burn',
-    regulatoryExposure: 'Regulatory & Compliance Burden',
-    defensibility: 'Moat & Switching Costs'
-  };
-
   return (
-    <div className="pb-24 bg-white dark:bg-black text-black dark:text-white min-h-screen">
+    <div className="min-h-screen bg-white dark:bg-black text-black dark:text-white">
       <PageHeader
-        title="Evidence-Based Startup Risk Scanner"
-        subtitle="Stress-test venture architecture against PivotVault's 11 canonical failure vectors and 413+ historical startup autopsies."
-        badge="Evidence Diagnostic"
-        tagline="VENTURE RISK INTELLIGENCE"
-        breadcrumbs={[{ label: 'Intelligence' }, { label: 'Risk Scanner' }]}
+        tag="EVIDENCE DIAGNOSTIC"
+        title="Venture Risk Scanner"
+        subtitle="Get a candid, context-aware analysis of your startup idea. We evaluate the risks that actually matter to your business model and compare them against 413+ verified startup failures."
+        breadcrumbs={[
+          { label: 'PivotVault', href: '/' },
+          { label: 'Intelligence', href: '/risk-scanner' },
+          { label: 'Risk Scanner' },
+        ]}
       />
 
-      <div className="vault-container">
-        {/* Input Form */}
-        <div className="vault-card p-6 sm:p-8 mb-10 border border-[#E5E5E5] dark:border-[#2A2A2A]">
+      <div className="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
+        {/* Startup Input Form */}
+        <div className="vault-card p-6 sm:p-8 border border-[#E5E5E5] dark:border-[#2A2A2A]">
           <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
             <div>
-              <h2 className="text-lg font-bold font-sans text-black dark:text-white">
-                1. Venture Architecture Parameters
+              <h2 className="text-sm font-mono font-bold uppercase tracking-wider text-black dark:text-white">
+                1. Tell Us About Your Startup
               </h2>
-              <p className="text-xs text-[#737373] dark:text-[#A3A3A3] font-sans">
-                Define the startup's core mechanics to map against historical failure distributions.
+              <p className="text-xs text-[#737373] dark:text-[#A3A3A3] mt-0.5">
+                The idea text is our primary source of truth. We automatically adapt the evaluation to your specific business.
               </p>
             </div>
             {result && (
               <button
+                type="button"
                 onClick={handleReset}
-                className="vault-btn-secondary text-xs flex items-center gap-1 font-mono cursor-pointer"
+                className="vault-btn vault-btn-ghost text-xs flex items-center gap-1.5"
               >
-                <RotateCcw className="w-3 h-3" />
-                <span>Reset Parameters</span>
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Reset Form</span>
               </button>
             )}
           </div>
 
           <form onSubmit={handleScan} className="space-y-6">
-            {/* Startup Idea Description */}
+            {/* Idea Concept Input */}
             <div>
-              <label className="block text-xs font-mono font-bold uppercase tracking-wider text-black dark:text-white mb-2">
-                Startup Concept / Core Value Proposition
+              <label className="block text-xs font-mono font-bold text-black dark:text-white mb-2">
+                STARTUP CONCEPT / VALUE PROPOSITION *
               </label>
               <textarea
-                rows={3}
-                required
                 value={formData.idea}
                 onChange={(e) => setFormData({ ...formData, idea: e.target.value })}
-                placeholder="Describe your startup concept, key differentiator, and how you deliver value..."
-                className="vault-input resize-none"
+                rows={3}
+                required
+                placeholder="e.g. A lightweight daily to-do list and task scheduler for remote developers, priced at $8/month..."
+                className="vault-input w-full font-sans text-sm resize-y leading-relaxed"
               />
+              <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3] mt-1.5">
+                Include what you build, who it's for, and how it delivers value. Detail helps us give you more tailored advice.
+              </p>
             </div>
 
-            {/* Grid for Sector, Customer, Business Model, Burn */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-              {/* Industry */}
+            {/* Context Grid */}
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-2">
+              {/* Industry Sector */}
               <div>
                 <label className="block text-xs font-mono font-bold text-black dark:text-white mb-1.5">
                   Industry Sector
@@ -151,7 +144,7 @@ export function RiskScanner() {
                   onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
                   className="vault-input cursor-pointer"
                 >
-                  {INDUSTRIES.filter(i => i !== 'All Industries').map((ind) => (
+                  {INDUSTRIES.map((ind) => (
                     <option key={ind} value={ind}>{ind}</option>
                   ))}
                 </select>
@@ -175,7 +168,7 @@ export function RiskScanner() {
                 </select>
               </div>
 
-              {/* Business Model */}
+              {/* Revenue / Monetization Model */}
               <div>
                 <label className="block text-xs font-mono font-bold text-black dark:text-white mb-1.5">
                   Revenue / Business Model
@@ -186,14 +179,14 @@ export function RiskScanner() {
                   className="vault-input cursor-pointer"
                 >
                   <option value="Subscription">SaaS Subscription (MRR)</option>
-                  <option value="Usage/API">Usage / Transactional Take-rate</option>
+                  <option value="Usage-based">Usage / Transactional Take-rate</option>
                   <option value="Marketplace">Two-Sided Marketplace Commission</option>
                   <option value="Hardware+Sub">Hardware Device + Subscription</option>
                   <option value="Direct Sales">One-time License / Direct Sale</option>
                 </select>
               </div>
 
-              {/* Anticipated Burn Rate */}
+              {/* Monthly Burn Projection */}
               <div>
                 <label className="block text-xs font-mono font-bold text-black dark:text-white mb-1.5">
                   Monthly Burn Projection
@@ -211,7 +204,7 @@ export function RiskScanner() {
               </div>
             </div>
 
-            {/* Risk Checkboxes (Hardware, Regulatory) */}
+            {/* Context Checkboxes */}
             <div className="flex flex-wrap items-center gap-6 pt-2">
               <label className="flex items-center gap-2 cursor-pointer text-xs font-sans text-black dark:text-white">
                 <input
@@ -230,11 +223,11 @@ export function RiskScanner() {
                   onChange={(e) => setFormData({ ...formData, regulatoryHeavy: e.target.checked })}
                   className="rounded border-[#E5E5E5] dark:border-[#2A2A2A] accent-black dark:accent-white"
                 />
-                <span>Subject to Heavy Regulatory / Financial Compliance (FDA, SEC, FinCEN)</span>
+                <span>Subject to Heavy Regulatory Compliance (FDA, SEC, FinCEN)</span>
               </label>
             </div>
 
-            {/* Submit Button & Stage Progress */}
+            {/* Submit Button & Stage Animation */}
             <div className="pt-4 border-t border-[#E5E5E5] dark:border-[#2A2A2A] flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="text-xs font-mono text-[#737373] dark:text-[#A3A3A3]">
                 {loading ? (
@@ -243,23 +236,23 @@ export function RiskScanner() {
                     <span className="text-black dark:text-white font-bold">{SCAN_STAGES[stageIndex]}</span>
                   </div>
                 ) : (
-                  <span>Ready to stress-test architecture across 12 dimensions</span>
+                  <span>Ready to evaluate your venture's key risk factors</span>
                 )}
               </div>
 
               <button
                 type="submit"
-                disabled={loading}
-                className="btn-primary w-full sm:w-auto px-7 py-3 text-xs font-mono flex items-center justify-center gap-2 rounded-[6px] cursor-pointer shadow-xs"
+                disabled={loading || !formData.idea.trim()}
+                className="vault-btn vault-btn-primary w-full sm:w-auto px-6 py-2.5 text-xs font-mono uppercase tracking-wider flex items-center justify-center gap-2"
               >
                 {loading ? (
                   <>
-                    <span className="w-4 h-4 border-2 border-neutral-300 border-t-white rounded-full animate-spin" />
-                    <span>Analyzing Failure Patterns...</span>
+                    <Activity className="w-3.5 h-3.5 animate-spin" />
+                    <span>Analyzing Startup...</span>
                   </>
                 ) : (
                   <>
-                    <ShieldAlert className="w-4 h-4" />
+                    <ShieldAlert className="w-3.5 h-3.5" />
                     <span>Run Venture Risk Scanner</span>
                   </>
                 )}
@@ -271,66 +264,66 @@ export function RiskScanner() {
         {/* Diagnostic Results Section */}
         {result && (
           <div className="space-y-8 animate-fade-in">
-            {/* Primary Score Hero Card */}
+            {/* 1. Primary Score Hero Card */}
             <div className="vault-card p-6 sm:p-8 border border-[#E5E5E5] dark:border-[#2A2A2A]">
               <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-                {/* Left: Gauge */}
+                {/* Left: Score Gauge */}
                 <div className="lg:col-span-4 flex flex-col items-center justify-center text-center pb-6 lg:pb-0 lg:border-r border-[#E5E5E5] dark:border-[#2A2A2A]">
                   <RiskScoreGauge 
-                    score={result.finalRiskScore ?? result.overallRiskScore}
+                    score={result.finalRiskScore ?? 50}
                     label="PivotVault Risk Score"
                   />
                   <div className="mt-4 flex flex-col items-center gap-1.5">
                     <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-mono font-bold uppercase rounded-[4px] ${
-                      (result.finalRiskScore ?? result.overallRiskScore) >= 75
+                      (result.finalRiskScore ?? 50) >= 75
                         ? 'bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#DC2626]'
                         : 'bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]'
                     }`}>
                       <span className={`w-1.5 h-1.5 rounded-full ${
-                        (result.finalRiskScore ?? result.overallRiskScore) >= 75 ? 'bg-[#DC2626]' : 'bg-black dark:bg-white'
+                        (result.finalRiskScore ?? 50) >= 75 ? 'bg-[#DC2626]' : 'bg-black dark:bg-white'
                       }`} />
                       {result.riskLevel || 'EVALUATED RISK'}
                     </span>
                     <span className="text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3]">
-                      Evidence Confidence: <strong className="text-black dark:text-white">{result.confidence ?? 88}%</strong>
+                      Evidence Confidence: <strong className="text-black dark:text-white">{result.confidence ?? 70}%</strong>
                     </span>
                   </div>
                 </div>
 
-                {/* Right: Executive Diagnosis & Methodology */}
-                <div className="lg:col-span-8 space-y-5">
+                {/* Right: Archetype & Scoring Methodology */}
+                <div className="lg:col-span-8 space-y-4">
                   <div className="flex items-center justify-between">
                     <span className="vault-badge vault-badge-neutral text-[10px] font-mono uppercase">
-                      Forensic Venture Diagnosis
+                      Venture Profile Identified
                     </span>
-                    <span className="text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3]">
-                      Venture Archetype: <strong className="text-black dark:text-white">{result.ventureProfile?.ventureType || 'Venture'}</strong>
+                    <span className="text-xs font-mono text-black dark:text-white">
+                      Archetype: <strong>{result.ventureProfile?.ventureType || 'SaaS & Software'}</strong>
                     </span>
                   </div>
 
-                  <div>
-                    <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-black dark:text-white mb-1.5">
-                      Why This Score?
-                    </h3>
-                    <p className="text-[13px] leading-relaxed text-[#404040] dark:text-[#D4D4D4] font-sans">
-                      {result.explanation || 'Evaluated against PivotVault failure taxonomies and analogous historical records.'}
+                  <div className="p-4 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-2">
+                    <span className="text-[10px] font-mono uppercase tracking-wider text-[#737373] dark:text-[#A3A3A3] block">
+                      Core Value Proposition:
+                    </span>
+                    <p className="text-xs font-sans text-black dark:text-white leading-relaxed">
+                      {result.ventureProfile?.coreValueProposition || result.idea}
                     </p>
                   </div>
 
-                  {/* How The Score Was Built: Transparency Table */}
-                  <div className="p-3.5 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A]">
+                  {/* How The Score Was Built */}
+                  <div className="p-3.5 rounded-[6px] bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A]">
                     <div className="flex items-center justify-between mb-2">
                       <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-black dark:text-white flex items-center gap-1.5">
                         <Activity className="w-3.5 h-3.5" />
                         How The Score Was Built
                       </span>
                       <span className="text-[10px] font-mono text-[#737373] dark:text-[#A3A3A3]">
-                        Multi-Signal Calibrated Synthesis
+                        Multi-Signal Synthesis
                       </span>
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-3 text-xs font-mono">
-                      <div className="p-2 rounded-[4px] bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A]">
+                      <div className="p-2 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A]">
                         <div className="text-[10px] text-[#737373] dark:text-[#A3A3A3] mb-0.5">
                           Venture Risk Engine ({Math.round((result.scoring?.weightsUsed?.ventureRisk || 0.71) * 100)}%)
                         </div>
@@ -339,16 +332,16 @@ export function RiskScanner() {
                         </div>
                       </div>
 
-                      <div className="p-2 rounded-[4px] bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A]">
+                      <div className="p-2 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A]">
                         <div className="text-[10px] text-[#737373] dark:text-[#A3A3A3] mb-0.5">
                           Historical Match ({Math.round((result.scoring?.weightsUsed?.historicalSimilarity || 0.29) * 100)}%)
                         </div>
                         <div className="font-bold text-black dark:text-white text-sm">
-                          {result.scoring?.historicalSimilarityScore ?? 65}/100
+                          {result.scoring?.historicalSimilarityScore ?? 50}/100
                         </div>
                       </div>
 
-                      <div className="p-2 rounded-[4px] bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A]">
+                      <div className="p-2 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A]">
                         <div className="text-[10px] text-[#737373] dark:text-[#A3A3A3] mb-0.5">
                           ML Benchmark ({Math.round((result.scoring?.weightsUsed?.mlBenchmark || 0) * 100)}%)
                         </div>
@@ -359,53 +352,199 @@ export function RiskScanner() {
                     </div>
 
                     <div className="mt-2 text-[10px] font-mono text-[#737373] dark:text-[#A3A3A3] italic">
-                      * {result.scoring?.mlBenchmarkReason || 'Pre-launch ideas lack historical venture funding rounds; final score dynamically re-weighted across validated venture & historical engines.'}
+                      * {result.scoring?.mlBenchmarkReason || 'Pre-launch concepts lack historical funding rounds; final score dynamically re-weighted across validated venture & historical engines.'}
                     </div>
                   </div>
                 </div>
               </div>
             </div>
 
-            {/* Mapped Failure Vectors */}
-            {result.primaryFailureVectors && result.primaryFailureVectors.length > 0 && (
+            {/* 2. Structured 4-Part Founder Diagnosis */}
+            {result.diagnosis && (
+              <div className="vault-card p-6 sm:p-8 border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-6">
+                <div className="border-b border-[#E5E5E5] dark:border-[#2A2A2A] pb-3 flex items-center justify-between">
+                  <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-black dark:text-white flex items-center gap-2">
+                    <Compass className="w-4 h-4" />
+                    Plain-English Venture Diagnosis
+                  </h3>
+                  <span className="text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3]">
+                    What you need to know in under 60 seconds
+                  </span>
+                </div>
+
+                <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                  {/* Card 1: What We Think */}
+                  <div className="p-5 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-2">
+                    <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-black dark:text-white block">
+                      1. WHAT WE THINK
+                    </span>
+                    <p className="text-xs text-[#404040] dark:text-[#D4D4D4] leading-relaxed font-sans">
+                      {result.diagnosis.whatWeThink}
+                    </p>
+                  </div>
+
+                  {/* Card 2: Why It Is Risky */}
+                  <div className="p-5 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-2">
+                    <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-black dark:text-white block">
+                      2. WHY IT IS RISKY
+                    </span>
+                    <ul className="space-y-1.5 text-xs text-[#404040] dark:text-[#D4D4D4]">
+                      {result.diagnosis.whyItIsRisky?.map((risk, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="font-mono text-black dark:text-white font-bold shrink-0">•</span>
+                          <span>{risk}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Card 3: What Looks Promising */}
+                  <div className="p-5 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-2">
+                    <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-black dark:text-white block">
+                      3. WHAT LOOKS PROMISING
+                    </span>
+                    <ul className="space-y-1.5 text-xs text-[#404040] dark:text-[#D4D4D4]">
+                      {result.diagnosis.whatLooksPromising?.map((sig, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <CheckCircle2 className="w-3.5 h-3.5 text-black dark:text-white shrink-0 mt-0.5" />
+                          <span>{sig}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  {/* Card 4: What You Should Validate First */}
+                  <div className="p-5 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-2">
+                    <span className="text-[10px] font-mono uppercase tracking-wider font-bold text-black dark:text-white block">
+                      4. WHAT YOU SHOULD VALIDATE FIRST
+                    </span>
+                    <ul className="space-y-1.5 text-xs text-[#404040] dark:text-[#D4D4D4]">
+                      {result.diagnosis.validateFirst?.map((action, idx) => (
+                        <li key={idx} className="flex items-start gap-2">
+                          <span className="font-mono text-black dark:text-white font-bold shrink-0">→</span>
+                          <span>{action}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* 3. Top Relevant Risks (Only Active Dimensions) */}
+            {result.riskDrivers && result.riskDrivers.length > 0 && (
               <div className="vault-card p-6 sm:p-8 border border-[#E5E5E5] dark:border-[#2A2A2A]">
                 <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
                   <div>
                     <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-black dark:text-white">
-                      Mapped PivotVault Failure Vectors
+                      Key Risk Factors For This Venture
                     </h3>
                     <p className="text-xs text-[#737373] dark:text-[#A3A3A3]">
-                      Degree of association with PivotVault's 11 canonical startup failure vectors.
+                      We only evaluate dimensions that genuinely apply to your business model.
                     </p>
                   </div>
-                  <span className="text-xs font-mono text-black dark:text-white font-bold">
-                    11-Vector Taxonomy
+                  <span className="text-xs font-mono text-[#737373] dark:text-[#A3A3A3]">
+                    0 = Low Risk • 100 = Critical Risk
                   </span>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-                  {result.primaryFailureVectors.map((vec, idx) => (
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                  {result.riskDrivers.map((driver, idx) => (
                     <div 
                       key={idx} 
                       className="p-4 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-2"
                     >
-                      <div className="flex items-center justify-between">
-                        <span className="text-[10px] font-mono uppercase text-[#737373] dark:text-[#A3A3A3]">
-                          Vector 0{idx + 1}
+                      <div className="flex items-center justify-between text-xs font-mono">
+                        <span className="font-bold text-black dark:text-white">
+                          {driver.name}
                         </span>
-                        <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-[3px] ${
-                          vec.associationLevel === 'HIGH' 
+                        <span className={`px-1.5 py-0.5 rounded-[3px] font-bold ${
+                          driver.score >= 75
                             ? 'bg-black text-white dark:bg-white dark:text-black'
                             : 'border border-[#E5E5E5] dark:border-[#2A2A2A] text-black dark:text-white'
                         }`}>
-                          {vec.associationScore}% {vec.associationLevel}
+                          {driver.score}/100
                         </span>
                       </div>
-                      <h4 className="text-xs font-bold text-black dark:text-white">
-                        {vec.name}
-                      </h4>
-                      <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3] leading-relaxed">
-                        {vec.rationale || vec.description}
+
+                      <div className="w-full h-1.5 bg-[#E5E5E5] dark:bg-[#2A2A2A] rounded-full overflow-hidden">
+                        <div 
+                          className="h-full bg-black dark:bg-white rounded-full transition-all duration-300"
+                          style={{ width: `${Math.min(100, Math.max(5, driver.score))}%` }}
+                        />
+                      </div>
+
+                      <p className="text-xs text-[#404040] dark:text-[#D4D4D4] leading-relaxed pt-1">
+                        {driver.reasoning}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Optional toggle for all dimensions */}
+                <div className="mt-4 pt-3 border-t border-[#E5E5E5] dark:border-[#2A2A2A] text-center">
+                  <button
+                    type="button"
+                    onClick={() => setShowAllDimensions(!showAllDimensions)}
+                    className="text-xs font-mono text-[#737373] dark:text-[#A3A3A3] hover:text-black dark:hover:text-white flex items-center justify-center gap-1.5 mx-auto"
+                  >
+                    <span>{showAllDimensions ? 'Hide Non-Applicable Dimensions' : 'View Full 12-Dimension Breakdown & Applicability'}</span>
+                    {showAllDimensions ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                  </button>
+
+                  {showAllDimensions && result.ventureProfile?.dimensions && (
+                    <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-left animate-fade-in">
+                      {Object.entries(result.ventureProfile.dimensions).map(([key, score]) => {
+                        const isNA = result.ventureProfile.dimensionStatus?.[key] === 'not_applicable';
+                        return (
+                          <div 
+                            key={key} 
+                            className={`p-3 rounded-[4px] border ${
+                              isNA 
+                                ? 'bg-transparent border-dashed border-[#E5E5E5] dark:border-[#2A2A2A] opacity-60' 
+                                : 'bg-white dark:bg-black border-[#E5E5E5] dark:border-[#2A2A2A]'
+                            }`}
+                          >
+                            <div className="flex items-center justify-between text-[11px] font-mono mb-1">
+                              <span className="capitalize">{key.replace(/([A-Z])/g, ' $1')}</span>
+                              <span className="font-bold">{isNA ? 'N/A' : `${score}/100`}</span>
+                            </div>
+                            <p className="text-[10px] text-[#737373] dark:text-[#A3A3A3]">
+                              {isNA ? 'Not applicable to this venture archetype.' : result.ventureProfile.dimensionReasoning?.[key]}
+                            </p>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+            )}
+
+            {/* 4. Critical Founder Questions (Unknowns) */}
+            {result.unknowns && result.unknowns.length > 0 && (
+              <div className="vault-card p-6 sm:p-8 border border-[#E5E5E5] dark:border-[#2A2A2A]">
+                <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
+                  <HelpCircle className="w-4 h-4 text-black dark:text-white" />
+                  <div>
+                    <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-black dark:text-white">
+                      Critical Questions You Need To Answer
+                    </h3>
+                    <p className="text-xs text-[#737373] dark:text-[#A3A3A3]">
+                      These are the primary unverified assumptions where early startups stumble:
+                    </p>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                  {result.unknowns.map((question, idx) => (
+                    <div 
+                      key={idx} 
+                      className="p-4 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] flex items-start gap-3"
+                    >
+                      <span className="font-mono text-sm font-bold text-black dark:text-white shrink-0">?</span>
+                      <p className="text-xs text-black dark:text-white font-medium leading-relaxed">
+                        {question}
                       </p>
                     </div>
                   ))}
@@ -413,52 +552,7 @@ export function RiskScanner() {
               </div>
             )}
 
-            {/* 12-Dimension Venture Risk Breakdown */}
-            {result.ventureProfile?.dimensions && (
-              <div className="vault-card p-6 sm:p-8 border border-[#E5E5E5] dark:border-[#2A2A2A]">
-                <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
-                  <div>
-                    <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-black dark:text-white">
-                      12-Dimension Venture Risk Spectrum
-                    </h3>
-                    <p className="text-xs text-[#737373] dark:text-[#A3A3A3]">
-                      Adaptive evaluation across core venture architecture mechanics.
-                    </p>
-                  </div>
-                  <span className="text-xs font-mono text-[#737373] dark:text-[#A3A3A3]">
-                    0 = Low Vulnerability • 100 = Critical Vulnerability
-                  </span>
-                </div>
-
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-4">
-                  {Object.entries(result.ventureProfile.dimensions).map(([key, score]) => (
-                    <div key={key} className="space-y-1.5">
-                      <div className="flex items-center justify-between text-xs">
-                        <span className="font-mono text-black dark:text-white">
-                          {dimensionLabels[key] || key}
-                        </span>
-                        <span className="font-mono font-bold text-black dark:text-white">
-                          {score}/100
-                        </span>
-                      </div>
-                      <div className="w-full h-1.5 bg-[#E5E5E5] dark:bg-[#2A2A2A] rounded-full overflow-hidden">
-                        <div 
-                          className="h-full bg-black dark:bg-white rounded-full transition-all duration-300"
-                          style={{ width: `${Math.min(100, Math.max(5, score))}%` }}
-                        />
-                      </div>
-                      {result.ventureProfile.dimensionReasoning?.[key] && (
-                        <p className="text-[10px] text-[#737373] dark:text-[#A3A3A3] line-clamp-1">
-                          {result.ventureProfile.dimensionReasoning[key]}
-                        </p>
-                      )}
-                    </div>
-                  ))}
-                </div>
-              </div>
-            )}
-
-            {/* Historical Parallels in Real Dataset */}
+            {/* 5. Historical Parallels (Strict Relevance) */}
             {result.historicalMatches && result.historicalMatches.length > 0 && (
               <div className="vault-card p-6 sm:p-8 border border-[#E5E5E5] dark:border-[#2A2A2A]">
                 <div className="flex items-center justify-between mb-4 pb-3 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
@@ -467,20 +561,26 @@ export function RiskScanner() {
                       Historical Parallels (PivotVault Verified Records)
                     </h3>
                     <p className="text-xs text-[#737373] dark:text-[#A3A3A3]">
-                      Zero-fabrication retrieval: authenticated post-mortems sharing structural venture dynamics.
+                      Zero-fabrication policy: Real post-mortems only shown when there is genuine operational relevance.
                     </p>
                   </div>
-                  <div className="flex items-center gap-2 text-xs font-mono text-[#737373] dark:text-[#A3A3A3]">
-                    <FileText className="w-3.5 h-3.5" />
-                    <span>{result.evidenceSummary?.totalEvidenceCount ?? 14} Evidence Records Cited</span>
-                  </div>
+                  {result.hasStrongMatches && (
+                    <div className="flex items-center gap-2 text-xs font-mono text-[#737373] dark:text-[#A3A3A3]">
+                      <FileText className="w-3.5 h-3.5" />
+                      <span>{result.evidenceSummary?.totalEvidenceCount ?? 8} Records Cited</span>
+                    </div>
+                  )}
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
                   {result.historicalMatches.map((m, idx) => (
                     <div 
                       key={idx} 
-                      className="p-5 rounded-[6px] bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#2A2A2A] flex flex-col justify-between space-y-3"
+                      className={`p-5 rounded-[6px] border flex flex-col justify-between space-y-3 ${
+                        m.relevanceScore > 0 
+                          ? 'bg-white dark:bg-[#0A0A0A] border-[#E5E5E5] dark:border-[#2A2A2A]' 
+                          : 'bg-[#F5F5F5] dark:bg-[#1A1A1A] border-dashed border-[#E5E5E5] dark:border-[#2A2A2A] md:col-span-3'
+                      }`}
                     >
                       <div>
                         <div className="flex items-center justify-between mb-1.5">
@@ -488,20 +588,22 @@ export function RiskScanner() {
                             <Building2 className="w-3.5 h-3.5" />
                             {m.name}
                           </span>
-                          {m.relevanceScore && (
+                          {m.relevanceScore > 0 && (
                             <span className="text-[10px] font-mono px-1.5 py-0.5 bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] text-black dark:text-white rounded-[3px]">
                               {m.relevanceScore}% Match
                             </span>
                           )}
                         </div>
 
-                        <div className="flex items-center gap-2 text-[10px] font-mono text-[#737373] dark:text-[#A3A3A3] mb-2">
-                          <span>{m.industry}</span>
-                          {m.failedYear && <span>• Collapsed {m.failedYear}</span>}
-                          {m.capitalRaised && (
-                            <span>• ${(m.capitalRaised / 1000000).toFixed(0)}M Lost</span>
-                          )}
-                        </div>
+                        {m.relevanceScore > 0 && (
+                          <div className="flex items-center gap-2 text-[10px] font-mono text-[#737373] dark:text-[#A3A3A3] mb-2">
+                            <span>{m.industry}</span>
+                            {m.failedYear && <span>• Collapsed {m.failedYear}</span>}
+                            {m.capitalRaised && (
+                              <span>• ${(m.capitalRaised / 1000000).toFixed(0)}M Lost</span>
+                            )}
+                          </div>
+                        )}
 
                         <p className="text-xs text-[#404040] dark:text-[#D4D4D4] leading-relaxed">
                           {m.whyRelevant}
@@ -524,74 +626,31 @@ export function RiskScanner() {
               </div>
             )}
 
-            {/* Positive Signals vs Critical Unknowns Grid */}
-            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-              {/* Positive Signals */}
-              <div className="vault-card p-6 sm:p-8 border border-[#E5E5E5] dark:border-[#2A2A2A]">
-                <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
-                  <CheckCircle2 className="w-4 h-4 text-black dark:text-white" />
-                  <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-black dark:text-white">
-                    Verified Positive Structural Signals
-                  </h3>
-                </div>
-                <div className="space-y-3">
-                  {result.positiveSignals?.map((sig, idx) => (
-                    <div key={idx} className="flex items-start gap-2.5 text-xs text-black dark:text-white">
-                      <span className="font-mono font-bold text-black dark:text-white shrink-0 mt-0.5">•</span>
-                      <div>
-                        <strong className="block font-sans">{sig.name || sig}</strong>
-                        {sig.reasoning && (
-                          <span className="text-[#737373] dark:text-[#A3A3A3] text-[11px] block mt-0.5">
-                            {sig.reasoning}
-                          </span>
-                        )}
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-
-              {/* Critical Unknowns / Needs Validation */}
-              <div className="vault-card p-6 sm:p-8 bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A]">
-                <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
-                  <HelpCircle className="w-4 h-4 text-black dark:text-white" />
-                  <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-black dark:text-white">
-                    Critical Unknowns / Needs Validation
-                  </h3>
-                </div>
-                <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3] mb-3">
-                  Information the founder has not validated; these represent early venture blindspots:
-                </p>
-                <div className="space-y-3">
-                  {result.unknowns?.map((unk, idx) => (
-                    <div key={idx} className="flex items-start gap-2.5 text-xs text-black dark:text-white">
-                      <span className="font-mono text-[#737373] dark:text-[#A3A3A3] shrink-0 mt-0.5">?</span>
-                      <span>{unk}</span>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            {/* Defensive Pre-Launch Action Recommendations */}
+            {/* 6. Practical Recommended Actions */}
             {result.recommendations && result.recommendations.length > 0 && (
               <div className="vault-card p-6 sm:p-8 border border-[#E5E5E5] dark:border-[#2A2A2A]">
                 <div className="flex items-center gap-2 mb-4 pb-3 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
                   <Lightbulb className="w-4 h-4 text-black dark:text-white" />
-                  <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-black dark:text-white">
-                    Defensive Pre-Launch Action Checklist
-                  </h3>
+                  <div>
+                    <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-black dark:text-white">
+                      Recommended Next Actions
+                    </h3>
+                    <p className="text-xs text-[#737373] dark:text-[#A3A3A3]">
+                      Actionable steps to validate demand and de-risk your business before building:
+                    </p>
+                  </div>
                 </div>
+
                 <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                   {result.recommendations.map((rec, idx) => (
                     <div 
                       key={idx} 
                       className="p-4 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-1.5"
                     >
-                      <span className="text-[10px] font-mono uppercase text-[#737373] dark:text-[#A3A3A3]">
+                      <span className="text-[10px] font-mono uppercase font-bold text-black dark:text-white">
                         Action 0{idx + 1}
                       </span>
-                      <p className="text-xs text-black dark:text-white font-medium leading-relaxed">
+                      <p className="text-xs text-[#404040] dark:text-[#D4D4D4] leading-relaxed">
                         {rec}
                       </p>
                     </div>

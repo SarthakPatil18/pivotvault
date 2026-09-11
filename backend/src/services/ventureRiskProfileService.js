@@ -1,16 +1,22 @@
 /**
  * Venture Risk Profile Service
- * Uses Groq / Llama 3 to structure and understand founder ideas into a normalized risk profile.
- * IMPORTANT: Groq DOES NOT generate the final score. Groq acts solely as a forensic analyst.
+ * Uses Groq / Gemini (with deterministic grounded fallback) to extract an intelligent,
+ * context-aware, founder-friendly venture profile.
+ * 
+ * CORE PRINCIPLES:
+ * 1. The Idea is the primary source of truth. Never let accidental form defaults override the actual concept.
+ * 2. Adaptive relevance: Not every startup has regulatory, clinical, or hardware risks.
+ * 3. Human advisor language: Avoid internal ML/forensic jargon.
+ * 4. Zero fabrication: Never invent metrics, companies, or citations.
  */
 
 const { callGroq, callGemini, parseJSON } = require('../agents/lib/ai');
 
-const VENTURE_DIMENSIONS = [
-  'productMarketFit',
+const ALL_DIMENSIONS = [
   'customerNeed',
   'differentiation',
   'competition',
+  'productMarketFit',
   'businessModel',
   'unitEconomics',
   'executionComplexity',
@@ -22,226 +28,392 @@ const VENTURE_DIMENSIONS = [
 ];
 
 /**
- * Deterministic fallback profile generator when Groq is unavailable.
- * Grounded purely in user inputs; does not fabricate metrics or hallucinate.
+ * Detects if form fields contradict the text of the idea.
+ * The idea text is ALWAYS the primary source of truth.
  */
-function createDeterministicProfile({ ideaText, industry, targetCustomer, businessModel, burnRate, hardwareInvolved, regulatoryHeavy }) {
-  const text = `${ideaText} ${industry} ${targetCustomer} ${businessModel}`.toLowerCase();
-  
-  // Venture classification
-  let ventureType = 'B2B SaaS';
-  if (hardwareInvolved || text.includes('hardware') || text.includes('robot') || text.includes('device')) {
-    ventureType = 'Consumer Hardware';
-  } else if (regulatoryHeavy || text.includes('fda') || text.includes('clinical') || industry.includes('Health') || industry.includes('Bio')) {
-    ventureType = 'Regulated HealthTech';
-  } else if (businessModel.includes('Marketplace') || text.includes('marketplace') || text.includes('two-sided')) {
-    ventureType = 'Marketplace';
-  } else if (targetCustomer === 'B2C' || text.includes('consumer') || text.includes('d2c')) {
-    ventureType = 'Consumer Tech';
-  } else if (industry.includes('FinTech') || industry.includes('Crypto') || text.includes('finance')) {
-    ventureType = 'FinTech';
+function sanitizeVentureContext({ ideaText, industry, targetCustomer, businessModel, burnRate, hardwareInvolved, regulatoryHeavy }) {
+  const text = (ideaText || '').toLowerCase();
+
+  // Keyword indicators
+  const hasHardwareWords = /\b(hardware|device|robot|robotics|sensor|machinery|chip|semiconductor|iot|physical product|wearable|manufactur)\b/i.test(text);
+  const hasClinicalHealthWords = /\b(patient|clinical|fda|diagnost|therap|drug|medical device|biotech|telehealth|blood test|hospital)\b/i.test(text);
+  const hasFintechWords = /\b(payment|banking|lending|credit|loan|crypto|wallet|fiat|custody|brokerage|insurance|fintech|securities|sec\b|fincen)\b/i.test(text);
+  const hasMarketplaceWords = /\b(marketplace|two-sided|buyers and sellers|platform connecting|commission per transaction)\b/i.test(text);
+  const isPureSoftware = /\b(app|saas|software|platform|copilot|dashboard|tool|extension|plugin|bot|ai-powered|productivity|crm|todo|task)\b/i.test(text) 
+    && !hasHardwareWords && !hasClinicalHealthWords;
+
+  // Resolve Contradictions: Idea text overrides checkboxes
+  let cleanHardware = Boolean(hardwareInvolved);
+  let cleanRegulatory = Boolean(regulatoryHeavy);
+  let cleanIndustry = industry || 'SaaS & Enterprise';
+
+  if (isPureSoftware && cleanHardware && !hasHardwareWords) {
+    // User accidentally checked physical hardware for a software tool
+    cleanHardware = false;
   }
 
-  // Dimension vulnerability baseline (0-100, where higher = higher risk/vulnerability)
-  const isHighBurn = burnRate.includes('150k') || burnRate.includes('500k');
-  const dimensions = {
-    productMarketFit: text.includes('proven') || text.includes('traction') ? 45 : 68,
-    customerNeed: text.includes('guarantee') || text.includes('critical') ? 42 : 58,
-    differentiation: text.includes('ai-powered') || text.includes('platform') ? 64 : 52,
-    competition: text.includes('ai') || industry.includes('SaaS') ? 72 : 55,
-    businessModel: businessModel.includes('Subscription') ? 48 : 65,
-    unitEconomics: isHighBurn ? 78 : (businessModel.includes('Marketplace') ? 72 : 54),
-    executionComplexity: hardwareInvolved ? 86 : (regulatoryHeavy ? 76 : 52),
-    scalability: hardwareInvolved ? 74 : (text.includes('manual') ? 70 : 44),
-    marketTiming: text.includes('ai') ? 60 : 50,
-    capitalIntensity: hardwareInvolved ? 88 : (isHighBurn ? 82 : 46),
-    regulatoryExposure: regulatoryHeavy ? 88 : (industry.includes('FinTech') ? 74 : 32),
-    defensibility: text.includes('patent') || text.includes('proprietary') ? 45 : 68
-  };
+  if (isPureSoftware && cleanRegulatory && !hasClinicalHealthWords && !hasFintechWords) {
+    // User accidentally checked heavy regulatory compliance for a simple productivity tool
+    cleanRegulatory = false;
+  }
+
+  // Determine realistic archetype from concept text
+  let ventureType = 'B2B SaaS';
+  if (hasClinicalHealthWords) {
+    ventureType = 'Healthcare & Biotech';
+    cleanIndustry = 'HealthTech & Biotech';
+    cleanRegulatory = true;
+  } else if (cleanHardware || hasHardwareWords) {
+    ventureType = 'Consumer Hardware';
+    cleanIndustry = 'Hardware & Robotics';
+  } else if (hasFintechWords) {
+    ventureType = 'FinTech';
+    cleanIndustry = 'FinTech & Crypto';
+    cleanRegulatory = true;
+  } else if (hasMarketplaceWords || (businessModel && businessModel.includes('Marketplace'))) {
+    ventureType = 'Marketplace';
+  } else if (text.includes('consumer') || text.includes('social') || text.includes('game') || targetCustomer === 'B2C') {
+    ventureType = 'Consumer Tech';
+    cleanIndustry = 'Consumer Apps';
+  } else {
+    ventureType = 'SaaS & Software';
+  }
 
   return {
+    ideaText: ideaText.trim(),
     ventureType,
-    targetCustomer: targetCustomer || 'B2B',
+    industry: cleanIndustry,
+    targetCustomer: targetCustomer || (text.includes('consumer') ? 'B2C' : 'B2B'),
     businessModel: businessModel || 'Subscription',
-    coreValueProposition: ideaText.slice(0, 140),
+    burnRate: burnRate || '$20k - $50k/mo',
+    hardwareInvolved: cleanHardware,
+    regulatoryHeavy: cleanRegulatory
+  };
+}
+
+/**
+ * Determines which dimensions are genuinely relevant for a given venture type.
+ * Irrelevant dimensions return 'not_applicable'.
+ */
+function getApplicableDimensions(ventureType, context) {
+  switch (ventureType) {
+    case 'Consumer Hardware':
+      return [
+        'capitalIntensity',
+        'executionComplexity',
+        'unitEconomics',
+        'customerNeed',
+        'differentiation',
+        'competition'
+      ];
+
+    case 'Healthcare & Biotech':
+      return [
+        'regulatoryExposure',
+        'executionComplexity',
+        'customerNeed',
+        'productMarketFit',
+        'capitalIntensity',
+        'defensibility'
+      ];
+
+    case 'FinTech':
+      return [
+        'regulatoryExposure',
+        'unitEconomics',
+        'competition',
+        'customerNeed',
+        'businessModel',
+        'defensibility'
+      ];
+
+    case 'Marketplace':
+      return [
+        'unitEconomics',
+        'productMarketFit',
+        'competition',
+        'customerNeed',
+        'scalability',
+        'differentiation'
+      ];
+
+    case 'Consumer Tech':
+      return [
+        'productMarketFit',
+        'customerNeed',
+        'differentiation',
+        'competition',
+        'marketTiming',
+        'unitEconomics'
+      ];
+
+    case 'B2B SaaS':
+    case 'SaaS & Software':
+    default:
+      return [
+        'competition',
+        'differentiation',
+        'customerNeed',
+        'productMarketFit',
+        'businessModel',
+        'unitEconomics'
+      ];
+  }
+}
+
+/**
+ * Grounded deterministic fallback profiler in plain human language.
+ */
+function createDeterministicProfile(rawInput) {
+  const ctx = sanitizeVentureContext(rawInput);
+  const text = ctx.ideaText.toLowerCase();
+  const applicable = getApplicableDimensions(ctx.ventureType, ctx);
+
+  // Dimension vulnerability baseline (0-100, where higher = higher risk)
+  const isHighBurn = ctx.burnRate.includes('150k') || ctx.burnRate.includes('500k');
+
+  const dimensions = {};
+  const dimensionStatus = {};
+  const dimensionReasoning = {};
+
+  for (const dim of ALL_DIMENSIONS) {
+    if (!applicable.includes(dim)) {
+      dimensions[dim] = 0;
+      dimensionStatus[dim] = 'not_applicable';
+      dimensionReasoning[dim] = 'Not applicable to this type of venture.';
+      continue;
+    }
+
+    dimensionStatus[dim] = 'active';
+
+    switch (dim) {
+      case 'competition':
+        dimensions[dim] = text.includes('todo') || text.includes('task') || text.includes('ai') ? 78 : 65;
+        dimensionReasoning[dim] = 'Crowded category with established alternatives; getting users to switch from existing habits is challenging.';
+        break;
+
+      case 'differentiation':
+        dimensions[dim] = text.includes('todo') || text.includes('simple') ? 74 : 60;
+        dimensionReasoning[dim] = 'Feature additions alone rarely create lasting defensive moats without proprietary workflow locks or unique data.';
+        break;
+
+      case 'customerNeed':
+        dimensions[dim] = text.includes('critical') || text.includes('must-have') ? 40 : 62;
+        dimensionReasoning[dim] = 'Solves an existing friction, but you need to prove whether users view it as a must-have tool or just a nice-to-have.';
+        break;
+
+      case 'productMarketFit':
+        dimensions[dim] = 68;
+        dimensionReasoning[dim] = 'Pre-launch concept without verified retention or active organic customer referrals.';
+        break;
+
+      case 'businessModel':
+        dimensions[dim] = ctx.businessModel.includes('Subscription') ? 48 : 62;
+        dimensionReasoning[dim] = 'Subscription monetization is familiar, but conversion rates from free to paid will govern viability.';
+        break;
+
+      case 'unitEconomics':
+        dimensions[dim] = isHighBurn ? 76 : 52;
+        dimensionReasoning[dim] = isHighBurn
+          ? 'High projected burn could exhaust cash reserves before customer acquisition costs stabilize.'
+          : 'Low infrastructure overhead keeps gross margins healthy if customer acquisition costs remain modest.';
+        break;
+
+      case 'capitalIntensity':
+        dimensions[dim] = ctx.hardwareInvolved ? 88 : (isHighBurn ? 78 : 34);
+        dimensionReasoning[dim] = ctx.hardwareInvolved
+          ? 'Requires significant capital for tooling, inventory, and supply chain commitments before revenue.'
+          : 'Lightweight software architecture allows you to launch and validate with minimal upfront capital.';
+        break;
+
+      case 'executionComplexity':
+        dimensions[dim] = ctx.hardwareInvolved ? 85 : (ctx.regulatoryHeavy ? 75 : 42);
+        dimensionReasoning[dim] = ctx.hardwareInvolved
+          ? 'Physical production, quality control, and shipping logistics introduce operational delays.'
+          : 'Core software is technically feasible to build; execution will depend on distribution and design polish.';
+        break;
+
+      case 'regulatoryExposure':
+        dimensions[dim] = ctx.regulatoryHeavy ? 84 : 20;
+        dimensionReasoning[dim] = ctx.regulatoryHeavy
+          ? 'Subject to formal regulatory compliance and legal oversight before full commercial launch.'
+          : 'Standard digital software with low regulatory hurdles or compliance barriers.';
+        break;
+
+      default:
+        dimensions[dim] = 50;
+        dimensionReasoning[dim] = 'Moderate operational factor standard for early-stage startups.';
+    }
+  }
+
+  // 4-Part Founder Diagnosis
+  const whatWeThink = `This is a ${ctx.ventureType} concept aimed at ${ctx.targetCustomer} customers using a ${ctx.businessModel} model. The core value proposition centers on ${ctx.ideaText.slice(0, 100).trim()}.`;
+  
+  const whyItIsRisky = [
+    `Competition & Differentiation: This market has many existing tools; convincing users to abandon their current habits will be the hardest hurdle.`,
+    `Willingness to Pay: Users frequently expect simple productivity features for free unless directly tied to measurable revenue or time saved.`,
+    isHighBurn ? `Burn Rate Pressure: Spending heavily before establishing clear user retention risks cash exhaustion.` : `Distribution Bottleneck: Without an existing audience or viral loop, acquiring new users may be slower than anticipated.`
+  ];
+
+  const whatLooksPromising = [
+    ctx.hardwareInvolved ? `High physical product defensibility once manufacturing is established.` : `Low initial launch cost allows testing an MVP with minimal financial risk.`,
+    `Focused single-problem proposition rather than trying to build a complex bloated tool.`
+  ];
+
+  const validateFirst = [
+    `Interview 15 target users to see what tool they currently use and what would genuinely force them to switch.`,
+    `Test a simple landing page or prototype with pricing to measure real willingness to pay before writing full code.`,
+    `Identify at least one low-cost distribution channel (niche community, newsletter, or workflow integration) that works consistently.`
+  ];
+
+  const practicalQuestions = [
+    `Will users actually pay for this, or do they expect existing free alternatives to suffice?`,
+    `Can you acquire new customers affordably without relying purely on expensive paid ads?`,
+    `Is the product sticky enough that users will keep using it past their first 30 days?`
+  ];
+
+  return {
+    ventureType: ctx.ventureType,
+    industry: ctx.industry,
+    targetCustomer: ctx.targetCustomer,
+    businessModel: ctx.businessModel,
+    coreValueProposition: ctx.ideaText.slice(0, 140),
     dimensions,
-    sources: {
-      productMarketFit: 'GENERAL BUSINESS REASONING',
-      customerNeed: 'SUPPORTED BY IDEA',
-      differentiation: 'GENERAL BUSINESS REASONING',
-      competition: 'GENERAL BUSINESS REASONING',
-      businessModel: 'SUPPORTED BY IDEA',
-      unitEconomics: 'GENERAL BUSINESS REASONING',
-      executionComplexity: hardwareInvolved || regulatoryHeavy ? 'SUPPORTED BY IDEA' : 'GENERAL BUSINESS REASONING',
-      scalability: 'GENERAL BUSINESS REASONING',
-      marketTiming: 'GENERAL BUSINESS REASONING',
-      capitalIntensity: isHighBurn || hardwareInvolved ? 'SUPPORTED BY IDEA' : 'GENERAL BUSINESS REASONING',
-      regulatoryExposure: regulatoryHeavy ? 'SUPPORTED BY IDEA' : 'GENERAL BUSINESS REASONING',
-      defensibility: 'GENERAL BUSINESS REASONING'
-    },
-    dimensionReasoning: {
-      productMarketFit: 'Pre-launch concept lacks verified customer retention and willingness-to-pay telemetry.',
-      customerNeed: 'Addresses identified workflow pain point, but urgency depends on commercial buyer prioritization.',
-      differentiation: 'High risk of feature commoditization by established market incumbents with existing distribution.',
-      competition: 'Active competitive landscape requires clear proprietary wedge or specialized workflow integration.',
-      businessModel: `Standard ${businessModel} model requires proving repeatable CAC-to-LTV payback period.`,
-      unitEconomics: isHighBurn ? 'Projected burn rate risks outrunning contribution margin recovery before Series A.' : 'Gross margins depend on keeping infrastructure and customer service costs contained.',
-      executionComplexity: hardwareInvolved ? 'Physical manufacturing and supply chain defect risks require substantial lead times.' : 'Software delivery is manageable but requires resilient compliance and uptime.',
-      scalability: 'Scaling velocity governed by customer acquisition cost rather than technological constraints.',
-      marketTiming: 'Current macroeconomic cycle requires immediate focus on capital efficiency over vanity growth.',
-      capitalIntensity: isHighBurn || hardwareInvolved ? 'High upfront capital requirements create severe bridge financing exposure.' : 'Bootstrappable baseline enables initial customer validation with disciplined cash management.',
-      regulatoryExposure: regulatoryHeavy ? 'Heavy regulatory compliance creates significant legal and audit overhead before launch.' : 'Standard operational compliance with low systemic regulatory friction.',
-      defensibility: 'Defensive moat is initially low; founder must build proprietary data assets or high switching costs.'
-    },
+    dimensionStatus,
+    applicableDimensions: applicable,
+    dimensionReasoning,
+    whatWeThink,
+    whyItIsRisky,
+    whatLooksPromising,
+    validateFirst,
+    practicalQuestions,
+    positiveSignals: whatLooksPromising,
+    unknowns: practicalQuestions,
     primaryAssumptions: [
-      'Target customers possess immediate discretionary budget for this solution without extensive procurement friction.',
-      'Customer acquisition costs can be sustained below 1/3rd of expected first-year customer lifetime value.',
-      'Core technology can be delivered without reliance on costly manual human workarounds.'
-    ],
-    positiveSignals: [
-      'Identified sector provides recognizable enterprise monetization mechanics.',
-      'Focused value proposition rather than an unfocused multi-product conglomerate.'
-    ],
-    unknowns: [
-      'Verified customer willingness to pay without initial discounting or trial concessions.',
-      'Real per-unit customer acquisition cost across non-founder sales channels.',
-      'Organic 60-day customer retention and net revenue expansion rate.'
+      'Target users feel enough friction with current options to try a new tool.',
+      'Customer acquisition cost will remain low enough to support positive margins.',
+      'Core user retention will remain stable beyond the initial curiosity phase.'
     ]
   };
 }
 
 /**
- * Main Profiler: Sends venture concept to Groq / Llama to extract structured risk profile.
+ * Main Profiler: Sends venture concept to Groq / Gemini with clear instructions
+ * to act like an expert startup advisor writing in plain, understandable English.
  */
-async function extractVentureProfile(input) {
-  const {
-    ideaText = '',
-    industry = 'SaaS & Enterprise',
-    targetCustomer = 'B2B',
-    businessModel = 'Subscription',
-    burnRate = '$20k - $50k/mo',
-    hardwareInvolved = false,
-    regulatoryHeavy = false
-  } = input;
+async function extractVentureProfile(rawInput) {
+  const ctx = sanitizeVentureContext(rawInput);
+  const applicableDimensions = getApplicableDimensions(ctx.ventureType, ctx);
 
-  const prompt = `You are a forensic venture capital analyst for PivotVault.
-Your task is to analyze the following startup concept and produce a structured, analytical VENTURE RISK PROFILE.
-You MUST NOT invent historical companies, fabricated revenue, or fake statistics.
-You MUST distinguish what is explicitly SUPPORTED BY THE IDEA, what is GENERAL BUSINESS REASONING, and what is UNKNOWN.
+  const prompt = `You are a veteran startup advisor and venture analyst for PivotVault.
+Your goal is to give the founder honest, clear, and highly relevant feedback on their startup idea.
+Speak directly to the founder in plain, natural, and friendly human language.
+DO NOT use overly technical machine jargon like "structural vulnerability", "failure vector topology", or "venture architecture mechanics".
+DO NOT invent competitors, fake revenue, false market numbers, or hallucinated facts.
 
-STARTUP VENTURE DATA:
-- Concept / Value Proposition: "${ideaText}"
-- Industry Sector: "${industry}"
-- Target Customer: "${targetCustomer}"
-- Business / Monetization Model: "${businessModel}"
-- Monthly Burn Projection: "${burnRate}"
-- Physical Hardware Involved: ${hardwareInvolved ? 'YES' : 'NO'}
-- Heavy Regulatory / Compliance: ${regulatoryHeavy ? 'YES' : 'NO'}
+CRITICAL INSTRUCTION ON RELEVANCE:
+- Evaluate the actual idea entered by the founder: "${ctx.ideaText}"
+- Startup Category: "${ctx.ventureType}" (${ctx.industry})
+- Target Customer: "${ctx.targetCustomer}"
+- Business Model: "${ctx.businessModel}"
+- ONLY evaluate risk dimensions that ACTUALLY apply to this business.
+- For non-applicable dimensions (e.g. manufacturing for pure software, or medical compliance for a to-do list), mark them "not_applicable".
+- A simple software tool should NOT receive hardware or regulatory risks.
 
-Score each of the 12 risk dimensions from 0 to 100, where:
-0 = Zero / Negligible Risk (strong structural advantage)
-50 = Standard Venture Baseline Risk
-100 = Catastrophic / Critical Vulnerability Risk
-
-Return a strict JSON object with this exact structure:
+Return a STRICT JSON object with this exact structure:
 {
-  "ventureType": "SaaS / Consumer Hardware / Regulated HealthTech / Marketplace / FinTech / D2C / DeepTech",
-  "targetCustomer": "B2B / B2C / Enterprise / Marketplace",
-  "businessModel": "Subscription / Marketplace / Direct / Usage",
-  "coreValueProposition": "Concise 1-sentence summary of the core mechanism",
-  "dimensions": {
-    "productMarketFit": (integer 0-100),
-    "customerNeed": (integer 0-100),
-    "differentiation": (integer 0-100),
-    "competition": (integer 0-100),
-    "businessModel": (integer 0-100),
-    "unitEconomics": (integer 0-100),
-    "executionComplexity": (integer 0-100),
-    "scalability": (integer 0-100),
-    "marketTiming": (integer 0-100),
-    "capitalIntensity": (integer 0-100),
-    "regulatoryExposure": (integer 0-100),
-    "defensibility": (integer 0-100)
-  },
-  "sources": {
-    "productMarketFit": "SUPPORTED BY IDEA / GENERAL BUSINESS REASONING / UNKNOWN",
-    "customerNeed": "SUPPORTED BY IDEA / GENERAL BUSINESS REASONING / UNKNOWN",
-    "differentiation": "SUPPORTED BY IDEA / GENERAL BUSINESS REASONING / UNKNOWN",
-    "competition": "SUPPORTED BY IDEA / GENERAL BUSINESS REASONING / UNKNOWN",
-    "businessModel": "SUPPORTED BY IDEA / GENERAL BUSINESS REASONING / UNKNOWN",
-    "unitEconomics": "SUPPORTED BY IDEA / GENERAL BUSINESS REASONING / UNKNOWN",
-    "executionComplexity": "SUPPORTED BY IDEA / GENERAL BUSINESS REASONING / UNKNOWN",
-    "scalability": "SUPPORTED BY IDEA / GENERAL BUSINESS REASONING / UNKNOWN",
-    "marketTiming": "SUPPORTED BY IDEA / GENERAL BUSINESS REASONING / UNKNOWN",
-    "capitalIntensity": "SUPPORTED BY IDEA / GENERAL BUSINESS REASONING / UNKNOWN",
-    "regulatoryExposure": "SUPPORTED BY IDEA / GENERAL BUSINESS REASONING / UNKNOWN",
-    "defensibility": "SUPPORTED BY IDEA / GENERAL BUSINESS REASONING / UNKNOWN"
+  "ventureType": "${ctx.ventureType}",
+  "whatWeThink": "1-3 plain English sentences explaining what you understand about this startup and its main premise.",
+  "whyItIsRisky": [
+    "2-4 concrete, idea-specific reasons why this specific business is risky in plain language."
+  ],
+  "whatLooksPromising": [
+    "1-3 real positive aspects or advantages based on what was described."
+  ],
+  "validateFirst": [
+    "2-4 practical, actionable steps or tests the founder should perform before investing heavily."
+  ],
+  "practicalQuestions": [
+    "3-4 practical questions the founder has not answered yet (e.g. 'Will users pay $X?', 'Can you acquire users cheaply?')"
+  ],
+  "relevantDimensions": [
+    ${applicableDimensions.map(d => `"${d}"`).join(', ')}
+  ],
+  "dimensionScores": {
+    ${applicableDimensions.map(d => `"${d}": (integer 0-100, where 0=low risk, 50=normal baseline, 100=very high risk)`).join(',\n    ')}
   },
   "dimensionReasoning": {
-    "productMarketFit": "Forensic rationale for this score",
-    "customerNeed": "Forensic rationale for this score",
-    "differentiation": "Forensic rationale for this score",
-    "competition": "Forensic rationale for this score",
-    "businessModel": "Forensic rationale for this score",
-    "unitEconomics": "Forensic rationale for this score",
-    "executionComplexity": "Forensic rationale for this score",
-    "scalability": "Forensic rationale for this score",
-    "marketTiming": "Forensic rationale for this score",
-    "capitalIntensity": "Forensic rationale for this score",
-    "regulatoryExposure": "Forensic rationale for this score",
-    "defensibility": "Forensic rationale for this score"
-  },
-  "primaryAssumptions": [
-    "Unverified assumption 1",
-    "Unverified assumption 2",
-    "Unverified assumption 3"
-  ],
-  "positiveSignals": [
-    "Positive structural factor 1",
-    "Positive structural factor 2"
-  ],
-  "unknowns": [
-    "Critical metric founder has not provided 1",
-    "Critical metric founder has not provided 2",
-    "Critical metric founder has not provided 3"
-  ]
+    ${applicableDimensions.map(d => `"${d}": "1-2 sentences of idea-specific, founder-friendly explanation for why this score was given"`).join(',\n    ')}
+  }
 }`;
 
   try {
     const raw = await callGroq(prompt, { maxTokens: 1200, model: process.env.GROQ_MODEL || 'openai/gpt-oss-120b' })
       .catch(() => callGemini(prompt, { maxTokens: 1200, json: true }));
-    
+
     const parsed = parseJSON(raw);
-    if (parsed && parsed.dimensions && typeof parsed.dimensions === 'object') {
-      // Validate all dimensions are numbers between 0 and 100
-      const validatedDimensions = {};
-      for (const dim of VENTURE_DIMENSIONS) {
-        const val = Number(parsed.dimensions[dim]);
-        validatedDimensions[dim] = Number.isFinite(val) ? Math.min(100, Math.max(0, Math.round(val))) : 50;
+    if (parsed && parsed.dimensionScores && typeof parsed.dimensionScores === 'object') {
+      const dimensions = {};
+      const dimensionStatus = {};
+      const dimensionReasoning = {};
+
+      const activeList = Array.isArray(parsed.relevantDimensions) && parsed.relevantDimensions.length > 0
+        ? parsed.relevantDimensions
+        : applicableDimensions;
+
+      for (const dim of ALL_DIMENSIONS) {
+        if (activeList.includes(dim) && parsed.dimensionScores[dim] !== undefined) {
+          const val = Number(parsed.dimensionScores[dim]);
+          dimensions[dim] = Number.isFinite(val) ? Math.min(99, Math.max(5, Math.round(val))) : 50;
+          dimensionStatus[dim] = 'active';
+          dimensionReasoning[dim] = parsed.dimensionReasoning?.[dim] || 'Evaluated based on current business model and competitive landscape.';
+        } else {
+          dimensions[dim] = 0;
+          dimensionStatus[dim] = 'not_applicable';
+          dimensionReasoning[dim] = 'Not applicable to this venture archetype.';
+        }
       }
 
       return {
-        ventureType: parsed.ventureType || 'Venture Concept',
-        targetCustomer: parsed.targetCustomer || targetCustomer,
-        businessModel: parsed.businessModel || businessModel,
-        coreValueProposition: parsed.coreValueProposition || ideaText.slice(0, 140),
-        dimensions: validatedDimensions,
-        sources: parsed.sources || {},
-        dimensionReasoning: parsed.dimensionReasoning || {},
-        primaryAssumptions: Array.isArray(parsed.primaryAssumptions) ? parsed.primaryAssumptions.slice(0, 4) : [],
-        positiveSignals: Array.isArray(parsed.positiveSignals) ? parsed.positiveSignals.slice(0, 3) : [],
-        unknowns: Array.isArray(parsed.unknowns) ? parsed.unknowns.slice(0, 4) : []
+        ventureType: parsed.ventureType || ctx.ventureType,
+        industry: ctx.industry,
+        targetCustomer: ctx.targetCustomer,
+        businessModel: ctx.businessModel,
+        coreValueProposition: ctx.ideaText.slice(0, 140),
+        dimensions,
+        dimensionStatus,
+        applicableDimensions: activeList,
+        dimensionReasoning,
+        whatWeThink: parsed.whatWeThink || `This is a ${ctx.ventureType} concept addressing ${ctx.targetCustomer} customers with a ${ctx.businessModel} model.`,
+        whyItIsRisky: Array.isArray(parsed.whyItIsRisky) && parsed.whyItIsRisky.length > 0
+          ? parsed.whyItIsRisky
+          : ['Competition from established alternatives is your biggest hurdle.', 'Customer willingness to pay must be proven before building.'],
+        whatLooksPromising: Array.isArray(parsed.whatLooksPromising) && parsed.whatLooksPromising.length > 0
+          ? parsed.whatLooksPromising
+          : ['Clear, focused proposition that can be prototyped quickly.'],
+        validateFirst: Array.isArray(parsed.validateFirst) && parsed.validateFirst.length > 0
+          ? parsed.validateFirst
+          : ['Interview 10 potential users to verify active pain.', 'Test pricing with a simple landing page.'],
+        practicalQuestions: Array.isArray(parsed.practicalQuestions) && parsed.practicalQuestions.length > 0
+          ? parsed.practicalQuestions
+          : ['Will customers pay for this solution?', 'How will you acquire users cost-effectively?'],
+        positiveSignals: parsed.whatLooksPromising || ['Focused initial feature set.'],
+        unknowns: parsed.practicalQuestions || ['Verified willingness to pay.'],
+        primaryAssumptions: [
+          'Target customers will switch from current tools.',
+          'Unit economics remain positive as acquisition scales.'
+        ]
       };
     }
   } catch (err) {
-    console.warn('[VentureProfiler] LLM profiling unavailable, using grounded deterministic profiler:', err.message);
+    console.warn('[VentureProfiler] External AI call failed or timed out, using grounded advisor profile:', err.message);
   }
 
-  // Grounded deterministic fallback (zero hallucination)
-  return createDeterministicProfile(input);
+  // Grounded deterministic fallback (zero hallucination, plain English)
+  return createDeterministicProfile(rawInput);
 }
 
 module.exports = {
   extractVentureProfile,
-  VENTURE_DIMENSIONS
+  ALL_DIMENSIONS
 };

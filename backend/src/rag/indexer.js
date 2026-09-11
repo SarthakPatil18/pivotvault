@@ -1,10 +1,10 @@
-import { chunkText } from './chunker.js';
-import { generateEmbeddings } from './embedder.js';
-import { getPrisma } from './runtime.js';
+const { chunkText } = require('./chunker');
+const { generateEmbeddings } = require('./embedder');
+const { getPrisma } = require('./runtime');
 
 const vector = (values) => `[${values.join(',')}]`;
 
-export async function indexDocument({ contentId, contentType, text, metadata = {} }) {
+async function indexDocument({ contentId, contentType, text, metadata = {} }) {
   if (!contentId || !contentType || !text) throw new Error('contentId, contentType, and text are required for indexing.');
   const prisma = await getPrisma();
   const chunks = chunkText(text);
@@ -22,3 +22,4 @@ export async function indexDocument({ contentId, contentType, text, metadata = {
   console.info('[RAG][INDEX] indexed document', { contentId, contentType, chunks: chunks.length });
   return { contentId, contentType, chunksIndexed: chunks.length };
 }
+module.exports = { indexDocument };

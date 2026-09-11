@@ -11,7 +11,7 @@ import { QUIZ_QUESTIONS } from './data/quizData';
 import { FOUNDER_CONFESSIONS } from './data/confessionsData';
 import { GHOST_PERSONAS } from './data/ghostsData';
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 
 /**
  * Helper to attempt a network fetch to the backend API, falling back to mock generator
@@ -205,9 +205,13 @@ export async function getRelatedStartups(id) {
  * Run Evidence-Based Startup Risk Scanner
  */
 export async function runRiskScanner(inputData) {
-  return fetchWithFallback('/risk-scanner', {
+  const result = await fetchWithFallback('/ai/risk-scan', {
     method: 'POST',
-    body: JSON.stringify(inputData),
+    body: JSON.stringify({
+      query: inputData.idea,
+      ideaText: inputData.idea,
+      features: inputData.modelFeatures,
+    }),
   }, async () => {
     // Intelligent offline algorithmic risk engine
     const {
@@ -292,15 +296,28 @@ export async function runRiskScanner(inputData) {
       ]
     };
   });
+
+  if (!result.isLive) return result;
+  const { ideaScore, scoreBreakdown = {}, sources = [] } = result.data;
+  return {
+    ...result,
+    data: {
+      ideaScore,
+      scoreBreakdown,
+      topRiskFactors: [],
+      recommendations: [],
+      sources,
+    },
+  };
 }
 
 /**
  * AI Research Assistant query
  */
 export async function askAssistant(question) {
-  return fetchWithFallback('/ai-assistant', {
+  const result = await fetchWithFallback('/ai/research', {
     method: 'POST',
-    body: JSON.stringify({ question }),
+    body: JSON.stringify({ query: question }),
   }, async () => {
     const q = (question || '').toLowerCase();
     
@@ -351,6 +368,18 @@ export async function askAssistant(question) {
       ]
     };
   });
+
+  if (!result.isLive) return result;
+  return {
+    ...result,
+    data: {
+      answer: result.data.answer,
+      evidenceCitations: result.data.sources?.map((source) => source.metadata?.companyName || source.metadata?.source || source.contentId).filter(Boolean) ?? [],
+      relatedStartups: [],
+      failurePatterns: [],
+      suggestedNextQueries: [],
+    },
+  };
 }
 
 /**

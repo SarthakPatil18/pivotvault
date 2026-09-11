@@ -1,20 +1,20 @@
-import { getPrisma } from '../rag/runtime.js';
-import { log } from './lib/logger.js';
-import { AgentInput } from './lib/types.js';
-import * as competitorIntel from './specialists/competitorIntel.js';
-import * as decisionCritic from './specialists/decisionCritic.js';
-import * as evidenceRetrieval from './specialists/evidenceRetrieval.js';
-import * as historicalIntel from './specialists/historicalIntel.js';
-import * as marketIntel from './specialists/marketIntel.js';
-import * as riskAnalyst from './specialists/riskAnalyst.js';
-import * as synthesis from './specialists/synthesis.js';
+const { getPrisma } = require('../rag/runtime');
+const { log } = require('./lib/logger');
+const { AgentInput } = require('./lib/types');
+const competitorIntel = require('./specialists/competitorIntel');
+const decisionCritic = require('./specialists/decisionCritic');
+const evidenceRetrieval = require('./specialists/evidenceRetrieval');
+const historicalIntel = require('./specialists/historicalIntel');
+const marketIntel = require('./specialists/marketIntel');
+const riskAnalyst = require('./specialists/riskAnalyst');
+const synthesis = require('./specialists/synthesis');
 
 const withTimeout = (promise, ms) => Promise.race([promise, new Promise((_, reject) => setTimeout(() => reject(new Error('Specialist timed out')), ms))]);
 const settled = (result) => result.status === 'fulfilled' ? result.value : { status: result.reason?.message === 'Specialist timed out' ? 'timeout' : 'failed', findings: null };
 async function createRun(input) { const prisma = await getPrisma(); return prisma.agentExecution.create({ data: { input, status: 'running', startedAt: new Date() } }); }
 async function finishRun(id, dossier) { const prisma = await getPrisma(); return prisma.agentExecution.update({ where: { id }, data: { status: 'completed', result: dossier, completedAt: new Date() } }); }
 
-export async function runDecision(input) {
+async function runDecision(input) {
   const agentInput = AgentInput.parse(input); const run = await createRun(agentInput); const started = Date.now();
   try {
     const evidence = await evidenceRetrieval.run(agentInput);
@@ -30,3 +30,4 @@ export async function runDecision(input) {
     const prisma = await getPrisma(); await prisma.agentExecution.update({ where: { id: run.id }, data: { status: 'failed', error: error.message, completedAt: new Date() } }); throw error;
   }
 }
+module.exports = { runDecision };

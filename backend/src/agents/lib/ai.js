@@ -1,7 +1,7 @@
-import { getConfig } from '../../rag/runtime.js';
+const { getConfig } = require('../../rag/runtime');
 
-export const wrapExternalContent = (text) => `<EXTERNAL_CONTENT>${String(text ?? '')}</EXTERNAL_CONTENT>`;
-export function parseJSON(text) {
+const wrapExternalContent = (text) => `<EXTERNAL_CONTENT>${String(text ?? '')}</EXTERNAL_CONTENT>`;
+function parseJSON(text) {
   try {
     const cleaned = String(text).trim().replace(/^```(?:json)?\s*/i, '').replace(/\s*```$/, '');
     return JSON.parse(cleaned);
@@ -20,7 +20,7 @@ async function gemini(prompt, { maxTokens = 1000, json = false, system = '' } = 
   return payload.candidates?.[0]?.content?.parts?.map((part) => part.text ?? '').join('') ?? null;
 }
 
-export async function callGroq(prompt, { maxTokens = 1000, model = 'llama3-70b-8192' } = {}) {
+async function callGroq(prompt, { maxTokens = 1000, model = 'llama3-70b-8192' } = {}) {
   const config = await getConfig();
   if (!config.GROQ_API_KEY) throw new Error('GROQ_API_KEY is not configured.');
   const response = await fetch('https://api.groq.com/openai/v1/chat/completions', { method: 'POST', headers: { 'content-type': 'application/json', authorization: `Bearer ${config.GROQ_API_KEY}` }, body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: 'user', content: prompt }] }) });
@@ -28,7 +28,7 @@ export async function callGroq(prompt, { maxTokens = 1000, model = 'llama3-70b-8
   return (await response.json()).choices?.[0]?.message?.content ?? null;
 }
 
-export async function callGemini(prompt, options = {}) {
+async function callGemini(prompt, options = {}) {
   try { return await gemini(prompt, options); } catch (geminiError) {
     try { return await callGroq(prompt, options); } catch (groqError) {
       console.warn('Both configured LLMs failed.', { geminiError: geminiError.message, groqError: groqError.message });
@@ -36,3 +36,4 @@ export async function callGemini(prompt, options = {}) {
     }
   }
 }
+module.exports = { callGemini, callGroq, wrapExternalContent, parseJSON };

@@ -1,10 +1,10 @@
-import { Worker } from 'bullmq';
-import { indexDocument } from '../rag/indexer.js';
-import { getPrisma } from '../rag/runtime.js';
-import { log } from '../agents/lib/logger.js';
+const { Worker } = require('bullmq');
+const { indexDocument } = require('../rag/indexer');
+const { getPrisma } = require('../rag/runtime');
+const { log } = require('../agents/lib/logger');
 
 async function queueConfig() {
-  const queues = await import('./queues.js').catch(() => null);
+  let queues; try { queues = require('./queues'); } catch { queues = null; }
   const connection = queues?.connection ?? queues?.redisConnection;
   if (!connection) throw new Error('Pipeline queue connection is unavailable. Export connection from src/pipeline/queues.js.');
   return { connection, queueName: queues.knowledgeIndexerQueue?.name ?? queues.embeddingQueue?.name ?? 'embeddingQueue', retryQueue: queues.retryQueue };
@@ -14,7 +14,7 @@ async function updateStatus(contentId, status, error) {
   await prisma.embeddingJob?.updateMany?.({ where: { contentId }, data: { status, error: error ?? null } });
 }
 
-export async function startEmbeddingWorker() {
+async function startEmbeddingWorker() {
   const { connection, queueName, retryQueue } = await queueConfig();
   return new Worker(queueName, async (job) => {
     const { contentId, contentType, text, metadata } = job.data;
@@ -29,3 +29,4 @@ export async function startEmbeddingWorker() {
     }
   }, { connection, concurrency: 2 });
 }
+module.exports = { startEmbeddingWorker };

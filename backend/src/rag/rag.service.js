@@ -1,16 +1,16 @@
-import { callGemini, wrapExternalContent } from '../agents/lib/ai.js';
-import { log } from '../agents/lib/logger.js';
-import { rerank } from './reranker.js';
-import { retrieve } from './retriever.js';
+const { callGemini, wrapExternalContent } = require('../agents/lib/ai');
+const { log } = require('../agents/lib/logger');
+const { rerank } = require('./reranker');
+const { retrieve } = require('./retriever');
 
-export async function ragSearch(query, options = {}) {
+async function ragSearch(query, options = {}) {
   const started = Date.now();
   const chunks = rerank(query, await retrieve(query, options));
   log.rag('search', chunks.length, Date.now() - started);
   return chunks;
 }
 
-export async function ragAsk(query, options = {}) {
+async function ragAsk(query, options = {}) {
   const started = Date.now();
   const chunks = await ragSearch(query, options);
   const context = chunks.map((chunk, index) => `[CHUNK ${index + 1} - ${chunk.metadata?.companyName ?? 'Unknown company'}, ${chunk.metadata?.failureYear ?? 'Unknown year'}]: ${wrapExternalContent(chunk.chunkText)}`).join('\n\n');
@@ -19,3 +19,4 @@ export async function ragAsk(query, options = {}) {
   log.rag('ask', chunks.length, Date.now() - started);
   return { answer, sources: chunks.map((chunk) => ({ contentId: chunk.contentId, metadata: chunk.metadata, similarity: chunk.similarity })), tokensUsed: null, chunksUsed: chunks.length };
 }
+module.exports = { ragSearch, ragAsk };

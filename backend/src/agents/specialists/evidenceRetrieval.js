@@ -1,8 +1,8 @@
-import { tools } from '../lib/tools.js';
-import { Evidence } from '../lib/types.js';
+const { tools } = require('../lib/tools');
+const { Evidence } = require('../lib/types');
 
 const confidence = (source) => source.score ?? source.similarity ?? 0.6;
-export async function run(agentInput) {
+async function run(agentInput) {
   const query = `${agentInput.query}\n${agentInput.ideaText}\nMarket: ${agentInput.market}`;
   const [chunks, web, claims] = await Promise.allSettled([tools.searchRAG({ query }), tools.searchWeb({ query }), tools.getClaims({ companyName: agentInput.market })]);
   const candidates = [
@@ -14,3 +14,4 @@ export async function run(agentInput) {
   return candidates.filter((item) => { const key = `${item.sourceUrl}|${item.content.slice(0, 160)}`; if (seen.has(key)) return false; seen.add(key); return true; })
     .sort((a, b) => b.confidence - a.confidence).map((item) => Evidence.parse(item));
 }
+module.exports = { run };

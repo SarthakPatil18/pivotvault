@@ -1,5 +1,5 @@
-import { getConfig } from '../../rag/runtime.js';
-import { log } from './logger.js';
+const { getConfig } = require('../../rag/runtime');
+const { log } = require('./logger');
 
 // Must exactly match ml-services: log_funding, funding_rounds,
 // days_to_first_funding, funding_duration_days, is_international (0 or 1).
@@ -26,7 +26,7 @@ async function checkHealth(url) {
     throw new Error(`Idea Score ML service health check failed: ${error.message}`);
   }
 }
-export async function scoreIdea(features) {
+async function scoreIdea(features) {
   const url = await serviceUrl();
   await checkHealth(url);
   let response;
@@ -37,3 +37,4 @@ export async function scoreIdea(features) {
   if (!Number.isFinite(payload.ideaScore) || payload.ideaScore < 0 || payload.ideaScore > 100) throw new Error('Idea Score ML service returned an invalid score.');
   return { ideaScore: payload.ideaScore, breakdown: Number.isFinite(payload.raw) ? { rawScore: payload.raw, modelVersion: payload.modelVersion } : {} };
 }
+module.exports = { scoreIdea };

@@ -1,4 +1,4 @@
-import { getConfig } from './runtime.js';
+const { getConfig } = require('./runtime');
 
 const delay = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 
@@ -18,7 +18,7 @@ async function requestEmbedding(text) {
   return embedding;
 }
 
-export async function generateEmbedding(text) {
+async function generateEmbedding(text) {
   if (typeof text !== 'string' || !text.trim()) throw new Error('Embedding text must be non-empty.');
   let lastError;
   for (let attempt = 0; attempt < 3; attempt += 1) {
@@ -30,7 +30,7 @@ export async function generateEmbedding(text) {
   throw lastError;
 }
 
-export async function generateEmbeddings(texts) {
+async function generateEmbeddings(texts) {
   if (!Array.isArray(texts)) throw new Error('texts must be an array.');
   const embeddings = [];
   for (const text of texts) {
@@ -39,3 +39,4 @@ export async function generateEmbeddings(texts) {
   }
   return embeddings;
 }
+module.exports = { generateEmbedding, generateEmbeddings };

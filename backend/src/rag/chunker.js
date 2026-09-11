@@ -1,4 +1,4 @@
-export function chunkText(text, chunkSize = 512, overlap = 64) {
+function chunkText(text, chunkSize = 512, overlap = 64) {
   if (typeof text !== 'string' || !text.trim()) return [];
   if (!Number.isInteger(chunkSize) || !Number.isInteger(overlap) || chunkSize < 1 || overlap < 0 || overlap >= chunkSize) {
     throw new Error('chunkSize must be positive and overlap must be smaller than chunkSize.');
@@ -24,3 +24,4 @@ export function chunkText(text, chunkSize = 512, overlap = 64) {
   if (words.length) chunks.push(words.join(' '));
   return chunks;
 }
+module.exports = { chunkText };

@@ -1,9 +1,9 @@
-import { generateEmbedding } from './embedder.js';
-import { getPrisma } from './runtime.js';
+const { generateEmbedding } = require('./embedder');
+const { getPrisma } = require('./runtime');
 
 const vector = (values) => `[${values.join(',')}]`;
 
-export async function retrieve(queryText, { contentType, limit = 10, threshold = 0.7 } = {}) {
+async function retrieve(queryText, { contentType, limit = 10, threshold = 0.7 } = {}) {
   const query = await generateEmbedding(queryText);
   const prisma = await getPrisma();
   const typeClause = contentType ? 'AND "contentType" = $2' : '';
@@ -16,3 +16,4 @@ export async function retrieve(queryText, { contentType, limit = 10, threshold =
   );
   return rows.map((row) => ({ ...row, similarity: Number(row.similarity), metadata: typeof row.metadata === 'string' ? JSON.parse(row.metadata) : row.metadata }));
 }
+module.exports = { retrieve };

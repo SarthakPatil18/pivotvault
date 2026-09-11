@@ -1,11 +1,11 @@
-import { ragSearch } from '../../rag/rag.service.js';
-import { getConfig, getPrisma } from '../../rag/runtime.js';
-import { wrapExternalContent } from './ai.js';
-import { scoreIdea } from './ideaScoreModel.js';
-import { log } from './logger.js';
+const { ragSearch } = require('../../rag/rag.service');
+const { getConfig, getPrisma } = require('../../rag/runtime');
+const { wrapExternalContent } = require('./ai');
+const { scoreIdea } = require('./ideaScoreModel');
+const { log } = require('./logger');
 
 const external = (value) => wrapExternalContent(JSON.stringify(value));
-export const tools = {
+const tools = {
   async searchWeb({ query, maxResults = 5 }) {
     const config = await getConfig();
     if (!config.TAVILY_API_KEY) throw new Error('TAVILY_API_KEY is not configured.');
@@ -22,8 +22,9 @@ export const tools = {
   async queryGraph({ companyId }) { const prisma = await getPrisma(); return prisma.knowledgeGraphEdge.findMany({ where: { OR: [{ sourceId: companyId }, { targetId: companyId }] } }); },
   async searchRAG({ query, ...options }) { return ragSearch(query, options); },
 };
-export async function dispatchTool(toolName, params) {
+async function dispatchTool(toolName, params) {
   const tool = tools[toolName];
   if (!tool) throw new Error(`Unknown tool: ${toolName}`);
   return external(await tool(params));
 }
+module.exports = { tools, dispatchTool };

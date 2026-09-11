@@ -27,18 +27,18 @@ export function MobileMenu({ isOpen, onClose, onOpenSearch }) {
     <div className="fixed inset-0 z-50 md:hidden">
       {/* Backdrop */}
       <div 
-        className="fixed inset-0 bg-black/40 backdrop-blur-xs"
+        className="fixed inset-0 bg-black/60 backdrop-blur-xs"
         onClick={onClose} 
       />
 
       {/* Drawer */}
-      <div className="fixed inset-y-0 right-0 w-full max-w-sm bg-[#ffffff] border-l border-[#e3e8ee] flex flex-col z-10 overflow-hidden animate-slide-down shadow-[rgba(0,55,112,0.12)_0px_8px_24px]">
+      <div className="fixed inset-y-0 right-0 w-full max-w-sm bg-white dark:bg-black border-l border-[#E5E5E5] dark:border-[#2A2A2A] flex flex-col z-10 overflow-hidden animate-slide-down shadow-xl">
         {/* Header */}
-        <div className="p-5 border-b border-[#e3e8ee] flex items-center justify-between">
+        <div className="p-5 border-b border-[#E5E5E5] dark:border-[#2A2A2A] flex items-center justify-between">
           <PivotVaultLogo />
           <button 
             onClick={onClose}
-            className="p-2 rounded-[8px] text-[#0d253d] hover:bg-[#f6f9fc] transition-colors"
+            className="p-2 rounded-[6px] text-black dark:text-white hover:bg-[#F5F5F5] dark:hover:bg-[#1A1A1A] transition-colors"
             aria-label="Close menu"
           >
             <X className="w-5 h-5" />
@@ -46,16 +46,16 @@ export function MobileMenu({ isOpen, onClose, onOpenSearch }) {
         </div>
 
         {/* Quick Search Trigger inside drawer */}
-        <div className="p-4 border-b border-[#e3e8ee]">
+        <div className="p-4 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
           <button
             onClick={() => {
               onClose();
               onOpenSearch();
             }}
-            className="w-full flex items-center justify-between px-4 py-2.5 text-[14px] bg-[#f6f9fc] text-[#64748d] border border-[#e3e8ee] rounded-[8px]"
+            className="w-full flex items-center justify-between px-4 py-2.5 text-xs font-mono bg-[#F5F5F5] dark:bg-[#0A0A0A] text-[#737373] dark:text-[#A3A3A3] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[6px]"
           >
             <span>Search 413+ Failures...</span>
-            <span className="font-semibold text-[#0d253d]">⌘K</span>
+            <span className="font-bold text-black dark:text-white">⌘K</span>
           </button>
         </div>
 
@@ -65,17 +65,17 @@ export function MobileMenu({ isOpen, onClose, onOpenSearch }) {
             const isExpanded = !!expandedCategories[cat.id];
 
             return (
-              <div key={cat.id} className="border-b border-[#e3e8ee] pb-3">
+              <div key={cat.id} className="border-b border-[#E5E5E5] dark:border-[#2A2A2A] pb-3">
                 <button
                   onClick={() => toggleCategory(cat.id)}
-                  className="w-full flex items-center justify-between text-[13px] font-bold uppercase tracking-wider text-[#0d253d] py-1"
+                  className="w-full flex items-center justify-between text-xs font-mono font-bold uppercase tracking-wider text-black dark:text-white py-1"
                 >
                   <span>{cat.name}</span>
-                  <span className="text-[12px] text-[#64748d]">{isExpanded ? '▲' : '▼'}</span>
+                  <span className="text-[10px] text-[#737373] dark:text-[#A3A3A3]">{isExpanded ? '▲' : '▼'}</span>
                 </button>
 
                 {isExpanded && (
-                  <div className="mt-2 pl-3 space-y-1 border-l-2 border-[#533afd]">
+                  <div className="mt-2 pl-3 space-y-1 border-l-2 border-black dark:border-white">
                     {cat.items.map((item) => {
                       const itemBasePath = item.href.split('?')[0];
                       const isActive = location.pathname === itemBasePath;
@@ -85,15 +85,15 @@ export function MobileMenu({ isOpen, onClose, onOpenSearch }) {
                           key={item.name + item.href}
                           to={item.href}
                           onClick={onClose}
-                          className={`block px-2 py-2 rounded-[6px] text-[14px] transition-colors ${
+                          className={`block px-2 py-2 rounded-[4px] text-xs font-medium transition-colors ${
                             isActive 
-                              ? 'bg-[#f6f9fc] text-[#0d253d] font-semibold' 
-                              : 'text-[#273951] hover:text-[#0d253d] hover:bg-[#f6f9fc]'
+                              ? 'bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white font-bold' 
+                              : 'text-[#404040] dark:text-[#D4D4D4] hover:text-black dark:hover:text-white hover:bg-[#F5F5F5] dark:hover:bg-[#1A1A1A]'
                           }`}
                         >
                           <div className="flex items-center justify-between">
                             <span>{item.name}</span>
-                            <span className="text-[#64748d]">→</span>
+                            <span className="text-[#A3A3A3] dark:text-[#737373]">→</span>
                           </div>
                         </Link>
                       );
@@ -105,18 +105,11 @@ export function MobileMenu({ isOpen, onClose, onOpenSearch }) {
           })}
 
           {/* Direct Links */}
-          <div className="pt-2 space-y-2">
+          <div className="pt-2">
             <Link
               to="/explore"
               onClick={onClose}
-              className="w-full text-center block text-[14px] transition-colors"
-              style={{
-                backgroundColor: '#533afd',
-                color: '#ffffff',
-                borderRadius: '9999px',
-                padding: '10px 20px',
-                fontWeight: 500,
-              }}
+              className="btn-primary w-full text-xs font-mono"
             >
               Explore Full Archive →
             </Link>
@@ -124,7 +117,7 @@ export function MobileMenu({ isOpen, onClose, onOpenSearch }) {
         </div>
 
         {/* Footer info */}
-        <div className="p-4 bg-[#f6f9fc] border-t border-[#e3e8ee] text-[12px] text-[#64748d] text-center">
+        <div className="p-4 bg-[#F5F5F5] dark:bg-[#0A0A0A] border-t border-[#E5E5E5] dark:border-[#2A2A2A] text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3] text-center">
           PivotVault • 413+ Documented Startup Failures
         </div>
       </div>

@@ -4,13 +4,13 @@ import { PageHeader } from '../components/layout/PageHeader';
 import { getInsights } from '../lib/api';
 import { formatCurrency, formatNumber } from '../lib/utils';
 import { 
-  BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer, 
-  LineChart, Line, CartesianGrid, Cell
+  ResponsiveContainer, 
+  LineChart, Line, CartesianGrid, XAxis, YAxis, Tooltip 
 } from 'recharts';
-import { Database, Flame, Activity, Layers, AlertTriangle, BookOpen, Gauge, Brain } from 'lucide-react';
+import { AlertTriangle, BookOpen, Gauge, Brain, TrendingUp, ShieldAlert, ArrowRight } from 'lucide-react';
 import { LoadingState } from '../components/common/InsightCard';
 
-function SparklineSVG({ data, stroke, fill, height = 30 }) {
+function SparklineSVG({ data, stroke = '#000000', fill = 'rgba(0,0,0,0.06)', height = 30 }) {
   if (!data || data.length < 2) return null;
   const width = 80;
   const min = Math.min(...data);
@@ -104,379 +104,189 @@ export function Insights() {
   ];
 
   return (
-    <div className="pb-20 bg-[#f6f5f3] min-h-screen">
+    <div className="pb-20 bg-white dark:bg-black text-black dark:text-white min-h-screen">
       <PageHeader
-        title="Failure Intelligence & Distribution"
-        subtitle="Patterns extracted across 413+ documented startup failures. Editorial analytics derived from verified corporate post-mortems and SEC filings."
+        title="Failure Intelligence & Macro Distribution"
+        subtitle="Forensic macro patterns extracted across 413+ documented venture autopsies, SEC regulatory filings, and audited court disclosures."
         badge="FORENSIC DATASET"
         tagline="MACRO DASHBOARD"
-        breadcrumbs={[{ label: 'Insights' }, { label: 'Insights Dashboard' }]}
+        breadcrumbs={[{ label: 'Insights' }, { label: 'Macro Dashboard' }]}
         actions={
           <Link 
-            to="/insights" 
-            className="font-medium text-sm hover:underline"
-            style={{ color: '#2d72f0' }}
+            to="/explore" 
+            className="vault-btn-secondary text-xs flex items-center gap-1.5"
           >
-            Macro Dashboard →
+            <span>Browse Full Archive</span>
+            <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         }
       />
 
       <div className="vault-container space-y-8">
         {/* All 4 Stat Cards */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
-          {/* Card 1: TOTAL FAILURES (Coral Leadgen Pillar) */}
-          <div
-            style={{
-              backgroundColor: '#fbfaf9',
-              border: '1px solid #dcdbda',
-              borderRadius: '16px',
-              boxShadow: 'rgba(0, 0, 0, 0.04) 0px 2px 12px',
-              padding: '24px',
-            }}
-          >
-            <div className="flex items-start justify-between mb-4">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+          {/* Card 1: TOTAL FAILURES */}
+          <div className="vault-card p-5">
+            <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-2">
-                <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: 'rgba(225, 101, 64, 0.12)', color: '#e16540' }}
-                >
-                  <AlertTriangle className="w-4 h-4" />
+                <div className="w-7 h-7 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] flex items-center justify-center shrink-0">
+                  <AlertTriangle className="w-3.5 h-3.5" />
                 </div>
-                <span
-                  style={{
-                    color: '#787673',
-                    letterSpacing: '0.5px',
-                    fontSize: '10px',
-                    fontWeight: 600,
-                  }}
-                  className="uppercase"
-                >
-                  TOTAL FAILURES
+                <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-[#737373] dark:text-[#A3A3A3]">
+                  Total Failures
                 </span>
               </div>
-              <span
-                style={{
-                  backgroundColor: 'rgba(225, 101, 64, 0.12)',
-                  color: '#e16540',
-                  borderRadius: '9999px',
-                  padding: '3px 8px',
-                  fontSize: '10px',
-                  fontWeight: 700,
-                }}
-              >
+              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]">
                 +18
               </span>
             </div>
-            <div className="flex items-end justify-between mb-3">
-              <div
-                style={{
-                  color: '#111111',
-                  fontSize: '34px',
-                  fontWeight: 700,
-                  fontFeatureSettings: '"tnum"',
-                  letterSpacing: '-0.42px',
-                  lineHeight: 1,
-                }}
-              >
+            <div className="flex items-end justify-between mb-2">
+              <div className="text-3xl font-bold font-sans tracking-tight text-black dark:text-white tabular-nums">
                 413
               </div>
               <SparklineSVG
                 data={[20, 32, 28, 45, 42, 58, 62, 55, 72, 75]}
-                stroke="#e16540"
-                fill="rgba(225, 101, 64, 0.12)"
+                stroke="#000000"
+                fill="rgba(0, 0, 0, 0.06)"
               />
             </div>
-            <div style={{ color: '#787673', fontSize: '11px' }}>
+            <div className="text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3]">
               This quarter
             </div>
           </div>
 
-          {/* Card 2: VAULTED STARTUPS (Blue Intelligence Pillar) */}
-          <div
-            style={{
-              backgroundColor: '#fbfaf9',
-              border: '1px solid #dcdbda',
-              borderRadius: '16px',
-              boxShadow: 'rgba(0, 0, 0, 0.04) 0px 2px 12px',
-              padding: '24px',
-            }}
-          >
-            <div className="flex items-start justify-between mb-4">
+          {/* Card 2: VAULTED STARTUPS */}
+          <div className="vault-card p-5">
+            <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-2">
-                <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: 'rgba(50, 142, 250, 0.12)', color: '#328efa' }}
-                >
-                  <BookOpen className="w-4 h-4" />
+                <div className="w-7 h-7 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] flex items-center justify-center shrink-0">
+                  <BookOpen className="w-3.5 h-3.5" />
                 </div>
-                <span
-                  style={{
-                    color: '#787673',
-                    fontSize: '10px',
-                    fontWeight: 600,
-                    letterSpacing: '0.5px'
-                  }}
-                  className="uppercase"
-                >
-                  VAULTED STARTUPS
+                <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-[#737373] dark:text-[#A3A3A3]">
+                  Vaulted Startups
                 </span>
               </div>
-              <span
-                style={{
-                  backgroundColor: 'rgba(50, 142, 250, 0.12)',
-                  color: '#328efa',
-                  borderRadius: '9999px',
-                  padding: '3px 8px',
-                  fontSize: '10px',
-                  fontWeight: 700,
-                }}
-              >
+              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]">
                 +214
               </span>
             </div>
-            <div className="flex items-end justify-between mb-3">
-              <div
-                style={{
-                  color: '#111111',
-                  fontSize: '34px',
-                  fontWeight: 700,
-                  fontFeatureSettings: '"tnum"',
-                  letterSpacing: '-0.42px',
-                  lineHeight: 1,
-                }}
-              >
+            <div className="flex items-end justify-between mb-2">
+              <div className="text-3xl font-bold font-sans tracking-tight text-black dark:text-white tabular-nums">
                 413
               </div>
               <SparklineSVG
                 data={[30, 34, 38, 42, 41, 46, 50, 54, 55, 60]}
-                stroke="#328efa"
-                fill="rgba(50, 142, 250, 0.12)"
+                stroke="#404040"
+                fill="rgba(0, 0, 0, 0.04)"
               />
             </div>
-            <div style={{ color: '#787673', fontSize: '11px' }}>
-              With postmortems
+            <div className="text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3]">
+              With full autopsy records
             </div>
           </div>
 
-          {/* Card 3: AVG RISK SCORE (Warm Gold Engagement Pillar) */}
-          <div
-            style={{
-              backgroundColor: '#fbfaf9',
-              border: '1px solid #dcdbda',
-              borderRadius: '16px',
-              boxShadow: 'rgba(0, 0, 0, 0.04) 0px 2px 12px',
-              padding: '24px',
-            }}
-          >
-            <div className="flex items-start justify-between mb-4">
+          {/* Card 3: AVG RISK SCORE */}
+          <div className="vault-card p-5">
+            <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-2">
-                <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: 'rgba(251, 199, 104, 0.18)', color: '#9b6829' }}
-                >
-                  <Gauge className="w-4 h-4" />
+                <div className="w-7 h-7 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] flex items-center justify-center shrink-0">
+                  <Gauge className="w-3.5 h-3.5" />
                 </div>
-                <span
-                  style={{
-                    color: '#787673',
-                    fontSize: '10px',
-                    fontWeight: 600,
-                    letterSpacing: '0.5px'
-                  }}
-                  className="uppercase"
-                >
-                  AVG RISK SCORE
+                <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-[#737373] dark:text-[#A3A3A3]">
+                  Avg Risk Score
                 </span>
               </div>
-              <span
-                style={{
-                  backgroundColor: 'rgba(251, 199, 104, 0.18)',
-                  color: '#9b6829',
-                  borderRadius: '9999px',
-                  padding: '3px 8px',
-                  fontSize: '10px',
-                  fontWeight: 700,
-                }}
-              >
+              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]">
                 +3.2
               </span>
             </div>
-            <div className="flex items-end justify-between mb-3">
-              <div
-                style={{
-                  color: '#111111',
-                  fontSize: '34px',
-                  fontWeight: 700,
-                  fontFeatureSettings: '"tnum"',
-                  letterSpacing: '-0.42px',
-                  lineHeight: 1,
-                }}
-              >
+            <div className="flex items-end justify-between mb-2">
+              <div className="text-3xl font-bold font-sans tracking-tight text-black dark:text-white tabular-nums">
                 68.4
               </div>
               <SparklineSVG
                 data={[55, 58, 60, 62, 61, 65, 66, 67, 68, 68.4]}
-                stroke="#fbc768"
-                fill="rgba(251, 199, 104, 0.14)"
+                stroke="#737373"
+                fill="rgba(0, 0, 0, 0.04)"
               />
             </div>
-            <div style={{ color: '#787673', fontSize: '11px' }}>
-              All analyzed startups
+            <div className="text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3]">
+              Across all analyzed startups
             </div>
           </div>
 
-          {/* Card 4: AI INSIGHTS (Mint Deliver Pillar) */}
-          <div
-            style={{
-              backgroundColor: '#fbfaf9',
-              border: '1px solid #dcdbda',
-              borderRadius: '16px',
-              boxShadow: 'rgba(0, 0, 0, 0.04) 0px 2px 12px',
-              padding: '24px',
-            }}
-          >
-            <div className="flex items-start justify-between mb-4">
+          {/* Card 4: AI INSIGHTS GENERATED */}
+          <div className="vault-card p-5">
+            <div className="flex items-start justify-between mb-3">
               <div className="flex items-center gap-2">
-                <div
-                  className="w-8 h-8 rounded-full flex items-center justify-center shrink-0"
-                  style={{ backgroundColor: 'rgba(71, 208, 150, 0.18)', color: '#2e7d32' }}
-                >
-                  <Brain className="w-4 h-4" />
+                <div className="w-7 h-7 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] flex items-center justify-center shrink-0">
+                  <Brain className="w-3.5 h-3.5" />
                 </div>
-                <span
-                  style={{
-                    color: '#787673',
-                    fontSize: '10px',
-                    fontWeight: 600,
-                    letterSpacing: '0.5px'
-                  }}
-                  className="uppercase"
-                >
-                  AI INSIGHTS GENERATED
+                <span className="text-[10px] font-mono font-bold tracking-wider uppercase text-[#737373] dark:text-[#A3A3A3]">
+                  AI Signals Analyzed
                 </span>
               </div>
-              <span
-                style={{
-                  backgroundColor: 'rgba(71, 208, 150, 0.18)',
-                  color: '#2e7d32',
-                  borderRadius: '9999px',
-                  padding: '3px 8px',
-                  fontSize: '10px',
-                  fontWeight: 700,
-                }}
-              >
-                +1204
+              <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]">
+                +1,204
               </span>
             </div>
-            <div className="flex items-end justify-between mb-3">
-              <div
-                style={{
-                  color: '#111111',
-                  fontSize: '34px',
-                  fontWeight: 700,
-                  fontFeatureSettings: '"tnum"',
-                  letterSpacing: '-0.42px',
-                  lineHeight: 1,
-                }}
-              >
+            <div className="flex items-end justify-between mb-2">
+              <div className="text-3xl font-bold font-sans tracking-tight text-black dark:text-white tabular-nums">
                 48,209
               </div>
               <SparklineSVG
                 data={[10, 18, 22, 28, 32, 38, 45, 48, 52, 56]}
-                stroke="#47d096"
-                fill="rgba(71, 208, 150, 0.14)"
+                stroke="#1A1A1A"
+                fill="rgba(0, 0, 0, 0.05)"
               />
             </div>
-            <div style={{ color: '#787673', fontSize: '11px' }}>
-              Last 30 days
+            <div className="text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3]">
+              Last 30 operational days
             </div>
           </div>
         </div>
 
         {/* 2-Column Section: Failure Vector Distribution & Failure Event Timeline */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
           {/* FAILURE VECTOR DISTRIBUTION Card */}
-          <div 
-            className="lg:col-span-6 p-6 space-y-4"
-            style={{
-              backgroundColor: '#fbfaf9',
-              border: '1px solid #dcdbda',
-              borderRadius: '16px',
-              boxShadow: '0 2px 10px rgba(0,0,0,0.02)'
-            }}
-          >
-            <div className="flex items-center justify-between pb-3 border-b border-[#dcdbda]">
+          <div className="lg:col-span-6 vault-card p-6 space-y-4">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
               <div>
-                <h3 
-                  style={{
-                    color: '#111111',
-                    fontWeight: 700,
-                    fontSize: '16px'
-                  }}
-                >
-                  FAILURE VECTOR DISTRIBUTION
+                <h3 className="text-sm font-bold font-mono uppercase tracking-wider text-black dark:text-white">
+                  Failure Vector Distribution
                 </h3>
-                <p style={{ color: '#787673', fontSize: '12px' }}>
-                  Primary root causes across 413 autopsies
+                <p className="text-xs text-[#737373] dark:text-[#A3A3A3] mt-0.5">
+                  Primary fatal root causes across 413 venture autopsies
                 </p>
               </div>
-              <span 
-                style={{
-                  backgroundColor: 'rgba(45, 114, 240, 0.12)',
-                  color: '#2d72f0',
-                  borderRadius: '9999px',
-                  fontSize: '11px',
-                  fontWeight: 600,
-                  padding: '3px 10px'
-                }}
-              >
+              <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]">
                 Ranked
               </span>
             </div>
 
-            <div className="space-y-4 pt-2">
+            <div className="space-y-3.5 pt-1">
               {failureVectors.map((vec) => (
                 <div key={vec.label}>
-                  <div className="flex items-center justify-between text-[13px] mb-1.5">
-                    <span 
-                      className="flex items-center gap-2"
-                      style={{
-                        color: vec.isHighRisk ? '#111111' : '#373634',
-                        fontWeight: vec.isHighRisk ? 600 : 500
-                      }}
-                    >
+                  <div className="flex items-center justify-between text-xs mb-1.5">
+                    <span className={`flex items-center gap-2 font-medium ${
+                      vec.isHighRisk ? 'text-black dark:text-white font-bold' : 'text-[#737373] dark:text-[#A3A3A3]'
+                    }`}>
                       {vec.isHighRisk && (
-                        <span 
-                          className="w-2 h-2 rounded-full"
-                          style={{ backgroundColor: '#e16540' }}
-                        />
+                        <span className="w-2 h-2 rounded-full bg-[#DC2626]" />
                       )}
                       {vec.label}
                     </span>
-                    <div className="flex items-center gap-3 text-[12px]">
-                      <span style={{ color: '#787673' }}>{vec.count} cases</span>
-                      <span 
-                        style={{
-                          color: vec.isHighRisk ? '#e16540' : '#787673',
-                          fontWeight: vec.isHighRisk ? 600 : 500,
-                          fontFeatureSettings: '"tnum"'
-                        }}
-                      >
+                    <div className="flex items-center gap-3 text-xs font-mono">
+                      <span className="text-[#737373] dark:text-[#A3A3A3]">{vec.count} cases</span>
+                      <span className="font-bold text-black dark:text-white">
                         {vec.pct}%
                       </span>
                     </div>
                   </div>
-                  <div 
-                    className="w-full rounded-full overflow-hidden"
-                    style={{ backgroundColor: '#ecebea', height: '4px' }}
-                  >
+                  <div className="w-full rounded-full bg-[#E5E5E5] dark:bg-[#2A2A2A] h-1.5 overflow-hidden">
                     <div 
-                      className="h-full rounded-full transition-all duration-300"
-                      style={{ 
-                        width: `${vec.pct * 3}%`,
-                        backgroundColor: vec.isHighRisk ? '#e16540' : '#373634'
-                      }}
+                      className="h-full rounded-full transition-all duration-300 bg-black dark:bg-white"
+                      style={{ width: `${vec.pct * 3.2}%` }}
                     />
                   </div>
                 </div>
@@ -485,71 +295,40 @@ export function Insights() {
           </div>
 
           {/* FAILURE EVENT TIMELINE chart */}
-          <div 
-            className="lg:col-span-6 p-6 flex flex-col justify-between"
-            style={{
-              backgroundColor: '#fbfaf9',
-              border: '1px solid #dcdbda',
-              borderRadius: '16px',
-              boxShadow: '0 2px 10px rgba(0,0,0,0.02)'
-            }}
-          >
+          <div className="lg:col-span-6 vault-card p-6 flex flex-col justify-between">
             <div>
-              <div className="flex items-center justify-between pb-3 border-b border-[#dcdbda]">
+              <div className="flex items-center justify-between pb-3 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
                 <div>
-                  <h3 
-                    style={{
-                      color: '#111111',
-                      fontWeight: 700,
-                      fontSize: '16px'
-                    }}
-                  >
-                    FAILURE EVENT TIMELINE
+                  <h3 className="text-sm font-bold font-mono uppercase tracking-wider text-black dark:text-white">
+                    Failure Event Timeline
                   </h3>
-                  <p style={{ color: '#787673', fontSize: '12px' }}>
+                  <p className="text-xs text-[#737373] dark:text-[#A3A3A3] mt-0.5">
                     Annual collapse concentration (2016–2024)
                   </p>
                 </div>
-                <span 
-                  style={{
-                    backgroundColor: 'rgba(225, 101, 64, 0.12)',
-                    color: '#e16540',
-                    borderRadius: '9999px',
-                    fontSize: '11px',
-                    fontWeight: 600,
-                    padding: '3px 10px'
-                  }}
-                >
+                <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]">
                   Peak: 2022 Crunch
                 </span>
               </div>
 
               {/* Bar visualization */}
-              <div className="mt-6 pt-4 grid grid-cols-9 gap-2 h-48 items-end pb-2 border-b border-[#dcdbda]">
+              <div className="mt-6 pt-4 grid grid-cols-9 gap-2 h-48 items-end pb-2 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
                 {trendData.map((d) => {
                   const heightPct = Math.round((d.failures / 84) * 100);
                   return (
                     <div key={d.year} className="flex flex-col items-center gap-2 h-full justify-end group">
-                      <span 
-                        className="text-[10px] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap"
-                        style={{ color: '#787673', fontFeatureSettings: '"tnum"' }}
-                      >
+                      <span className="text-[10px] font-mono text-[#737373] dark:text-[#A3A3A3] opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap">
                         {d.failures}
                       </span>
                       <div 
-                        className="w-full rounded-t-[4px] transition-all"
-                        style={{ 
-                          height: `${heightPct}%`,
-                          backgroundColor: d.isPeak ? '#e16540' : '#373634'
-                        }}
+                        className={`w-full rounded-t-[3px] transition-all ${
+                          d.isPeak ? 'bg-black dark:bg-white ring-1 ring-black dark:ring-white' : 'bg-[#737373] dark:bg-[#404040]'
+                        }`}
+                        style={{ height: `${heightPct}%` }}
                       />
-                      <span 
-                        style={{
-                          color: d.isPeak ? '#e16540' : '#787673',
-                          fontSize: '11px',
-                          fontWeight: d.isPeak ? 700 : 500
-                        }}
-                      >
+                      <span className={`text-[11px] font-mono ${
+                        d.isPeak ? 'text-black dark:text-white font-bold underline' : 'text-[#737373] dark:text-[#A3A3A3]'
+                      }`}>
                         {d.year.slice(2)}'
                       </span>
                     </div>
@@ -558,17 +337,11 @@ export function Insights() {
               </div>
             </div>
 
-            <div 
-              className="mt-6 p-3.5 rounded-[10px] flex items-center justify-between text-[12px]"
-              style={{
-                backgroundColor: '#f6f5f3',
-                border: '1px solid #dcdbda'
-              }}
-            >
-              <div style={{ color: '#373634' }}>
-                <strong style={{ color: '#111111' }}>Trend Insight:</strong> Zero-interest-rate policy (ZIRP) hangover drove record mortality spikes in 2022–2023.
+            <div className="mt-6 p-3.5 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] flex items-center justify-between text-xs">
+              <div className="text-black dark:text-white">
+                <strong className="font-bold">Trend Insight:</strong> Zero-interest-rate policy (ZIRP) hangover drove record mortality spikes in 2022–2023.
               </div>
-              <span style={{ color: '#2d72f0', fontWeight: 600 }} className="shrink-0 ml-3">
+              <span className="font-mono font-bold text-[11px] shrink-0 ml-3 text-black dark:text-white">
                 Verified
               </span>
             </div>
@@ -576,42 +349,44 @@ export function Insights() {
         </div>
 
         {/* Cumulative Capital Evaporation Curve Chart */}
-        <div 
-          className="p-6"
-          style={{
-            backgroundColor: '#fbfaf9',
-            border: '1px solid #dcdbda',
-            borderRadius: '16px',
-            boxShadow: '0 2px 10px rgba(0,0,0,0.02)'
-          }}
-        >
-          <h3 
-            style={{
-              color: '#111111',
-              fontWeight: 700,
-              fontSize: '16px',
-              marginBottom: '4px'
-            }}
-          >
-            Cumulative Capital Evaporation Curve ($ Billions)
-          </h3>
-          <p style={{ color: '#787673', fontSize: '12px', marginBottom: '24px' }}>
-            Historical trajectory of venture capital lost across documented cases (2010–2024).
-          </p>
+        <div className="vault-card p-6">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-6">
+            <div>
+              <h3 className="text-sm font-bold font-mono uppercase tracking-wider text-black dark:text-white">
+                Cumulative Capital Evaporation Curve ($ Billions)
+              </h3>
+              <p className="text-xs text-[#737373] dark:text-[#A3A3A3] mt-0.5">
+                Historical trajectory of aggregate venture capital lost across documented cases (2010–2024).
+              </p>
+            </div>
+            <span className="text-[10px] font-mono text-[#737373] dark:text-[#A3A3A3]">
+              Unit: USD Billions
+            </span>
+          </div>
 
           <div className="h-64 w-full">
             <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={timelineTrendData} margin={{ top: 5, right: 30, left: 10, bottom: 5 }}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#dcdbda" />
-                <XAxis dataKey="year" stroke="#787673" fontSize={11} />
-                <YAxis stroke="#787673" fontSize={11} unit="B" />
+              <LineChart data={timelineTrendData} margin={{ top: 5, right: 20, left: 0, bottom: 5 }}>
+                <CartesianGrid strokeDasharray="3 3" stroke="#E5E5E5" />
+                <XAxis 
+                  dataKey="year" 
+                  stroke="#737373" 
+                  className="text-[11px] font-mono" 
+                  tickLine={false}
+                />
+                <YAxis 
+                  stroke="#737373" 
+                  className="text-[11px] font-mono" 
+                  unit="B"
+                  tickLine={false}
+                />
                 <Tooltip 
                   contentStyle={{ 
-                    backgroundColor: '#fbfaf9', 
-                    borderColor: '#dcdbda',
-                    color: '#111111',
+                    backgroundColor: '#FFFFFF', 
+                    borderColor: '#E5E5E5',
+                    color: '#000000',
                     fontSize: '12px',
-                    borderRadius: '8px',
+                    borderRadius: '6px',
                     boxShadow: '0 4px 12px rgba(0,0,0,0.06)'
                   }}
                   formatter={(val) => [`$${val} Billion`, 'Capital Evaporated']}
@@ -619,9 +394,9 @@ export function Insights() {
                 <Line 
                   type="monotone" 
                   dataKey="capital" 
-                  stroke="#2d72f0" 
-                  strokeWidth={2.5} 
-                  dot={{ fill: '#2d72f0', r: 4 }} 
+                  stroke="#000000" 
+                  strokeWidth={2} 
+                  dot={{ fill: '#000000', r: 4 }} 
                   activeDot={{ r: 6 }}
                 />
               </LineChart>

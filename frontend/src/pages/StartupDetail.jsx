@@ -59,23 +59,23 @@ export function StartupDetail() {
   }
 
   return (
-    <div className="pb-20">
+    <div className="pb-20 bg-white dark:bg-black text-black dark:text-white min-h-screen">
       {/* Top Breadcrumbs Strip */}
-      <div className="border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50/50 dark:bg-neutral-900/30 py-3">
-        <div className="vault-container flex items-center justify-between text-xs font-mono text-neutral-400">
+      <div className="border-b border-[#E5E5E5] dark:border-[#2A2A2A] bg-[#F5F5F5] dark:bg-[#0A0A0A] py-3">
+        <div className="vault-container flex items-center justify-between text-xs font-mono text-[#737373] dark:text-[#A3A3A3]">
           <div className="flex items-center gap-1.5">
-            <Link to="/explore" className="hover:text-neutral-900 dark:hover:text-neutral-100 flex items-center gap-1">
+            <Link to="/explore" className="hover:text-black dark:hover:text-white flex items-center gap-1">
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Explore Archive</span>
             </Link>
             <ChevronRight className="w-3 h-3" />
-            <span className="text-neutral-900 dark:text-neutral-100 font-bold">{startup.name}</span>
+            <span className="text-black dark:text-white font-bold">{startup.name}</span>
           </div>
 
           <div className="flex items-center gap-2">
             <Link
               to={`/risk-scanner?q=${encodeURIComponent(startup.name)}`}
-              className="text-rose-600 dark:text-rose-400 hover:underline flex items-center gap-1 font-semibold"
+              className="text-black dark:text-white hover:underline flex items-center gap-1 font-semibold"
             >
               <ShieldAlert className="w-3.5 h-3.5" />
               <span>Scan Related Risk</span>
@@ -89,7 +89,7 @@ export function StartupDetail() {
         <StartupHeader startup={startup} />
 
         {/* Tab Navigation */}
-        <div className="flex items-center gap-2 border-b border-neutral-200 dark:border-neutral-800 mb-6 font-mono text-xs">
+        <div className="flex items-center gap-2 border-b border-[#E5E5E5] dark:border-[#2A2A2A] mb-6 font-mono text-xs">
           {[
             { id: 'autopsy', label: 'Failure Autopsy & Lessons' },
             { id: 'timeline', label: 'Chronological Timeline' },
@@ -98,10 +98,10 @@ export function StartupDetail() {
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              className={`pb-3 px-3 transition-colors border-b-2 -mb-px font-semibold ${
+              className={`pb-3 px-3 transition-colors border-b-2 -mb-px font-semibold cursor-pointer ${
                 activeTab === tab.id
-                  ? 'border-neutral-900 text-neutral-900 dark:border-neutral-100 dark:text-neutral-100'
-                  : 'border-transparent text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-300'
+                  ? 'border-black text-black dark:border-white dark:text-white'
+                  : 'border-transparent text-[#737373] dark:text-[#A3A3A3] hover:text-black dark:hover:text-white'
               }`}
             >
               {tab.label}

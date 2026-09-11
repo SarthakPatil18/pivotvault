@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useSearchParams, Link } from 'react-router-dom';
+import { useSearchParams } from 'react-router-dom';
 import { PageHeader } from '../components/layout/PageHeader';
 import { AIResponseCard } from '../components/intelligence/AIResponseCard';
 import { askAssistant } from '../lib/api';
@@ -56,7 +56,7 @@ export function AIAssistant() {
   };
 
   return (
-    <div className="pb-20 bg-[#f6f9fc] min-h-screen">
+    <div className="pb-20">
       <PageHeader
         title="AI Failure Research Assistant"
         subtitle="Forensic reasoning engine trained on 413+ startup autopsies, SEC regulatory filings, and court disclosures."
@@ -66,94 +66,52 @@ export function AIAssistant() {
       />
 
       <div className="vault-container">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-6">
           {/* Left Sidebar: Prompts & History */}
-          <div className="space-y-6">
-            <div 
-              className="p-5"
-              style={{
-                backgroundColor: '#ffffff',
-                borderRight: '1px solid #e3e8ee',
-                border: '1px solid #e3e8ee',
-                borderRadius: '12px',
-                padding: '20px',
-                boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
-              }}
-            >
+          <div className="space-y-5">
+            <div className="vault-card p-5 space-y-5">
               {/* Quick Investigation Presets */}
-              <div className="flex items-center gap-2 mb-3">
-                <Sparkles className="w-3.5 h-3.5 text-[#533afd]" />
-                <span 
-                  style={{
-                    color: '#64748d',
-                    fontSize: '10px',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px'
-                  }}
-                >
-                  FORENSIC PROMPTS
-                </span>
-              </div>
-              <div className="space-y-1.5 mb-6">
-                {presetQueries.map((item, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handleAsk(item.prompt)}
-                    className="w-full text-left transition-colors block"
-                    style={{
-                      color: '#273951',
-                      fontSize: '13px',
-                      padding: '10px 12px',
-                      borderRadius: '8px',
-                      borderBottom: '1px solid #e3e8ee'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = '#f6f9fc';
-                      e.currentTarget.style.color = '#0d253d';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = 'transparent';
-                      e.currentTarget.style.color = '#273951';
-                    }}
-                  >
-                    {item.label}
-                  </button>
-                ))}
+              <div>
+                <div className="flex items-center gap-1.5 mb-2.5">
+                  <Sparkles className="w-3.5 h-3.5 text-black dark:text-white" />
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                    Forensic Prompts
+                  </span>
+                </div>
+                <div className="space-y-1">
+                  {presetQueries.map((item, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleAsk(item.prompt)}
+                      className="w-full text-left p-2 rounded-[4px] text-xs font-medium text-neutral-700 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-950 dark:hover:text-neutral-50 transition-colors flex items-center justify-between group"
+                    >
+                      <span className="truncate">{item.label}</span>
+                      <ChevronRight className="w-3 h-3 text-neutral-400 opacity-0 group-hover:opacity-100 shrink-0 transition-opacity" />
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Inquiry History */}
-              <div className="flex items-center gap-2 mb-3 pt-3 border-t border-[#e3e8ee]">
-                <Clock className="w-3.5 h-3.5 text-[#64748d]" />
-                <span 
-                  style={{
-                    color: '#64748d',
-                    fontSize: '10px',
-                    fontWeight: 700,
-                    textTransform: 'uppercase',
-                    letterSpacing: '1px'
-                  }}
-                >
-                  INQUIRY LOG
-                </span>
-              </div>
-              <div className="space-y-1">
-                {queryHistory.map((item, idx) => (
-                  <button
-                    key={idx}
-                    onClick={() => handleAsk(item)}
-                    className="w-full text-left truncate block transition-colors"
-                    style={{
-                      color: '#64748d',
-                      fontSize: '12px',
-                      padding: '6px 0',
-                      borderBottom: '1px solid #f6f9fc'
-                    }}
-                    title={item}
-                  >
-                    • {item}
-                  </button>
-                ))}
+              <div className="pt-4 border-t border-[#E5E5E5] dark:border-[#2A2A2A]">
+                <div className="flex items-center gap-1.5 mb-2.5">
+                  <Clock className="w-3.5 h-3.5 text-neutral-400" />
+                  <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-neutral-500 dark:text-neutral-400">
+                    Inquiry Log
+                  </span>
+                </div>
+                <div className="space-y-1">
+                  {queryHistory.map((item, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => handleAsk(item)}
+                      className="w-full text-left truncate text-[11px] font-mono text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200 py-1 transition-colors block"
+                      title={item}
+                    >
+                      • {item}
+                    </button>
+                  ))}
+                </div>
               </div>
             </div>
           </div>
@@ -161,68 +119,41 @@ export function AIAssistant() {
           {/* Main Workspace */}
           <div className="lg:col-span-3 space-y-6">
             {/* Input Box */}
-            <div 
-              style={{
-                backgroundColor: '#ffffff',
-                border: '1px solid #a8c3de',
-                borderRadius: '12px',
-                boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px',
-                padding: '20px'
-              }}
-            >
+            <div className="vault-card p-6">
               <form 
                 onSubmit={(e) => { e.preventDefault(); handleAsk(); }}
-                className="space-y-3"
+                className="space-y-4"
               >
-                <div className="relative">
+                <div>
+                  <label className="block text-xs font-mono font-bold uppercase tracking-wider text-neutral-600 dark:text-neutral-400 mb-2">
+                    Submit Forensic Inquiry to Research Corpus
+                  </label>
                   <textarea
                     rows={3}
                     value={question}
                     onChange={(e) => setQuestion(e.target.value)}
                     placeholder="Ask a forensic question (e.g. 'Why did Quibi fail in 6 months?', 'Compare WeWork vs Katerra failure modes', 'What burn rate warning signs preceded Fast shutting down?')..."
-                    className="w-full p-3 bg-transparent text-sm text-[#0d253d] focus:outline-none resize-none font-sans"
-                    style={{
-                      color: '#0d253d',
-                      fontSize: '14px',
-                    }}
+                    className="vault-input resize-none"
                   />
                 </div>
 
-                <div className="flex items-center justify-between pt-2 border-t border-[#e3e8ee]">
-                  <span 
-                    style={{
-                      color: '#64748d',
-                      fontSize: '12px',
-                      fontFeatureSettings: '"tnum"'
-                    }}
-                  >
-                    Press Analyze to cross-reference 413+ post-mortems
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pt-2 border-t border-[#E5E5E5] dark:border-[#2A2A2A]">
+                  <span className="text-xs font-mono text-neutral-400">
+                    Cross-referencing 413+ post-mortems & regulatory evidence
                   </span>
                   <button
                     type="submit"
                     disabled={!question.trim() || loading}
-                    className="flex items-center gap-1.5 transition-colors disabled:opacity-50"
-                    style={{
-                      backgroundColor: '#533afd',
-                      color: '#ffffff',
-                      borderRadius: '9999px',
-                      padding: '8px 20px',
-                      fontSize: '14px',
-                      fontWeight: 500,
-                      border: 'none',
-                      cursor: 'pointer'
-                    }}
-                    onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#4434d4'}
-                    onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#533afd'}
+                    className="btn-primary shrink-0 self-end sm:self-auto text-xs flex items-center gap-2 px-5 py-2.5"
                   >
                     {loading ? (
                       <>
-                        <span className="w-3 h-3 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                        <span className="w-3.5 h-3.5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
                         <span>Synthesizing...</span>
                       </>
                     ) : (
                       <>
-                        <Send className="w-3.5 h-3.5 text-white" />
+                        <Send className="w-3.5 h-3.5" />
                         <span>Analyze Question</span>
                       </>
                     )}
@@ -233,66 +164,30 @@ export function AIAssistant() {
 
             {/* AI Response Display */}
             {loading && (
-              <div 
-                className="p-12 text-center"
-                style={{
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #e3e8ee',
-                  borderRadius: '12px',
-                  boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
-                }}
-              >
-                <div className="w-8 h-8 border-2 border-[#b9b9f9] border-t-[#533afd] rounded-full animate-spin mx-auto mb-3" />
-                <p className="font-mono text-xs text-[#64748d] uppercase tracking-wider">
+              <div className="vault-card p-12 text-center space-y-3">
+                <div className="w-7 h-7 border-2 border-neutral-300 dark:border-neutral-700 border-t-black dark:border-t-white rounded-full animate-spin mx-auto" />
+                <p className="font-mono text-xs text-[#737373] dark:text-[#A3A3A3] uppercase tracking-wider">
                   Traversing SEC filings, bankruptcy records, and post-mortem taxonomy...
                 </p>
               </div>
             )}
 
             {!loading && currentResponse && (
-              <div 
-                style={{
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #e3e8ee',
-                  borderRadius: '12px',
-                  boxShadow: 'rgba(0, 55, 112, 0.12) 0px 8px 24px',
-                  padding: '24px'
-                }}
-              >
-                <AIResponseCard 
-                  response={currentResponse} 
-                  onAskFollowUp={(q) => handleAsk(q)}
-                />
-              </div>
+              <AIResponseCard 
+                response={currentResponse} 
+                onAskFollowUp={(q) => handleAsk(q)}
+              />
             )}
 
             {!loading && !currentResponse && (
-              <div 
-                className="p-12 text-center space-y-3"
-                style={{
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #e3e8ee',
-                  borderRadius: '12px',
-                  boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
-                }}
-              >
-                <Sparkles className="w-8 h-8 mx-auto" style={{ color: '#b9b9f9' }} />
-                <h4 
-                  style={{
-                    color: '#0d253d',
-                    fontWeight: 600,
-                    fontSize: '16px'
-                  }}
-                >
+              <div className="vault-card p-12 text-center space-y-3">
+                <div className="w-10 h-10 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white flex items-center justify-center mx-auto border border-[#E5E5E5] dark:border-[#2A2A2A]">
+                  <Sparkles className="w-5 h-5" />
+                </div>
+                <h4 className="text-base font-bold font-sans text-black dark:text-white">
                   Forensic Research Assistant Ready
                 </h4>
-                <p 
-                  className="max-w-md mx-auto"
-                  style={{
-                    color: '#64748d',
-                    fontSize: '14px'
-                  }}
-                >
+                <p className="max-w-md mx-auto text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">
                   Select a prompt from the sidebar or enter a question to analyze cross-case failure patterns, unit economic collapses, and governance blindspots.
                 </p>
               </div>

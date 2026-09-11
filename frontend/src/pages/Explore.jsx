@@ -124,7 +124,7 @@ export function Explore() {
   };
 
   return (
-    <div className="pb-20 bg-[#f6f9fc] min-h-screen">
+    <div className="pb-20 bg-white dark:bg-black min-h-screen text-black dark:text-white">
       <PageHeader
         title="Startup Failure Archive"
         subtitle="Search, filter, and analyze 413+ verified startup failure post-mortems across 15 industries and 12 failure vectors."
@@ -134,40 +134,21 @@ export function Explore() {
         actions={
           <button
             onClick={handleExportCSV}
-            className="flex items-center gap-1.5 transition-colors shadow-xs"
-            style={{
-              color: '#2d72f0',
-              border: '1px solid #dcdbda',
-              borderRadius: '9999px',
-              backgroundColor: '#ffffff',
-              padding: '6px 14px',
-              fontSize: '13px',
-              fontWeight: 500,
-            }}
-            onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#f6f5f3'}
-            onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#ffffff'}
+            className="vault-btn-secondary flex items-center gap-1.5 cursor-pointer text-xs px-3.5 py-2 rounded-[6px]"
           >
-            {exported ? <Check className="w-3.5 h-3.5 text-[#47d096]" /> : <Download className="w-3.5 h-3.5" />}
-            <span>{exported ? 'Exported' : 'Export CSV'}</span>
+            <Download className="w-3.5 h-3.5" />
+            <span>Export CSV</span>
           </button>
         }
       />
 
       <div className="vault-container">
         {/* Search & Filter Controls Bar */}
-        <div 
-          className="p-5 mb-8 space-y-4"
-          style={{
-            backgroundColor: '#fbfaf9',
-            border: '1px solid #dcdbda',
-            borderRadius: '16px',
-            boxShadow: 'rgba(0, 0, 0, 0.04) 0px 2px 8px'
-          }}
-        >
+        <div className="p-5 mb-8 space-y-4 bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] shadow-sm">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
             {/* Search Input */}
             <div className="md:col-span-2 relative">
-              <Search className="w-4 h-4 text-[#787673] absolute left-3 top-3.5" />
+              <Search className="w-4 h-4 text-[#737373] dark:text-[#A3A3A3] absolute left-3 top-3" />
               <input
                 type="text"
                 value={searchQuery}
@@ -177,13 +158,7 @@ export function Explore() {
                   updateFilters({ q: e.target.value, page: 1 });
                 }}
                 placeholder="Search by company, founder, investor, root cause..."
-                className="w-full pl-9 pr-3 py-2 text-sm focus:outline-none transition-colors"
-                style={{
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #dcdbda',
-                  borderRadius: '8px',
-                  color: '#111111',
-                }}
+                className="w-full pl-9 pr-3 py-2 text-sm focus:outline-none transition-colors bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[6px] text-black dark:text-white placeholder-[#737373] dark:placeholder-[#A3A3A3]"
               />
             </div>
 
@@ -196,13 +171,7 @@ export function Explore() {
                   setCurrentPage(1);
                   updateFilters({ industry: e.target.value, page: 1 });
                 }}
-                className="w-full px-3 py-2 text-sm focus:outline-none transition-colors"
-                style={{
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #dcdbda',
-                  borderRadius: '8px',
-                  color: '#373634'
-                }}
+                className="w-full px-3 py-2 text-sm focus:outline-none transition-colors cursor-pointer bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[6px] text-black dark:text-white"
               >
                 {INDUSTRIES.map((ind) => (
                   <option key={ind} value={ind}>{ind}</option>
@@ -219,13 +188,7 @@ export function Explore() {
                   setCurrentPage(1);
                   updateFilters({ failureMode: e.target.value, page: 1 });
                 }}
-                className="w-full px-3 py-2 text-sm focus:outline-none transition-colors"
-                style={{
-                  backgroundColor: '#ffffff',
-                  border: '1px solid #dcdbda',
-                  borderRadius: '8px',
-                  color: '#373634'
-                }}
+                className="w-full px-3 py-2 text-sm focus:outline-none transition-colors cursor-pointer bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[6px] text-black dark:text-white"
               >
                 {FAILURE_MODES.map((fm) => (
                   <option key={fm} value={fm}>{fm}</option>
@@ -235,10 +198,10 @@ export function Explore() {
           </div>
 
           {/* Secondary Filter Row: Country, Sort, View Mode & Reset */}
-          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#e3e8ee] text-xs">
+          <div className="flex flex-wrap items-center justify-between gap-3 pt-3 border-t border-[#E5E5E5] dark:border-[#2A2A2A] text-xs">
             <div className="flex flex-wrap items-center gap-4">
               {/* Country Selector */}
-              <div className="flex items-center gap-1.5 font-sans" style={{ color: '#787673', fontSize: '12px' }}>
+              <div className="flex items-center gap-1.5 font-sans text-[#737373] dark:text-[#A3A3A3] text-[12px]">
                 <span>Country:</span>
                 <select
                   value={selectedCountry}
@@ -247,14 +210,7 @@ export function Explore() {
                     setCurrentPage(1);
                     updateFilters({ country: e.target.value, page: 1 });
                   }}
-                  className="px-2.5 py-1 rounded focus:outline-none"
-                  style={{
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #dcdbda',
-                    borderRadius: '8px',
-                    color: '#111111',
-                    fontSize: '12px'
-                  }}
+                  className="px-2.5 py-1 rounded-[4px] focus:outline-none cursor-pointer bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] text-black dark:text-white text-[12px]"
                 >
                   {COUNTRIES.map((c) => (
                     <option key={c} value={c}>{c}</option>
@@ -263,8 +219,8 @@ export function Explore() {
               </div>
 
               {/* Sort Selector */}
-              <div className="flex items-center gap-1.5 font-sans" style={{ color: '#787673', fontSize: '12px' }}>
-                <ArrowUpDown className="w-3.5 h-3.5 text-[#787673]" />
+              <div className="flex items-center gap-1.5 font-sans text-[#737373] dark:text-[#A3A3A3] text-[12px]">
+                <ArrowUpDown className="w-3.5 h-3.5 text-black dark:text-white" />
                 <span>Sort:</span>
                 <select
                   value={sortOption}
@@ -272,14 +228,7 @@ export function Explore() {
                     setSortOption(e.target.value);
                     updateFilters({ sort: e.target.value });
                   }}
-                  className="px-2.5 py-1 rounded focus:outline-none"
-                  style={{
-                    backgroundColor: '#ffffff',
-                    border: '1px solid #dcdbda',
-                    borderRadius: '8px',
-                    color: '#111111',
-                    fontSize: '12px'
-                  }}
+                  className="px-2.5 py-1 rounded-[4px] focus:outline-none cursor-pointer bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] text-black dark:text-white text-[12px]"
                 >
                   <option value="score_desc">Highest Failure Score</option>
                   <option value="score_asc">Lowest Failure Score</option>
@@ -294,8 +243,7 @@ export function Explore() {
               {(searchQuery || selectedIndustry !== 'All Industries' || selectedFailureMode !== 'All Failure Modes' || selectedCountry !== 'All Countries') && (
                 <button
                   onClick={handleResetFilters}
-                  className="flex items-center gap-1 hover:underline text-xs font-medium"
-                  style={{ color: '#e16540' }}
+                  className="flex items-center gap-1 hover:underline text-xs font-bold cursor-pointer text-black dark:text-white"
                 >
                   <RotateCcw className="w-3 h-3" />
                   <span>Clear Filters</span>
@@ -305,21 +253,21 @@ export function Explore() {
 
             {/* Results Count & Grid/Table View Mode */}
             <div className="flex items-center gap-4">
-              <span className="text-xs" style={{ color: '#787673' }}>
-                Showing <strong style={{ color: '#2d72f0', fontWeight: 600 }}>{pagination.totalRecords}</strong> failures
+              <span className="text-xs text-[#737373] dark:text-[#A3A3A3]">
+                Showing <strong className="text-black dark:text-white font-extrabold">{pagination.totalRecords}</strong> failures
               </span>
 
-              <div className="flex items-center p-0.5 rounded bg-[#f6f5f3] border border-[#dcdbda]">
+              <div className="flex items-center p-0.5 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A]">
                 <button
                   onClick={() => setViewMode('grid')}
-                  className={`p-1.5 rounded transition-colors ${viewMode === 'grid' ? 'bg-[#ffffff] text-[#111111] shadow-xs' : 'text-[#787673]'}`}
+                  className={`p-1.5 rounded-[3px] transition-colors cursor-pointer ${viewMode === 'grid' ? 'bg-black text-white dark:bg-white dark:text-black shadow-xs' : 'text-[#737373] dark:text-[#A3A3A3]'}`}
                   title="Grid View"
                 >
                   <Grid className="w-3.5 h-3.5" />
                 </button>
                 <button
                   onClick={() => setViewMode('table')}
-                  className={`p-1.5 rounded transition-colors ${viewMode === 'table' ? 'bg-[#ffffff] text-[#111111] shadow-xs' : 'text-[#787673]'}`}
+                  className={`p-1.5 rounded-[3px] transition-colors cursor-pointer ${viewMode === 'table' ? 'bg-black text-white dark:bg-white dark:text-black shadow-xs' : 'text-[#737373] dark:text-[#A3A3A3]'}`}
                   title="Table View"
                 >
                   <List className="w-3.5 h-3.5" />
@@ -361,66 +309,54 @@ export function Explore() {
 
         {/* Table View Rendering */}
         {!loading && !error && startups.length > 0 && viewMode === 'table' && (
-          <div 
-            className="overflow-x-auto"
-            style={{
-              backgroundColor: '#fbfaf9',
-              border: '1px solid #dcdbda',
-              borderRadius: '16px',
-              boxShadow: 'rgba(0, 0, 0, 0.04) 0px 2px 8px'
-            }}
-          >
+          <div className="overflow-x-auto bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] shadow-sm">
             <table className="w-full text-left text-xs">
-              <thead 
-                className="border-b border-[#dcdbda] font-sans text-[11px] uppercase tracking-wider"
-                style={{ backgroundColor: '#f6f5f3', color: '#787673' }}
-              >
+              <thead className="border-b border-[#E5E5E5] dark:border-[#2A2A2A] font-sans text-[11px] uppercase tracking-wider bg-[#F5F5F5] dark:bg-[#1A1A1A] text-[#737373] dark:text-[#A3A3A3]">
                 <tr>
-                  <th className="py-3.5 px-4 font-semibold">Startup</th>
-                  <th className="py-3.5 px-4 font-semibold">Industry</th>
-                  <th className="py-3.5 px-4 font-semibold">Country</th>
-                  <th className="py-3.5 px-4 font-semibold">Failure Score</th>
-                  <th className="py-3.5 px-4 font-semibold">Capital Lost</th>
-                  <th className="py-3.5 px-4 font-semibold">Lifespan</th>
-                  <th className="py-3.5 px-4 font-semibold">Primary Failure Mode</th>
-                  <th className="py-3.5 px-4 text-right font-semibold">Action</th>
+                  <th className="py-3.5 px-4 font-bold">Startup</th>
+                  <th className="py-3.5 px-4 font-bold">Industry</th>
+                  <th className="py-3.5 px-4 font-bold">Country</th>
+                  <th className="py-3.5 px-4 font-bold">Failure Score</th>
+                  <th className="py-3.5 px-4 font-bold">Capital Lost</th>
+                  <th className="py-3.5 px-4 font-bold">Lifespan</th>
+                  <th className="py-3.5 px-4 font-bold">Primary Failure Mode</th>
+                  <th className="py-3.5 px-4 text-right font-bold">Action</th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-[#ecebea] font-sans">
+              <tbody className="divide-y divide-[#E5E5E5] dark:divide-[#2A2A2A] font-sans">
                 {startups.map((s) => (
-                  <tr key={s.id} className="hover:bg-[#f6f5f3] transition-colors">
-                    <td className="py-3.5 px-4 font-bold text-[#111111]">
-                      <Link to={`/startup/${s.id}`} className="hover:text-[#2d72f0] transition-colors flex items-center gap-2.5">
+                  <tr key={s.id} className="hover:bg-[#F5F5F5] dark:hover:bg-[#1A1A1A] transition-colors">
+                    <td className="py-3.5 px-4 font-bold text-black dark:text-white">
+                      <Link to={`/startup/${s.id}`} className="hover:underline transition-colors flex items-center gap-2.5">
                         <CompanyLogo startup={s} size="xs" />
                         <span>{s.name}</span>
                       </Link>
                     </td>
-                    <td className="py-3.5 px-4 text-[#373634]">
+                    <td className="py-3.5 px-4 text-black dark:text-white">
                       {s.industry}
                     </td>
-                    <td className="py-3.5 px-4 text-[#787673]">
+                    <td className="py-3.5 px-4 text-[#737373] dark:text-[#A3A3A3]">
                       {s.country}
                     </td>
                     <td className="py-3.5 px-4">
                       <FailureScoreBadge score={s.failureScore} size="sm" />
                     </td>
                     <td 
-                      className="py-3.5 px-4 font-bold text-[#e16540]"
-                      style={{ fontFeatureSettings: '"tnum"', letterSpacing: '-0.42px' }}
+                      className="py-3.5 px-4 font-bold text-black dark:text-white font-mono"
+                      style={{ letterSpacing: '-0.42px' }}
                     >
                       {formatCurrency(s.capitalRaised)}
                     </td>
-                    <td className="py-3.5 px-4 text-[#787673]">
+                    <td className="py-3.5 px-4 text-[#737373] dark:text-[#A3A3A3]">
                       {s.foundedYear}–{s.failedYear}
                     </td>
-                    <td className="py-3.5 px-4 text-[#373634]">
+                    <td className="py-3.5 px-4 text-[#737373] dark:text-[#A3A3A3]">
                       {s.failureMode}
                     </td>
                     <td className="py-3.5 px-4 text-right">
                       <Link
                         to={`/startup/${s.id}`}
-                        className="text-xs hover:underline font-semibold"
-                        style={{ color: '#2d72f0' }}
+                        className="text-xs hover:underline font-bold text-black dark:text-white"
                       >
                         Autopsy →
                       </Link>
@@ -434,8 +370,8 @@ export function Explore() {
 
         {/* Pagination Controls */}
         {!loading && !error && pagination.totalPages > 1 && (
-          <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-[#e3e8ee] text-xs">
-            <div style={{ color: '#64748d' }}>
+          <div className="mt-10 flex flex-col sm:flex-row items-center justify-between gap-4 pt-6 border-t border-[#E5E5E5] dark:border-[#2A2A2A] text-xs">
+            <div className="text-[#737373] dark:text-[#A3A3A3]">
               Page {pagination.currentPage} of {pagination.totalPages} ({pagination.totalRecords} records)
             </div>
 
@@ -448,9 +384,9 @@ export function Explore() {
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
                 disabled={!pagination.hasPrevPage}
-                className="vault-btn-secondary text-xs px-3 py-1.5 disabled:opacity-40"
+                className="vault-btn-secondary text-xs px-3 py-1.5 disabled:opacity-40 cursor-pointer"
               >
-                <ChevronLeft className="w-3.5 h-3.5 mr-1" />
+                <ChevronLeft className="w-3.5 h-3.5 mr-1 inline" />
                 Previous
               </button>
 
@@ -476,10 +412,10 @@ export function Explore() {
                         updateFilters({ page: pNum });
                         window.scrollTo({ top: 0, behavior: 'smooth' });
                       }}
-                      className={`w-8 h-8 rounded-full text-xs transition-colors ${
+                      className={`w-8 h-8 rounded-[4px] text-xs transition-colors cursor-pointer ${
                         currentPage === pNum
-                          ? 'bg-[#0d253d] text-white font-bold'
-                          : 'bg-[#ffffff] text-[#273951] border border-[#e3e8ee] hover:bg-[#f6f9fc]'
+                          ? 'bg-black text-white dark:bg-white dark:text-black font-bold'
+                          : 'bg-white dark:bg-black text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] hover:bg-[#F5F5F5] dark:hover:bg-[#1A1A1A]'
                       }`}
                     >
                       {pNum}
@@ -496,10 +432,10 @@ export function Explore() {
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }}
                 disabled={!pagination.hasNextPage}
-                className="vault-btn-secondary text-xs px-3 py-1.5 disabled:opacity-40"
+                className="vault-btn-secondary text-xs px-3 py-1.5 disabled:opacity-40 cursor-pointer"
               >
                 Next
-                <ChevronRight className="w-3.5 h-3.5 ml-1" />
+                <ChevronRight className="w-3.5 h-3.5 ml-1 inline" />
               </button>
             </div>
           </div>

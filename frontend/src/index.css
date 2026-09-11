@@ -4,71 +4,94 @@
 
 @layer base {
   :root {
-    --pv-primary: #533afd;
-    --pv-primary-deep: #4434d4;
-    --pv-primary-soft: #665efd;
-    --pv-primary-bg: #b9b9f9;
-    --pv-brand-dark: #1c1e54;
-    --pv-ink: #0d253d;
-    --pv-ink-secondary: #273951;
-    --pv-ink-mute: #64748d;
-    --pv-canvas: #ffffff;
-    --pv-canvas-soft: #f6f9fc;
-    --pv-canvas-cream: #f5e9d4;
-    --pv-hairline: #e3e8ee;
-    --pv-hairline-input: #a8c3de;
-    --pv-ruby: #ea2261;
-    --pv-ruby-bg: rgba(234, 34, 97, 0.10);
-    --pv-lemon: #9b6829;
-    --pv-lemon-bg: rgba(155, 104, 41, 0.12);
+    /* Strict Black & White Palette */
+    --pv-canvas: #FFFFFF;
+    --pv-canvas-soft: #FFFFFF;
+    --pv-canvas-muted: #F5F5F5;
+    --pv-canvas-dark: #0A0A0A;
+    --pv-hairline: #E5E5E5;
+    --pv-hairline-dark: #2A2A2A;
+    --pv-ink: #000000;
+    --pv-ink-secondary: #404040;
+    --pv-ink-mute: #737373;
+    --pv-card-bg: #FFFFFF;
+    --pv-card-border: #E5E5E5;
 
-    /* Amplemarket Design Token System */
-    --am--primary-dark: #111111;
-    --am--primary-light: #f6f5f3;
-    --am--secondary-dark: #272625;
-    --am--secondary-light: #fbfaf9;
-    --am--secondary-white: #ffffff;
-    --am--neutral--neutral-02: #373634;
-    --am--neutral--neutral-03: #494846;
-    --am--neutral--neutral-04: #5e5c5a;
-    --am--neutral--neutral-05: #787673;
-    --am--neutral--neutral-06: #a7a6a4;
-    --am--neutral--neutral-07: #dcdbda;
-    --am--neutral--neutral-08: #ecebea;
+    /* Functional Accents ONLY */
+    --pv-status-risk: #DC2626;
+    --pv-status-ready: #16A34A;
+    --pv-status-caution: #737373;
 
-    --am--product-blue: #2d72f0;
-    --am--pillars-leadgen: #e16540;
-    --am--pillars-intelligence: #328efa;
-    --am--pillars-engagement: #fbc768;
-    --am--pillars-deliver: #47d096;
+    /* Legacy compatibility mapped to grayscale */
+    --am--primary-dark: #000000;
+    --am--primary-light: #FFFFFF;
+    --am--secondary-dark: #1A1A1A;
+    --am--secondary-light: #FFFFFF;
+    --am--secondary-white: #FFFFFF;
+    --am--neutral--neutral-02: #1A1A1A;
+    --am--neutral--neutral-03: #404040;
+    --am--neutral--neutral-04: #737373;
+    --am--neutral--neutral-05: #737373;
+    --am--neutral--neutral-06: #D4D4D4;
+    --am--neutral--neutral-07: #E5E5E5;
+    --am--neutral--neutral-08: #F5F5F5;
+    --am--nav-bg-light: rgba(255, 255, 255, 0.95);
+    --am--nav-bg-dark: rgba(0, 0, 0, 0.95);
+    --am--nav-border-dark: #2A2A2A;
+    --am--border-white: rgba(255, 255, 255, 0.1);
 
-    /* Frosted Navbar Tokens */
-    --am--nav-bg-light: rgba(251, 250, 249, 0.85);
-    --am--nav-bg-dark: rgba(39, 38, 37, 0.85);
-    --am--nav-border-dark: rgba(73, 72, 70, 0.85);
-    --am--border-white: rgba(255, 255, 255, 0.051);
-
-    --color-ink: #0d253d;
-    --color-ink-2: #273951;
-    --color-ink-3: #64748d;
-    --color-paper: #f6f9fc;
-    --color-paper-2: #ffffff;
-    --color-line: #e3e8ee;
-    --color-light-black: #0d253d;
-    --color-soft-green: #b9b9f9;
-    --color-strong-green: #4434d4;
-    --color-soft-red: rgba(234, 34, 97, 0.10);
-    --color-strong-red: #ea2261;
+    --color-ink: #000000;
+    --color-ink-2: #404040;
+    --color-ink-3: #737373;
+    --color-paper: #FFFFFF;
+    --color-paper-2: #FFFFFF;
+    --color-line: #E5E5E5;
+    --color-light-black: #000000;
   }
 
   .dark {
-    --color-ink: #f6f9fc;
-    --color-ink-2: #e3e8ee;
-    --color-ink-3: #64748d;
-    --color-paper: #0d253d;
-    --color-paper-2: #1c1e54;
-    --color-line: #273951;
-    --color-light-black: #0d253d;
+    /* Strict Black & White Palette (Inverted) */
+    --pv-canvas: #000000;
+    --pv-canvas-soft: #0A0A0A;
+    --pv-canvas-muted: #1A1A1A;
+    --pv-canvas-dark: #000000;
+    --pv-hairline: #2A2A2A;
+    --pv-hairline-dark: #404040;
+    --pv-ink: #FFFFFF;
+    --pv-ink-secondary: #D4D4D4;
+    --pv-ink-mute: #A3A3A3;
+    --pv-card-bg: #0A0A0A;
+    --pv-card-border: #2A2A2A;
+
+    /* Functional Accents ONLY */
+    --pv-status-risk: #DC2626;
+    --pv-status-ready: #16A34A;
+    --pv-status-caution: #A3A3A3;
+
+    --am--primary-dark: #FFFFFF;
+    --am--primary-light: #000000;
+    --am--secondary-dark: #D4D4D4;
+    --am--secondary-light: #0A0A0A;
+    --am--secondary-white: #0A0A0A;
+    --am--neutral--neutral-02: #FFFFFF;
+    --am--neutral--neutral-03: #D4D4D4;
+    --am--neutral--neutral-04: #A3A3A3;
+    --am--neutral--neutral-05: #737373;
+    --am--neutral--neutral-06: #404040;
+    --am--neutral--neutral-07: #2A2A2A;
+    --am--neutral--neutral-08: #1A1A1A;
+    --am--nav-bg-light: rgba(10, 10, 10, 0.95);
+    --am--nav-bg-dark: rgba(0, 0, 0, 0.95);
+    --am--nav-border-dark: #2A2A2A;
+    --am--border-white: rgba(255, 255, 255, 0.1);
+
+    --color-ink: #FFFFFF;
+    --color-ink-2: #D4D4D4;
+    --color-ink-3: #A3A3A3;
+    --color-paper: #000000;
+    --color-paper-2: #0A0A0A;
+    --color-line: #2A2A2A;
+    --color-light-black: #FFFFFF;
   }
 
   * {
@@ -77,30 +100,46 @@
 
   body {
     font-family: "Open Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-    background-color: #f6f9fc;
-    color: #0d253d;
+    background-color: #FFFFFF;
+    color: #000000;
     margin: 0;
     padding: 0;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     overflow-x: hidden;
+    transition: background-color 150ms ease, color 150ms ease;
+  }
+
+  .dark body,
+  html.dark body {
+    background-color: #000000;
+    color: #FFFFFF;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    color: #0d253d;
+    color: #000000;
+    letter-spacing: -0.025em;
+  }
+
+  .dark h1, .dark h2, .dark h3, .dark h4, .dark h5, .dark h6 {
+    color: #FFFFFF;
   }
 
   p {
-    color: #273951;
+    color: #404040;
+    line-height: 1.625;
   }
 
-  /* Numeric & monetary tabular numerals */
+  .dark p {
+    color: #D4D4D4;
+  }
+
   .tnum, [data-tnum="true"] {
     font-feature-settings: "tnum";
     letter-spacing: -0.42px;
   }
 
-  /* Minimal custom scrollbar with blue/slate tint */
+  /* Minimal grayscale scrollbar */
   ::-webkit-scrollbar {
     width: 6px;
     height: 6px;
@@ -109,11 +148,19 @@
     background: transparent;
   }
   ::-webkit-scrollbar-thumb {
-    background: #a8c3de;
+    background: #D4D4D4;
     border-radius: 3px;
   }
   ::-webkit-scrollbar-thumb:hover {
-    background: #64748d;
+    background: #737373;
+  }
+
+  .dark ::-webkit-scrollbar-thumb {
+    background: #2A2A2A;
+    border-radius: 3px;
+  }
+  .dark ::-webkit-scrollbar-thumb:hover {
+    background: #404040;
   }
 }
 
@@ -142,70 +189,110 @@
     }
   }
 
-  /* Primary CTA Button (Pill shape, #533afd, hover #4434d4) */
+  /* ==========================================================================
+     STRICT BLACK & WHITE BUTTONS
+     Primary: Solid black, white text. On hover inverts to white bg, black text/border.
+     In dark mode: Solid white, black text. On hover inverts to black bg, white text/border.
+     ========================================================================== */
   .btn-primary, .vault-btn-primary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 8px;
-    background-color: #533afd;
-    color: #ffffff;
-    border-radius: 9999px;
-    padding: 10px 24px;
-    font-size: 15px;
-    font-weight: 500;
+    background-color: #000000;
+    color: #FFFFFF;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 700;
     cursor: pointer;
-    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1), transform 150ms ease;
-    border: none;
+    border: 1.5px solid #000000;
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.08);
   }
   .btn-primary:hover, .vault-btn-primary:hover {
-    background-color: #4434d4;
+    background-color: #FFFFFF;
+    color: #000000;
+    border-color: #000000;
   }
   .btn-primary:disabled, .vault-btn-primary:disabled {
-    opacity: 0.6;
+    opacity: 0.4;
     cursor: not-allowed;
   }
+  .dark .btn-primary, .dark .vault-btn-primary {
+    background-color: #FFFFFF;
+    color: #000000;
+    border-color: #FFFFFF;
+  }
+  .dark .btn-primary:hover, .dark .vault-btn-primary:hover {
+    background-color: #000000;
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+  }
 
-  /* Nav Small CTA Button (Explore Archive) */
+  /* Nav Small CTA Button */
   .btn-nav-cta {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    border-radius: 9999px;
-    padding: 8px 20px;
-    font-size: 14px;
-    font-weight: 500;
-    background-color: #533afd;
-    color: #ffffff;
-    transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1);
-    border: none;
+    border-radius: 6px;
+    padding: 7px 16px;
+    font-size: 13px;
+    font-weight: 700;
+    background-color: #000000;
+    color: #FFFFFF;
+    border: 1.5px solid #000000;
+    transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
     text-decoration: none;
   }
   .btn-nav-cta:hover {
-    background-color: #4434d4;
+    background-color: #FFFFFF;
+    color: #000000;
+    border-color: #000000;
+  }
+  .dark .btn-nav-cta {
+    background-color: #FFFFFF;
+    color: #000000;
+    border-color: #FFFFFF;
+  }
+  .dark .btn-nav-cta:hover {
+    background-color: #000000;
+    color: #FFFFFF;
+    border-color: #FFFFFF;
   }
 
-  /* Secondary Button */
+  /* Secondary / Outline Button: White bg, 1.5px black border, black text */
   .vault-btn-secondary {
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    background-color: #ffffff;
-    color: #533afd;
-    border: 1px solid #b9b9f9;
-    border-radius: 9999px;
-    padding: 6px 14px;
+    background-color: #FFFFFF;
+    color: #000000;
+    border: 1.5px solid #000000;
+    border-radius: 6px;
+    padding: 8px 16px;
     font-size: 13px;
-    font-weight: 500;
+    font-weight: 700;
     cursor: pointer;
     transition: all 150ms ease;
     text-decoration: none;
   }
   .vault-btn-secondary:hover {
-    background-color: #f6f9fc;
-    border-color: #533afd;
+    background-color: #000000;
+    color: #FFFFFF;
+    border-color: #000000;
+  }
+  .dark .vault-btn-secondary {
+    background-color: #000000;
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+  }
+  .dark .vault-btn-secondary:hover {
+    background-color: #FFFFFF;
+    color: #000000;
+    border-color: #FFFFFF;
   }
 
   /* Inverted Button */
@@ -213,19 +300,29 @@
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: #ffffff;
-    color: #0d253d;
-    border-radius: 9999px;
-    padding: 12px 24px;
-    font-size: 15px;
-    font-weight: 600;
+    background-color: #FFFFFF;
+    color: #000000;
+    border-radius: 6px;
+    padding: 10px 20px;
+    font-size: 14px;
+    font-weight: 700;
     cursor: pointer;
-    transition: background-color 150ms ease;
-    border: none;
+    transition: all 150ms ease;
+    border: 1.5px solid #000000;
     text-decoration: none;
   }
   .btn-inverted:hover {
-    background-color: #f6f9fc;
+    background-color: #000000;
+    color: #FFFFFF;
+  }
+  .dark .btn-inverted {
+    background-color: #000000;
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+  }
+  .dark .btn-inverted:hover {
+    background-color: #FFFFFF;
+    color: #000000;
   }
 
   /* Link CTA with Arrow */
@@ -234,106 +331,192 @@
     align-items: center;
     gap: 4px;
     font-size: 14px;
-    font-weight: 500;
-    color: #533afd;
+    font-weight: 700;
+    color: #000000;
     text-decoration: none;
     transition: color 150ms ease;
     cursor: pointer;
   }
   .btn-link-cta:hover {
-    color: #4434d4;
     text-decoration: underline;
   }
+  .dark .btn-link-cta {
+    color: #FFFFFF;
+  }
 
-  /* Standard Inputs */
+  /* ==========================================================================
+     STRICT BLACK & WHITE INPUTS
+     ========================================================================== */
   .input-editorial, .vault-input {
     width: 100%;
     padding: 10px 14px;
-    border: 1px solid #a8c3de;
-    border-radius: 8px;
-    background-color: #ffffff;
+    border: 1px solid #E5E5E5;
+    border-radius: 6px;
+    background-color: #FFFFFF;
     font-size: 14px;
     font-weight: 400;
-    color: #0d253d;
+    color: #000000;
     outline: none;
     transition: border-color 150ms ease, box-shadow 150ms ease;
   }
   .input-editorial::placeholder, .vault-input::placeholder {
-    color: #64748d;
+    color: #737373;
   }
   .input-editorial:focus, .vault-input:focus {
-    border-color: #533afd;
-    box-shadow: 0 0 0 2px rgba(83, 58, 253, 0.15);
+    border-color: #000000;
+    box-shadow: 0 0 0 1px #000000;
   }
 
-  /* Editorial & Vault Cards */
+  .dark .input-editorial,
+  .dark .vault-input,
+  .dark input[type="text"],
+  .dark input[type="email"],
+  .dark input[type="search"],
+  .dark textarea,
+  .dark select {
+    background-color: #0A0A0A;
+    border-color: #2A2A2A;
+    color: #FFFFFF;
+  }
+  .dark .input-editorial::placeholder,
+  .dark .vault-input::placeholder,
+  .dark input::placeholder,
+  .dark textarea::placeholder {
+    color: #737373;
+  }
+  .dark .input-editorial:focus,
+  .dark .vault-input:focus,
+  .dark input:focus,
+  .dark textarea:focus,
+  .dark select:focus {
+    border-color: #FFFFFF;
+    box-shadow: 0 0 0 1px #FFFFFF;
+  }
+
+  /* ==========================================================================
+     STRICT BLACK & WHITE CARDS
+     White background, 1px black/gray border, pure black low-opacity shadow
+     ========================================================================== */
   .card-editorial, .vault-card {
-    background-color: #ffffff;
-    border: 1px solid #e3e8ee;
-    border-radius: 16px;
+    background-color: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    border-radius: 8px;
     padding: 24px;
-    box-shadow: 0 2px 8px rgba(0, 55, 112, 0.06);
-    transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1), transform 150ms ease;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+    transition: box-shadow 150ms cubic-bezier(0.4, 0, 0.2, 1), transform 150ms ease, border-color 150ms ease;
   }
   .card-editorial:hover, .vault-card:hover {
-    box-shadow: 0 8px 24px rgba(0, 55, 112, 0.12);
+    border-color: #000000;
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
   }
 
-  /* Badges */
+  .dark .card-editorial, 
+  .dark .vault-card {
+    background-color: #0A0A0A;
+    border-color: #2A2A2A;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
+  }
+  .dark .card-editorial:hover, 
+  .dark .vault-card:hover {
+    border-color: #FFFFFF;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.6);
+  }
+
+  /* ==========================================================================
+     STRICT BLACK & WHITE BADGES (With minimal functional status accents)
+     ========================================================================== */
+  .badge-neutral, .vault-badge, .vault-badge-neutral {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background-color: #F5F5F5;
+    color: #000000;
+    border: 1px solid #E5E5E5;
+  }
+  .dark .badge-neutral,
+  .dark .vault-badge,
+  .dark .vault-badge-neutral {
+    background-color: #1A1A1A;
+    color: #FFFFFF;
+    border-color: #2A2A2A;
+  }
+
+  /* High Risk: Black/Gray card badge with functional red accent dot or text */
   .badge-soft-red, .vault-badge-red {
     display: inline-flex;
     align-items: center;
-    padding: 3px 10px;
-    border-radius: 9999px;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 4px;
     font-size: 11px;
-    font-weight: 600;
-    background-color: rgba(234, 34, 97, 0.10);
-    color: #ea2261;
-    border: 1px solid rgba(234, 34, 97, 0.20);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background-color: #F5F5F5;
+    color: #000000;
+    border: 1px solid #E5E5E5;
+  }
+  .dark .badge-soft-red,
+  .dark .vault-badge-red {
+    background-color: #1A1A1A;
+    color: #FFFFFF;
+    border-color: #2A2A2A;
   }
 
+  /* Market Ready: Black/Gray card badge with functional green accent */
   .badge-soft-green, .vault-badge-green {
     display: inline-flex;
     align-items: center;
-    padding: 3px 10px;
-    border-radius: 9999px;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 4px;
     font-size: 11px;
-    font-weight: 500;
-    background-color: #b9b9f9;
-    color: #4434d4;
-    border: 1px solid #b9b9f9;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background-color: #F5F5F5;
+    color: #000000;
+    border: 1px solid #E5E5E5;
   }
-
-  .badge-neutral {
-    display: inline-flex;
-    align-items: center;
-    padding: 3px 10px;
-    border-radius: 9999px;
-    font-size: 12px;
-    font-weight: 500;
-    background-color: #f6f9fc;
-    color: #273951;
-    border: 1px solid #e3e8ee;
+  .dark .badge-soft-green,
+  .dark .vault-badge-green {
+    background-color: #1A1A1A;
+    color: #FFFFFF;
+    border-color: #2A2A2A;
   }
 
   .badge-warning {
     display: inline-flex;
     align-items: center;
-    padding: 3px 10px;
-    border-radius: 9999px;
+    gap: 5px;
+    padding: 3px 8px;
+    border-radius: 4px;
     font-size: 11px;
-    font-weight: 600;
-    background-color: rgba(155, 104, 41, 0.12);
-    color: #9b6829;
-    border: 1px solid rgba(155, 104, 41, 0.20);
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    background-color: #F5F5F5;
+    color: #000000;
+    border: 1px solid #E5E5E5;
+  }
+  .dark .badge-warning {
+    background-color: #1A1A1A;
+    color: #FFFFFF;
+    border-color: #2A2A2A;
   }
 
   /* Tables */
   .failory-table {
     width: 100%;
-    border: 1px solid #e3e8ee;
-    border-radius: 12px;
-    background: #ffffff;
+    border: 1px solid #E5E5E5;
+    border-radius: 8px;
+    background: #FFFFFF;
     border-collapse: separate;
     border-spacing: 0;
     overflow: hidden;
@@ -344,21 +527,74 @@
     text-transform: uppercase;
     letter-spacing: 0.5px;
     padding: 12px 16px;
-    background-color: #f6f9fc;
-    border-bottom: 1px solid #e3e8ee;
-    color: #64748d;
+    background-color: #F5F5F5;
+    border-bottom: 1px solid #E5E5E5;
+    color: #737373;
     text-align: left;
   }
   .failory-table td {
     font-size: 13px;
     padding: 14px 16px;
-    border-bottom: 1px solid #e3e8ee;
-    color: #273951;
+    border-bottom: 1px solid #F5F5F5;
+    color: #000000;
   }
   .failory-table tr:last-child td {
     border-bottom: none;
   }
   .failory-table tr:hover td {
-    background-color: #f6f9fc;
+    background-color: #F5F5F5;
   }
+
+  .dark .failory-table {
+    background: #0A0A0A;
+    border-color: #2A2A2A;
+  }
+  .dark .failory-table th {
+    background-color: #1A1A1A;
+    border-bottom-color: #2A2A2A;
+    color: #A3A3A3;
+  }
+  .dark .failory-table td {
+    border-bottom-color: #2A2A2A;
+    color: #FFFFFF;
+  }
+  .dark .failory-table tr:hover td {
+    background-color: #1A1A1A;
+  }
+}
+
+/* ==========================================================================
+   GLOBAL BLACK & WHITE OVERRIDES FOR DATA VIZ & CHARTS
+   ========================================================================== */
+.recharts-default-tooltip {
+  background-color: #000000 !important;
+  border: 1px solid #404040 !important;
+  color: #FFFFFF !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15) !important;
+  border-radius: 6px !important;
+  font-size: 12px !important;
+}
+.dark .recharts-default-tooltip {
+  background-color: #0A0A0A !important;
+  border-color: #2A2A2A !important;
+  color: #FFFFFF !important;
+}
+.recharts-tooltip-item {
+  color: #D4D4D4 !important;
+}
+.recharts-cartesian-grid-horizontal line,
+.recharts-cartesian-grid-vertical line {
+  stroke: #E5E5E5 !important;
+}
+.dark .recharts-cartesian-grid-horizontal line,
+.dark .recharts-cartesian-grid-vertical line {
+  stroke: #2A2A2A !important;
+}
+.recharts-text {
+  fill: #737373 !important;
+  font-family: ui-monospace, monospace !important;
+  font-size: 11px !important;
+}
+.dark .recharts-text {
+  fill: #A3A3A3 !important;
 }

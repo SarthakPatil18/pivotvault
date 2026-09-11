@@ -14,46 +14,16 @@ export function StartupCard({ startup, compact = false }) {
 
   return (
     <div 
-      className="flex flex-col justify-between h-full group transition-all duration-200"
-      style={{
-        backgroundColor: '#fbfaf9',
-        border: '1px solid #dcdbda',
-        borderRadius: '12px',
-        padding: '20px',
-        boxShadow: 'rgba(0, 0, 0, 0.04) 0px 2px 8px',
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.boxShadow = 'rgba(0, 0, 0, 0.08) 0px 8px 24px';
-        e.currentTarget.style.borderColor = '#a7a6a4';
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.boxShadow = 'rgba(0, 0, 0, 0.04) 0px 2px 8px';
-        e.currentTarget.style.borderColor = '#dcdbda';
-      }}
+      className="flex flex-col justify-between h-full group transition-all duration-150 bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#2A2A2A] hover:border-black dark:hover:border-white rounded-[8px] p-5 shadow-xs hover:shadow-dropdown"
     >
       <div>
         {/* Card Header: Industry, Failure Score & Bookmark */}
         <div className="flex items-center justify-between gap-2 mb-3">
           <div className="flex items-center gap-2 flex-wrap">
-            <span 
-              style={{
-                backgroundColor: '#f6f5f3',
-                color: '#373634',
-                border: '1px solid #ecebea',
-                borderRadius: '9999px',
-                fontSize: '12px',
-                padding: '3px 10px',
-              }}
-            >
+            <span className="bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[4px] text-[10px] px-2 py-0.5 font-mono font-bold uppercase tracking-wider">
               {startup.industry}
             </span>
-            <span 
-              style={{
-                background: 'transparent',
-                color: '#787673',
-                fontSize: '12px',
-              }}
-            >
+            <span className="text-[#737373] dark:text-[#A3A3A3] text-[11px] font-mono">
               {startup.country}
             </span>
           </div>
@@ -65,15 +35,14 @@ export function StartupCard({ startup, compact = false }) {
                 e.stopPropagation();
                 toggleBookmark(startup.id);
               }}
-              className="p-1 transition-colors"
-              style={{ color: '#787673' }}
+              className="p-1 text-[#737373] dark:text-[#A3A3A3] hover:text-black dark:hover:text-white transition-colors"
               title={bookmarked ? "Remove bookmark" : "Save startup"}
               aria-label="Bookmark startup"
             >
               {bookmarked ? (
-                <BookmarkCheck className="w-4 h-4" style={{ color: '#2d72f0' }} />
+                <BookmarkCheck className="w-4 h-4 text-black dark:text-white" />
               ) : (
-                <Bookmark className="w-4 h-4 hover:text-[#111111]" />
+                <Bookmark className="w-4 h-4" />
               )}
             </button>
           </div>
@@ -83,64 +52,28 @@ export function StartupCard({ startup, compact = false }) {
         <Link to={`/startup/${startup.id}`} className="block">
           <div className="flex items-center gap-3">
             <CompanyLogo startup={startup} size="md" />
-            <h3 
-              className="flex items-center justify-between flex-1 group-hover:text-[#2d72f0] transition-colors"
-              style={{
-                color: '#111111',
-                fontSize: '24px',
-                fontWeight: 700,
-              }}
-            >
+            <h3 className="flex items-center justify-between flex-1 text-lg sm:text-xl font-extrabold text-black dark:text-white transition-colors">
               <span>{startup.name}</span>
-              <span className="text-[16px] text-[#2d72f0] opacity-0 group-hover:opacity-100 group-hover:translate-x-1 transition-all">
+              <span className="text-[14px] text-black dark:text-white opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">
                 →
               </span>
             </h3>
           </div>
         </Link>
-        <p 
-          className="mt-2 line-clamp-2 leading-relaxed"
-          style={{
-            color: '#5e5c5a',
-            fontSize: '14px',
-          }}
-        >
+        <p className="mt-2 line-clamp-2 leading-relaxed text-[13px] text-[#737373] dark:text-[#A3A3A3]">
           {startup.tagline || startup.summary}
         </p>
 
         {/* Fatal Failure Mode */}
-        <div className="mt-4 pt-3 border-t border-[#ecebea]">
-          <div 
-            style={{
-              color: '#787673',
-              fontSize: '10px',
-              fontWeight: 600,
-              textTransform: 'uppercase',
-              letterSpacing: '0.5px',
-              marginBottom: '4px',
-            }}
-          >
-            FATAL FAILURE VECTOR
+        <div className="mt-4 pt-3 border-t border-[#E5E5E5] dark:border-[#2A2A2A]">
+          <div className="text-[#737373] dark:text-[#A3A3A3] text-[10px] font-mono font-bold uppercase tracking-wider mb-1">
+            Fatal Failure Vector
           </div>
-          <div 
-            className="line-clamp-1"
-            style={{
-              color: '#111111',
-              fontSize: '14px',
-              fontWeight: 600,
-            }}
-          >
+          <div className="line-clamp-1 text-[13px] font-bold text-black dark:text-white">
             {startup.failureMode}
           </div>
           {startup.rootCauses && startup.rootCauses.length > 0 && !compact && (
-            <p 
-              className="mt-1 line-clamp-2"
-              style={{
-                color: '#787673',
-                fontSize: '13px',
-                fontStyle: 'italic',
-              }}
-            >
+            <p className="mt-1 line-clamp-2 text-[12px] italic text-[#737373] dark:text-[#A3A3A3]">
               "{startup.rootCauses[0]}"
             </p>
           )}
@@ -148,31 +81,20 @@ export function StartupCard({ startup, compact = false }) {
       </div>
 
       {/* Card Footer: Metrics & Link */}
-      <div className="mt-5 pt-3 border-t border-[#ecebea] flex items-center justify-between text-[13px]">
+      <div className="mt-5 pt-3 border-t border-[#E5E5E5] dark:border-[#2A2A2A] flex items-center justify-between text-[12px] font-mono">
         <div className="flex items-center gap-2">
-          <span 
-            style={{
-              color: '#e16540',
-              fontWeight: 600,
-              fontFeatureSettings: '"tnum"',
-              letterSpacing: '-0.42px',
-            }}
-          >
+          <span className="font-bold text-black dark:text-white">
             {formatCurrency(startup.capitalRaised)} lost
           </span>
-          <span style={{ color: '#dcdbda' }}>•</span>
-          <span style={{ color: '#787673', fontSize: '13px' }}>
+          <span className="text-[#A3A3A3] dark:text-[#404040]">•</span>
+          <span className="text-[#737373] dark:text-[#A3A3A3]">
             {startup.foundedYear}–{startup.failedYear}
           </span>
         </div>
 
         <Link
           to={`/startup/${startup.id}`}
-          className="hover:underline inline-flex items-center gap-1"
-          style={{
-            color: '#2d72f0',
-            fontWeight: 500,
-          }}
+          className="inline-flex items-center gap-1 text-black dark:text-white font-bold hover:underline"
         >
           <span>Dossier</span>
           <span>→</span>

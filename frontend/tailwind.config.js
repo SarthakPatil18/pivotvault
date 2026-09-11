@@ -8,78 +8,27 @@ export default {
   theme: {
     extend: {
       colors: {
-        primary: {
-          DEFAULT: '#533afd',
-          accent: '#533afd',
-          deep: '#4434d4',
-          soft: '#665efd',
-          bg: '#b9b9f9',
+        // Strict Black & White Palette Ramp
+        black: '#000000',
+        white: '#FFFFFF',
+        mono: {
+          950: '#0A0A0A',
+          900: '#1A1A1A',
+          800: '#2A2A2A',
+          700: '#404040',
+          500: '#737373',
+          400: '#A3A3A3',
+          300: '#D4D4D4',
+          200: '#E5E5E5',
+          100: '#F5F5F5',
+          50: '#FAFAFA',
         },
-        brand: {
-          dark: '#1c1e54',
+        // Functional State Accents ONLY (small status dots/badge text)
+        status: {
+          risk: '#DC2626',
+          ready: '#16A34A',
+          caution: '#737373',
         },
-        ink: {
-          DEFAULT: '#0d253d',
-          secondary: '#273951',
-          mute: '#64748d',
-          2: '#273951',
-          3: '#64748d',
-        },
-        canvas: {
-          DEFAULT: '#ffffff',
-          soft: '#f6f9fc',
-          cream: '#f5e9d4',
-        },
-        paper: {
-          DEFAULT: '#ffffff',
-          2: '#f6f9fc',
-        },
-        hairline: {
-          DEFAULT: '#e3e8ee',
-          input: '#a8c3de',
-        },
-        line: {
-          DEFAULT: '#e3e8ee',
-          dark: '#e3e8ee',
-          dark2: '#a8c3de',
-        },
-        ruby: {
-          DEFAULT: '#ea2261',
-          bg: 'rgba(234, 34, 97, 0.10)',
-        },
-        lemon: {
-          DEFAULT: '#9b6829',
-          bg: 'rgba(155, 104, 41, 0.12)',
-        },
-        // Amplemarket Design Token System
-        am: {
-          'primary-dark': '#111111',
-          'primary-light': '#f6f5f3',
-          'secondary-dark': '#272625',
-          'secondary-light': '#fbfaf9',
-          'secondary-white': '#ffffff',
-          'neutral-02': '#373634',
-          'neutral-03': '#494846',
-          'neutral-04': '#5e5c5a',
-          'neutral-05': '#787673',
-          'neutral-06': '#a7a6a4',
-          'neutral-07': '#dcdbda',
-          'neutral-08': '#ecebea',
-          'product-blue': '#2d72f0',
-          'pillars-leadgen': '#e16540',
-          'pillars-intelligence': '#328efa',
-          'pillars-engagement': '#fbc768',
-          'pillars-deliver': '#47d096',
-          'nav-light': 'rgba(251, 250, 249, 0.85)',
-          'nav-dark': 'rgba(39, 38, 37, 0.85)',
-          'nav-border-dark': 'rgba(73, 72, 70, 0.85)',
-          'border-white': 'rgba(255, 255, 255, 0.051)',
-        },
-        'soft-green': '#b9b9f9',
-        'strong-green': '#4434d4',
-        'soft-red': 'rgba(234, 34, 97, 0.10)',
-        'strong-red': '#ea2261',
-        'focus-ring': '#533afd',
       },
       fontFamily: {
         sans: ['"Open Sans"', 'ui-sans-serif', 'system-ui', '-apple-system', 'BlinkMacSystemFont', '"Segoe UI"', 'Roboto', 'sans-serif'],
@@ -89,14 +38,14 @@ export default {
         'site': '1520px',
       },
       borderRadius: {
-        'button': '9999px',
-        'card': '16px',
+        'button': '6px',
+        'card': '8px',
       },
       boxShadow: {
-        'sm': '0 1px 3px rgba(0, 55, 112, 0.08)',
-        'dropdown': '0 8px 24px rgba(0, 55, 112, 0.08)',
-        'product': '0 2px 8px rgba(0, 55, 112, 0.06)',
-        'elevated': '0 8px 24px rgba(0, 55, 112, 0.12)',
+        'sm': '0 1px 2px rgba(0, 0, 0, 0.05)',
+        'dropdown': '0 4px 16px rgba(0, 0, 0, 0.08)',
+        'product': '0 2px 8px rgba(0, 0, 0, 0.06)',
+        'elevated': '0 8px 24px rgba(0, 0, 0, 0.08)',
       },
       animation: {
         'slide-down': 'slideDown 0.15s cubic-bezier(0.4, 0, 0.2, 1)',

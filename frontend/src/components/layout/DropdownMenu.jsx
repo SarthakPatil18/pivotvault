@@ -50,15 +50,15 @@ export function DropdownMenu({ category }) {
         type="button"
         onClick={() => setIsOpen((prev) => !prev)}
         onFocus={() => setIsOpen(true)}
-        className={`inline-flex items-center gap-1.5 px-3 lg:px-4 py-2 text-[15px] font-medium leading-[20px] transition-colors duration-150 rounded-[8px] ${
+        className={`inline-flex items-center gap-1.5 px-3 lg:px-4 py-2 text-[14px] font-medium leading-[20px] transition-colors duration-150 rounded-[6px] ${
           isCategoryActive 
-            ? 'text-[#0d253d] font-semibold' 
-            : 'text-[#64748d] hover:text-[#0d253d]'
+            ? 'text-black dark:text-white font-bold' 
+            : 'text-[#737373] dark:text-[#A3A3A3] hover:text-black dark:hover:text-white'
         }`}
         aria-expanded={isOpen}
       >
         <span>{category.name}</span>
-        <span className={`text-[10px] transform transition-transform duration-150 text-[#64748d] ${isOpen ? 'rotate-180' : ''}`}>
+        <span className={`text-[10px] transform transition-transform duration-150 text-[#737373] dark:text-[#A3A3A3] ${isOpen ? 'rotate-180' : ''}`}>
           ▼
         </span>
       </button>
@@ -66,13 +66,12 @@ export function DropdownMenu({ category }) {
       {/* Dropdown Panel */}
       {isOpen && (
         <div 
-          className="absolute top-full left-0 mt-1 w-72 bg-[#ffffff] border border-[#e3e8ee] rounded-[8px] p-2 z-50 animate-slide-down"
-          style={{ boxShadow: 'rgba(0, 55, 112, 0.08) 0px 8px 24px' }}
+          className="absolute top-full left-0 mt-1 w-72 bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] p-2 z-50 animate-slide-down shadow-dropdown"
           role="menu"
         >
           {category.description && (
-            <div className="px-3 py-1.5 mb-1 border-b border-[#e3e8ee]">
-              <p className="text-[12px] text-[#64748d]">
+            <div className="px-3 py-1.5 mb-1 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
+              <p className="text-[12px] text-[#737373] dark:text-[#A3A3A3]">
                 {category.description}
               </p>
             </div>
@@ -90,21 +89,21 @@ export function DropdownMenu({ category }) {
                   to={item.href}
                   className={`group block px-3 py-2 rounded-[6px] transition-colors duration-150 ${
                     isActive 
-                      ? 'bg-[#f6f9fc] text-[#0d253d] font-semibold' 
-                      : 'hover:bg-[#f6f9fc] text-[#273951] hover:text-[#0d253d]'
+                      ? 'bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white font-bold' 
+                      : 'hover:bg-[#F5F5F5] dark:hover:bg-[#1A1A1A] text-[#404040] dark:text-[#D4D4D4] hover:text-black dark:hover:text-white'
                   }`}
                   role="menuitem"
                 >
                   <div className="flex items-center justify-between">
-                    <span className="text-[14px] font-medium leading-tight">
+                    <span className="text-[13px] font-medium leading-tight">
                       {item.name}
                     </span>
-                    <span className="text-[13px] text-[#64748d] group-hover:text-[#0d253d] group-hover:translate-x-0.5 transition-transform">
+                    <span className="text-[12px] text-[#A3A3A3] dark:text-[#737373] group-hover:text-black dark:group-hover:text-white group-hover:translate-x-0.5 transition-transform">
                       →
                     </span>
                   </div>
                   {item.description && (
-                    <p className="text-[12px] text-[#64748d] mt-0.5 line-clamp-1">
+                    <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3] mt-0.5 line-clamp-1">
                       {item.description}
                     </p>
                   )}

@@ -38,7 +38,7 @@ export function HallOfGhosts() {
   }
 
   return (
-    <div className="pb-20">
+    <div className="pb-20 bg-white dark:bg-black text-black dark:text-white min-h-screen">
       <PageHeader
         title="Hall of Ghosts — Reconstructed Founder Personas"
         subtitle="Forensic dialogue with AI personas synthesized strictly from public court filings, SEC testimony, and investigative journalism."
@@ -49,13 +49,13 @@ export function HallOfGhosts() {
 
       <div className="vault-container">
         {/* Prominent Legal & UX Disclosure Notice */}
-        <div className="vault-card p-4 sm:p-5 mb-8 bg-neutral-900 text-white dark:bg-neutral-950 border-neutral-800 flex items-start gap-3">
-          <ShieldAlert className="w-5 h-5 text-amber-400 shrink-0 mt-0.5" />
+        <div className="vault-card p-4 sm:p-5 mb-8 bg-black text-white dark:bg-[#0A0A0A] border border-[#2A2A2A] flex items-start gap-3">
+          <ShieldAlert className="w-5 h-5 text-white shrink-0 mt-0.5" />
           <div className="text-xs space-y-1">
-            <span className="font-bold text-amber-300 uppercase tracking-wider font-mono text-[10px]">
+            <span className="font-bold text-white uppercase tracking-wider font-mono text-[10px]">
               LEGAL & ETHICAL UX DISCLOSURE
             </span>
-            <p className="text-neutral-300 leading-relaxed font-sans">
+            <p className="text-[#A3A3A3] leading-relaxed font-sans">
               These personas are AI-synthesized models based exclusively on public trial records, SEC enforcement releases, published autobiographies, and investigative reporting. They do not constitute live statements by living persons.
             </p>
           </div>

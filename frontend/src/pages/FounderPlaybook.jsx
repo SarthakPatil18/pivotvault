@@ -112,7 +112,7 @@ export function FounderPlaybook() {
   };
 
   return (
-    <div className="pb-20">
+    <div className="pb-20 bg-white dark:bg-black text-black dark:text-white min-h-screen">
       <PageHeader
         title="Founder Defensive Playbook"
         subtitle="Operational defense frameworks: converting 413+ historical failure autopsies into actionable pre-launch protocols."
@@ -123,17 +123,17 @@ export function FounderPlaybook() {
 
       <div className="vault-container">
         {/* Interactive Custom 90-Day Defense Protocol Generator */}
-        <div className="vault-card p-6 sm:p-8 mb-8 border-[#533afd]/30 bg-gradient-to-br from-white to-[#533afd]/5 dark:from-[#272625] dark:to-[#1c1e54]/20 shadow-sm">
+        <div className="vault-card p-6 sm:p-8 mb-8">
           <div className="flex items-center gap-2 mb-2">
-            <Sparkles className="w-4 h-4 text-[#533afd]" />
-            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#533afd]">
-              LIVE AI DEFENSE SYNTHESIS
+            <Sparkles className="w-4 h-4 text-black dark:text-white" />
+            <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-black dark:text-white">
+              Live AI Defense Synthesis
             </span>
           </div>
-          <h2 className="text-xl font-bold font-sans text-neutral-950 dark:text-neutral-50 mb-2">
+          <h2 className="text-xl font-bold font-sans text-black dark:text-white mb-2">
             Synthesize a Custom 90-Day Evidence-Based Defense Plan
           </h2>
-          <p className="text-xs text-neutral-600 dark:text-neutral-400 mb-5 max-w-3xl leading-relaxed">
+          <p className="text-xs text-[#737373] dark:text-[#A3A3A3] mb-5 max-w-3xl leading-relaxed">
             Enter your startup model, target industry, or distribution strategy. Our RAG engine extracts relevant historical failure evidence and constructs an execution defense protocol to safeguard your unit economics and cash runway.
           </p>
 
@@ -149,11 +149,11 @@ export function FounderPlaybook() {
             <button
               type="submit"
               disabled={generating}
-              className="vault-btn-primary shrink-0 text-xs flex items-center justify-center gap-2 px-5 py-2.5"
+              className="btn-primary shrink-0 text-xs flex items-center justify-center gap-2 px-5 py-2.5 rounded-[6px] cursor-pointer"
             >
               {generating ? (
                 <>
-                  <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  <div className="w-3.5 h-3.5 border-2 border-neutral-300 border-t-white rounded-full animate-spin" />
                   <span>Synthesizing Protocol...</span>
                 </>
               ) : (
@@ -166,8 +166,8 @@ export function FounderPlaybook() {
           </form>
 
           {/* Quick Idea Presets */}
-          <div className="flex flex-wrap items-center gap-2 mt-3 pt-3 border-t border-neutral-100 dark:border-neutral-800 text-[11px] font-mono text-neutral-500">
-            <span className="text-neutral-400">Quick Test:</span>
+          <div className="flex flex-wrap items-center gap-2 mt-4 pt-3 border-t border-[#E5E5E5] dark:border-[#2A2A2A] text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3]">
+            <span>Quick Test:</span>
             {[
               'B2B AI cold outreach tool',
               'D2C connected fitness hardware',
@@ -180,31 +180,31 @@ export function FounderPlaybook() {
                 onClick={() => {
                   setIdeaPrompt(preset);
                 }}
-                className="px-2 py-0.5 rounded bg-neutral-100 hover:bg-neutral-200 dark:bg-neutral-800 dark:hover:bg-neutral-700 text-neutral-700 dark:text-neutral-300 transition-colors"
+                className="px-2 py-0.5 rounded-[4px] bg-[#F5F5F5] hover:bg-[#E5E5E5] dark:bg-[#1A1A1A] dark:hover:bg-[#2A2A2A] text-black dark:text-white transition-colors cursor-pointer border border-[#E5E5E5] dark:border-[#2A2A2A]"
               >
                 {preset}
               </button>
             ))}
           </div>
 
-          {/* Custom Plan Output Modal/Card */}
+          {/* Custom Plan Output Card */}
           {customPlan && (
-            <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-neutral-800 animate-fade-in space-y-4">
+            <div className="mt-6 pt-6 border-t border-[#E5E5E5] dark:border-[#2A2A2A] animate-fade-in space-y-4">
               <div className="flex items-center justify-between flex-wrap gap-2">
                 <div className="flex items-center gap-2">
-                  <CheckCircle2 className="w-4 h-4 text-emerald-600" />
-                  <h3 className="text-sm font-bold font-sans text-neutral-900 dark:text-neutral-100">
+                  <CheckCircle2 className="w-4 h-4 text-black dark:text-white" />
+                  <h3 className="text-sm font-bold font-sans text-black dark:text-white">
                     Generated Defense Protocol for: "{ideaPrompt}"
                   </h3>
                 </div>
                 <button
                   type="button"
                   onClick={handleCopy}
-                  className="vault-btn-secondary text-xs flex items-center gap-1.5 py-1 px-3"
+                  className="vault-btn-secondary text-xs flex items-center gap-1.5 py-1 px-3 cursor-pointer"
                 >
                   {copied ? (
                     <>
-                      <Check className="w-3 h-3 text-emerald-600" />
+                      <Check className="w-3 h-3" />
                       <span>Copied!</span>
                     </>
                   ) : (
@@ -216,22 +216,22 @@ export function FounderPlaybook() {
                 </button>
               </div>
 
-              <div className="p-5 rounded-lg bg-neutral-50 dark:bg-neutral-900/90 border border-neutral-200 dark:border-neutral-800 text-xs font-sans text-neutral-800 dark:text-neutral-200 whitespace-pre-wrap leading-relaxed space-y-2">
+              <div className="p-5 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] text-xs font-sans text-black dark:text-white whitespace-pre-wrap leading-relaxed space-y-2">
                 {customPlan.plan}
               </div>
 
               {customPlan.sources && customPlan.sources.length > 0 && (
                 <div className="pt-2">
-                  <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400 block mb-2">
+                  <span className="text-[10px] font-mono uppercase tracking-wider text-[#737373] dark:text-[#A3A3A3] block mb-2">
                     Evidence Sources Cross-Referenced from Supabase Archive:
                   </span>
                   <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
                     {customPlan.sources.map((src, idx) => (
-                      <div key={idx} className="p-2.5 rounded bg-white dark:bg-neutral-800 border border-neutral-200 dark:border-neutral-700 text-[11px]">
-                        <span className="font-bold text-rose-600 dark:text-rose-400 block">
+                      <div key={idx} className="p-2.5 rounded-[4px] bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] text-[11px]">
+                        <span className="font-bold text-black dark:text-white block">
                           {src.metadata?.companyName || 'Archive Case'} ({src.metadata?.source || 'Public Docket'})
                         </span>
-                        <p className="text-neutral-500 line-clamp-2 mt-0.5">{src.chunkText}</p>
+                        <p className="text-[#737373] dark:text-[#A3A3A3] line-clamp-2 mt-0.5">{src.chunkText}</p>
                       </div>
                     ))}
                   </div>
@@ -242,31 +242,32 @@ export function FounderPlaybook() {
         </div>
 
         {/* Core Philosophy Banner */}
-        <div className="vault-card p-6 sm:p-8 mb-8 bg-neutral-50/80 dark:bg-neutral-900/50">
+        <div className="vault-card p-6 sm:p-8 mb-8 bg-[#F5F5F5] dark:bg-[#1A1A1A]">
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="space-y-2 max-w-2xl">
-              <span className="vault-badge vault-badge-red text-[11px]">
+              <span className="flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-wider text-black dark:text-white font-bold">
+                <span className="w-2 h-2 rounded-full bg-[#DC2626]" />
                 THE PIVOTVAULT PRINCIPLE
               </span>
-              <h2 className="text-xl sm:text-2xl font-bold font-sans text-neutral-950 dark:text-neutral-50">
+              <h2 className="text-xl sm:text-2xl font-bold font-sans text-black dark:text-white">
                 INTELLIGENCE → LESSON → ACTION
               </h2>
-              <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed font-sans">
+              <p className="text-xs text-[#737373] dark:text-[#A3A3A3] leading-relaxed font-sans">
                 Every venture vulnerability documented in our archive has a counteracting execution move. Review these defensive playbooks to stress-test your roadmap.
               </p>
             </div>
 
             {/* Filter by Category */}
             <div className="flex flex-wrap items-center gap-2 font-mono text-xs">
-              <span className="text-neutral-400 mr-1">Filter Vector:</span>
+              <span className="text-[#737373] dark:text-[#A3A3A3] mr-1">Filter Vector:</span>
               {['ALL', 'Product-Market Fit', 'Unit Economics', 'Hardware', 'Governance'].map((vec) => (
                 <button
                   key={vec}
                   onClick={() => setSelectedVector(vec)}
-                  className={`px-3 py-1.5 rounded text-xs transition-colors ${
+                  className={`px-3 py-1.5 rounded-[4px] text-xs transition-colors cursor-pointer ${
                     selectedVector === vec
-                      ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 font-bold'
-                      : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-400 border border-neutral-200 dark:border-neutral-700'
+                      ? 'bg-black text-white dark:bg-white dark:text-black font-bold'
+                      : 'bg-white dark:bg-black text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] hover:border-black dark:hover:border-white'
                   }`}
                 >
                   {vec}

@@ -112,22 +112,22 @@ export function KnowledgeGraph() {
       .force('center', d3.forceCenter(width / 2, height / 2))
       .force('collision', d3.forceCollide().radius(35));
 
-    // Colors by Type
+    // Colors by Type (Strict Grayscale Ramp)
     const getColor = (type) => {
       switch (type) {
-        case 'STARTUP': return '#e11d48'; // Subtle Red accent
-        case 'FAILURE_CAUSE': return '#d97706'; // Amber
-        case 'FOUNDER': return '#52525b'; // Neutral dark
-        case 'INVESTOR': return '#3b82f6'; // Subtle blue
-        case 'INDUSTRY': return '#10b981'; // Emerald
-        default: return '#71717a';
+        case 'STARTUP': return '#000000';
+        case 'FAILURE_CAUSE': return '#404040';
+        case 'FOUNDER': return '#737373';
+        case 'INVESTOR': return '#A3A3A3';
+        case 'INDUSTRY': return '#D4D4D4';
+        default: return '#737373';
       }
     };
 
     // Render Links
     const link = container.append('g')
-      .attr('stroke', '#71717a')
-      .attr('stroke-opacity', 0.25)
+      .attr('stroke', '#A3A3A3')
+      .attr('stroke-opacity', 0.3)
       .attr('stroke-width', 1.2)
       .selectAll('line')
       .data(filteredLinks)
@@ -196,10 +196,10 @@ export function KnowledgeGraph() {
   return (
     <div className="relative vault-card overflow-hidden">
       {/* Graph Toolbar */}
-      <div className="p-4 border-b border-neutral-200 dark:border-neutral-800 bg-neutral-50/70 dark:bg-neutral-900/70 flex flex-wrap items-center justify-between gap-4 text-xs font-mono">
+      <div className="p-3.5 border-b border-[#E5E5E5] dark:border-[#2A2A2A] bg-[#F5F5F5] dark:bg-[#1A1A1A] flex flex-wrap items-center justify-between gap-3 text-xs font-mono">
         {/* Node Filters */}
         <div className="flex items-center gap-1.5 flex-wrap">
-          <span className="text-neutral-400 mr-1 flex items-center gap-1">
+          <span className="text-[#737373] dark:text-[#A3A3A3] mr-1 flex items-center gap-1">
             <Filter className="w-3.5 h-3.5" /> Filter:
           </span>
           {[
@@ -213,10 +213,10 @@ export function KnowledgeGraph() {
             <button
               key={item.value}
               onClick={() => setFilterType(item.value)}
-              className={`px-2.5 py-1 rounded text-xs transition-colors ${
+              className={`px-2.5 py-1 rounded-[4px] text-xs transition-colors cursor-pointer ${
                 filterType === item.value
-                  ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 font-bold'
-                  : 'bg-white dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 border border-neutral-200 dark:border-neutral-700 hover:bg-neutral-100'
+                  ? 'bg-black text-white dark:bg-white dark:text-black font-bold'
+                  : 'bg-white dark:bg-black text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] hover:border-black dark:hover:border-white'
               }`}
             >
               {item.label}
@@ -231,7 +231,7 @@ export function KnowledgeGraph() {
             placeholder="Search node name..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
-            className="px-2.5 py-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded text-xs w-44 placeholder-neutral-400 focus:outline-none"
+            className="px-2.5 py-1 bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[4px] text-xs w-44 placeholder-[#737373] dark:placeholder-[#A3A3A3] focus:outline-none focus:border-black dark:focus:border-white"
           />
           {searchTerm && (
             <button onClick={() => setSearchTerm('')} className="text-neutral-400 hover:text-neutral-600">
@@ -246,40 +246,40 @@ export function KnowledgeGraph() {
         <svg ref={svgRef} className="w-full h-full" />
 
         {/* Legend */}
-        <div className="absolute bottom-4 left-4 p-3 rounded-lg bg-white/90 dark:bg-neutral-900/90 backdrop-blur border border-neutral-200 dark:border-neutral-800 text-[10px] font-mono space-y-1.5 shadow-sm">
-          <div className="font-bold uppercase tracking-wider text-neutral-400 mb-1">Legend</div>
+        <div className="absolute bottom-4 left-4 p-3 rounded-[6px] bg-white/95 dark:bg-[#0A0A0A]/95 backdrop-blur border border-[#E5E5E5] dark:border-[#2A2A2A] text-[10px] font-mono space-y-1.5 shadow-xs">
+          <div className="font-bold uppercase tracking-wider text-[#737373] dark:text-[#A3A3A3] mb-1">Entity Legend</div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-rose-600" />
-            <span>Failed Startup</span>
+            <span className="w-2.5 h-2.5 rounded-[2px] bg-black dark:bg-white" />
+            <span className="text-black dark:text-white font-medium">Failed Startup</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-amber-600" />
-            <span>Failure Root Cause</span>
+            <span className="w-2.5 h-2.5 rounded-[2px] bg-[#404040] dark:bg-[#D4D4D4]" />
+            <span className="text-[#404040] dark:text-[#D4D4D4] font-medium">Failure Root Cause</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-neutral-600" />
-            <span>Founder</span>
+            <span className="w-2.5 h-2.5 rounded-[2px] bg-[#737373]" />
+            <span className="text-[#737373] font-medium">Founder</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-blue-500" />
-            <span>Venture Investor</span>
+            <span className="w-2.5 h-2.5 rounded-[2px] bg-[#A3A3A3] dark:bg-[#737373]" />
+            <span className="text-[#737373] dark:text-[#A3A3A3] font-medium">Venture Investor</span>
           </div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" />
-            <span>Industry Sector</span>
+            <span className="w-2.5 h-2.5 rounded-[2px] bg-[#D4D4D4] dark:bg-[#404040]" />
+            <span className="text-[#737373] dark:text-[#A3A3A3] font-medium">Industry Sector</span>
           </div>
         </div>
 
         {/* Selected Node Details Drawer */}
         {selectedNode && (
-          <div className="absolute top-4 right-4 w-80 max-w-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-xl shadow-2xl p-5 animate-fade-in z-10 text-xs">
+          <div className="absolute top-4 right-4 w-84 max-w-full bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] shadow-dropdown p-5 animate-fade-in z-10 text-xs">
             <div className="flex items-start justify-between gap-2 mb-3">
               <span className="vault-badge vault-badge-neutral font-mono text-[10px]">
                 {selectedNode.type}
               </span>
               <button
                 onClick={() => setSelectedNode(null)}
-                className="text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-100 p-1"
+                className="text-[#737373] hover:text-black dark:hover:text-white p-1"
               >
                 <X className="w-4 h-4" />
               </button>
@@ -293,14 +293,14 @@ export function KnowledgeGraph() {
               <div className="space-y-3 mt-3">
                 <div className="flex items-center justify-between font-mono text-xs">
                   <span className="text-neutral-400">Capital Lost:</span>
-                  <span className="font-bold">{formatCurrency(selectedNode.capitalRaised)}</span>
+                  <span className="font-bold text-neutral-900 dark:text-neutral-100">{formatCurrency(selectedNode.capitalRaised)}</span>
                 </div>
                 <div className="flex items-center justify-between font-mono text-xs">
                   <span className="text-neutral-400">Failure Score:</span>
                   <FailureScoreBadge score={selectedNode.failureScore} size="sm" />
                 </div>
-                <div className="text-xs text-neutral-600 dark:text-neutral-400 pt-2 border-t border-neutral-100 dark:border-neutral-800">
-                  <strong className="block text-[10px] font-mono uppercase text-neutral-400 mb-0.5">Primary Failure Vector:</strong>
+                <div className="text-xs text-[#737373] dark:text-[#A3A3A3] pt-2 border-t border-[#E5E5E5] dark:border-[#2A2A2A]">
+                  <strong className="block text-[10px] font-mono uppercase text-[#737373] dark:text-[#A3A3A3] mb-0.5">Primary Failure Vector:</strong>
                   {selectedNode.failureMode}
                 </div>
                 <p className="text-[11px] text-neutral-500 line-clamp-3">
@@ -308,7 +308,7 @@ export function KnowledgeGraph() {
                 </p>
                 <Link
                   to={`/startup/${selectedNode.startupId}`}
-                  className="vault-btn-primary w-full text-xs font-mono mt-2"
+                  className="btn-primary w-full text-xs font-mono mt-2 justify-center"
                 >
                   <span>Open Full Autopsy</span>
                   <ArrowRight className="w-3.5 h-3.5 ml-1.5" />

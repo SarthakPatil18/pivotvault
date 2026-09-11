@@ -18,13 +18,7 @@ export function Navbar() {
   return (
     <>
       <header 
-        className="sticky top-0 z-50 w-full transition-colors duration-150"
-        style={{
-          backgroundColor: isDark ? 'rgba(39, 38, 37, 0.85)' : 'rgba(251, 250, 249, 0.85)',
-          backdropFilter: 'blur(16px)',
-          WebkitBackdropFilter: 'blur(16px)',
-          borderBottom: isDark ? '1px solid rgba(73, 72, 70, 0.85)' : '1px solid #dcdbda',
-        }}
+        className="sticky top-0 z-50 w-full transition-colors duration-150 border-b border-[#E5E5E5] dark:border-[#2A2A2A] bg-white/95 dark:bg-black/95 backdrop-blur-md"
       >
         <div className="site-container flex items-center justify-between h-[68px]">
           {/* Brand Logo */}
@@ -46,26 +40,13 @@ export function Navbar() {
             {/* Search Trigger Button */}
             <button
               onClick={openSearch}
-              className="flex items-center gap-2 px-3 py-2 text-[14px] transition-colors"
-              style={{
-                backgroundColor: isDark ? '#373634' : '#ffffff',
-                color: isDark ? '#ecebea' : '#5e5c5a',
-                border: isDark ? '1px solid rgba(255, 255, 255, 0.051)' : '1px solid #dcdbda',
-                borderRadius: '8px',
-              }}
+              className="flex items-center gap-2 px-3.5 py-1.5 text-xs font-mono transition-colors rounded-[6px] bg-white dark:bg-[#0A0A0A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] hover:border-black dark:hover:border-white"
               title="Search startup intelligence (Cmd+K)"
               aria-label="Search startup intelligence"
             >
-              <Search className="w-4 h-4" style={{ color: isDark ? '#a7a6a4' : '#787673' }} />
-              <span className="hidden lg:inline font-normal">Search archive...</span>
-              <kbd 
-                className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[11px] font-mono rounded"
-                style={{
-                  backgroundColor: isDark ? '#272625' : '#f6f5f3',
-                  border: isDark ? '1px solid #494846' : '1px solid #ecebea',
-                  color: isDark ? '#a7a6a4' : '#787673'
-                }}
-              >
+              <Search className="w-3.5 h-3.5 text-black dark:text-white" />
+              <span className="hidden lg:inline font-sans text-xs text-[#737373] dark:text-[#A3A3A3]">Search archive...</span>
+              <kbd className="hidden sm:inline-flex items-center px-1.5 py-0.5 text-[10px] font-mono rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] text-black dark:text-white">
                 ⌘K
               </kbd>
             </button>
@@ -73,30 +54,17 @@ export function Navbar() {
             {/* Theme Toggle Button */}
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-[8px] transition-colors"
-              style={{
-                color: isDark ? '#ecebea' : '#5e5c5a'
-              }}
+              className="p-2 rounded-[6px] transition-colors border border-transparent hover:border-[#E5E5E5] dark:hover:border-[#2A2A2A] hover:bg-[#F5F5F5] dark:hover:bg-[#1A1A1A] text-black dark:text-white"
               title={`Switch to ${isDark ? 'Light' : 'Dark'} mode`}
               aria-label="Toggle theme"
             >
-              {isDark ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}
+              {isDark ? <Sun className="w-4 h-4 text-white" /> : <Moon className="w-4 h-4 text-black" />}
             </button>
 
-            {/* Explore Archive CTA Button (hidden on mobile) */}
+            {/* Explore Archive CTA Button */}
             <Link
               to="/explore"
-              className="hidden lg:inline-flex items-center justify-center text-[14px] transition-colors shadow-xs"
-              style={{
-                backgroundColor: isDark ? '#373634' : '#2d72f0',
-                color: '#ffffff',
-                border: isDark ? '1px solid rgba(255, 255, 255, 0.051)' : '1px solid transparent',
-                borderRadius: '9999px',
-                padding: '8px 20px',
-                fontWeight: 500,
-              }}
-              onMouseEnter={(e) => e.currentTarget.style.backgroundColor = isDark ? '#494846' : '#1d5ec9'}
-              onMouseLeave={(e) => e.currentTarget.style.backgroundColor = isDark ? '#373634' : '#2d72f0'}
+              className="hidden lg:inline-flex btn-nav-cta shadow-xs"
             >
               Explore Archive →
             </Link>
@@ -104,23 +72,23 @@ export function Navbar() {
             {/* Hamburger Button (md:hidden) */}
             <button
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              className="md:hidden flex flex-col items-center justify-center w-[48px] h-[48px] p-2 focus:outline-none"
+              className="md:hidden flex flex-col items-center justify-center w-[44px] h-[44px] p-2 focus:outline-none"
               aria-label="Toggle mobile menu"
               aria-expanded={mobileMenuOpen}
             >
               <span 
-                className={`block w-[26px] h-[3px] bg-[#0d253d] rounded-sm transition-transform duration-150 ${
-                  mobileMenuOpen ? 'rotate-45 translate-y-[9px]' : ''
+                className={`block w-[22px] h-[2px] bg-black dark:bg-white rounded-sm transition-transform duration-150 ${
+                  mobileMenuOpen ? 'rotate-45 translate-y-[8px]' : ''
                 }`}
               />
               <span 
-                className={`block w-[26px] h-[3px] bg-[#0d253d] rounded-sm my-[6px] transition-opacity duration-150 ${
+                className={`block w-[22px] h-[2px] bg-black dark:bg-white rounded-sm my-[5px] transition-opacity duration-150 ${
                   mobileMenuOpen ? 'opacity-0' : 'opacity-100'
                 }`}
               />
               <span 
-                className={`block w-[26px] h-[3px] bg-[#0d253d] rounded-sm transition-transform duration-150 ${
-                  mobileMenuOpen ? '-rotate-45 -translate-y-[9px]' : ''
+                className={`block w-[22px] h-[2px] bg-black dark:bg-white rounded-sm transition-transform duration-150 ${
+                  mobileMenuOpen ? '-rotate-45 -translate-y-[8px]' : ''
                 }`}
               />
             </button>

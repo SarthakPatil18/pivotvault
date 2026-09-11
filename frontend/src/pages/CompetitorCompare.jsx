@@ -23,7 +23,7 @@ export function CompetitorCompare() {
   ];
 
   return (
-    <div className="pb-20">
+    <div className="pb-20 bg-white dark:bg-black text-black dark:text-white min-h-screen">
       <PageHeader
         title="Side-by-Side Failure Post-Mortem Comparator"
         subtitle="Compare fatal divergences, governance blindspots, and capital destruction across pairs of collapsed startups."
@@ -35,7 +35,7 @@ export function CompetitorCompare() {
       <div className="vault-container space-y-8">
         {/* Curated Preset Pairs */}
         <div className="vault-card p-4 sm:p-5">
-          <div className="text-xs font-mono uppercase tracking-wider text-neutral-400 mb-2">
+          <div className="text-xs font-mono uppercase tracking-wider text-[#737373] dark:text-[#A3A3A3] mb-2.5">
             Curated Head-to-Head Comparative Autopsies:
           </div>
           <div className="flex flex-wrap gap-2">
@@ -46,10 +46,10 @@ export function CompetitorCompare() {
                   setStartupAId(pair.a);
                   setStartupBId(pair.b);
                 }}
-                className={`px-3 py-1.5 rounded text-xs font-sans transition-colors ${
+                className={`px-3 py-1.5 rounded-[4px] text-xs font-mono transition-colors border cursor-pointer ${
                   startupAId === pair.a && startupBId === pair.b
-                    ? 'bg-neutral-900 text-white dark:bg-neutral-100 dark:text-neutral-900 font-bold'
-                    : 'bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200'
+                    ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white font-bold'
+                    : 'bg-white dark:bg-black text-black dark:text-white border-[#E5E5E5] dark:border-[#2A2A2A] hover:border-black dark:hover:border-white'
                 }`}
               >
                 {pair.name}
@@ -62,13 +62,13 @@ export function CompetitorCompare() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6 items-center">
           {/* Startup A Selector */}
           <div className="vault-card p-4 space-y-2">
-            <label className="block text-xs font-mono font-bold text-neutral-500 uppercase">
+            <label className="block text-xs font-mono font-bold text-[#737373] dark:text-[#A3A3A3] uppercase">
               Venture A (Reference Autopsy)
             </label>
             <select
               value={startupAId}
               onChange={(e) => setStartupAId(e.target.value)}
-              className="vault-input font-bold"
+              className="vault-input font-bold cursor-pointer"
             >
               {CURATED_STARTUPS.map((s) => (
                 <option key={s.id} value={s.id}>{s.name} ({s.industry})</option>
@@ -78,13 +78,13 @@ export function CompetitorCompare() {
 
           {/* Startup B Selector */}
           <div className="vault-card p-4 space-y-2">
-            <label className="block text-xs font-mono font-bold text-neutral-500 uppercase">
+            <label className="block text-xs font-mono font-bold text-[#737373] dark:text-[#A3A3A3] uppercase">
               Venture B (Comparative Autopsy)
             </label>
             <select
               value={startupBId}
               onChange={(e) => setStartupBId(e.target.value)}
-              className="vault-input font-bold"
+              className="vault-input font-bold cursor-pointer"
             >
               {CURATED_STARTUPS.map((s) => (
                 <option key={s.id} value={s.id}>{s.name} ({s.industry})</option>
@@ -96,42 +96,45 @@ export function CompetitorCompare() {
         {/* Side-by-Side Comparison Matrix */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
           {/* Column A */}
-          <div className="vault-card p-6 space-y-5 border-neutral-300 dark:border-neutral-700">
-            <div className="flex items-center justify-between pb-3 border-b border-neutral-100 dark:border-neutral-800">
+          <div className="vault-card p-6 space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
               <div className="flex items-center gap-3">
                 <CompanyLogo startup={startupA} size="lg" />
                 <div>
-                  <h3 className="text-xl font-bold font-sans text-neutral-950 dark:text-neutral-50">
+                  <h3 className="text-xl font-bold font-sans text-black dark:text-white">
                     {startupA.name}
                   </h3>
-                  <span className="text-xs font-mono text-neutral-500">{startupA.industry}</span>
+                  <span className="text-xs font-mono text-[#737373] dark:text-[#A3A3A3]">{startupA.industry}</span>
                 </div>
               </div>
               <FailureScoreBadge score={startupA.failureScore} size="md" />
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs font-mono">
-              <div className="p-3 rounded bg-neutral-50 dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800">
-                <span className="text-neutral-400 block text-[10px] uppercase">Capital Evaporated</span>
-                <span className="text-base font-bold text-neutral-900 dark:text-neutral-100">{formatCurrency(startupA.capitalRaised)}</span>
+              <div className="p-3 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A]">
+                <span className="text-[#737373] dark:text-[#A3A3A3] block text-[10px] uppercase">Capital Evaporated</span>
+                <span className="text-base font-bold text-black dark:text-white tabular-nums">{formatCurrency(startupA.capitalRaised)}</span>
               </div>
-              <div className="p-3 rounded bg-neutral-50 dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800">
-                <span className="text-neutral-400 block text-[10px] uppercase">Active Span</span>
-                <span className="text-base font-bold text-neutral-900 dark:text-neutral-100">{startupA.foundedYear}–{startupA.failedYear}</span>
+              <div className="p-3 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A]">
+                <span className="text-[#737373] dark:text-[#A3A3A3] block text-[10px] uppercase">Active Span</span>
+                <span className="text-base font-bold text-black dark:text-white tabular-nums">{startupA.foundedYear}–{startupA.failedYear}</span>
               </div>
             </div>
 
             <div className="space-y-1">
-              <span className="text-[10px] font-mono uppercase text-neutral-400">Primary Failure Mode:</span>
-              <div className="text-xs font-bold text-rose-600 dark:text-rose-400">{startupA.failureMode}</div>
+              <span className="text-[10px] font-mono uppercase text-[#737373] dark:text-[#A3A3A3]">Primary Failure Mode:</span>
+              <div className="text-xs font-bold text-black dark:text-white flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#DC2626]" />
+                <span>{startupA.failureMode}</span>
+              </div>
             </div>
 
-            <div className="space-y-2 pt-2 border-t border-neutral-100 dark:border-neutral-800">
-              <span className="text-[10px] font-mono uppercase text-neutral-400">Documented Root Causes:</span>
-              <ul className="space-y-1.5 text-xs text-neutral-600 dark:text-neutral-400">
+            <div className="space-y-2 pt-2 border-t border-[#E5E5E5] dark:border-[#2A2A2A]">
+              <span className="text-[10px] font-mono uppercase text-[#737373] dark:text-[#A3A3A3]">Documented Root Causes:</span>
+              <ul className="space-y-1.5 text-xs text-[#737373] dark:text-[#A3A3A3]">
                 {startupA.rootCauses?.map((rc, idx) => (
                   <li key={idx} className="flex items-start gap-2">
-                    <span className="text-rose-600 font-bold">•</span>
+                    <span className="text-black dark:text-white font-bold">•</span>
                     <span>{rc}</span>
                   </li>
                 ))}
@@ -144,42 +147,45 @@ export function CompetitorCompare() {
           </div>
 
           {/* Column B */}
-          <div className="vault-card p-6 space-y-5 border-neutral-300 dark:border-neutral-700">
-            <div className="flex items-center justify-between pb-3 border-b border-neutral-100 dark:border-neutral-800">
+          <div className="vault-card p-6 space-y-5">
+            <div className="flex items-center justify-between pb-3 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
               <div className="flex items-center gap-3">
                 <CompanyLogo startup={startupB} size="lg" />
                 <div>
-                  <h3 className="text-xl font-bold font-sans text-neutral-950 dark:text-neutral-50">
+                  <h3 className="text-xl font-bold font-sans text-black dark:text-white">
                     {startupB.name}
                   </h3>
-                  <span className="text-xs font-mono text-neutral-500">{startupB.industry}</span>
+                  <span className="text-xs font-mono text-[#737373] dark:text-[#A3A3A3]">{startupB.industry}</span>
                 </div>
               </div>
               <FailureScoreBadge score={startupB.failureScore} size="md" />
             </div>
 
             <div className="grid grid-cols-2 gap-3 text-xs font-mono">
-              <div className="p-3 rounded bg-neutral-50 dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800">
-                <span className="text-neutral-400 block text-[10px] uppercase">Capital Evaporated</span>
-                <span className="text-base font-bold text-neutral-900 dark:text-neutral-100">{formatCurrency(startupB.capitalRaised)}</span>
+              <div className="p-3 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A]">
+                <span className="text-[#737373] dark:text-[#A3A3A3] block text-[10px] uppercase">Capital Evaporated</span>
+                <span className="text-base font-bold text-black dark:text-white tabular-nums">{formatCurrency(startupB.capitalRaised)}</span>
               </div>
-              <div className="p-3 rounded bg-neutral-50 dark:bg-neutral-900 border border-neutral-100 dark:border-neutral-800">
-                <span className="text-neutral-400 block text-[10px] uppercase">Active Span</span>
-                <span className="text-base font-bold text-neutral-900 dark:text-neutral-100">{startupB.foundedYear}–{startupB.failedYear}</span>
+              <div className="p-3 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A]">
+                <span className="text-[#737373] dark:text-[#A3A3A3] block text-[10px] uppercase">Active Span</span>
+                <span className="text-base font-bold text-black dark:text-white tabular-nums">{startupB.foundedYear}–{startupB.failedYear}</span>
               </div>
             </div>
 
             <div className="space-y-1">
-              <span className="text-[10px] font-mono uppercase text-neutral-400">Primary Failure Mode:</span>
-              <div className="text-xs font-bold text-rose-600 dark:text-rose-400">{startupB.failureMode}</div>
+              <span className="text-[10px] font-mono uppercase text-[#737373] dark:text-[#A3A3A3]">Primary Failure Mode:</span>
+              <div className="text-xs font-bold text-black dark:text-white flex items-center gap-1.5">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#DC2626]" />
+                <span>{startupB.failureMode}</span>
+              </div>
             </div>
 
-            <div className="space-y-2 pt-2 border-t border-neutral-100 dark:border-neutral-800">
-              <span className="text-[10px] font-mono uppercase text-neutral-400">Documented Root Causes:</span>
-              <ul className="space-y-1.5 text-xs text-neutral-600 dark:text-neutral-400">
+            <div className="space-y-2 pt-2 border-t border-[#E5E5E5] dark:border-[#2A2A2A]">
+              <span className="text-[10px] font-mono uppercase text-[#737373] dark:text-[#A3A3A3]">Documented Root Causes:</span>
+              <ul className="space-y-1.5 text-xs text-[#737373] dark:text-[#A3A3A3]">
                 {startupB.rootCauses?.map((rc, idx) => (
                   <li key={idx} className="flex items-start gap-2">
-                    <span className="text-rose-600 font-bold">•</span>
+                    <span className="text-black dark:text-white font-bold">•</span>
                     <span>{rc}</span>
                   </li>
                 ))}

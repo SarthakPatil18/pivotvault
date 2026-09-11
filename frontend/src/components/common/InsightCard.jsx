@@ -6,13 +6,13 @@ export function InsightCard({ title, description, category = 'Pattern Insight', 
   const getIcon = () => {
     switch (iconType) {
       case 'alert':
-        return <ShieldAlert className="w-4 h-4 text-[#ea2261]" />;
+        return <ShieldAlert className="w-3.5 h-3.5 text-black dark:text-white" />;
       case 'trend':
-        return <TrendingDown className="w-4 h-4 text-[#533afd]" />;
+        return <TrendingDown className="w-3.5 h-3.5 text-black dark:text-white" />;
       case 'sparkles':
-        return <Sparkles className="w-4 h-4 text-[#533afd]" />;
+        return <Sparkles className="w-3.5 h-3.5 text-black dark:text-white" />;
       default:
-        return <Lightbulb className="w-4 h-4 text-[#533afd]" />;
+        return <Lightbulb className="w-3.5 h-3.5 text-black dark:text-white" />;
     }
   };
 
@@ -21,71 +21,42 @@ export function InsightCard({ title, description, category = 'Pattern Insight', 
   return (
     <CardWrapper 
       to={linkTo} 
-      className="flex flex-col justify-between block group transition-all"
-      style={{
-        backgroundColor: '#ffffff',
-        border: '1px solid #e3e8ee',
-        borderRadius: '16px',
-        padding: '24px',
-        boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
-      }}
+      className="flex flex-col justify-between block group transition-all duration-150 bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#2A2A2A] hover:border-black dark:hover:border-white rounded-[8px] p-6 shadow-xs"
     >
       <div>
         <div className="flex items-center justify-between gap-2 mb-3">
-          <span 
-            style={{
-              backgroundColor: '#f6f9fc',
-              color: '#273951',
-              border: '1px solid #e3e8ee',
-              borderRadius: '9999px',
-              fontSize: '11px',
-              fontWeight: 500,
-              padding: '2px 10px'
-            }}
-          >
+          <span className="bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[4px] text-[10px] font-mono font-bold uppercase tracking-wider px-2 py-0.5">
             {category}
           </span>
-          <div 
-            className="p-1.5 rounded-full flex items-center justify-center"
-            style={{
-              backgroundColor: '#f6f9fc',
-              border: '1px solid #e3e8ee'
-            }}
-          >
+          <div className="p-1 rounded-[4px] flex items-center justify-center bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A]">
             {getIcon()}
           </div>
         </div>
 
-        <h4 
-          className="text-[18px] font-bold transition-colors group-hover:text-[#533afd]"
-          style={{ color: '#0d253d' }}
-        >
+        <h4 className="text-[17px] font-bold text-black dark:text-white transition-colors">
           {title}
         </h4>
 
-        <p className="mt-2 text-[13px] leading-relaxed" style={{ color: '#64748d' }}>
+        <p className="mt-2 text-[13px] leading-relaxed text-[#737373] dark:text-[#A3A3A3]">
           {description}
         </p>
       </div>
 
       {(metric || linkTo) && (
-        <div className="mt-5 pt-3 border-t border-[#e3e8ee] flex items-center justify-between text-[13px]">
+        <div className="mt-5 pt-3 border-t border-[#E5E5E5] dark:border-[#2A2A2A] flex items-center justify-between text-[12px] font-mono">
           {metric ? (
             <span 
-              className="font-bold text-[12px]"
-              style={{ color: '#ea2261', fontFeatureSettings: '"tnum"' }}
+              className="font-bold text-black dark:text-white"
+              style={{ fontFeatureSettings: '"tnum"' }}
             >
               {metric}
             </span>
           ) : <span />}
           
           {linkTo && (
-            <span 
-              className="inline-flex items-center gap-1 font-medium hover:underline"
-              style={{ color: '#533afd' }}
-            >
+            <span className="inline-flex items-center gap-1 font-bold text-black dark:text-white hover:underline transition-colors">
               <span>Explore Pattern</span>
-              <span className="group-hover:translate-x-1 transition-transform">→</span>
+              <span className="group-hover:translate-x-0.5 transition-transform">→</span>
             </span>
           )}
         </div>
@@ -97,10 +68,10 @@ export function InsightCard({ title, description, category = 'Pattern Insight', 
 export function LoadingState({ message = 'Accessing startup intelligence records...' }) {
   return (
     <div className="py-16 flex flex-col items-center justify-center text-center">
-      <div className="relative flex items-center justify-center mb-4">
-        <div className="w-8 h-8 border-2 border-[#b9b9f9] border-t-[#533afd] rounded-full animate-spin" />
+      <div className="relative flex items-center justify-center mb-3">
+        <div className="w-7 h-7 border-2 border-[#E5E5E5] border-t-black dark:border-[#2A2A2A] dark:border-t-white rounded-full animate-spin" />
       </div>
-      <p className="text-[12px] font-medium uppercase tracking-wider" style={{ color: '#64748d' }}>
+      <p className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#737373] dark:text-[#A3A3A3]">
         {message}
       </p>
     </div>
@@ -114,48 +85,20 @@ export function EmptyState({
   onAction
 }) {
   return (
-    <div 
-      className="text-center my-8 flex flex-col items-center justify-center"
-      style={{
-        backgroundColor: '#ffffff',
-        border: '1px solid #e3e8ee',
-        borderRadius: '16px',
-        padding: '48px 24px',
-        boxShadow: 'rgba(0, 55, 112, 0.06) 0px 2px 8px'
-      }}
-    >
-      <div 
-        className="w-12 h-12 mb-4 rounded-full flex items-center justify-center"
-        style={{
-          backgroundColor: '#f6f9fc',
-          border: '1px solid #e3e8ee',
-          color: '#533afd'
-        }}
-      >
-        <ShieldAlert className="w-6 h-6 text-[#533afd]" />
+    <div className="text-center my-8 flex flex-col items-center justify-center bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] p-12 shadow-xs">
+      <div className="w-10 h-10 mb-3 rounded-[6px] flex items-center justify-center bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] text-black dark:text-white">
+        <ShieldAlert className="w-5 h-5 text-black dark:text-white" />
       </div>
-      <h3 className="text-[18px] font-bold" style={{ color: '#0d253d' }}>
+      <h3 className="text-[17px] font-bold text-black dark:text-white">
         {title}
       </h3>
-      <p className="mt-2 text-[14px] max-w-md mx-auto" style={{ color: '#64748d' }}>
+      <p className="mt-2 text-[13px] max-w-md mx-auto text-[#737373] dark:text-[#A3A3A3]">
         {description}
       </p>
       {actionLabel && onAction && (
         <button
           onClick={onAction}
-          className="mt-5 transition-colors"
-          style={{
-            backgroundColor: '#533afd',
-            color: '#ffffff',
-            borderRadius: '9999px',
-            padding: '10px 24px',
-            fontSize: '14px',
-            fontWeight: 500,
-            border: 'none',
-            cursor: 'pointer'
-          }}
-          onMouseEnter={(e) => e.currentTarget.style.backgroundColor = '#4434d4'}
-          onMouseLeave={(e) => e.currentTarget.style.backgroundColor = '#533afd'}
+          className="btn-primary mt-5 text-xs font-mono"
         >
           {actionLabel}
         </button>

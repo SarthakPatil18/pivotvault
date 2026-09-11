@@ -103,7 +103,7 @@ export function PitchDeckAutopsy() {
   };
 
   return (
-    <div className="pb-20">
+    <div className="pb-20 bg-white dark:bg-black text-black dark:text-white min-h-screen">
       <PageHeader
         title="Pitch Deck Forensic Autopsy"
         subtitle="Upload or select a venture deck to audit unit economics, market assumptions, and fatal historical parallels."
@@ -115,10 +115,10 @@ export function PitchDeckAutopsy() {
       <div className="vault-container space-y-8">
         {/* Deck Upload / Sample Picker */}
         <div className="vault-card p-6 sm:p-8">
-          <h2 className="text-base font-bold font-sans text-neutral-950 dark:text-neutral-50 mb-2">
+          <h2 className="text-base font-bold font-sans text-black dark:text-white mb-2">
             1. Select Deck or Drop Pitch Document
           </h2>
-          <p className="text-xs text-neutral-500 mb-6">
+          <p className="text-xs text-[#737373] dark:text-[#A3A3A3] mb-6">
             Audit sample decks from different venture categories or test diagnostic checks.
           </p>
 
@@ -130,36 +130,36 @@ export function PitchDeckAutopsy() {
                   setSelectedDeck(deck.id);
                   handleRunAutopsy(deck.id);
                 }}
-                className={`p-4 rounded-lg border cursor-pointer transition-all ${
+                className={`p-4 rounded-[6px] border cursor-pointer transition-all ${
                   selectedDeck === deck.id
-                    ? 'border-neutral-900 dark:border-neutral-100 bg-neutral-50 dark:bg-neutral-900 ring-1 ring-neutral-900 dark:ring-neutral-100'
-                    : 'border-neutral-200 dark:border-neutral-800 hover:border-neutral-400'
+                    ? 'border-black dark:border-white bg-[#F5F5F5] dark:bg-[#1A1A1A] ring-1 ring-black dark:ring-white'
+                    : 'border-[#E5E5E5] dark:border-[#2A2A2A] hover:border-black dark:hover:border-white bg-white dark:bg-black'
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
                   <span className="vault-badge vault-badge-neutral text-[10px]">
                     {deck.industry}
                   </span>
-                  <span className="text-[10px] font-mono text-neutral-400">
+                  <span className="text-[10px] font-mono text-[#737373] dark:text-[#A3A3A3]">
                     {deck.pages} Slides
                   </span>
                 </div>
-                <h4 className="text-xs font-bold text-neutral-900 dark:text-neutral-100">
+                <h4 className="text-xs font-bold text-black dark:text-white font-sans">
                   {deck.title}
                 </h4>
-                <div className="mt-2 text-[11px] font-mono text-neutral-500">
+                <div className="mt-2 text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3]">
                   Target: {deck.targetRaise}
                 </div>
               </div>
             ))}
           </div>
 
-          <div className="p-8 border-2 border-dashed border-neutral-200 dark:border-neutral-800 rounded-xl text-center hover:border-neutral-400 transition-colors">
-            <FileUp className="w-8 h-8 text-neutral-400 mx-auto mb-2" />
-            <p className="text-xs font-semibold text-neutral-800 dark:text-neutral-200">
+          <div className="p-8 border-2 border-dashed border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] text-center hover:border-black dark:hover:border-white transition-colors bg-[#F5F5F5] dark:bg-[#1A1A1A]">
+            <FileUp className="w-8 h-8 text-[#737373] dark:text-[#A3A3A3] mx-auto mb-2" />
+            <p className="text-xs font-semibold text-black dark:text-white font-sans">
               Drop custom pitch deck PDF / PPTX here
             </p>
-            <p className="text-[11px] text-neutral-400 mt-1">
+            <p className="text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3] mt-1">
               Supports 10-30 slide seed to series B investor presentations (Max 25MB).
             </p>
           </div>
@@ -168,8 +168,8 @@ export function PitchDeckAutopsy() {
         {/* Diagnostic Results */}
         {isAnalyzing && (
           <div className="vault-card p-12 text-center">
-            <div className="w-8 h-8 border-2 border-neutral-300 border-t-rose-600 rounded-full animate-spin mx-auto mb-3" />
-            <p className="font-mono text-xs text-neutral-500 uppercase tracking-wider">
+            <div className="w-8 h-8 border-2 border-neutral-300 border-t-black dark:border-t-white rounded-full animate-spin mx-auto mb-3" />
+            <p className="font-mono text-xs text-[#737373] dark:text-[#A3A3A3] uppercase tracking-wider">
               Auditing unit economics and cross-referencing with 413+ historical pitch decks...
             </p>
           </div>
@@ -178,15 +178,16 @@ export function PitchDeckAutopsy() {
         {!isAnalyzing && autopsyResult && (
           <div className="space-y-8 animate-fade-in">
             {/* Historical Parallel Flag */}
-            <div className="p-4 rounded-lg bg-neutral-900 text-white dark:bg-neutral-950 border border-neutral-800 flex items-start justify-between gap-4">
+            <div className="p-4 rounded-[6px] bg-black text-white dark:bg-[#0A0A0A] border border-[#2A2A2A] flex items-start justify-between gap-4">
               <div className="space-y-1">
-                <span className="vault-badge vault-badge-red text-[10px]">
+                <span className="flex items-center gap-1.5 text-white font-mono text-[10px] uppercase tracking-wider">
+                  <span className="w-2 h-2 rounded-full bg-[#DC2626]" />
                   CRITICAL HISTORICAL PARALLEL IDENTIFIED
                 </span>
                 <h3 className="text-sm font-bold">
-                  This business model & cost structure closely mirrors: <span className="text-rose-400">{autopsyResult.parallel}</span>
+                  This business model & cost structure closely mirrors: <span className="underline font-bold text-white">{autopsyResult.parallel}</span>
                 </h3>
-                <p className="text-xs text-neutral-300">
+                <p className="text-xs text-[#A3A3A3]">
                   {autopsyResult.summary}
                 </p>
               </div>
@@ -197,23 +198,23 @@ export function PitchDeckAutopsy() {
 
             {/* Category Scores */}
             <div className="vault-card p-6">
-              <h3 className="text-sm font-bold font-mono uppercase tracking-wider text-neutral-900 dark:text-neutral-100 mb-4">
+              <h3 className="text-sm font-bold font-mono uppercase tracking-wider text-black dark:text-white mb-4">
                 Slide-by-Slide Vulnerability Assessment
               </h3>
 
-              <div className="space-y-4">
+              <div className="space-y-3">
                 {autopsyResult.categories.map((cat, idx) => (
-                  <div key={idx} className="p-3.5 rounded-lg bg-neutral-50 dark:bg-neutral-900/60 border border-neutral-200/70 dark:border-neutral-800 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
+                  <div key={idx} className="p-3 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
                     <div>
-                      <span className="font-bold font-sans text-neutral-900 dark:text-neutral-100 block sm:inline mr-2">
+                      <span className="font-bold font-sans text-black dark:text-white block sm:inline mr-2">
                         {cat.name}
                       </span>
-                      <span className="text-neutral-600 dark:text-neutral-400 font-sans">
+                      <span className="text-[#737373] dark:text-[#A3A3A3] font-sans">
                         — {cat.flag}
                       </span>
                     </div>
                     <div className="shrink-0 flex items-center gap-2">
-                      <span className="font-mono text-xs text-neutral-400">Risk Score:</span>
+                      <span className="font-mono text-xs text-[#737373] dark:text-[#A3A3A3]">Risk Score:</span>
                       <FailureScoreBadge score={cat.score} size="sm" />
                     </div>
                   </div>
@@ -222,17 +223,17 @@ export function PitchDeckAutopsy() {
             </div>
 
             {/* Red Flag Audit Findings */}
-            <div className="vault-card p-6 border-rose-200 dark:border-rose-900/40">
+            <div className="vault-card p-6">
               <div className="flex items-center gap-2 mb-4">
-                <AlertTriangle className="w-4 h-4 text-rose-600" />
-                <h3 className="text-sm font-bold font-mono uppercase tracking-wider text-neutral-900 dark:text-neutral-100">
+                <span className="w-2 h-2 rounded-full bg-[#DC2626]" />
+                <h3 className="text-sm font-bold font-mono uppercase tracking-wider text-black dark:text-white">
                   Specific Diagnostic Red Flags in Slides
                 </h3>
               </div>
               <div className="space-y-2.5">
                 {autopsyResult.redFlags.map((flag, idx) => (
-                  <div key={idx} className="flex items-start gap-2.5 text-xs text-neutral-700 dark:text-neutral-300">
-                    <span className="font-mono text-rose-600 font-bold shrink-0 mt-0.5">•</span>
+                  <div key={idx} className="flex items-start gap-2.5 text-xs text-black dark:text-white">
+                    <span className="font-mono text-black dark:text-white font-bold shrink-0 mt-0.5">•</span>
                     <span>{flag}</span>
                   </div>
                 ))}

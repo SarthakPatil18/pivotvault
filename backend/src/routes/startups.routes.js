@@ -9,11 +9,22 @@ function mapCompanyToStartup(c) {
   const capital = c.totalFunding || (c.valuation ? c.valuation * 0.2 : 50000000);
   const score = Math.min(99, Math.max(50, Math.round(70 + (capital > 500000000 ? 20 : capital > 50000000 ? 10 : 0) + ((c.evidence && c.evidence.length) || 1) * 2)));
 
+  let domain = '';
+  if (c.website) {
+    try {
+      domain = new URL(c.website.startsWith('http') ? c.website : `https://${c.website}`).hostname.replace(/^www\./, '');
+    } catch {
+      domain = '';
+    }
+  }
+
   return {
     id: c.slug || c.id,
     dbId: c.id,
     name: c.name,
     slug: c.slug,
+    website: c.website || (domain ? `https://${domain}` : undefined),
+    domain: domain || undefined,
     industry: c.industry || 'Technology',
     country: 'United States',
     foundedYear: c.foundedYear || 2014,

@@ -33,59 +33,107 @@ const ALL_DIMENSIONS = [
  */
 function sanitizeVentureContext({ ideaText, industry, targetCustomer, businessModel, burnRate, hardwareInvolved, regulatoryHeavy }) {
   const text = (ideaText || '').toLowerCase();
+  const ind = (industry || '').toLowerCase();
+  const cust = (targetCustomer || '').toLowerCase();
+  const model = (businessModel || '').toLowerCase();
+  const burn = (burnRate || '').toLowerCase();
 
-  // Keyword indicators
-  const hasHardwareWords = /\b(hardware|device|robot|robotics|sensor|machinery|chip|semiconductor|iot|physical product|wearable|manufactur)\b/i.test(text);
-  const hasClinicalHealthWords = /\b(patient|clinical|fda|diagnost|therap|drug|medical device|biotech|telehealth|blood test|hospital)\b/i.test(text);
-  const hasFintechWords = /\b(payment|banking|lending|credit|loan|crypto|wallet|fiat|custody|brokerage|insurance|fintech|securities|sec\b|fincen)\b/i.test(text);
-  const hasMarketplaceWords = /\b(marketplace|two-sided|buyers and sellers|platform connecting|commission per transaction)\b/i.test(text);
-  const isPureSoftware = /\b(app|saas|software|platform|copilot|dashboard|tool|extension|plugin|bot|ai-powered|productivity|crm|todo|task)\b/i.test(text) 
+  // Keyword indicators from idea text (primary source of truth)
+  const hasHardwareWords = /\b(hardware|device|devices|robot|robots|robotics|sensor|sensors|machinery|chip|chips|semiconductor|semiconductors|iot|physical product|wearable|wearables|manufactur\w*|gadget|gadgets)\b/i.test(text);
+  const hasClinicalHealthWords = /\b(patient|patients|clinical|clinic|clinics|fda|diagnostic|diagnostics|diagnos\w*|therapy|therapeutic|therapeutics|drug|drugs|medical|medicine|biotech|telehealth|blood test|hospital|hospitals|doctor|doctors|pharma|pharmaceutical|healthcare|health)\b/i.test(text);
+  const hasFintechWords = /\b(payment|payments|banking|lending|credit|loan|loans|crypto|wallet|wallets|fiat|custody|brokerage|insurance|fintech|securities|sec\b|fincen|invoice|invoicing)\b/i.test(text);
+  const hasMarketplaceWords = /\b(marketplace|two-sided|buyers and sellers|platform connecting|commission per transaction|courier|couriers|driver|drivers|gig|delivery|food delivery|grocery)\b/i.test(text);
+  const isPureSoftware = /\b(app|saas|software|platform|copilot|dashboard|tool|extension|plugin|bot|ai-powered|productivity|crm|todo|task|scheduler|workflow)\b/i.test(text) 
     && !hasHardwareWords && !hasClinicalHealthWords;
 
-  // Resolve Contradictions: Idea text overrides checkboxes
+  // Resolve Contradictions: Idea text overrides checkboxes and accidental dropdown choices
   let cleanHardware = Boolean(hardwareInvolved);
   let cleanRegulatory = Boolean(regulatoryHeavy);
-  let cleanIndustry = industry || 'SaaS & Enterprise';
+  let cleanIndustry = industry || 'Software / SaaS';
 
-  if (isPureSoftware && cleanHardware && !hasHardwareWords) {
-    // User accidentally checked physical hardware for a software tool
-    cleanHardware = false;
+  if (isPureSoftware) {
+    // If the idea is pure software (e.g. todo list, task manager, saas platform, dev tool):
+    // Never let accidental hardware or healthcare/fintech selections distort it.
+    if (!hasHardwareWords) cleanHardware = false;
+    if (!hasClinicalHealthWords && !hasFintechWords) cleanRegulatory = false;
+    if (!hasClinicalHealthWords && !hasFintechWords && !hasMarketplaceWords) {
+      if (ind.includes('health') || ind.includes('bio') || ind.includes('hardware') || ind.includes('device')) {
+        cleanIndustry = 'Software / SaaS';
+      }
+    }
   }
 
-  if (isPureSoftware && cleanRegulatory && !hasClinicalHealthWords && !hasFintechWords) {
-    // User accidentally checked heavy regulatory compliance for a simple productivity tool
-    cleanRegulatory = false;
+  // Normalize "Not sure yet" / "Other" for Industry
+  if (!industry || ind.includes('not sure') || ind.includes('other')) {
+    if (hasClinicalHealthWords) cleanIndustry = 'Healthcare & Biotech';
+    else if (hasHardwareWords || cleanHardware) cleanIndustry = 'Hardware & Devices';
+    else if (hasFintechWords) cleanIndustry = 'Finance / Fintech';
+    else if (hasMarketplaceWords) cleanIndustry = 'E-commerce & Retail';
+    else if (text.includes('food') || text.includes('grocery')) cleanIndustry = 'Food / Delivery';
+    else if (text.includes('learn') || text.includes('school') || text.includes('student')) cleanIndustry = 'Education / EdTech';
+    else cleanIndustry = 'Software / SaaS';
   }
 
-  // Determine realistic archetype from concept text
-  let ventureType = 'B2B SaaS';
-  if (hasClinicalHealthWords) {
+  // Determine realistic archetype from concept text (Priority 1: Idea text, Priority 2: Inferred industry)
+  let ventureType = 'SaaS & Software';
+  if (hasClinicalHealthWords || (!isPureSoftware && (cleanIndustry.includes('Health') || cleanIndustry.includes('Bio')))) {
     ventureType = 'Healthcare & Biotech';
-    cleanIndustry = 'HealthTech & Biotech';
+    cleanIndustry = 'Healthcare & Biotech';
     cleanRegulatory = true;
-  } else if (cleanHardware || hasHardwareWords) {
+  } else if ((hasHardwareWords || cleanHardware) || (!isPureSoftware && cleanIndustry.includes('Hardware'))) {
     ventureType = 'Consumer Hardware';
-    cleanIndustry = 'Hardware & Robotics';
-  } else if (hasFintechWords) {
+    cleanIndustry = 'Hardware & Devices';
+  } else if (hasFintechWords || (!isPureSoftware && (cleanIndustry.includes('Fin') || cleanIndustry.includes('Crypto')))) {
     ventureType = 'FinTech';
-    cleanIndustry = 'FinTech & Crypto';
+    cleanIndustry = 'Finance / Fintech';
     cleanRegulatory = true;
-  } else if (hasMarketplaceWords || (businessModel && businessModel.includes('Marketplace'))) {
+  } else if (hasMarketplaceWords || model.includes('marketplace') || cust.includes('both') || cleanIndustry.includes('Food') || cleanIndustry.includes('Delivery')) {
     ventureType = 'Marketplace';
-  } else if (text.includes('consumer') || text.includes('social') || text.includes('game') || targetCustomer === 'B2C') {
+  } else if (text.includes('consumer') || text.includes('social') || text.includes('game') || cust.includes('consumer') || cleanIndustry.includes('Social') || cleanIndustry.includes('Media')) {
     ventureType = 'Consumer Tech';
-    cleanIndustry = 'Consumer Apps';
   } else {
     ventureType = 'SaaS & Software';
+  }
+
+  // Normalize Target Customer
+  let cleanCustomer = targetCustomer;
+  if (!cleanCustomer || cust.includes('not sure') || cust.includes('other')) {
+    if (text.includes('developer') || text.includes('engineer') || text.includes('designer')) {
+      cleanCustomer = 'Developers / technical users';
+    } else if (text.includes('consumer') || text.includes('shopper') || text.includes('student')) {
+      cleanCustomer = 'Individual consumers';
+    } else if (text.includes('enterprise') || text.includes('fortune') || text.includes('large company')) {
+      cleanCustomer = 'Large companies';
+    } else {
+      cleanCustomer = 'Small and medium businesses';
+    }
+  }
+
+  // Normalize Business Model
+  let cleanModel = businessModel;
+  if (!cleanModel || model.includes('not sure') || model.includes('other') || model.includes('deciding')) {
+    if (text.includes('commission') || text.includes('take rate') || ventureType === 'Marketplace') {
+      cleanModel = 'Marketplace commission';
+    } else if (cleanHardware || text.includes('purchase') || text.includes('buy')) {
+      cleanModel = 'One-time purchase';
+    } else {
+      cleanModel = 'Monthly / yearly subscription';
+    }
+  }
+
+  // Normalize Burn Rate
+  let cleanBurn = burnRate;
+  if (!cleanBurn || burn.includes('not sure')) {
+    cleanBurn = cleanHardware ? 'Early Stage ($10k - $50k/mo)' : 'Bootstrapped (Under $10k/mo)';
   }
 
   return {
     ideaText: ideaText.trim(),
     ventureType,
     industry: cleanIndustry,
-    targetCustomer: targetCustomer || (text.includes('consumer') ? 'B2C' : 'B2B'),
-    businessModel: businessModel || 'Subscription',
-    burnRate: burnRate || '$20k - $50k/mo',
+    targetCustomer: cleanCustomer,
+    businessModel: cleanModel,
+    burnRate: cleanBurn,
     hardwareInvolved: cleanHardware,
     regulatoryHeavy: cleanRegulatory
   };

@@ -2,28 +2,96 @@ import React, { useState, useEffect } from 'react';
 import { PageHeader } from '../components/layout/PageHeader';
 import { RiskScoreGauge } from '../components/intelligence/RiskScoreGauge';
 import { runRiskScanner } from '../lib/api';
-import { INDUSTRIES } from '../lib/data/startupsData';
 import { 
   ShieldAlert, CheckCircle2, RotateCcw, Building2,
-  Activity, ChevronDown, ChevronUp, Layers, HelpCircle
+  Activity, ChevronDown, ChevronUp, ArrowRight, Sparkles
 } from 'lucide-react';
 
 const SCAN_STAGES = [
-  'Analyzing core problem and target audience...',
-  'Identifying venture category and business model...',
-  'Evaluating key risk factors for this business...',
-  'Searching verified historical failures in PivotVault archive...',
+  'Reading your startup idea and target market...',
+  'Checking which risk factors apply to your business...',
+  'Comparing against 413+ verified startup failures...',
   'Calculating calibrated PivotVault Risk Score...',
-  'Preparing founder-friendly diagnostic summary...'
+  'Preparing plain-English diagnosis and next steps...'
 ];
+
+const FRIENDLY_INDUSTRIES = [
+  'Software / SaaS',
+  'AI / Machine Learning',
+  'Healthcare & Biotech',
+  'Finance / Fintech',
+  'Education / EdTech',
+  'Food / Delivery',
+  'E-commerce & Retail',
+  'Hardware & Devices',
+  'Climate / CleanTech / Energy',
+  'Media / Entertainment',
+  'Travel & Mobility',
+  'Social & Community',
+  'Not sure yet / Other'
+];
+
+const TARGET_CUSTOMERS = [
+  { value: 'Individual consumers', label: 'Individual consumers', desc: 'People using it for personal use' },
+  { value: 'Small and medium businesses', label: 'Small and medium businesses', desc: 'Businesses with smaller teams & budgets' },
+  { value: 'Large companies', label: 'Large companies', desc: 'Enterprise customers with larger contracts' },
+  { value: 'Developers / technical users', label: 'Developers / technical users', desc: 'Engineers, designers, technical creators' },
+  { value: 'Both consumers and businesses', label: 'Both consumers and businesses', desc: 'Platform / two-sided market' },
+  { value: 'Not sure yet', label: 'Not sure yet', desc: 'The AI will infer this from your idea' }
+];
+
+const BUSINESS_MODELS = [
+  { value: 'Monthly / yearly subscription', label: 'Monthly / yearly subscription', desc: 'Recurring subscription fee' },
+  { value: 'One-time purchase', label: 'One-time purchase', desc: 'Pay once to own or access' },
+  { value: 'Freemium', label: 'Freemium', desc: 'Free basic tier with paid upgrades' },
+  { value: 'Pay per use', label: 'Pay per use', desc: 'Usage-based or transactional pricing' },
+  { value: 'Marketplace commission', label: 'Marketplace commission', desc: 'Take a fee per transaction' },
+  { value: 'Advertising', label: 'Advertising / sponsored', desc: 'Monetize attention or brand sponsors' },
+  { value: 'Not sure yet', label: 'Not sure yet / Deciding later', desc: 'The AI will suggest a model' }
+];
+
+const MONTHLY_SPEND_OPTIONS = [
+  { value: 'Bootstrapped (Under $10k/mo)', label: 'Bootstrapped (Under $10k/mo)', desc: 'Lean team, low initial overhead' },
+  { value: 'Early Stage ($10k - $50k/mo)', label: 'Early Stage ($10k - $50k/mo)', desc: 'Small core team, testing MVP' },
+  { value: 'Funded ($50k - $150k/mo)', label: 'Funded ($50k - $150k/mo)', desc: 'Active hiring and marketing' },
+  { value: 'High Growth ($150k+/mo)', label: 'High Growth ($150k+/mo)', desc: 'Rapid expansion and scale' },
+  { value: 'Not sure yet', label: 'Not sure yet', desc: 'Operating costs still being estimated' }
+];
+
+const FRIENDLY_RISK_NAMES = {
+  'Competitive Pressure': 'Competition',
+  'competition': 'Competition',
+  'Differentiation & Moat': 'Standing Out',
+  'differentiation': 'Standing Out',
+  'Product-Market Fit & Retention': 'Customer Demand',
+  'productMarketFit': 'Customer Demand',
+  'Unit Economics & Margins': 'Making Money',
+  'unitEconomics': 'Making Money',
+  'Customer Urgency & Pain': 'Urgent Need',
+  'customerNeed': 'Urgent Need',
+  'Business Model & Monetization': 'Monetization Model',
+  'businessModel': 'Monetization Model',
+  'Execution & Operations': 'Building & Delivery',
+  'executionComplexity': 'Building & Delivery',
+  'Capital Requirements & Burn': 'Funding & Costs',
+  'capitalIntensity': 'Funding & Costs',
+  'Regulatory & Legal Risk': 'Regulations & Legal',
+  'regulatoryExposure': 'Regulations & Legal',
+  'Defensibility & Switching Barriers': 'Defensibility & Moat',
+  'defensibility': 'Defensibility & Moat',
+  'Scalability & Growth Limits': 'Scaling & Operations',
+  'scalability': 'Scaling & Operations',
+  'Market Timing & Adoption': 'Market Timing',
+  'marketTiming': 'Market Timing',
+};
 
 export function RiskScanner() {
   const [formData, setFormData] = useState({
     idea: 'A lightweight AI-powered daily to-do list and task scheduler for remote software developers and designers.',
-    industry: 'SaaS & Enterprise',
-    targetCustomer: 'B2B',
-    businessModel: 'Subscription',
-    burnRate: '<$10k/mo',
+    industry: 'Software / SaaS',
+    targetCustomer: 'Developers / technical users',
+    businessModel: 'Monthly / yearly subscription',
+    burnRate: 'Bootstrapped (Under $10k/mo)',
     hardwareInvolved: false,
     regulatoryHeavy: false,
   });
@@ -66,19 +134,19 @@ export function RiskScanner() {
     setResult(null);
     setFormData({
       idea: '',
-      industry: 'SaaS & Enterprise',
-      targetCustomer: 'B2B',
-      businessModel: 'Subscription',
-      burnRate: '<$10k/mo',
+      industry: 'Software / SaaS',
+      targetCustomer: 'Developers / technical users',
+      businessModel: 'Monthly / yearly subscription',
+      burnRate: 'Bootstrapped (Under $10k/mo)',
       hardwareInvolved: false,
       regulatoryHeavy: false,
     });
   };
 
-  // Human-readable summary sentence based on score
+  // Human-readable summary verdict sentence based on score
   const getScoreSummary = (score) => {
     if (score < 50) {
-      return 'Your idea looks relatively low-risk to start, but standing out from existing tools and confirming customer demand still need validation.';
+      return 'Your idea looks relatively low-risk to start, but competition and customer demand still need validation.';
     }
     if (score >= 75) {
       return 'Your idea carries significant execution and capital risks that should be thoroughly validated before committing heavy resources.';
@@ -125,14 +193,15 @@ export function RiskScanner() {
 
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8 space-y-10">
         {/* Startup Input Form */}
-        <div className="vault-card p-6 sm:p-8 border border-[#E5E5E5] dark:border-[#2A2A2A]">
-          <div className="flex items-center justify-between mb-6 pb-4 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
+        <div className="vault-card p-6 sm:p-8 border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-7">
+          {/* Header */}
+          <div className="flex items-center justify-between pb-4 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
             <div>
-              <h2 className="text-sm font-mono font-bold uppercase tracking-wider text-black dark:text-white">
-                Enter Your Startup Idea
+              <h2 className="text-base font-mono font-bold uppercase tracking-wider text-black dark:text-white">
+                Tell Us About Your Startup
               </h2>
-              <p className="text-xs text-[#737373] dark:text-[#A3A3A3] mt-0.5">
-                Describe what you build, who it's for, and how it works.
+              <p className="text-xs text-[#737373] dark:text-[#A3A3A3] mt-1">
+                Give us a few details so we can identify the risks that matter most to your idea.
               </p>
             </div>
             {result && (
@@ -147,123 +216,189 @@ export function RiskScanner() {
             )}
           </div>
 
-          <form onSubmit={handleScan} className="space-y-6">
-            {/* Idea Concept Input */}
-            <div>
-              <label className="block text-xs font-mono font-bold text-black dark:text-white mb-2">
-                YOUR STARTUP CONCEPT *
+          <form onSubmit={handleScan} className="space-y-7">
+            {/* GROUP 1: START WITH YOUR IDEA */}
+            <div className="space-y-2">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#737373] dark:text-[#A3A3A3]">
+                  1. Start With Your Idea
+                </span>
+                <span className="text-[10px] font-mono text-[#737373] dark:text-[#A3A3A3]">
+                  Primary Source of Truth
+                </span>
+              </div>
+              <label className="block text-xs font-mono font-bold text-black dark:text-white">
+                Describe Your Startup Idea *
               </label>
+              <p className="text-xs text-[#737373] dark:text-[#A3A3A3]">
+                Tell us what you are building, who it helps, and how it works. More detail leads to a better analysis.
+              </p>
               <textarea
                 value={formData.idea}
                 onChange={(e) => setFormData({ ...formData, idea: e.target.value })}
                 rows={3}
                 required
-                placeholder="e.g. A lightweight daily to-do list and task scheduler for remote developers, priced at $8/month..."
-                className="vault-input w-full font-sans text-sm resize-y leading-relaxed"
+                placeholder="e.g. A lightweight AI-powered daily to-do list and task scheduler for remote software developers, priced at $8/month..."
+                className="vault-input w-full font-sans text-sm resize-y leading-relaxed mt-1"
               />
             </div>
 
-            {/* Context Grid */}
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 pt-1">
-              <div>
-                <label className="block text-xs font-mono font-bold text-black dark:text-white mb-1.5">
-                  Industry Sector
-                </label>
-                <select
-                  value={formData.industry}
-                  onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
-                  className="vault-input cursor-pointer"
-                >
-                  {INDUSTRIES.map((ind) => (
-                    <option key={ind} value={ind}>{ind}</option>
-                  ))}
-                </select>
+            {/* GROUP 2: A FEW MORE DETAILS */}
+            <div className="space-y-3 pt-2 border-t border-[#E5E5E5] dark:border-[#2A2A2A]">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#737373] dark:text-[#A3A3A3]">
+                  2. A Few More Details
+                </span>
+                <span className="text-[10px] font-mono text-[#737373] dark:text-[#A3A3A3]">
+                  Not sure? Choose "Not sure yet"
+                </span>
               </div>
 
-              <div>
-                <label className="block text-xs font-mono font-bold text-black dark:text-white mb-1.5">
-                  Target Customer
-                </label>
-                <select
-                  value={formData.targetCustomer}
-                  onChange={(e) => setFormData({ ...formData, targetCustomer: e.target.value })}
-                  className="vault-input cursor-pointer"
-                >
-                  <option value="B2B">B2B (SMBs & Mid-Market)</option>
-                  <option value="Enterprise">B2B Enterprise ($50k+ ACV)</option>
-                  <option value="B2C">B2C (Consumers)</option>
-                  <option value="B2B2C">B2B2C / Platform</option>
-                  <option value="D2C">D2C Physical Goods</option>
-                </select>
-              </div>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5 pt-1">
+                {/* Field 1: Industry */}
+                <div className="space-y-1">
+                  <label className="block text-xs font-mono font-bold text-black dark:text-white">
+                    What industry is your startup in?
+                  </label>
+                  <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3]">
+                    Choose the area your startup operates in.
+                  </p>
+                  <select
+                    value={formData.industry}
+                    onChange={(e) => setFormData({ ...formData, industry: e.target.value })}
+                    className="vault-input cursor-pointer w-full text-xs"
+                  >
+                    {FRIENDLY_INDUSTRIES.map((ind) => (
+                      <option key={ind} value={ind}>{ind}</option>
+                    ))}
+                  </select>
+                </div>
 
-              <div>
-                <label className="block text-xs font-mono font-bold text-black dark:text-white mb-1.5">
-                  Business Model
-                </label>
-                <select
-                  value={formData.businessModel}
-                  onChange={(e) => setFormData({ ...formData, businessModel: e.target.value })}
-                  className="vault-input cursor-pointer"
-                >
-                  <option value="Subscription">SaaS Subscription (MRR)</option>
-                  <option value="Usage-based">Usage / Transactional</option>
-                  <option value="Marketplace">Marketplace Commission</option>
-                  <option value="Hardware+Sub">Hardware + Subscription</option>
-                  <option value="Direct Sales">One-time / Direct Sale</option>
-                </select>
-              </div>
+                {/* Field 2: Target Customer */}
+                <div className="space-y-1">
+                  <label className="block text-xs font-mono font-bold text-black dark:text-white">
+                    Who will use your product?
+                  </label>
+                  <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3]">
+                    Who are you building this for?
+                  </p>
+                  <select
+                    value={formData.targetCustomer}
+                    onChange={(e) => setFormData({ ...formData, targetCustomer: e.target.value })}
+                    className="vault-input cursor-pointer w-full text-xs"
+                  >
+                    {TARGET_CUSTOMERS.map((tc) => (
+                      <option key={tc.value} value={tc.value}>
+                        {tc.label} — {tc.desc}
+                      </option>
+                    ))}
+                  </select>
+                </div>
 
-              <div>
-                <label className="block text-xs font-mono font-bold text-black dark:text-white mb-1.5">
-                  Estimated Monthly Burn
-                </label>
-                <select
-                  value={formData.burnRate}
-                  onChange={(e) => setFormData({ ...formData, burnRate: e.target.value })}
-                  className="vault-input cursor-pointer"
-                >
-                  <option value="<$10k/mo">Bootstrapped (&lt;$10k/mo)</option>
-                  <option value="$20k - $50k/mo">Early Stage ($20k - $50k/mo)</option>
-                  <option value="$50k - $150k/mo">Funded ($50k - $150k/mo)</option>
-                  <option value="$500k+/mo">High Growth ($500k+/mo)</option>
-                </select>
+                {/* Field 3: Business Model */}
+                <div className="space-y-1">
+                  <label className="block text-xs font-mono font-bold text-black dark:text-white">
+                    How will you make money?
+                  </label>
+                  <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3]">
+                    Choose your main way of earning revenue.
+                  </p>
+                  <select
+                    value={formData.businessModel}
+                    onChange={(e) => setFormData({ ...formData, businessModel: e.target.value })}
+                    className="vault-input cursor-pointer w-full text-xs"
+                  >
+                    {BUSINESS_MODELS.map((bm) => (
+                      <option key={bm.value} value={bm.value}>
+                        {bm.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+
+                {/* Field 4: Monthly Cost */}
+                <div className="space-y-1">
+                  <label className="block text-xs font-mono font-bold text-black dark:text-white">
+                    Expected monthly spending
+                  </label>
+                  <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3]">
+                    Roughly how much do you expect to spend each month?
+                  </p>
+                  <select
+                    value={formData.burnRate}
+                    onChange={(e) => setFormData({ ...formData, burnRate: e.target.value })}
+                    className="vault-input cursor-pointer w-full text-xs"
+                  >
+                    {MONTHLY_SPEND_OPTIONS.map((ms) => (
+                      <option key={ms.value} value={ms.value}>
+                        {ms.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
 
-            {/* Checkboxes */}
-            <div className="flex flex-wrap items-center gap-6 pt-1">
-              <label className="flex items-center gap-2 cursor-pointer text-xs font-sans text-black dark:text-white">
-                <input
-                  type="checkbox"
-                  checked={formData.hardwareInvolved}
-                  onChange={(e) => setFormData({ ...formData, hardwareInvolved: e.target.checked })}
-                  className="rounded border-[#E5E5E5] dark:border-[#2A2A2A] accent-black dark:accent-white"
-                />
-                <span>Includes Physical Hardware Manufacturing</span>
-              </label>
+            {/* GROUP 3: OPTIONAL DETAILS */}
+            <div className="space-y-3 pt-2 border-t border-[#E5E5E5] dark:border-[#2A2A2A]">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#737373] dark:text-[#A3A3A3]">
+                  3. Optional Details
+                </span>
+                <span className="text-[10px] font-mono text-[#737373] dark:text-[#A3A3A3]">
+                  Only select if applicable
+                </span>
+              </div>
 
-              <label className="flex items-center gap-2 cursor-pointer text-xs font-sans text-black dark:text-white">
-                <input
-                  type="checkbox"
-                  checked={formData.regulatoryHeavy}
-                  onChange={(e) => setFormData({ ...formData, regulatoryHeavy: e.target.checked })}
-                  className="rounded border-[#E5E5E5] dark:border-[#2A2A2A] accent-black dark:accent-white"
-                />
-                <span>Subject to Heavy Legal / Medical Regulation (FDA, SEC, FinCEN)</span>
-              </label>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 pt-1">
+                {/* Hardware Checkbox */}
+                <label className="p-3.5 rounded-[6px] border border-[#E5E5E5] dark:border-[#2A2A2A] bg-white dark:bg-black hover:border-black dark:hover:border-white transition-colors cursor-pointer flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    checked={formData.hardwareInvolved}
+                    onChange={(e) => setFormData({ ...formData, hardwareInvolved: e.target.checked })}
+                    className="rounded border-[#E5E5E5] dark:border-[#2A2A2A] accent-black dark:accent-white mt-0.5"
+                  />
+                  <div className="space-y-0.5">
+                    <span className="text-xs font-mono font-bold text-black dark:text-white block">
+                      Does your product require physical hardware?
+                    </span>
+                    <span className="text-[11px] text-[#737373] dark:text-[#A3A3A3] block">
+                      Examples: devices, machines, sensors, wearables.
+                    </span>
+                  </div>
+                </label>
+
+                {/* Regulation Checkbox */}
+                <label className="p-3.5 rounded-[6px] border border-[#E5E5E5] dark:border-[#2A2A2A] bg-white dark:bg-black hover:border-black dark:hover:border-white transition-colors cursor-pointer flex items-start gap-3">
+                  <input
+                    type="checkbox"
+                    checked={formData.regulatoryHeavy}
+                    onChange={(e) => setFormData({ ...formData, regulatoryHeavy: e.target.checked })}
+                    className="rounded border-[#E5E5E5] dark:border-[#2A2A2A] accent-black dark:accent-white mt-0.5"
+                  />
+                  <div className="space-y-0.5">
+                    <span className="text-xs font-mono font-bold text-black dark:text-white block">
+                      Does your product require government approval or strict regulations?
+                    </span>
+                    <span className="text-[11px] text-[#737373] dark:text-[#A3A3A3] block">
+                      Examples: medical products, financial services, regulated industries.
+                    </span>
+                  </div>
+                </label>
+              </div>
             </div>
 
-            {/* Submit Bar */}
+            {/* SUBMIT BAR */}
             <div className="pt-4 border-t border-[#E5E5E5] dark:border-[#2A2A2A] flex flex-col sm:flex-row items-center justify-between gap-4">
               <div className="text-xs font-mono text-[#737373] dark:text-[#A3A3A3]">
                 {loading ? (
                   <div className="flex items-center gap-2">
-                    <span className="inline-block w-2 h-2 rounded-full bg-[#DC2626] animate-pulse" />
+                    <span className="inline-block w-2 h-2 rounded-full bg-black dark:bg-white animate-pulse" />
                     <span className="text-black dark:text-white font-bold">{SCAN_STAGES[stageIndex]}</span>
                   </div>
                 ) : (
-                  <span>Ready to evaluate your venture's key risk factors</span>
+                  <span>Ready to evaluate the risks that matter most to your idea</span>
                 )}
               </div>
 
@@ -280,7 +415,8 @@ export function RiskScanner() {
                 ) : (
                   <>
                     <ShieldAlert className="w-3.5 h-3.5" />
-                    <span>Run Risk Scanner</span>
+                    <span>Analyze My Startup</span>
+                    <ArrowRight className="w-3.5 h-3.5" />
                   </>
                 )}
               </button>
@@ -288,7 +424,7 @@ export function RiskScanner() {
           </form>
         </div>
 
-        {/* Diagnostic Results Section */}
+        {/* DIAGNOSTIC RESULTS SECTION */}
         {result && (
           <div className="space-y-8 animate-fade-in">
             {/* 1. HOW RISKY IS MY IDEA? (Primary Result Card) */}
@@ -298,12 +434,12 @@ export function RiskScanner() {
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#737373] dark:text-[#A3A3A3] block mb-1">
                     HOW RISKY IS MY IDEA?
                   </span>
-                  <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-black dark:text-white">
+                  <h3 className="text-base font-mono font-bold uppercase tracking-wider text-black dark:text-white">
                     PivotVault Risk Score
                   </h3>
                 </div>
                 <div className="text-xs font-mono text-[#737373] dark:text-[#A3A3A3]">
-                  Scale: <strong className="text-black dark:text-white">0 = Low Risk</strong> • <strong className="text-black dark:text-white">100 = Very High Risk</strong>
+                  Scale: <strong className="text-black dark:text-white">0 = Lower Risk</strong> • <strong className="text-black dark:text-white">100 = Higher Risk</strong>
                 </div>
               </div>
 
@@ -330,6 +466,7 @@ export function RiskScanner() {
 
                 {/* Score Summary & Confidence */}
                 <div className="md:col-span-8 space-y-4">
+                  {/* One-Line Verdict */}
                   <div className="p-4 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A]">
                     <p className="text-sm font-sans text-black dark:text-white font-medium leading-relaxed">
                       "{getScoreSummary(scoreVal)}"
@@ -353,7 +490,7 @@ export function RiskScanner() {
                     </div>
                   )}
 
-                  {/* What We Think (Concept Summary) */}
+                  {/* What We Understand (Concept Summary) */}
                   {result.diagnosis?.whatWeThink && (
                     <div className="text-xs text-[#404040] dark:text-[#D4D4D4] leading-relaxed pt-1">
                       <strong className="font-mono text-black dark:text-white block mb-0.5">What We Understand:</strong>
@@ -364,23 +501,24 @@ export function RiskScanner() {
               </div>
             </div>
 
-            {/* 2. WHY IS IT RISKY? (Top Relevant Risks Only) */}
+            {/* 2. WHAT COULD GO WRONG? (Top Relevant Risks Only) */}
             {result.riskDrivers && result.riskDrivers.length > 0 && (
               <div className="vault-card p-6 sm:p-8 border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-4">
                 <div className="pb-3 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#737373] dark:text-[#A3A3A3] block mb-1">
-                    WHY IS IT RISKY?
+                    WHAT COULD GO WRONG?
                   </span>
                   <h3 className="text-sm font-mono font-bold uppercase tracking-wider text-black dark:text-white">
-                    Top Risks For This Venture
+                    Top Risks For Your Startup
                   </h3>
                   <p className="text-xs text-[#737373] dark:text-[#A3A3A3] mt-0.5">
-                    We only highlight the risks that genuinely apply to your business model.
+                    We highlight the risks that matter most for your idea.
                   </p>
                 </div>
 
                 <div className="space-y-4">
                   {result.riskDrivers.map((driver, idx) => {
+                    const friendlyName = FRIENDLY_RISK_NAMES[driver.name] || driver.name;
                     const levelLabel = driver.score >= 75 ? 'High Risk' : driver.score >= 55 ? 'Medium Risk' : 'Low Risk';
                     return (
                       <div 
@@ -389,14 +527,14 @@ export function RiskScanner() {
                       >
                         <div className="flex items-center justify-between text-xs font-mono">
                           <span className="font-bold text-black dark:text-white text-sm">
-                            {driver.name}
+                            {friendlyName}
                           </span>
                           <span className={`px-2 py-0.5 rounded-[3px] text-[11px] font-bold ${
                             driver.score >= 75
                               ? 'bg-black text-white dark:bg-white dark:text-black'
                               : 'border border-[#E5E5E5] dark:border-[#2A2A2A] text-black dark:text-white'
                           }`}>
-                            {levelLabel} ({driver.score}/100)
+                            {levelLabel} — {driver.score}/100
                           </span>
                         </div>
 
@@ -549,7 +687,7 @@ export function RiskScanner() {
               </div>
             )}
 
-            {/* 6. HOW DID WE CALCULATE THIS? (Collapsed Accordion For Judges) */}
+            {/* 6. HOW WE CALCULATE THIS (Collapsed Accordion For Judges) */}
             <div className="vault-card p-6 border border-[#E5E5E5] dark:border-[#2A2A2A]">
               <button
                 type="button"
@@ -561,7 +699,7 @@ export function RiskScanner() {
                     FOR JUDGES & ANALYSTS
                   </span>
                   <h4 className="text-xs font-mono font-bold uppercase tracking-wider text-black dark:text-white mt-0.5">
-                    How Did We Calculate This Score?
+                    How We Calculate This
                   </h4>
                 </div>
                 <div className="flex items-center gap-1.5 text-xs font-mono text-[#737373] dark:text-[#A3A3A3]">
@@ -579,40 +717,40 @@ export function RiskScanner() {
                   <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
                     <div className="p-3.5 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-1.5">
                       <div className="flex items-center justify-between font-mono font-bold text-black dark:text-white">
-                        <span>Idea Analysis</span>
+                        <span>AI Analysis</span>
                         <span>{Math.round((result.scoring?.weightsUsed?.ventureRisk || 0.71) * 100)}%</span>
                       </div>
                       <div className="text-sm font-mono font-bold text-black dark:text-white">
                         {result.scoring?.ventureRiskScore ?? result.finalRiskScore}/100
                       </div>
                       <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3]">
-                        AI evaluates the business idea and identifies the risks that actually apply.
+                        AI analyzes the actual startup idea and identifies relevant risks.
                       </p>
                     </div>
 
                     <div className="p-3.5 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-1.5">
                       <div className="flex items-center justify-between font-mono font-bold text-black dark:text-white">
-                        <span>Historical Patterns</span>
+                        <span>Historical Failure Patterns</span>
                         <span>{Math.round((result.scoring?.weightsUsed?.historicalSimilarity || 0.29) * 100)}%</span>
                       </div>
                       <div className="text-sm font-mono font-bold text-black dark:text-white">
                         {result.scoring?.historicalSimilarityScore ?? 50}/100
                       </div>
                       <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3]">
-                        Compares your concept with real startup failure records in PivotVault's database.
+                        PivotVault compares the idea with real startup failures in its evidence base.
                       </p>
                     </div>
 
                     <div className="p-3.5 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-1.5">
                       <div className="flex items-center justify-between font-mono font-bold text-black dark:text-white">
-                        <span>ML Benchmark</span>
+                        <span>ML Signal</span>
                         <span>{Math.round((result.scoring?.weightsUsed?.mlBenchmark || 0) * 100)}%</span>
                       </div>
                       <div className="text-sm font-mono font-bold text-black dark:text-white">
                         {result.scoring?.mlBenchmarkScore ? `${result.scoring.mlBenchmarkScore}/100` : 'Unavailable (Pre-launch)'}
                       </div>
                       <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3]">
-                        Adds a secondary signal from our trained capitalization model when funding history exists.
+                        Our trained model provides an additional historical signal when applicable.
                       </p>
                     </div>
                   </div>
@@ -632,6 +770,7 @@ export function RiskScanner() {
                       <div className="mt-4 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 text-left animate-fade-in">
                         {Object.entries(result.ventureProfile.dimensions).map(([key, score]) => {
                           const isNA = result.ventureProfile.dimensionStatus?.[key] === 'not_applicable';
+                          const friendlyDimName = FRIENDLY_RISK_NAMES[key] || key.replace(/([A-Z])/g, ' $1');
                           return (
                             <div 
                               key={key} 
@@ -642,11 +781,11 @@ export function RiskScanner() {
                               }`}
                             >
                               <div className="flex items-center justify-between text-[11px] font-mono mb-1">
-                                <span className="capitalize">{key.replace(/([A-Z])/g, ' $1')}</span>
+                                <span className="capitalize font-bold">{friendlyDimName}</span>
                                 <span className="font-bold">{isNA ? 'N/A' : `${score}/100`}</span>
                               </div>
                               <p className="text-[10px] text-[#737373] dark:text-[#A3A3A3]">
-                                {isNA ? 'Not applicable to this venture archetype.' : result.ventureProfile.dimensionReasoning?.[key]}
+                                {isNA ? 'Not applicable to this startup type.' : result.ventureProfile.dimensionReasoning?.[key]}
                               </p>
                             </div>
                           );

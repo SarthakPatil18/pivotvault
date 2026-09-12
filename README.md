@@ -1,72 +1,121 @@
 # PivotVault — AI-Powered Startup Failure Intelligence Platform
 
-Founders use PivotVault to learn from failed startups, validate ideas, scan risks, and make smarter decisions before building or raising money.
+**Team CodeRegime (KH024)**
+
+Founders use PivotVault to learn from failed startups, validate ideas, scan risks, and make smarter decisions before building or raising money. Over 90% of startups fail by repeating known failure modes (unit economics collapse, premature scaling, lack of PMF). PivotVault provides defensive intelligence powered by 419+ verified post-mortems, pgvector semantic search, and Google Gemini RAG.
 
 ---
 
 ## Repository Structure
 
 ```
-pivotvault/
-├── backend/                  # PostgreSQL + Prisma + BullMQ Scraper Pipeline & Vector Ingestion
-└── frontend/                 # Vite + React + Tailwind Minimal Editorial Intelligence Platform
+KH024-CodeRegime/
+├── README.md                           # Project documentation & execution guide
+├── LICENSE                             # MIT Open Source License
+│
+├── src/                                # Project Source Code
+│   ├── frontend/                       # Vite + React 19 + Tailwind CSS platform
+│   ├── backend/                        # Node.js + Express + Prisma + BullMQ API
+│   ├── ml-services/                    # Python FastAPI IdeaScore ML scoring engine
+│   └── pivotvault-landing/             # Standalone landing showcase
+│
+├── docs/                               # Documentation & Architectural Artifacts
+│   ├── project-documentation.pdf       # Formal project presentation & report (3 pages)
+│   ├── architecture.png                # Full-stack system architecture diagram
+│   └── other-diagrams/                 # Pipeline & Entity-Relationship diagrams
+│       ├── rag-agent-pipeline.png      # RAG forensic retrieval workflow
+│       └── database-schema.png         # PostgreSQL + pgvector relational schema
+│
+├── screenshots/                        # High-Resolution UI Demonstrations
+│   ├── screenshot-1.png                # Startup Failure Archive (419+ Startups)
+│   └── screenshot-2.png                # AI Risk Scanner & Autopsy Matchmaker
+│
+├── data/                               # Canonical Forensic Datasets
+│   ├── README.md                       # Data dictionary, taxonomy & sources
+│   └── seed.json                       # 419+ verified startup post-mortems
+│
+├── requirements.txt                    # Python environment dependencies
+├── package.json                        # Monorepo workspace scripts
+├── vercel.json                         # Vercel deployment configuration
+├── render.yaml                         # Render backend web service configuration
+└── .gitignore                          # Git exclusions
 ```
 
 ---
 
-## Frontend Architecture & Intelligence Suite
+## Quickstart Guide
 
-- **Hero & First Viewport**: 60/40 viewport-filling layout engineered for 100% desktop scale.
-- **Editorial Design System**: Strictly adheres to `design.md` with a clean monochrome aesthetic, high information density, and soft red accents strictly reserved for high-risk telemetry.
-- **Live Failure Intelligence**: Ranked distribution charts across 14 failure vectors and a historical collapse event timeline.
-- **Cross-Industry Heatmap Matrix**: Failure mode correlations across 7 industries.
-- **The Startup Failure Network**: Interactive Knowledge Graph with relationship explorer.
-- **Risk Scanner**: Interactive startup model audit with real-time risk score gauge (0-100) and historical autopsy matchmaker.
-- **Hall of Ghosts**: AI-reconstructed founder debriefs grounded in public records and testimonies.
-- **Diagnostic Tools**: Pitch Deck Autopsy, Competitor Comparison, and Financial Intelligence.
+### 1. Root Workspace (Frontend & Backend)
 
-### Frontend Quickstart
-
+Install all dependencies across the monorepo:
 ```bash
-cd frontend
-npm install
-npm run dev
+npm run install:all
 ```
 
-Production build:
+Start the frontend development server:
+```bash
+npm run dev
+# Or: cd src/frontend && npm run dev
+```
+
+Build the production bundle:
 ```bash
 npm run build
+# Or: cd src/frontend && npm run build
 ```
 
 ---
 
-## v0-database Architecture & Status (Developer 1)
-
-- **Database Layer**: PostgreSQL with `pgvector` (`vector(768)`).
-- **Prisma Schema**: Models for `Company`, `Evidence`, `Claim`, `Embedding`, `FailurePattern`, `AgentExecution`, and `RiskScan`.
-- **Pre-Seeded Companies**: 20 canonical startup postmortems (WeWork, Theranos, Quibi, Juicero, Vine, Clubhouse, Yo App, Color Labs, Pets.com, Webvan, Byju's, FTX, Solyndra, MoviePass, Jawbone, Fab.com, Homejoy, Rdio, Meerkat, Secret).
-- **Web Scraper Suite**:
-  - `StartupGraveyard.js` (`https://startupgraveyard.io`)
-  - `Failory.js` (`https://www.failory.com/cemetery`)
-  - `TheStartupGraveyard.js` (`https://www.thestartupgraveyard.com`)
-  - `StartupGraveyardCo.js` (`https://www.startupgraveyard.co`)
-  - `HackerNews`, `Reddit`, `YCombinator`, `ProductHunt`, `IndieHackers`, `TechCrunch`
-- **Data Pipelines**:
-  - `ingest:direct`: Direct scraper-to-database loader with concurrent batching.
-  - `pipeline:start`: 9-stage BullMQ asynchronous queue system with Handoff Contract (`embeddingQueue`) for Developer 2.
-
-### Backend Quickstart
+### 2. Backend Service (Node.js + PostgreSQL + pgvector)
 
 ```bash
-cd backend
+cd src/backend
 npm install
 cp .env.example .env
 
-# Generate Prisma Client & Push Schema
+# Generate Prisma Client & Push Database Schema
 npm run prisma:generate
 npm run prisma:push
 
-# Seed Canonical Startups & Run Direct Scraper Ingestion
+# Seed Canonical Failure Records & Run Direct Ingestion
 npm run prisma:seed
 npm run ingest:direct
+
+# Start API Server
+npm run dev
 ```
+
+---
+
+### 3. ML Scoring Service (Python FastAPI)
+
+```bash
+cd src/ml-services
+python3 -m venv venv
+source venv/bin/activate
+pip install -r requirements.txt
+
+uvicorn main:app --host 0.0.0.0 --port 8001 --reload
+```
+
+---
+
+## Core Platform Features
+
+- **Startup Failure Archive**: 419+ verified post-mortems indexed with failure scores, capital burned, and root causes across 15 industries.
+- **AI Risk Scanner**: Automated model audit cross-referencing startup hypotheses with vector embeddings to compute an objective risk score (0-100).
+- **Historical Autopsy Matchmaker**: RAG-retrieved top 3 nearest failed ancestors via cosine distance over 768-dim embeddings.
+- **Hall of Ghosts**: Conversational founder personas reconstructed from public testimony to interrogate historical decision points.
+- **Pitch Deck Autopsy**: Slide-by-slide diagnostic identifying premature scaling, missing unit economics, and unverified TAM assumptions.
+- **Macro Failure Heatmap Matrix**: Failure mode correlations and capital loss patterns across 7 major tech sectors.
+
+---
+
+## Verification & Documentation Assets
+
+- Complete technical documentation is compiled in [`docs/project-documentation.pdf`](file:///Users/sarthak/Desktop/PivotVault/docs/project-documentation.pdf).
+- System architecture diagram: [`docs/architecture.png`](file:///Users/sarthak/Desktop/PivotVault/docs/architecture.png).
+- RAG pipeline workflow: [`docs/other-diagrams/rag-agent-pipeline.png`](file:///Users/sarthak/Desktop/PivotVault/docs/other-diagrams/rag-agent-pipeline.png).
+- Database schema: [`docs/other-diagrams/database-schema.png`](file:///Users/sarthak/Desktop/PivotVault/docs/other-diagrams/database-schema.png).
+- UI Screenshots: [`screenshots/screenshot-1.png`](file:///Users/sarthak/Desktop/PivotVault/screenshots/screenshot-1.png) and [`screenshots/screenshot-2.png`](file:///Users/sarthak/Desktop/PivotVault/screenshots/screenshot-2.png).
+- Dataset documentation & data dictionary: [`data/README.md`](file:///Users/sarthak/Desktop/PivotVault/data/README.md).

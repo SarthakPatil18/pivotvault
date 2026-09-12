@@ -1,0 +1,30 @@
+{
+  "name": "pivotvault-workspace",
+  "version": "1.0.0",
+  "description": "PivotVault — AI-Powered Startup Failure Intelligence Platform (Team CodeRegime - KH024)",
+  "private": true,
+  "workspaces": [
+    "src/frontend",
+    "src/backend"
+  ],
+  "scripts": {
+    "dev": "npm --prefix src/frontend run dev",
+    "build": "npm --prefix src/frontend run build",
+    "preview": "npm --prefix src/frontend run preview",
+    "start:backend": "npm --prefix src/backend run start",
+    "dev:backend": "npm --prefix src/backend run dev",
+    "prisma:generate": "npm --prefix src/backend run prisma:generate",
+    "prisma:push": "npm --prefix src/backend run prisma:push",
+    "install:all": "npm install && npm --prefix src/frontend install && npm --prefix src/backend install"
+  },
+  "keywords": [
+    "startup-intelligence",
+    "failure-analysis",
+    "ai-forensics",
+    "pgvector",
+    "rag",
+    "gemini"
+  ],
+  "author": "CodeRegime (KH024)",
+  "license": "MIT"
+}

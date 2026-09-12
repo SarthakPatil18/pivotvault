@@ -5,12 +5,12 @@ export function FailureScoreBadge({ score, size = 'md', showIcon = true, showLab
   const isHighRisk = numScore >= 70;
   const isLowRisk = numScore < 50;
 
-  // Single permitted functional accent: tiny status dot only
+  // Functional status indicator colors
   const dotColor = isHighRisk 
     ? 'bg-[#DC2626]' 
     : isLowRisk 
-    ? 'bg-[#16A34A]' 
-    : 'bg-[#737373]';
+    ? 'bg-[#10B981]' 
+    : 'bg-[#F59E0B]';
 
   return (
     <span 

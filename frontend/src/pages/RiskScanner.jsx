@@ -450,18 +450,6 @@ export function RiskScanner() {
                     score={scoreVal}
                     label="Risk Score"
                   />
-                  <div className="mt-3">
-                    <span className={`inline-flex items-center gap-1.5 px-3 py-1 text-xs font-mono font-bold uppercase rounded-[4px] ${
-                      scoreVal >= 75
-                        ? 'bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#DC2626]'
-                        : 'bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]'
-                    }`}>
-                      <span className={`w-1.5 h-1.5 rounded-full ${
-                        scoreVal >= 75 ? 'bg-[#DC2626]' : 'bg-black dark:bg-white'
-                      }`} />
-                      {result.riskLevel || 'EVALUATED RISK'}
-                    </span>
-                  </div>
                 </div>
 
                 {/* Score Summary & Confidence */}
@@ -519,33 +507,44 @@ export function RiskScanner() {
                 <div className="space-y-4">
                   {result.riskDrivers.map((driver, idx) => {
                     const friendlyName = FRIENDLY_RISK_NAMES[driver.name] || driver.name;
-                    const levelLabel = driver.score >= 75 ? 'High Risk' : driver.score >= 55 ? 'Medium Risk' : 'Low Risk';
+                    const isHigh = driver.score >= 75;
+                    const isMedium = driver.score >= 50 && driver.score < 75;
+                    const levelLabel = isHigh ? 'High Risk' : isMedium ? 'Medium Risk' : 'Low Risk';
+                    
+                    const barColor = isHigh 
+                      ? 'bg-[#DC2626]' 
+                      : isMedium 
+                      ? 'bg-[#F59E0B]' 
+                      : 'bg-[#10B981]';
+                      
+                    const badgeClass = isHigh
+                      ? 'bg-red-50 dark:bg-red-950/50 text-red-700 dark:text-red-400 border border-red-200 dark:border-red-900/60'
+                      : isMedium
+                      ? 'bg-amber-50 dark:bg-amber-950/50 text-amber-700 dark:text-amber-400 border border-amber-200 dark:border-amber-900/60'
+                      : 'bg-emerald-50 dark:bg-emerald-950/50 text-emerald-700 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-900/60';
+
                     return (
                       <div 
                         key={idx} 
-                        className="p-4 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-2"
+                        className="p-4 rounded-[8px] bg-[#F9F9F9] dark:bg-[#141414] border border-[#EAEAEA] dark:border-[#222222] space-y-2.5"
                       >
                         <div className="flex items-center justify-between text-xs font-mono">
                           <span className="font-bold text-black dark:text-white text-sm">
                             {friendlyName}
                           </span>
-                          <span className={`px-2 py-0.5 rounded-[3px] text-[11px] font-bold ${
-                            driver.score >= 75
-                              ? 'bg-black text-white dark:bg-white dark:text-black'
-                              : 'border border-[#E5E5E5] dark:border-[#2A2A2A] text-black dark:text-white'
-                          }`}>
+                          <span className={`px-2.5 py-0.5 rounded-[4px] text-[11px] font-bold shadow-xs ${badgeClass}`}>
                             {levelLabel} — {driver.score}/100
                           </span>
                         </div>
 
-                        <div className="w-full h-1.5 bg-[#E5E5E5] dark:bg-[#2A2A2A] rounded-full overflow-hidden">
+                        <div className="w-full h-2 bg-[#EAEAEA] dark:bg-[#262626] rounded-full overflow-hidden">
                           <div 
-                            className="h-full bg-black dark:bg-white rounded-full transition-all duration-300"
+                            className={`h-full rounded-full transition-all duration-500 ${barColor}`}
                             style={{ width: `${Math.min(100, Math.max(5, driver.score))}%` }}
                           />
                         </div>
 
-                        <p className="text-xs text-[#404040] dark:text-[#D4D4D4] leading-relaxed pt-1">
+                        <p className="text-xs text-[#404040] dark:text-[#D4D4D4] leading-relaxed pt-0.5">
                           {driver.reasoning}
                         </p>
                       </div>

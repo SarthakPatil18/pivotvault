@@ -735,10 +735,15 @@ export function FailureAnalysis({ startup }) {
             <div>
               <div className="flex items-center justify-between text-xs font-mono mb-1">
                 <span className="font-bold text-black dark:text-white">Financial Health</span>
-                <span className="text-[#737373]">{finScore}/20</span>
+                <span className="font-bold text-black dark:text-white">{finScore}/20</span>
               </div>
               <div className="w-full h-2 rounded-full bg-[#E5E5E5] dark:bg-[#2A2A2A] overflow-hidden">
-                <div className="h-full bg-black dark:bg-white rounded-full" style={{ width: `${(finScore / 20) * 100}%` }} />
+                <div 
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    (finScore / 20) >= 0.7 ? 'bg-[#DC2626]' : (finScore / 20) >= 0.5 ? 'bg-[#F59E0B]' : 'bg-[#10B981]'
+                  }`} 
+                  style={{ width: `${(finScore / 20) * 100}%` }} 
+                />
               </div>
               <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3] mt-1">
                 Runway managed efficiently relative to growth benchmarks; standard cash allocation.
@@ -748,10 +753,15 @@ export function FailureAnalysis({ startup }) {
             <div>
               <div className="flex items-center justify-between text-xs font-mono mb-1">
                 <span className="font-bold text-black dark:text-white">Product Execution</span>
-                <span className="text-[#737373]">{prodScore}/25</span>
+                <span className="font-bold text-black dark:text-white">{prodScore}/25</span>
               </div>
               <div className="w-full h-2 rounded-full bg-[#E5E5E5] dark:bg-[#2A2A2A] overflow-hidden">
-                <div className="h-full bg-black dark:bg-white rounded-full" style={{ width: `${(prodScore / 25) * 100}%` }} />
+                <div 
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    (prodScore / 25) >= 0.7 ? 'bg-[#DC2626]' : (prodScore / 25) >= 0.5 ? 'bg-[#F59E0B]' : 'bg-[#10B981]'
+                  }`} 
+                  style={{ width: `${(prodScore / 25) * 100}%` }} 
+                />
               </div>
               <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3] mt-1">
                 {rootCause1}
@@ -761,10 +771,15 @@ export function FailureAnalysis({ startup }) {
             <div>
               <div className="flex items-center justify-between text-xs font-mono mb-1">
                 <span className="font-bold text-black dark:text-white">Market Fit</span>
-                <span className="text-[#737373]">{mktScore}/15</span>
+                <span className="font-bold text-black dark:text-white">{mktScore}/15</span>
               </div>
               <div className="w-full h-2 rounded-full bg-[#E5E5E5] dark:bg-[#2A2A2A] overflow-hidden">
-                <div className="h-full bg-black dark:bg-white rounded-full" style={{ width: `${(mktScore / 15) * 100}%` }} />
+                <div 
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    (mktScore / 15) >= 0.7 ? 'bg-[#DC2626]' : (mktScore / 15) >= 0.5 ? 'bg-[#F59E0B]' : 'bg-[#10B981]'
+                  }`} 
+                  style={{ width: `${(mktScore / 15) * 100}%` }} 
+                />
               </div>
               <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3] mt-1">
                 Market demand matches baseline parameters; moderate customer validation risk.
@@ -774,10 +789,15 @@ export function FailureAnalysis({ startup }) {
             <div>
               <div className="flex items-center justify-between text-xs font-mono mb-1">
                 <span className="font-bold text-black dark:text-white">Leadership</span>
-                <span className="text-[#737373]">{ldrScore}/15</span>
+                <span className="font-bold text-black dark:text-white">{ldrScore}/15</span>
               </div>
               <div className="w-full h-2 rounded-full bg-[#E5E5E5] dark:bg-[#2A2A2A] overflow-hidden">
-                <div className="h-full bg-black dark:bg-white rounded-full" style={{ width: `${(ldrScore / 15) * 100}%` }} />
+                <div 
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    (ldrScore / 15) >= 0.7 ? 'bg-[#DC2626]' : (ldrScore / 15) >= 0.5 ? 'bg-[#F59E0B]' : 'bg-[#10B981]'
+                  }`} 
+                  style={{ width: `${(ldrScore / 15) * 100}%` }} 
+                />
               </div>
               <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3] mt-1">
                 Stable corporate governance and founder alignment observed through operation.
@@ -787,10 +807,15 @@ export function FailureAnalysis({ startup }) {
             <div>
               <div className="flex items-center justify-between text-xs font-mono mb-1">
                 <span className="font-bold text-black dark:text-white">External Factors</span>
-                <span className="text-[#737373]">{extScore}/15</span>
+                <span className="font-bold text-black dark:text-white">{extScore}/15</span>
               </div>
               <div className="w-full h-2 rounded-full bg-[#E5E5E5] dark:bg-[#2A2A2A] overflow-hidden">
-                <div className="h-full bg-black dark:bg-white rounded-full" style={{ width: `${(extScore / 15) * 100}%` }} />
+                <div 
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    (extScore / 15) >= 0.7 ? 'bg-[#DC2626]' : (extScore / 15) >= 0.5 ? 'bg-[#F59E0B]' : 'bg-[#10B981]'
+                  }`} 
+                  style={{ width: `${(extScore / 15) * 100}%` }} 
+                />
               </div>
               <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3] mt-1">
                 Standard competitive pressures; no direct existential threats from major incumbents.
@@ -800,10 +825,15 @@ export function FailureAnalysis({ startup }) {
             <div>
               <div className="flex items-center justify-between text-xs font-mono mb-1">
                 <span className="font-bold text-black dark:text-white">Timing</span>
-                <span className="text-[#737373]">{timeScore}/10</span>
+                <span className="font-bold text-black dark:text-white">{timeScore}/10</span>
               </div>
               <div className="w-full h-2 rounded-full bg-[#E5E5E5] dark:bg-[#2A2A2A] overflow-hidden">
-                <div className="h-full bg-black dark:bg-white rounded-full" style={{ width: `${(timeScore / 10) * 100}%` }} />
+                <div 
+                  className={`h-full rounded-full transition-all duration-500 ${
+                    (timeScore / 10) >= 0.7 ? 'bg-[#DC2626]' : (timeScore / 10) >= 0.5 ? 'bg-[#F59E0B]' : 'bg-[#10B981]'
+                  }`} 
+                  style={{ width: `${(timeScore / 10) * 100}%` }} 
+                />
               </div>
               <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3] mt-1">
                 Launched in a standard window with average market adoption readiness.
@@ -812,8 +842,10 @@ export function FailureAnalysis({ startup }) {
 
             {/* Total Row */}
             <div className="pt-2 border-t border-[#E5E5E5] dark:border-[#2A2A2A] flex items-center justify-between text-xs font-mono font-bold text-black dark:text-white">
-              <span>Total</span>
-              <span>{rawScore}%</span>
+              <span>Total Composite Failure Score</span>
+              <span className={`px-2 py-0.5 rounded ${
+                rawScore >= 70 ? 'bg-red-100 text-red-700 dark:bg-red-950/60 dark:text-red-400' : 'bg-amber-100 text-amber-700 dark:bg-amber-950/60 dark:text-amber-400'
+              }`}>{rawScore}%</span>
             </div>
           </div>
         </div>
@@ -824,13 +856,21 @@ export function FailureAnalysis({ startup }) {
             Diagnostic Vectors
           </h3>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 text-center font-mono">
-            {vectors.map((vec, idx) => (
-              <div key={idx} className="p-2.5 rounded-[6px] border border-[#E5E5E5] dark:border-[#2A2A2A] bg-[#FAFAFA] dark:bg-[#0A0A0A]">
-                <div className="text-[11px] text-[#737373] dark:text-[#A3A3A3]">{vec.label}</div>
-                <div className="text-[9px] text-[#A3A3A3] dark:text-[#666666]">(w: {vec.weight})</div>
-                <div className="text-sm font-bold text-black dark:text-white mt-1">{vec.score}%</div>
-              </div>
-            ))}
+            {vectors.map((vec, idx) => {
+              const vecColor = vec.score >= 70 
+                ? 'text-[#DC2626] border-red-200 dark:border-red-950/60 bg-red-50/40 dark:bg-red-950/20' 
+                : vec.score >= 50 
+                ? 'text-[#D97706] dark:text-[#F59E0B] border-amber-200 dark:border-amber-950/60 bg-amber-50/40 dark:bg-amber-950/20' 
+                : 'text-[#10B981] border-emerald-200 dark:border-emerald-950/60 bg-emerald-50/40 dark:bg-emerald-950/20';
+
+              return (
+                <div key={idx} className={`p-2.5 rounded-[8px] border ${vecColor} transition-all`}>
+                  <div className="text-[11px] font-medium text-black dark:text-white">{vec.label}</div>
+                  <div className="text-[9px] text-[#888888] dark:text-[#777777]">(w: {vec.weight})</div>
+                  <div className="text-sm font-extrabold mt-1 font-mono">{vec.score}%</div>
+                </div>
+              );
+            })}
           </div>
 
           <button

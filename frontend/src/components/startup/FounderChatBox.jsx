@@ -11,7 +11,9 @@ import {
   ShieldAlert, 
   ArrowUp,
   MessageSquare,
-  HelpCircle
+  HelpCircle,
+  Key,
+  Check
 } from 'lucide-react';
 import { chatWithGhost } from '../../lib/api';
 import { GhostIcon } from '../common/GhostIcon';
@@ -21,9 +23,12 @@ export function FounderChatBox({ startup, isOpen, onClose }) {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [geminiApiKey] = useState(() => {
+  const [geminiApiKey, setGeminiApiKey] = useState(() => {
     return typeof window !== 'undefined' ? (localStorage.getItem('gemini_api_key') || localStorage.getItem('pivotvault_gemini_api_key') || '') : '';
   });
+  const [showKeyInput, setShowKeyInput] = useState(false);
+  const [keyInput, setKeyInput] = useState(geminiApiKey);
+  const [keySavedMessage, setKeySavedMessage] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -199,6 +204,18 @@ export function FounderChatBox({ startup, isOpen, onClose }) {
 
         <div className="flex items-center gap-1 text-[#737373] dark:text-[#A3A3A3]">
           <button 
+            onClick={() => setShowKeyInput(prev => !prev)}
+            className={`p-1.5 rounded hover:bg-[#EAEAEA] dark:hover:bg-[#222222] transition-colors relative cursor-pointer ${
+              geminiApiKey ? 'text-emerald-600 dark:text-emerald-400' : 'hover:text-black dark:hover:text-white'
+            }`}
+            title={geminiApiKey ? "Gemini Key Connected (click to change)" : "Connect Gemini API Key (optional)"}
+          >
+            <Key className="w-3.5 h-3.5" />
+            {geminiApiKey && (
+              <span className="absolute top-1 right-1 w-1.5 h-1.5 rounded-full bg-emerald-500" />
+            )}
+          </button>
+          <button 
             onClick={resetChat}
             className="p-1.5 rounded hover:bg-[#EAEAEA] dark:hover:bg-[#222222] hover:text-black dark:hover:text-white cursor-pointer"
             title="Reset conversation"
@@ -221,6 +238,39 @@ export function FounderChatBox({ startup, isOpen, onClose }) {
           </button>
         </div>
       </div>
+
+      {/* Optional Inline Gemini Key Config */}
+      {showKeyInput && (
+        <div className="px-3 py-2 bg-[#F0F0F0] dark:bg-[#161616] border-b border-[#E5E5E5] dark:border-[#2A2A2A] flex items-center gap-2 animate-in fade-in duration-150">
+          <Key className="w-3.5 h-3.5 text-[#737373] shrink-0" />
+          <input 
+            type="password"
+            placeholder="Paste Google Gemini API Key..."
+            value={keyInput}
+            onChange={(e) => setKeyInput(e.target.value)}
+            className="flex-1 px-2 py-1 text-[11px] font-mono rounded border border-[#D4D4D4] dark:border-[#333] bg-white dark:bg-black text-black dark:text-white placeholder-[#8E8E8E] focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white"
+          />
+          <button
+            onClick={() => {
+              const cleaned = keyInput.trim();
+              setGeminiApiKey(cleaned);
+              if (typeof window !== 'undefined') {
+                localStorage.setItem('gemini_api_key', cleaned);
+                localStorage.setItem('pivotvault_gemini_api_key', cleaned);
+              }
+              setKeySavedMessage(true);
+              setTimeout(() => {
+                setKeySavedMessage(false);
+                setShowKeyInput(false);
+              }, 1000);
+            }}
+            className="px-2.5 py-1 text-[10px] font-mono font-bold bg-black text-white dark:bg-white dark:text-black rounded hover:opacity-90 flex items-center gap-1 cursor-pointer shrink-0"
+          >
+            {keySavedMessage ? <Check className="w-3 h-3 text-emerald-400" /> : null}
+            <span>{keySavedMessage ? 'Saved' : 'Save'}</span>
+          </button>
+        </div>
+      )}
 
       {/* Messages Scroll Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 text-xs leading-relaxed">

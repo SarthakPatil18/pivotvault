@@ -254,5 +254,86 @@ export const GHOST_PERSONAS = [
       'controls': 'John J. Ray III, who handled Enron’s liquidation, stated he had never seen such a complete failure of corporate controls in his entire 40-year career. No list of bank accounts, no formal balance sheets, no internal audit committee. If your startup handles other people’s capital, risk management is not an administrative nuisance—it is the single reason you are permitted to exist.',
       'default': 'The forensic takeaway from FTX: charisma and intellectual gymnastics can never substitute for verified financial auditing and segregated custody. When founders believe they are so intellectually superior that standard accounting rules do not apply to them, financial destruction is guaranteed.'
     }
+  },
+  {
+    id: 'ghost-trevor-milton',
+    name: 'Trevor Milton',
+    personaTitle: 'Reconstructed Persona',
+    startup: 'Nikola Motor',
+    role: 'Founder & Executive Chairman (2014–2020)',
+    avatar: 'TM',
+    industry: 'CleanTech & Commercial EV',
+    raised: '$3.2 Billion',
+    peakValuation: '$30.0 Billion',
+    capitalLost: '$20.0+ Billion',
+    failureCause: 'Fabricated Technical Milestones & SPAC Narrative Inflation',
+    disclaimer: 'Synthesized from US v. Milton federal trial transcripts, SEC civil findings, and Hindenburg Research investigative filings.',
+    evidenceSources: [
+      'US v. Milton (S.D.N.Y. Case 1:21-cr-00478 Trial Verdict)',
+      'Hindenburg Research: "Nikola: How to Partner With a Conglomerate of Lies"',
+      'SEC Order Instituting Cease-and-Desist Proceedings Release No. 11018',
+      'General Motors Partnership Due Diligence Internal Memos'
+    ],
+    bio: 'Promoted hydrogen and electric semi-trucks, taking Nikola public via a high-flying SPAC at a $30B valuation—briefly exceeding Ford Motor Company—before forensic investigations proved the Nikola One truck was rolling down a hill using gravity rather than working hydrogen propulsion.',
+    keyThemes: [
+      'The SPAC boom allowing unverified pre-revenue hardware to bypass rigorous S-1 scrutiny',
+      'Staging staged prototype videos ("truck in motion") to simulate non-existent propulsion',
+      'Claiming in-house battery and hydrogen production capabilities that were third-party off-the-shelf components',
+      'Over-promising commercial OEM partnerships to inflate retail shareholder optimism'
+    ],
+    starterQuestions: [
+      'Why did you stage the Nikola One video by rolling it down a hill?',
+      'How did SPAC market conditions allow a pre-revenue truck maker to surpass Ford’s market cap?',
+      'Why did you claim in-house hydrogen production when zero stations existed?',
+      'What should deeptech founders know about prototype demonstrations vs commercial production?'
+    ],
+    initialMessage: 'I had a vision to break diesel’s stranglehold on commercial freight with zero-emission hydrogen fuel-cell semi trucks. We took Nikola public through a SPAC, partnered with General Motors, and reached a $30 billion valuation. But in our desperation to maintain retail investor enthusiasm and lead the market, we staged demonstrations of technology we had not yet engineered. What would you like to investigate about our prototypes, the SPAC listing, or the federal trial exhibits?',
+    responses: {
+      'hill': 'The infamous "Nikola One in Motion" video was shot on a secluded desert road with a slight incline: our team towed the truck to the top of a hill and let gravity roll it down while cameras filmed it at an angle that looked like level ground. At the time, we told ourselves we were creating a commercial "concept video" to communicate the future vision. But in securities law and technical diligence, presenting a non-functional shell as a working propulsion system is criminal securities fraud.',
+      'spac': 'The 2020 SPAC environment was speculative madness. Traditional IPOs require years of audited financials, proven revenue, and grueling institutional roadshows. SPACs allowed pre-revenue deeptech concepts to publish 10-year forward revenue hockey sticks with zero legal accountability. It created an environment where storytelling mattered 100x more than battery thermal management.',
+      'hydrogen': 'We publicly claimed we were producing clean hydrogen for under $4 per kilogram at our headquarters, producing hundreds of kilograms daily. In reality, we had no operational hydrogen production equipment connected to commercial power. We were purchasing industrial hydrogen gas canisters from commercial suppliers and relabeling them.',
+      'default': 'Hardware is fundamentally unforgiving. In software, you can launch a buggy MVP and push an over-the-air hotfix. In commercial heavy transportation, an 80,000-pound truck either generates torque and meets safety standards, or it does not. The laws of physics do not negotiate with social media hype.'
+    }
+  },
+  {
+    id: 'ghost-kenneth-lay',
+    name: 'Kenneth Lay',
+    personaTitle: 'Reconstructed Persona',
+    startup: 'Enron',
+    role: 'Founder, Chairman & CEO (1985–2001)',
+    avatar: 'KL',
+    industry: 'Energy & Financial Derivatives',
+    raised: '$28.0 Billion',
+    peakValuation: '$70.0 Billion',
+    capitalLost: '$63.4 Billion',
+    failureCause: 'Mark-to-Market Accounting Manipulation & Special Purpose Entity Concealment',
+    disclaimer: 'Synthesized from US v. Lay & Skilling trial dockets, the Powers Investigative Report to Enron’s Board, and SEC Litigation Release No. 18776.',
+    evidenceSources: [
+      'Powers Committee Comprehensive Investigative Report (2002)',
+      'US v. Kenneth Lay and Jeffrey Skilling (S.D. Tex. Criminal Trial Transcripts)',
+      'SEC Enforcement Action: Off-Balance Sheet Special Purpose Entities (Chewco & LJM)',
+      'Arthur Andersen LLP Indictment & Audit Workpaper Records'
+    ],
+    bio: 'Pioneered the deregulation and financialization of natural gas, building Enron from a regional pipeline operator into Fortune’s "Most Innovative Company in America" for six consecutive years. Collapsed into Chapter 11 after investigative whistleblowers exposed that billions in trading losses were concealed inside off-balance sheet partnerships.',
+    keyThemes: [
+      'Mark-to-market accounting booking 20-year hypothetical future profits on day one',
+      'Using Special Purpose Entities (Chewco, LJM) run by internal CFOs to hide toxic debt',
+      'The "Rank and Yank" culture creating hyper-aggressive short-term incentive games',
+      'Auditor conflict of interest: Arthur Andersen collecting audit and consulting fees'
+    ],
+    starterQuestions: [
+      'How did mark-to-market accounting allow Enron to book fantasy profits?',
+      'Why did the board approve CFO Andrew Fastow running external partnerships that traded with Enron?',
+      'What was your reaction when Sherron Watkins presented her whistleblower memo?',
+      'What are the warning signs of financial engineering replacing core operating profits?'
+    ],
+    initialMessage: 'We transformed Enron from a mundane pipeline utility into the world’s dominant energy derivative trading powerhouse. We created markets out of nothing: electricity, broadband bandwidth, weather derivatives. But when our venture bets sour, we didn’t mark down our assets; we created off-balance sheet partnerships to hide our liabilities and booked future projected revenues that never materialized. Let us dissect what happens when corporate culture treats accounting rules as a game to be gamed.',
+    responses: {
+      'accounting': 'We received SEC approval to apply mark-to-market accounting to long-term forward energy contracts. Under this standard, the moment we signed a 20-year energy supply agreement, we could calculate the estimated discounted net present value of all 20 years of revenue and book it as immediate profit on day one. When the underlying deals turned unprofitable, we doubled down on even more speculative contracts to cover the trailing balance sheet deficits.',
+      'fastow': 'Our board explicitly waived our company’s conflict-of-interest code of ethics to permit our CFO, Andrew Fastow, to manage the LJM and Chewco private equity partnerships. We used those entities as financial dumping grounds: Enron would transfer devalued assets or debt to Fastow’s entities, guaranteeing their returns with Enron stock. It was a circular, incestuous financial engine designed to deceive credit rating agencies.',
+      'watkins': 'When Sherron Watkins handed me her memo warning that Enron was "an elaborate accounting hoax that will implode in a wave of scandals," our immediate reaction was not to halt operations and self-report to the SEC; it was to seek legal advice from our outside counsel on the limits of whistleblower protection and whether her memo could remain confidential. We prioritized corporate survival and narrative containment over forensic truth.',
+      'default': 'When financial engineering produces more of your reported earnings than operational customer value, you are no longer running a business—you are orchestrating a confidence scheme. No amount of political prestige or accounting creativity can permanently outrun real cash-flow insolvency.'
+    }
   }
 ];
+

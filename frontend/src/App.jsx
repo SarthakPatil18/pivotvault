@@ -3,6 +3,7 @@ import { BrowserRouter, Routes, Route, Navigate, Outlet } from 'react-router-dom
 import { ThemeProvider } from './context/ThemeContext';
 import { Navbar } from './components/layout/Navbar';
 import { Footer } from './components/layout/Footer';
+import { ScrollToTop } from './components/common/ScrollToTop';
 
 // Pages
 import { LandingPage } from './pages/LandingPage';
@@ -14,7 +15,6 @@ import { FounderPlaybook } from './pages/FounderPlaybook';
 import { PitchDeckAutopsy } from './pages/PitchDeckAutopsy';
 import { CompetitorCompare } from './pages/CompetitorCompare';
 import { Insights } from './pages/Insights';
-import { StartupGraph } from './pages/StartupGraph';
 import { FounderConfessions } from './pages/FounderConfessions';
 import { HallOfGhosts } from './pages/HallOfGhosts';
 import { AIAssistant } from './pages/AIAssistant';
@@ -45,6 +45,7 @@ export function App() {
   return (
     <ThemeProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <Routes>
           {/* Public Landing Page Entry */}
           <Route path="/" element={<LandingPage />} />
@@ -66,7 +67,7 @@ export function App() {
             <Route path="/competitor-compare" element={<CompetitorCompare />} />
             <Route path="/founder-playbook" element={<FounderPlaybook />} />
             <Route path="/insights" element={<Insights />} />
-            <Route path="/startup-graph" element={<StartupGraph />} />
+            <Route path="/startup-graph" element={<Navigate to="/insights" replace />} />
             <Route path="/founder-confessions" element={<FounderConfessions />} />
             <Route path="/hall-of-confessions" element={<Navigate to="/founder-confessions" replace />} />
             <Route path="/hall-of-ghosts" element={<HallOfGhosts />} />

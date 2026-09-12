@@ -32,8 +32,7 @@ export const NAV_CATEGORIES = [
     name: 'Insights',
     href: '/insights',
     items: [
-      { name: 'Insights Dashboard', href: '/insights', description: 'Macro analytics, failure causes, and capital loss patterns.' },
-      { name: 'Knowledge Graph', href: '/startup-graph', description: 'Interactive network mapping founders, investors, and causes.' }
+      { name: 'Insights Dashboard', href: '/insights', description: 'Macro analytics, failure causes, and capital loss patterns.' }
     ]
   },
   {
@@ -58,7 +57,6 @@ export const ALL_ROUTES = [
   { path: '/pitch-deck-autopsy', name: 'Pitch Deck Autopsy' },
   { path: '/competitor-compare', name: 'Competitor Compare' },
   { path: '/insights', name: 'Insights Dashboard' },
-  { path: '/startup-graph', name: 'Knowledge Graph' },
   { path: '/founder-confessions', name: 'Founder Confessions' },
   { path: '/hall-of-ghosts', name: 'Hall of Ghosts' },
 ];

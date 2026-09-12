@@ -141,14 +141,6 @@ export function Footer() {
                   Macro Insights
                 </Link>
               </li>
-              <li>
-                <Link
-                  to="/startup-graph"
-                  className="text-[13px] text-[#737373] dark:text-[#A3A3A3] hover:text-black dark:hover:text-white transition-colors"
-                >
-                  Knowledge Graph
-                </Link>
-              </li>
             </ul>
           </div>
 

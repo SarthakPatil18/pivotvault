@@ -1,371 +1,223 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState } from 'react';
 import { PageHeader } from '../components/layout/PageHeader';
-import { FOUNDER_CONFESSIONS } from '../lib/data/confessionsData';
-import { 
-  Send, 
-  RotateCcw, 
-  MessageSquare, 
-  CheckCircle2, 
-  Sparkles, 
-  Heart, 
-  ShieldAlert,
-  Flame,
-  ArrowRight,
-  TrendingDown,
-  User,
-  Bot,
-  ExternalLink
-} from 'lucide-react';
-import { CompanyLogo } from '../components/common/CompanyLogo';
-import { getFounderWikipediaUrl } from '../lib/wikipedia';
+import { SOCIAL_CONFESSIONS } from '../lib/data/socialConfessionsData';
+import { Heart, CheckCircle2, MessageSquare, ExternalLink, Share2, Sparkles, Filter } from 'lucide-react';
+
+/**
+ * Custom SVG Icons for X (Twitter) and Reddit
+ */
+function XLogo({ className = "w-4 h-4" }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={`fill-current ${className}`}>
+      <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
+    </svg>
+  );
+}
+
+function RedditLogo({ className = "w-4 h-4 text-[#FF4500]" }) {
+  return (
+    <svg viewBox="0 0 24 24" aria-hidden="true" className={`fill-current ${className}`}>
+      <path d="M12 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0zm5.01 4.744c.688 0 1.25.561 1.25 1.249a1.25 1.25 0 0 1-2.498.056l-2.597-.547-.8 3.747c1.824.07 3.48.632 4.674 1.488.308-.309.73-.491 1.207-.491.968 0 1.754.786 1.754 1.754 0 .716-.435 1.333-1.01 1.614a3.111 3.111 0 0 1 .042.52c0 2.694-3.13 4.87-7.004 4.87-3.874 0-7.004-2.176-7.004-4.87 0-.183.015-.366.043-.534A1.748 1.748 0 0 1 4.028 12c0-.968.786-1.754 1.754-1.754.463 0 .898.196 1.207.49 1.207-.883 2.878-1.43 4.744-1.487l.885-4.182a.342.342 0 0 1 .14-.197.35.35 0 0 1 .238-.042l2.906.617a1.214 1.214 0 0 1 1.108-.703zM9.25 12C8.561 12 8 12.562 8 13.25c0 .687.561 1.248 1.25 1.248.687 0 1.248-.561 1.248-1.249 0-.688-.561-1.249-1.249-1.249zm5.5 0c-.687 0-1.248.561-1.248 1.25 0 .687.561 1.248 1.249 1.248.688 0 1.249-.561 1.249-1.249 0-.687-.562-1.249-1.25-1.249zm-5.466 3.99a.327.327 0 0 0-.231.095.327.327 0 0 0 0 .463c.842.842 2.484.913 2.961.913.477 0 2.105-.056 2.961-.913a.361.361 0 0 0 .029-.463.33.33 0 0 0-.464 0c-.547.533-1.684.73-2.512.73-.828 0-1.979-.196-2.512-.73a.326.326 0 0 0-.232-.095z" />
+    </svg>
+  );
+}
 
 export function FounderConfessions() {
-  const [selectedFounderId, setSelectedFounderId] = useState('all');
-  const [messages, setMessages] = useState([]);
-  const [input, setInput] = useState('');
-  const [isTyping, setIsTyping] = useState(false);
-  const messagesEndRef = useRef(null);
+  const [activeTab, setActiveTab] = useState('All');
+  const [likedPosts, setLikedPosts] = useState({});
 
-  // Get current active founder (if not 'all')
-  const currentFounder = selectedFounderId === 'all' 
-    ? null 
-    : FOUNDER_CONFESSIONS.find((c) => c.id === selectedFounderId) || FOUNDER_CONFESSIONS[0];
+  const categories = [
+    'All',
+    '𝕏 Convos',
+    'Reddit Post-Mortems',
+    'Post-Mortems',
+    'Cofounder & Burnout'
+  ];
 
-  // Initialize or reset chat on founder change
-  useEffect(() => {
-    if (selectedFounderId === 'all') {
-      setMessages([
-        {
-          id: 1,
-          sender: 'bot',
-          speaker: 'Confession Vault Bot',
-          avatar: 'CV',
-          text: 'Welcome to the Hall of Confessions. Behind every failed startup chart is a human founder who faced sleepless nights, panic attacks, team layoffs, or the heartbreak of shutting down a dream. Select a founder above, or ask any question below about startup failures.',
-          keyLesson: 'Startup autopsies become transformative only when we examine the human decisions and vulnerabilities behind them.',
-          suggestions: [
-            'What did it feel like laying off 75% of your team?',
-            'Why did Pebble lose against the Apple Watch?',
-            'How did 99dresses unit economics break?',
-            'Why did Justin Kan\'s $75M legal startup crash?',
-            'Tell me an unfiltered story about founder burnout'
-          ],
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }
-      ]);
-    } else if (currentFounder) {
-      setMessages([
-        {
-          id: 1,
-          sender: 'founder',
-          speaker: `${currentFounder.founder} (${currentFounder.startup})`,
-          avatar: currentFounder.avatar,
-          startup: currentFounder.startup,
-          failureTag: currentFounder.failureTag,
-          capitalRaised: currentFounder.capitalRaised,
-          text: `"${currentFounder.title}"\n\n${currentFounder.openingPrompt}`,
-          summary: currentFounder.summary,
-          keyLesson: currentFounder.keyLessons[0],
-          suggestions: currentFounder.starterQuestions || [],
-          timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-        }
-      ]);
-    }
-  }, [selectedFounderId]);
-
-  // Auto-scroll to bottom of chat
-  useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
-  }, [messages, isTyping]);
-
-  const handleReset = () => {
-    if (selectedFounderId === 'all') {
-      setSelectedFounderId('confession-1');
-      setTimeout(() => setSelectedFounderId('all'), 10);
-    } else {
-      const cur = selectedFounderId;
-      setSelectedFounderId('all');
-      setTimeout(() => setSelectedFounderId(cur), 10);
-    }
+  const handleLike = (id) => {
+    setLikedPosts(prev => ({
+      ...prev,
+      [id]: !prev[id]
+    }));
   };
 
-  const handleSendMessage = (textToSend) => {
-    const query = (textToSend || input).trim();
-    if (!query) return;
-
-    const userMsg = {
-      id: Date.now(),
-      sender: 'user',
-      text: query,
-      timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-    };
-
-    setMessages((prev) => [...prev, userMsg]);
-    if (!textToSend) setInput('');
-    setIsTyping(true);
-
-    const qLower = query.toLowerCase();
-
-    // Determine respondent
-    setTimeout(() => {
-      let targetFounder = currentFounder;
-
-      // If in 'all' mode, find the founder best matching the question
-      if (!targetFounder) {
-        if (qLower.includes('gumroad') || qLower.includes('sahil') || qLower.includes('layoff') || qLower.includes('vc') || qLower.includes('series b')) {
-          targetFounder = FOUNDER_CONFESSIONS.find((c) => c.id === 'confession-1');
-        } else if (qLower.includes('pebble') || qLower.includes('hardware') || qLower.includes('watch') || qLower.includes('inventory') || qLower.includes('migicovsky')) {
-          targetFounder = FOUNDER_CONFESSIONS.find((c) => c.id === 'confession-2');
-        } else if (qLower.includes('99dresses') || qLower.includes('nikki') || qLower.includes('fashion') || qLower.includes('shipping') || qLower.includes('buttons')) {
-          targetFounder = FOUNDER_CONFESSIONS.find((c) => c.id === 'confession-3');
-        } else if (qLower.includes('atrium') || qLower.includes('justin') || qLower.includes('legal') || qLower.includes('lawyer') || qLower.includes('75m')) {
-          targetFounder = FOUNDER_CONFESSIONS.find((c) => c.id === 'confession-4');
-        } else if (qLower.includes('scalefactor') || qLower.includes('fake') || qLower.includes('accounting') || qLower.includes('austin')) {
-          targetFounder = FOUNDER_CONFESSIONS.find((c) => c.id === 'confession-5');
-        } else if (qLower.includes('burnout') || qLower.includes('panic') || qLower.includes('mental') || qLower.includes('hospital')) {
-          targetFounder = FOUNDER_CONFESSIONS.find((c) => c.id === 'confession-6');
-        } else {
-          // Default to first founder or matching random
-          targetFounder = FOUNDER_CONFESSIONS[0];
-        }
-      }
-
-      // Find best answer matching query
-      let answerText = targetFounder.answers?.default || targetFounder.summary;
-      let lesson = targetFounder.keyLessons?.[0] || 'Survival requires facing hard economic truths early.';
-
-      const ansKeys = Object.keys(targetFounder.answers || {});
-      for (const key of ansKeys) {
-        if (key === 'default') continue;
-        if (qLower.includes(key) || key.split('-').some((k) => qLower.includes(k))) {
-          answerText = targetFounder.answers[key];
-          break;
-        }
-      }
-
-      // Additional semantic checks
-      if (qLower.includes('layoff') && targetFounder.answers?.layoff) {
-        answerText = targetFounder.answers.layoff;
-        lesson = targetFounder.keyLessons[1] || targetFounder.keyLessons[0];
-      } else if ((qLower.includes('apple') || qLower.includes('watch')) && targetFounder.answers?.apple) {
-        answerText = targetFounder.answers.apple;
-      } else if (qLower.includes('inventory') && targetFounder.answers?.inventory) {
-        answerText = targetFounder.answers.inventory;
-      } else if ((qLower.includes('unit') || qLower.includes('economic')) && targetFounder.answers?.economics) {
-        answerText = targetFounder.answers.economics;
-      } else if (qLower.includes('burnout') && targetFounder.answers?.burnout) {
-        answerText = targetFounder.answers.burnout;
-        lesson = targetFounder.keyLessons[1];
-      } else if (qLower.includes('fake') && targetFounder.answers?.['fake-ai']) {
-        answerText = targetFounder.answers['fake-ai'];
-      }
-
-      const botReply = {
-        id: Date.now() + 1,
-        sender: 'founder',
-        speaker: `${targetFounder.founder} (${targetFounder.startup})`,
-        avatar: targetFounder.avatar,
-        startup: targetFounder.startup,
-        failureTag: targetFounder.failureTag,
-        text: answerText,
-        keyLesson: lesson,
-        suggestions: targetFounder.starterQuestions?.slice(0, 3) || [],
-        timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })
-      };
-
-      setMessages((prev) => [...prev, botReply]);
-      setIsTyping(false);
-    }, 450);
-  };
+  const filteredPosts = SOCIAL_CONFESSIONS.filter(post => {
+    if (activeTab === 'All') return true;
+    if (activeTab === '𝕏 Convos') return post.platform === 'x';
+    if (activeTab === 'Reddit Post-Mortems') return post.platform === 'reddit';
+    return post.category === activeTab;
+  });
 
   return (
-    <div className="pb-20 bg-white dark:bg-black text-black dark:text-white min-h-screen">
-      <PageHeader
-        title="Hall of Confessions"
-        subtitle="Simple, unfiltered retrospective chatbot. Ask real founders about the hardest moments, mistakes, and painful truths behind their startup collapses."
-        badge="Confession Chatbot"
-        tagline="FOUNDER RETROSPECTIVES"
-        breadcrumbs={[{ label: 'Stories' }, { label: 'Hall of Confessions' }]}
-      />
+    <div className="pb-24 bg-[#FAFAFA] dark:bg-black text-black dark:text-white min-h-screen">
+      {/* Top Banner Header */}
+      <div className="pt-12 pb-8 border-b border-[#EBEBEB] dark:border-[#1F1F1F] bg-white dark:bg-[#0A0A0A]">
+        <div className="vault-container text-center max-w-3xl space-y-3">
+          <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#F2F2F2] dark:bg-[#1A1A1A] border border-[#E0E0E0] dark:border-[#2A2A2A] text-[11px] font-mono font-bold tracking-wider uppercase text-[#525252] dark:text-[#A3A3A3]">
+            <Sparkles className="w-3.5 h-3.5 text-black dark:text-white" />
+            <span>Real Conversations & Raw Post-Mortems</span>
+          </div>
 
-      <div className="site-container max-w-4xl">
-        {/* Simple Chatbot Screen Container */}
-        <div className="rounded-[8px] border border-[#E5E5E5] dark:border-[#2A2A2A] bg-white dark:bg-black shadow-sm overflow-hidden flex flex-col h-[700px]">
-          {/* Top Bar: Founder Selector Pills & Controls */}
-          <div className="p-3.5 sm:p-4 border-b border-[#E5E5E5] dark:border-[#2A2A2A] bg-white dark:bg-[#0A0A0A] flex flex-col gap-2.5">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center gap-2">
-                <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="font-mono text-xs font-bold uppercase tracking-wider text-black dark:text-white flex items-center gap-1.5">
-                  {selectedFounderId === 'all' ? (
-                    'All Confessions Vault'
-                  ) : (
-                    <>
-                      <span>Confessing:</span>
-                      {getFounderWikipediaUrl(currentFounder?.founder) ? (
-                        <a
-                          href={getFounderWikipediaUrl(currentFounder?.founder)}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="hover:underline inline-flex items-center gap-1 text-black dark:text-white cursor-pointer group"
-                          title={`View ${currentFounder?.founder}'s Wikipedia biography`}
-                        >
-                          <span>{currentFounder?.founder}</span>
-                          <ExternalLink className="w-3 h-3 text-[#737373] group-hover:text-black dark:group-hover:text-white" />
-                        </a>
-                      ) : (
-                        <span>{currentFounder?.founder}</span>
-                      )}
-                    </>
-                  )}
-                </span>
-                <span className="text-[#D4D4D4] dark:text-[#404040] hidden sm:inline">•</span>
-                <span className="text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3] hidden sm:inline">
-                  {selectedFounderId === 'all' ? '6 Retrospectives Ready' : `${currentFounder?.startup} • ${currentFounder?.failureTag}`}
-                </span>
-              </div>
+          <h1 className="text-4xl sm:text-5xl font-black tracking-tight text-black dark:text-white">
+            Trusted By +40K Founders
+          </h1>
 
-              <button
-                onClick={handleReset}
-                title="Restart Chat"
-                className="p-1.5 rounded-[6px] border border-[#E5E5E5] dark:border-[#2A2A2A] hover:bg-[#F5F5F5] dark:hover:bg-[#1A1A1A] text-[#737373] dark:text-[#A3A3A3] hover:text-black dark:hover:text-white transition-colors cursor-pointer"
-              >
-                <RotateCcw className="w-3.5 h-3.5" />
-              </button>
-            </div>
+          <p className="text-sm sm:text-base text-[#666666] dark:text-[#A3A3A3] leading-relaxed">
+            Real founder admissions, failure autopsies, and unfiltered unit economics breakdowns sourced directly from 𝕏 (Twitter) and Reddit.
+          </p>
 
-            {/* Horizontal Founder Switcher Scroll */}
-            <div className="flex items-center gap-1.5 overflow-x-auto pb-1 no-scrollbar">
-              <button
-                onClick={() => setSelectedFounderId('all')}
-                className={`px-3 py-1 rounded-[4px] text-[11px] font-mono transition-colors shrink-0 cursor-pointer ${
-                  selectedFounderId === 'all'
-                    ? 'bg-black text-white dark:bg-white dark:text-black font-bold'
-                    : 'bg-[#F5F5F5] dark:bg-[#141414] text-[#737373] dark:text-[#A3A3A3] hover:text-black dark:hover:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]'
-                }`}
-              >
-                ⚡ All Confessions
-              </button>
-
-              {FOUNDER_CONFESSIONS.map((c) => (
+          {/* Filter Bar */}
+          <div className="pt-4 flex flex-wrap items-center justify-center gap-2">
+            {categories.map((cat) => {
+              const isActive = activeTab === cat;
+              return (
                 <button
-                  key={c.id}
-                  onClick={() => setSelectedFounderId(c.id)}
-                  className={`px-3 py-1 rounded-[4px] text-[11px] font-mono transition-colors shrink-0 flex items-center gap-1.5 cursor-pointer ${
-                    selectedFounderId === c.id
-                      ? 'bg-black text-white dark:bg-white dark:text-black font-bold'
-                      : 'bg-[#F5F5F5] dark:bg-[#141414] text-[#737373] dark:text-[#A3A3A3] hover:text-black dark:hover:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]'
+                  key={cat}
+                  onClick={() => setActiveTab(cat)}
+                  className={`px-3.5 py-1.5 rounded-full text-xs font-semibold transition-all cursor-pointer ${
+                    isActive
+                      ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm font-bold'
+                      : 'bg-white dark:bg-[#141414] text-[#666666] dark:text-[#999999] border border-[#E5E5E5] dark:border-[#262626] hover:border-black dark:hover:border-white'
                   }`}
                 >
-                  <span>{c.avatar}</span>
-                  <span>{c.founder.split(' ')[0]} ({c.startup.split(' ')[0]})</span>
+                  {cat}
                 </button>
-              ))}
-            </div>
+              );
+            })}
           </div>
+        </div>
+      </div>
 
-          {/* Chat Messages Stream */}
-          <div className="flex-1 overflow-y-auto p-4 sm:p-6 space-y-4 bg-[#FAFAFA] dark:bg-[#0A0A0A]">
-            {messages.map((msg) => (
+      {/* Masonry / Grid of Cards */}
+      <div className="vault-container pt-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 items-start">
+          {filteredPosts.map((post) => {
+            const isLiked = likedPosts[post.id];
+            const currentLikes = post.likes + (isLiked ? 1 : 0);
+
+            return (
               <div
-                key={msg.id}
-                className={`flex flex-col ${msg.sender === 'user' ? 'items-end' : 'items-start'}`}
+                key={post.id}
+                className="rounded-[16px] border border-[#E5E5E5] dark:border-[#262626] bg-white dark:bg-[#0C0C0C] p-5 sm:p-6 shadow-sm hover:shadow-md transition-all flex flex-col justify-between"
               >
-                {/* Speaker Tag */}
-                <div className="flex items-center gap-1.5 mb-1 px-1 text-[10px] font-mono text-[#737373] dark:text-[#A3A3A3]">
-                  <span className="font-semibold">
-                    {msg.sender === 'user' ? 'You' : msg.speaker}
-                  </span>
-                  <span>•</span>
-                  <span>{msg.timestamp}</span>
-                </div>
-
-                {/* Message Bubble */}
-                <div
-                  className={`max-w-[92%] sm:max-w-[85%] p-4 rounded-[8px] text-[13px] leading-relaxed shadow-xs ${
-                    msg.sender === 'user'
-                      ? 'bg-black text-white dark:bg-white dark:text-black font-medium'
-                      : 'bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] text-black dark:text-white space-y-3'
-                  }`}
-                >
-                  {msg.sender === 'founder' || msg.sender === 'bot' ? (
-                    <>
-                      <p className="whitespace-pre-line text-black dark:text-[#E5E5E5]">
-                        {msg.text}
-                      </p>
-
-                      {/* Raw Takeaway Lesson Box */}
-                      {msg.keyLesson && (
-                        <div className="p-3 rounded-[6px] bg-[#FAFAFA] dark:bg-[#111111] border-l-2 border-black dark:border-white text-[12px]">
-                          <span className="font-mono font-bold uppercase tracking-wider text-[10px] text-black dark:text-white block mb-0.5">
-                            Raw Forensic Lesson:
+                <div>
+                  {/* Card Header: Avatar, Name, Handle, Social Icon */}
+                  <div className="flex items-start justify-between gap-3 mb-3.5">
+                    <div className="flex items-center gap-3 min-w-0">
+                      <img
+                        src={post.avatar}
+                        alt={post.author}
+                        className="w-10 h-10 rounded-full object-cover shrink-0 border border-[#E5E5E5] dark:border-[#333]"
+                        onError={(e) => {
+                          e.target.onerror = null;
+                          e.target.src = 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&auto=format&fit=crop&q=80';
+                        }}
+                      />
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1.5">
+                          <span className="font-bold text-[14px] text-black dark:text-white truncate">
+                            {post.author}
                           </span>
-                          <span className="text-[#525252] dark:text-[#CCCCCC]">
-                            {msg.keyLesson}
-                          </span>
+                          {post.verified && (
+                            <svg className="w-3.5 h-3.5 text-[#1D9BF0] fill-current shrink-0" viewBox="0 0 24 24">
+                              <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41L9 16.17z" />
+                            </svg>
+                          )}
+                          {post.subreddit && (
+                            <span className="text-[10px] font-mono px-1.5 py-0.5 rounded bg-[#FFF0E8] dark:bg-[#2A1710] text-[#FF4500] font-bold shrink-0">
+                              {post.subreddit}
+                            </span>
+                          )}
                         </div>
-                      )}
+                        <span className="text-xs text-[#737373] dark:text-[#8E8E8E] truncate block font-mono">
+                          {post.handle}
+                        </span>
+                      </div>
+                    </div>
 
-                      {/* Follow-up Prompt Pills */}
-                      {msg.suggestions && msg.suggestions.length > 0 && (
-                        <div className="pt-2 border-t border-[#F0F0F0] dark:border-[#1C1C1C] space-y-1.5">
-                          <span className="text-[10px] font-mono uppercase text-[#737373] dark:text-[#A3A3A3] font-semibold block">
-                            Ask a follow-up:
-                          </span>
-                          <div className="flex flex-wrap gap-1.5">
-                            {msg.suggestions.map((prompt, idx) => (
-                              <button
-                                key={idx}
-                                onClick={() => handleSendMessage(prompt)}
-                                className="text-left px-2.5 py-1 text-[11px] rounded-[4px] bg-[#F5F5F5] dark:bg-[#141414] hover:bg-black hover:text-white dark:hover:bg-white dark:hover:text-black border border-[#E5E5E5] dark:border-[#2A2A2A] text-black dark:text-white transition-colors cursor-pointer"
-                              >
-                                {prompt}
-                              </button>
-                            ))}
-                          </div>
-                        </div>
+                    <div className="shrink-0 p-1 text-black dark:text-white">
+                      {post.platform === 'x' ? (
+                        <XLogo className="w-4 h-4" />
+                      ) : (
+                        <RedditLogo className="w-4 h-4" />
                       )}
-                    </>
-                  ) : (
-                    msg.text
+                    </div>
+                  </div>
+
+                  {/* Card Body: Text */}
+                  <div className="text-[13px] text-[#262626] dark:text-[#D4D4D4] leading-relaxed whitespace-pre-line mb-4 font-sans">
+                    {post.text}
+                  </div>
+
+                  {/* Rich Preview Blocks if present */}
+                  {post.hasPreview && post.previewType === 'cemetery-dossier' && (
+                    <div className="mb-4 p-3 rounded-[10px] border border-[#E5E5E5] dark:border-[#2A2A2A] bg-[#FAFAFA] dark:bg-[#141414] overflow-hidden">
+                      <div className="flex items-center justify-between text-[11px] font-mono text-[#737373] pb-2 border-b border-[#E5E5E5] dark:border-[#262626]">
+                        <span className="font-bold text-black dark:text-white">PivotVault Forensic Index</span>
+                        <span className="text-emerald-600 dark:text-emerald-400 font-bold">● 413+ Autopsies</span>
+                      </div>
+                      <div className="pt-2 space-y-1.5 text-[11px] font-mono">
+                        <div className="flex justify-between text-[#555] dark:text-[#A3A3A3]">
+                          <span>Median Capital Lost:</span>
+                          <span className="font-bold text-black dark:text-white">$84.2M</span>
+                        </div>
+                        <div className="flex justify-between text-[#555] dark:text-[#A3A3A3]">
+                          <span>#1 Failure Mode:</span>
+                          <span className="font-bold text-black dark:text-white">Negative Contribution Margin</span>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {post.hasPreview && post.previewType === 'pixels-graphic' && (
+                    <div className="mb-4 p-4 rounded-[10px] border border-[#E5E5E5] dark:border-[#2A2A2A] bg-gradient-to-b from-purple-50/50 to-white dark:from-purple-950/20 dark:to-[#121212] text-center">
+                      <div className="w-6 h-6 mx-auto mb-1 text-purple-600 dark:text-purple-400 flex items-center justify-center font-black font-mono">
+                        ❖
+                      </div>
+                      <div className="text-[10px] uppercase tracking-widest text-[#737373] dark:text-[#A3A3A3] font-mono">
+                        BREAKDOWN
+                      </div>
+                      <div className="text-base font-black text-purple-600 dark:text-purple-400 tracking-wider font-mono">
+                        PIXELS
+                      </div>
+                      <div className="text-[11px] text-[#555555] dark:text-[#A3A3A3] mt-0.5">
+                        Pixels Break It Down Edition · Forensic Autopsy
+                      </div>
+                      <div className="mt-3 flex justify-center gap-2 text-purple-500 text-xs">
+                        <span>✦ TIPS</span>
+                        <span>•</span>
+                        <span>⚡ PLAYBOOKS</span>
+                        <span>•</span>
+                        <span>▲ FAILURES</span>
+                      </div>
+                    </div>
                   )}
                 </div>
-              </div>
-            ))}
 
-            {isTyping && (
-              <div className="flex items-center gap-2 text-xs font-mono text-[#737373] dark:text-[#A3A3A3] p-2">
-                <span className="w-2 h-2 rounded-full bg-black dark:bg-white animate-pulse" />
-                <span>Founder is reflecting on public retrospective records...</span>
-              </div>
-            )}
-            <div ref={messagesEndRef} />
-          </div>
+                {/* Card Footer: Likes, Dot, Date */}
+                <div className="pt-3 border-t border-[#F0F0F0] dark:border-[#202020] flex items-center justify-between text-xs text-[#737373] dark:text-[#8E8E8E]">
+                  <div className="flex items-center gap-2">
+                    <button
+                      onClick={() => handleLike(post.id)}
+                      className={`flex items-center gap-1.5 transition-colors cursor-pointer ${
+                        isLiked ? 'text-red-500 font-bold' : 'hover:text-red-500'
+                      }`}
+                      title="Like confession"
+                    >
+                      <Heart className={`w-3.5 h-3.5 ${isLiked ? 'fill-current text-red-500' : ''}`} />
+                      <span className="font-mono text-[11px]">{currentLikes}</span>
+                    </button>
+                    <span>•</span>
+                    <span className="font-mono text-[11px]">{post.date}</span>
+                  </div>
 
-          {/* Sticky Bottom Input Bar */}
-          <form
-            onSubmit={(e) => { e.preventDefault(); handleSendMessage(); }}
-            className="p-3 sm:p-4 border-t border-[#E5E5E5] dark:border-[#2A2A2A] bg-white dark:bg-[#0A0A0A] flex items-center gap-2"
-          >
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder={
-                selectedFounderId === 'all'
-                  ? "Ask about layoffs, burn rate, co-founder friction, or shutting down..."
-                  : `Ask ${currentFounder?.founder.split(' ')[0]} about their startup failure...`
-              }
-              className="flex-1 px-3.5 py-2.5 text-[13px] bg-[#FAFAFA] dark:bg-[#111111] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[6px] text-black dark:text-white placeholder-[#737373] focus:outline-none focus:border-black dark:focus:border-white transition-colors"
-            />
-            <button
-              type="submit"
-              disabled={!input.trim() || isTyping}
-              className="px-4 py-2.5 rounded-[6px] bg-black text-white dark:bg-white dark:text-black text-[12px] font-bold hover:opacity-90 disabled:opacity-40 transition-opacity flex items-center gap-1.5 shrink-0 cursor-pointer"
-            >
-              <Send className="w-3.5 h-3.5" />
-              <span>Send</span>
-            </button>
-          </form>
+                  <span className="text-[10px] font-mono uppercase text-[#A3A3A3]">
+                    Verified Convo
+                  </span>
+                </div>
+              </div>
+            );
+          })}
         </div>
       </div>
     </div>

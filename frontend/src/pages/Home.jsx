@@ -51,7 +51,6 @@ export function Home() {
   const [featuredStartups, setFeaturedStartups] = useState([]);
   const [activeGhost, setActiveGhost] = useState('adam');
   const [activeGhostQuestion, setActiveGhostQuestion] = useState('warning');
-  const [activeGraphNode, setActiveGraphNode] = useState('wework');
   const [activeHeatmapCell, setActiveHeatmapCell] = useState({ vector: 'Unit Economics', industry: 'Hardware' });
   const [demoIdea, setDemoIdea] = useState('On-demand grocery delivery with 10-minute guarantee and subsidized courier fleet');
   const [isScanning, setIsScanning] = useState(false);
@@ -139,58 +138,6 @@ export function Home() {
     { name: 'Timing Mismatch', values: [3, 2, 3, 4, 2, 2, 4], detail: 'Too early for VR/hardware infrastructure' },
     { name: 'Governance Void', values: [1, 5, 5, 2, 2, 4, 1], detail: 'Concentrated in Crypto/Fintech and Biotech clinical claims' },
   ];
-
-  // Knowledge graph nodes for preview
-  const graphEntities = {
-    wework: {
-      name: 'WeWork',
-      type: 'Startup ($12.8B Vaporized)',
-      description: 'Arbitraging long-term commercial leases with short-term subleases disguised as tech platform.',
-      connections: [
-        { name: 'Adam Neumann', role: 'Founder / CEO' },
-        { name: 'SoftBank Vision Fund', role: 'Lead Investor ($10B+)' },
-        { name: 'Real Estate / PropTech', role: 'Core Sector' },
-        { name: 'Unit Economics Collapse', role: 'Fatal Vector' },
-        { name: 'Governance Void', role: 'Contributing Factor' }
-      ]
-    },
-    theranos: {
-      name: 'Theranos',
-      type: 'Startup ($1.4B Vaporized)',
-      description: 'Claimed automated micro-blood testing without peer-reviewed validation or working hardware.',
-      connections: [
-        { name: 'Elizabeth Holmes', role: 'Founder / CEO' },
-        { name: 'Walgreens / Safeway', role: 'Commercial Partners' },
-        { name: 'HealthTech & Biotech', role: 'Sector' },
-        { name: 'Fraud & Regulatory Shutdown', role: 'Fatal Vector' },
-        { name: 'Board Secrecy', role: 'Governance Failure' }
-      ]
-    },
-    fast: {
-      name: 'Fast',
-      type: 'Startup ($125M Vaporized)',
-      description: '1-click checkout platform spending $10M/month to generate $50k in ARR.',
-      connections: [
-        { name: 'Domm Holland', role: 'Founder / CEO' },
-        { name: 'Stripe', role: 'Lead Investor ($102M)' },
-        { name: 'FinTech & E-Commerce', role: 'Sector' },
-        { name: 'Burn Rate Exhaustion', role: 'Fatal Vector' },
-        { name: 'Extreme CAC vs LTV', role: 'Model Trap' }
-      ]
-    },
-    quibi: {
-      name: 'Quibi',
-      type: 'Startup ($1.75B Vaporized)',
-      description: 'Short-form Hollywood streaming mobile app launched against free TikTok & YouTube ecosystems.',
-      connections: [
-        { name: 'Jeffrey Katzenberg', role: 'Founder' },
-        { name: 'Meg Whitman', role: 'CEO' },
-        { name: 'Disney & WarnerMedia', role: 'Media Investors' },
-        { name: 'Lack of Market Need', role: 'Fatal Vector' },
-        { name: 'No Social Sharing Moat', role: 'Product Trap' }
-      ]
-    }
-  };
 
   // Reconstructed Ghost Persona Dialogues
   const ghostProfiles = {
@@ -385,7 +332,7 @@ export function Home() {
             </h1>
 
             <p className="mt-5 max-w-2xl text-[17px] leading-relaxed text-[#737373] dark:text-[#A3A3A3]">
-              PivotVault synthesizes 413+ historical startup autopsies, forensic post-mortems, and knowledge graphs into defensive intelligence for founders and investors.
+              PivotVault synthesizes 413+ historical startup autopsies, forensic post-mortems, and case studies into defensive intelligence for founders and investors.
             </p>
 
             {/* 2px Solid Ink Border Search Bar */}
@@ -557,58 +504,6 @@ export function Home() {
                       <div className="h-full rounded-full bg-purple-500 dark:bg-purple-400" style={{ width: '14%' }} />
                     </div>
                   </div>
-                </div>
-              </div>
-
-              {/* KNOWLEDGE GRAPH CONNECTOR */}
-              <div className="p-3.5 bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px]">
-                <div className="flex items-center justify-between mb-2">
-                  <span className="flex items-center gap-1.5 text-[#737373] dark:text-[#A3A3A3] text-[11px] uppercase font-bold tracking-wider">
-                    <Network className="w-3.5 h-3.5 text-black dark:text-white" />
-                    KNOWLEDGE GRAPH CONNECTOR
-                  </span>
-                  <Link 
-                    to="/startup-graph" 
-                    className="hover:underline flex items-center font-bold text-black dark:text-white text-[11px]"
-                  >
-                    Full Graph →
-                  </Link>
-                </div>
-                
-                <div className="flex items-center justify-between gap-1 py-1">
-                  {['wework', 'theranos', 'fast', 'quibi'].map((key) => {
-                    const isActive = activeGraphNode === key;
-                    return (
-                      <button
-                        key={key}
-                        onClick={() => setActiveGraphNode(key)}
-                        className={`px-2.5 py-1 text-[11px] font-bold capitalize transition-colors rounded-[4px] cursor-pointer ${
-                          isActive 
-                            ? 'bg-black text-white dark:bg-white dark:text-black' 
-                            : 'text-[#737373] dark:text-[#A3A3A3] hover:text-black dark:hover:text-white'
-                        }`}
-                      >
-                        {key}
-                      </button>
-                    );
-                  })}
-                </div>
-
-                <div className="mt-2 p-2.5 bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[6px]">
-                  <div className="flex items-center justify-between">
-                    <div className="flex items-center gap-2">
-                      <CompanyLogo name={graphEntities[activeGraphNode].name} size="xs" />
-                      <span className="font-bold text-[13px] text-black dark:text-white">
-                        {graphEntities[activeGraphNode].name}
-                      </span>
-                    </div>
-                    <span className="font-bold text-[11px] text-[#737373] dark:text-[#A3A3A3]">
-                      {graphEntities[activeGraphNode].type}
-                    </span>
-                  </div>
-                  <p className="mt-1 line-clamp-1 text-[13px] text-[#737373] dark:text-[#A3A3A3]">
-                    {graphEntities[activeGraphNode].description}
-                  </p>
                 </div>
               </div>
 
@@ -1023,126 +918,6 @@ export function Home() {
         </div>
       </section>
 
-      {/* 6. Section: The Startup Failure Network */}
-      <section className="site-container py-12 border-t border-[#E5E5E5] dark:border-[#2A2A2A]">
-        <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4 mb-6">
-          <div>
-            <div className="inline-flex items-center gap-1.5 mb-2 px-2.5 py-1 rounded-[4px] bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] text-[11px] font-bold tracking-wider uppercase">
-              <Network className="w-3.5 h-3.5" />
-              <span>Relational Topology</span>
-            </div>
-            <h2 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-black dark:text-white">
-              The Startup Failure Network
-            </h2>
-            <p className="text-[14px] text-[#737373] dark:text-[#A3A3A3] mt-1">
-              Connect startups, founders, investors, markets, and failure causes. Explore cross-entity contagion.
-            </p>
-          </div>
-          <Link 
-            to="/startup-graph" 
-            className="shrink-0 font-bold text-[13px] text-black dark:text-white hover:underline flex items-center gap-1"
-          >
-            <span>Launch Full Graph Engine</span>
-            <span>→</span>
-          </Link>
-        </div>
-
-        <div className="p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 items-center bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] shadow-sm">
-          {/* Node Canvas Simulation */}
-          <div className="lg:col-span-7 p-6 relative min-h-[340px] flex flex-col justify-between bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[6px]">
-            <div className="flex items-center justify-between text-[11px] font-bold uppercase tracking-wider pb-2 border-b border-[#E5E5E5] dark:border-[#2A2A2A] text-[#737373] dark:text-[#A3A3A3]">
-              <span>INTERACTIVE CLUSTER VIEW</span>
-              <span>413 NODES • 890 EDGES</span>
-            </div>
-
-            <div className="py-6 flex flex-col items-center justify-center text-center space-y-4">
-              <div className="flex items-center gap-2.5 flex-wrap justify-center">
-                {Object.keys(graphEntities).map((key) => {
-                  const isSelected = activeGraphNode === key;
-                  return (
-                    <button
-                      key={key}
-                      onClick={() => setActiveGraphNode(key)}
-                      className={`px-3.5 py-1.5 rounded-[4px] text-[12px] font-bold uppercase transition-all cursor-pointer ${
-                        isSelected 
-                          ? 'bg-black text-white dark:bg-white dark:text-black shadow-sm ring-1 ring-black dark:ring-white' 
-                          : 'bg-white dark:bg-black text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] hover:border-black dark:hover:border-white'
-                      }`}
-                    >
-                      {graphEntities[key].name}
-                    </button>
-                  );
-                })}
-              </div>
-
-              <div className="w-full max-w-md pt-2">
-                <div className="text-[11px] font-bold uppercase tracking-wider mb-2 text-[#737373] dark:text-[#A3A3A3]">
-                  DIRECTLY LINKED EDGES:
-                </div>
-                <div className="grid grid-cols-2 gap-2 text-left">
-                  {graphEntities[activeGraphNode].connections.map((c, i) => (
-                    <div 
-                      key={i} 
-                      className="p-2.5 text-[11px] bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[4px]"
-                    >
-                      <div className="font-bold line-clamp-1 text-black dark:text-white">{c.name}</div>
-                      <div className="text-[#737373] dark:text-[#A3A3A3] text-[10px] mt-0.5">{c.role}</div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-            </div>
-
-            <div className="text-[11px] flex items-center justify-between pt-2 border-t border-[#E5E5E5] dark:border-[#2A2A2A] text-[#737373] dark:text-[#A3A3A3]">
-              <span>Click node to reveal relationship mapping</span>
-              <span className="font-bold text-black dark:text-white">Selected: {graphEntities[activeGraphNode].name}</span>
-            </div>
-          </div>
-
-          {/* Node Inspector Detail Panel */}
-          <div className="lg:col-span-5 space-y-4">
-            <div className="p-5 bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[6px]">
-              <span className="mb-2 inline-block bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] text-black dark:text-white rounded-[4px] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
-                Entity Dossier
-              </span>
-              <h3 className="text-xl font-bold text-black dark:text-white">
-                {graphEntities[activeGraphNode].name}
-              </h3>
-              <div className="text-[12px] font-bold text-[#737373] dark:text-[#A3A3A3] mb-2 font-mono">
-                {graphEntities[activeGraphNode].type}
-              </div>
-              <p className="text-[13px] text-[#737373] dark:text-[#A3A3A3] leading-relaxed">
-                {graphEntities[activeGraphNode].description}
-              </p>
-            </div>
-
-            <div className="space-y-1">
-              <h4 className="text-[11px] font-bold uppercase tracking-wider text-black dark:text-white">
-                Network Contagion Analysis
-              </h4>
-              <p className="text-[12px] text-[#737373] dark:text-[#A3A3A3] leading-relaxed">
-                Founders and lead investors who repeat high-burn strategies across portfolio companies carry a 2.4x higher repeat failure correlation.
-              </p>
-            </div>
-
-            <div className="pt-2 flex items-center gap-3">
-              <Link 
-                to="/startup-graph" 
-                className="btn-primary px-4 py-2 text-[13px] font-bold rounded-[6px]"
-              >
-                Explore in 3D Graph →
-              </Link>
-              <Link 
-                to={`/startup/${activeGraphNode}`} 
-                className="vault-btn-secondary px-4 py-2 text-[13px] font-bold rounded-[6px]"
-              >
-                Read Autopsy
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
       {/* 7. Section: Process Flow */}
       <section className="site-container py-12 border-t border-[#E5E5E5] dark:border-[#2A2A2A]">
         <div className="p-8 rounded-[8px] bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] shadow-sm">
@@ -1162,7 +937,7 @@ export function Home() {
             {[
               { num: '01. COLLECT', title: 'Public Evidence', desc: 'SEC filings, court dockets, post-mortems & liquidation reports.' },
               { num: '02. ENRICH', title: 'AI Extraction', desc: 'Dual-engine extraction of cash burn velocity & fatal pivots.' },
-              { num: '03. CONNECT', title: 'Knowledge Graph', desc: 'Map cross-entity founder, investor, and failure vector relationships.' },
+              { num: '03. AUDIT', title: 'Pitch Deck Autopsy', desc: 'Stress-test pitch decks against historical failure models and valuation traps.' },
               { num: '04. ANALYZE', title: 'Failure Patterns', desc: 'Calculate Failure Scores (0–100) and multi-factor risk meters.' },
               { num: '05. ACT', title: 'Founder Action', desc: 'Audit pitch decks, scan business models, and pivot safely.', highlight: true },
             ].map((step, idx) => (
@@ -1382,36 +1157,37 @@ export function Home() {
             </div>
           </Link>
 
-          {/* Card 5: Knowledge Graph */}
+          {/* Card 5: Founder Confessions */}
           <Link 
-            to="/startup-graph" 
+            to="/founder-confessions" 
             className="p-6 group flex flex-col justify-between transition-all bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] shadow-sm hover:border-black dark:hover:border-white"
           >
             <div>
               <div className="flex items-center justify-between mb-3">
                 <span className="bg-[#F5F5F5] dark:bg-[#1A1A1A] text-[#737373] dark:text-[#A3A3A3] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[4px] px-2 py-0.5 text-[10px] font-bold uppercase tracking-wider">
-                  Relational Graph
+                  Social Debriefs
                 </span>
-                <Network className="w-5 h-5 text-black dark:text-white" />
+                <MessageSquare className="w-5 h-5 text-black dark:text-white" />
               </div>
               <h3 className="text-[17px] font-bold text-black dark:text-white group-hover:underline transition-colors">
-                Knowledge Graph
+                Founder Confessions
               </h3>
               <p className="text-[13px] text-[#737373] dark:text-[#A3A3A3] mt-1 leading-relaxed">
-                Explore relational topologies between investors, founders, and root causes.
+                Raw failure debriefs and candid post-mortems from real founders on 𝕏 and Reddit.
               </p>
 
-              <div className="mt-4 p-3 rounded-[6px] text-[11px] flex items-center justify-center gap-2 bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A]">
-                <span className="p-1 px-2 rounded-[4px] font-bold bg-black dark:bg-white text-white dark:text-black">Startup</span>
-                <span className="text-[#A3A3A3]">───</span>
-                <span className="p-1 px-2 rounded-[4px] font-bold bg-[#404040] text-white">Cause</span>
-                <span className="text-[#A3A3A3]">───</span>
-                <span className="p-1 px-2 rounded-[4px] font-medium bg-white dark:bg-black text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A]">Investor</span>
+              <div className="mt-4 p-3 rounded-[6px] text-[11px] space-y-1 bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A]">
+                <div className="font-bold text-black dark:text-white">
+                  r/startups & 𝕏 Convos
+                </div>
+                <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3]">
+                  “Burned $2.1M before realizing CAC exceeded cohort LTV.”
+                </p>
               </div>
             </div>
 
             <div className="mt-5 pt-3 border-t border-[#E5E5E5] dark:border-[#2A2A2A] flex items-center justify-between text-[12px] font-bold text-black dark:text-white">
-              <span>Launch Graph</span>
+              <span>Read Confessions</span>
               <span className="group-hover:translate-x-1 transition-transform">→</span>
             </div>
           </Link>

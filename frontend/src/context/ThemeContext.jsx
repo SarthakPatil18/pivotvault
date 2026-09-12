@@ -11,10 +11,9 @@ export function ThemeProvider({ children }) {
   const [theme, setTheme] = useState(() => {
     try {
       const saved = localStorage.getItem('pivotvault_theme');
-      if (saved === 'dark' || saved === 'light') return saved;
-      return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches
-        ? 'dark'
-        : 'light';
+      // Always default to light mode unless the user explicitly chose dark
+      if (saved === 'dark') return 'dark';
+      return 'light';
     } catch {
       return 'light';
     }
@@ -41,22 +40,7 @@ export function ThemeProvider({ children }) {
     }
   }, [theme, isDark]);
 
-  // Listen for OS preference changes if no manual preference is saved
-  useEffect(() => {
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-    const handleChange = (e) => {
-      const saved = localStorage.getItem('pivotvault_theme');
-      if (!saved) {
-        setTheme(e.matches ? 'dark' : 'light');
-      }
-    };
-
-    if (mediaQuery.addEventListener) {
-      mediaQuery.addEventListener('change', handleChange);
-      return () => mediaQuery.removeEventListener('change', handleChange);
-    }
-  }, []);
-
+  // Respect user preference; default strictly to light mode
   const toggleTheme = () => {
     setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
   };

@@ -81,8 +81,6 @@ const ghosts = [
   { name: 'Jawbone', domain: 'Hardware', raised: '$3B', stage: 'Late stage', cause: 'Runway collapsed after premature hiring', lesson: 'Capital is a runway, not a strategy.' }
 ];
 
-const ghostNodes = ['Quibi', 'Fast', 'Katerra', 'Beepi', 'Jawbone', 'Tally', 'HomeJoy', 'Ninja', 'Secto', 'Vitae'];
-
 const confessions = [
   { quote: 'We had eighteen months of runway and spent it proving a hypothesis nobody had asked for. I wish I had known this before.', author: 'Anonymous founder', detail: 'Consumer social · shut down 2021' },
   { quote: 'Every metric went up and to the right except the one that mattered: did customers come back in week four?', author: 'Anonymous founder', detail: 'B2B SaaS · acqui-hired' },
@@ -800,37 +798,6 @@ export function LandingPage() {
           </div>
         </section>
 
-        {/* Knowledge Graph Section */}
-        <section className="knowledge shell">
-          <SectionIntro
-            eyebrow="KNOWLEDGE GRAPH"
-            title="See how failure connects."
-            copy="Companies, founders, markets, failure vectors, funding decisions, and outcomes — one connected evidence graph."
-            align="center"
-          />
-          <Reveal className="knowledge-stage">
-            <div className="kg-node center">
-              <BrainCircuit />
-              <span>PivotVault Graph</span>
-            </div>
-            {ghostNodes.map((name, index) => {
-              const angle = (index / ghostNodes.length) * Math.PI * 2;
-              const x = 50 + 38 * Math.cos(angle);
-              const y = 50 + 34 * Math.sin(angle);
-              return (
-                <div key={name} className="kg-node satellite" style={{ left: `${x}%`, top: `${y}%` }}>
-                  {name}
-                </div>
-              );
-            })}
-            <div className="kg-edge e0" /><div className="kg-edge e1" />
-            <div className="kg-edge e2" /><div className="kg-edge e3" />
-            <div className="kg-edge e4" /><div className="kg-edge e5" />
-            <div className="kg-edge e6" /><div className="kg-edge e7" />
-            <div className="kg-edge e8" /><div className="kg-edge e9" />
-          </Reveal>
-        </section>
-
         {/* Multi-Agent Analysis Section */}
         <section className="architecture">
           <div className="shell">
@@ -928,8 +895,8 @@ export function LandingPage() {
           </div>
 
           {[
-            ['Product', 'Failure Explorer|Knowledge Graph|Hall of Ghosts|Risk Scanner'],
-            ['Intelligence', 'Pitch Deck Autopsy|Competitor Compare|Insight Dashboard'],
+            ['Product', 'Failure Explorer|Hall of Ghosts|Risk Scanner|Pitch Deck Autopsy'],
+            ['Intelligence', 'Competitor Compare|Insight Dashboard'],
             ['Founder', 'Founder Playbook|Founders Confessions'],
             ['Company', 'About|Research|Contact']
           ].map(([title, links]) => (
@@ -937,7 +904,6 @@ export function LandingPage() {
               <b>{title}</b>
               {links.split('|').map(link => {
                 const targetPath = link === 'Failure Explorer' ? '/explore'
-                  : link === 'Knowledge Graph' ? '/startup-graph'
                   : link === 'Hall of Ghosts' ? '/hall-of-ghosts'
                   : link === 'Risk Scanner' ? '/risk-scanner'
                   : link === 'Pitch Deck Autopsy' ? '/pitch-deck-autopsy'

@@ -54,7 +54,6 @@ export function SearchModal({ isOpen, onClose }) {
     { name: 'Founder Playbook', path: '/founder-playbook', desc: 'Defensive tactical playbooks' },
     { name: 'Pitch Deck Autopsy', path: '/pitch-deck-autopsy', desc: 'Audit pitch deck economics' },
     { name: 'Competitor Compare', path: '/competitor-compare', desc: 'Side-by-side failure post-mortems' },
-    { name: 'Knowledge Graph', path: '/startup-graph', desc: 'Explore relationship network' },
     { name: 'Hall of Ghosts', path: '/hall-of-ghosts', desc: 'Interview AI founder personas' },
     { name: 'Founder Confessions', path: '/founder-confessions', desc: 'Raw founder post-mortems' }
   ];

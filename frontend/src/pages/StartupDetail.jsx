@@ -47,7 +47,7 @@ export function StartupDetail() {
     return (
       <EmptyState
         title="Autopsy Docket Not Found"
-        description="The requested startup record does not exist in the public knowledge graph."
+        description="The requested startup record does not exist in the public intelligence registry."
         action={
           <Link to="/app" className="vault-btn-primary text-xs">
             Return to Registry

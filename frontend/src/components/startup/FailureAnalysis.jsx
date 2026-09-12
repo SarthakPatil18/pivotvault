@@ -11,7 +11,10 @@ import {
   ChevronDown, 
   ChevronUp, 
   BrainCircuit, 
-  TrendingDown
+  TrendingDown,
+  Target,
+  Landmark,
+  Flame
 } from 'lucide-react';
 import { formatCurrency } from '../../lib/utils';
 
@@ -418,67 +421,82 @@ export function FailureAnalysis({ startup }) {
   return (
     <div className="space-y-12">
       {/* ========================================================
-          1. THE INSIDER BRIEFING
+          1. THE INSIDER BRIEFING (Matching Screenshot Layout)
          ======================================================== */}
-      <section className="vault-card p-6 sm:p-8 space-y-6">
-        <div className="border-b border-[#E5E5E5] dark:border-[#2A2A2A] pb-4">
-          <span className="text-[10px] font-mono font-bold uppercase tracking-widest text-[#737373] dark:text-[#A3A3A3] block mb-1">
-            EXECUTIVE INTELLIGENCE
-          </span>
-          <h2 className="text-xl sm:text-2xl font-extrabold tracking-tight text-black dark:text-white flex items-center gap-2">
-            <BookOpen className="w-5 h-5 text-black dark:text-white" />
-            <span>The Insider Briefing</span>
+      <section className="space-y-4">
+        {/* Eyebrow Header: Sparkle + THE INSIDER BRIEFING */}
+        <div className="flex items-center gap-2 pl-1">
+          <Sparkles className="w-4 h-4 text-[#9C6636] dark:text-[#D4A373] shrink-0" />
+          <h2 className="text-xs sm:text-[13px] font-mono font-bold uppercase tracking-widest text-[#9C6636] dark:text-[#D4A373]">
+            THE INSIDER BRIEFING
           </h2>
         </div>
 
-        <div className="space-y-6 text-sm leading-relaxed text-[#404040] dark:text-[#CCCCCC]">
-          <div>
-            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-black dark:text-white mb-1.5 flex items-center gap-2">
-              <Compass className="w-3.5 h-3.5 text-black dark:text-white" />
-              <span>The Dream</span>
-            </h3>
-            <p>
+        {/* 3-Column Card Grid exactly matching user screenshot */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
+          {/* Card 1: The Dream */}
+          <div className="bg-white dark:bg-[#0E0E0E] rounded-[16px] p-6 border border-[#EBEBEB] dark:border-[#222222] shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all flex flex-col justify-start">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-9 h-9 rounded-[10px] bg-[#EBF3FF] dark:bg-[#0D2040] text-[#3B82F6] dark:text-[#60A5FA] flex items-center justify-center shrink-0 border border-[#D6E6FE] dark:border-[#1E3A66]">
+                <Target className="w-4.5 h-4.5" />
+              </div>
+              <h3 className="font-bold text-sm sm:text-[15px] text-black dark:text-white font-sans">
+                The Dream
+              </h3>
+            </div>
+            <p className="text-[13px] sm:text-sm text-[#555555] dark:text-[#A3A3A3] leading-relaxed font-sans">
               To become the defining {cleanIndustry} platform in {cleanCountry} — building a product that would make the existing alternatives obsolete and generate a durable, compounding competitive moat.
             </p>
           </div>
 
-          <div>
-            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-black dark:text-white mb-1.5 flex items-center gap-2">
-              <TrendingUp className="w-3.5 h-3.5 text-black dark:text-white" />
-              <span>The Investment Thesis</span>
-            </h3>
-            <p>
+          {/* Card 2: The Investment Thesis */}
+          <div className="bg-white dark:bg-[#0E0E0E] rounded-[16px] p-6 border border-[#EBEBEB] dark:border-[#222222] shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all flex flex-col justify-start">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-9 h-9 rounded-[10px] bg-[#EBFBF3] dark:bg-[#0D3320] text-[#10B981] dark:text-[#34D399] flex items-center justify-center shrink-0 border border-[#D1F6E3] dark:border-[#175333]">
+                <Landmark className="w-4.5 h-4.5" />
+              </div>
+              <h3 className="font-bold text-sm sm:text-[15px] text-black dark:text-white font-sans">
+                The Investment Thesis
+              </h3>
+            </div>
+            <p className="text-[13px] sm:text-sm text-[#555555] dark:text-[#A3A3A3] leading-relaxed font-sans">
               Investors were drawn to the large addressable market, the early traction signals, and a founding team with the conviction to execute at speed. The early metrics suggested a clear product-market fit was within reach.
             </p>
           </div>
 
-          <div>
-            <h3 className="text-xs font-mono font-bold uppercase tracking-wider text-black dark:text-white mb-1.5 flex items-center gap-2">
-              <Sparkles className="w-3.5 h-3.5 text-black dark:text-white" />
-              <span>The Excitement</span>
-            </h3>
-            <p>
+          {/* Card 3: The Excitement */}
+          <div className="bg-white dark:bg-[#0E0E0E] rounded-[16px] p-6 border border-[#EBEBEB] dark:border-[#222222] shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all flex flex-col justify-start">
+            <div className="flex items-center gap-3 mb-4">
+              <div className="w-9 h-9 rounded-[10px] bg-[#F5F0FF] dark:bg-[#251340] text-[#8B5CF6] dark:text-[#A78BFA] flex items-center justify-center shrink-0 border border-[#E8DAFE] dark:border-[#3D2168]">
+                <Flame className="w-4.5 h-4.5" />
+              </div>
+              <h3 className="font-bold text-sm sm:text-[15px] text-black dark:text-white font-sans">
+                The Excitement
+              </h3>
+            </div>
+            <p className="text-[13px] sm:text-sm text-[#555555] dark:text-[#A3A3A3] leading-relaxed font-sans">
               With significant venture capital committed and a growing team, {name} appeared positioned to execute the playbook that had made category winners in adjacent markets. Industry observers cited it as one to watch.
             </p>
           </div>
+        </div>
 
-          <div className="pt-2 border-t border-[#EFEFEF] dark:border-[#1F1F1F]">
-            <h3 className="text-sm font-bold text-black dark:text-white mb-2">
-              Chapter 1: The Promise & The Pivot
-            </h3>
-            <p className="mb-3">
-              {startup.summary || startup.description || `${name} launched with high market expectations to revolutionize ${cleanIndustry}.`}
-            </p>
-            <p className="mb-3">
-              However, the structural weaknesses were already embedded in the business model. {rootCause1} Compounding this, {rootCause2} These were not isolated problems — they reflected a deeper misalignment between the company's cost structure and its actual value delivery to customers.
-            </p>
-            <p>
-              After {monthsOfOperation} months of operation and a failed in {failedYear}, the venture became a case study in the gap between ambition and sustainable execution. The story of {name} carries durable lessons that every founder operating in {cleanIndustry} must internalize.
-            </p>
-          </div>
+        {/* Chapter 1: The Promise & The Pivot */}
+        <div className="vault-card p-6 sm:p-8 mt-2 space-y-4 text-sm leading-relaxed text-[#404040] dark:text-[#CCCCCC]">
+          <h3 className="text-base sm:text-lg font-bold text-black dark:text-white font-sans">
+            Chapter 1: The Promise & The Pivot
+          </h3>
+          <p className="mb-3">
+            {startup.summary || startup.description || `${name} launched with high market expectations to revolutionize ${cleanIndustry}.`}
+          </p>
+          <p className="mb-3">
+            However, the structural weaknesses were already embedded in the business model. {rootCause1} Compounding this, {rootCause2} These were not isolated problems — they reflected a deeper misalignment between the company's cost structure and its actual value delivery to customers.
+          </p>
+          <p>
+            After {monthsOfOperation} months of operation and a failed in {failedYear}, the venture became a case study in the gap between ambition and sustainable execution. The story of {name} carries durable lessons that every founder operating in {cleanIndustry} must internalize.
+          </p>
 
           {/* Callout Quote Block */}
-          <div className="p-4 sm:p-5 rounded-[6px] bg-[#F9F9F9] dark:bg-[#111111] border-l-4 border-black dark:border-white text-black dark:text-white italic text-xs sm:text-sm leading-relaxed font-serif">
+          <div className="p-4 sm:p-5 rounded-[8px] bg-[#F9F9F9] dark:bg-[#111111] border-l-4 border-black dark:border-white text-black dark:text-white italic text-xs sm:text-sm leading-relaxed font-serif">
             “In {foundedYear}, investors believed this startup had everything required to dominate its market. The reality, however, was far more unforgiving.”
           </div>
         </div>

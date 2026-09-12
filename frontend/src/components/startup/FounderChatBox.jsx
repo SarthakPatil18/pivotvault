@@ -11,12 +11,9 @@ import {
   ShieldAlert, 
   ArrowUp,
   MessageSquare,
-  HelpCircle,
-  ExternalLink,
-  Key
+  HelpCircle
 } from 'lucide-react';
 import { chatWithGhost } from '../../lib/api';
-import { getFounderWikipediaUrl } from '../../lib/wikipedia';
 import { GhostIcon } from '../common/GhostIcon';
 
 export function FounderChatBox({ startup, isOpen, onClose }) {
@@ -24,11 +21,9 @@ export function FounderChatBox({ startup, isOpen, onClose }) {
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [isMinimized, setIsMinimized] = useState(false);
-  const [geminiApiKey, setGeminiApiKey] = useState(() => {
-    return typeof window !== 'undefined' ? localStorage.getItem('pivotvault_gemini_api_key') || '' : '';
+  const [geminiApiKey] = useState(() => {
+    return typeof window !== 'undefined' ? (localStorage.getItem('gemini_api_key') || localStorage.getItem('pivotvault_gemini_api_key') || '') : '';
   });
-  const [showKeyConfig, setShowKeyConfig] = useState(false);
-  const [keyInput, setKeyInput] = useState('');
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -165,13 +160,12 @@ export function FounderChatBox({ startup, isOpen, onClose }) {
           onClick={() => setIsMinimized(false)}
           aria-label={`Open AI Ghost Chat with ${founderName}`}
           className="w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-black text-white dark:bg-white dark:text-black border-2 border-white/25 dark:border-black/25 shadow-2xl hover:scale-110 active:scale-95 transition-all duration-200 flex items-center justify-center cursor-pointer group relative ring-4 ring-black/10 dark:ring-white/10"
-          title={`Resume interrogation with ${founderName} (Gemini AI)`}
+          title={`Resume conversation with ${founderName}`}
         >
           <GhostIcon className="w-7 h-7 sm:w-8 sm:h-8 group-hover:scale-110 transition-transform" />
           <span className="absolute -top-0.5 -right-0.5 w-3.5 h-3.5 rounded-full bg-emerald-500 border-2 border-white dark:border-black animate-pulse" />
-          <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-[6px] bg-black text-white dark:bg-white dark:text-black text-xs font-mono font-bold whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-lg flex items-center gap-1.5">
+          <div className="absolute right-full mr-3 top-1/2 -translate-y-1/2 px-3 py-1.5 rounded-[6px] bg-black text-white dark:bg-white dark:text-black text-xs font-mono font-bold whitespace-nowrap opacity-0 pointer-events-none group-hover:opacity-100 transition-opacity shadow-lg">
             <span>Resume {founderName}</span>
-            <span className="text-[10px] px-1 py-0.2 rounded bg-neutral-800 text-neutral-300 dark:bg-neutral-200 dark:text-neutral-800">Gemini</span>
           </div>
         </button>
       </div>
@@ -192,20 +186,7 @@ export function FounderChatBox({ startup, isOpen, onClose }) {
 
           <div className="min-w-0">
             <h3 className="text-sm font-bold text-black dark:text-white truncate flex items-center gap-1.5">
-              {getFounderWikipediaUrl(founderName) ? (
-                <a
-                  href={getFounderWikipediaUrl(founderName)}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="hover:underline inline-flex items-center gap-1 group text-black dark:text-white cursor-pointer"
-                  title={`View ${founderName}'s Wikipedia biography`}
-                >
-                  <span className="truncate">{founderName}</span>
-                  <ExternalLink className="w-3 h-3 text-[#737373] group-hover:text-black dark:group-hover:text-white transition-colors shrink-0" />
-                </a>
-              ) : (
-                <span>{founderName}</span>
-              )}
+              <span className="truncate">{founderName}</span>
               <span className="text-[10px] font-mono uppercase px-1.5 py-0.2 rounded bg-[#E5E5E5] dark:bg-[#2A2A2A] text-[#525252] dark:text-[#A3A3A3] shrink-0">
                 Ghost AI
               </span>
@@ -240,89 +221,6 @@ export function FounderChatBox({ startup, isOpen, onClose }) {
           </button>
         </div>
       </div>
-
-      {/* Intelligence Disclaimer & Gemini API Connection Banner */}
-      <div className="px-3.5 py-1.5 bg-[#F0F0F0] dark:bg-[#161616] border-b border-[#E5E5E5] dark:border-[#222222] flex items-center justify-between text-[10px] font-mono text-[#737373] dark:text-[#8E8E8E]">
-        <div className="flex items-center gap-2 truncate">
-          <span className="flex items-center gap-1 text-black dark:text-white font-semibold">
-            <Sparkles className="w-3 h-3 text-emerald-500 shrink-0" />
-            <span>Gemini 1.5 Flash</span>
-          </span>
-          <span className="text-[#A3A3A3] dark:text-[#404040]">•</span>
-          <button
-            onClick={() => {
-              setKeyInput(geminiApiKey);
-              setShowKeyConfig(!showKeyConfig);
-            }}
-            className="hover:underline flex items-center gap-1 text-[#525252] dark:text-[#A3A3A3] hover:text-black dark:hover:text-white cursor-pointer"
-            title="Configure Google Gemini API Key"
-          >
-            <Key className="w-2.5 h-2.5 text-emerald-500" />
-            <span>{geminiApiKey ? 'API Key Set' : 'Add Gemini Key'}</span>
-          </button>
-        </div>
-        <span className="shrink-0 text-emerald-600 dark:text-emerald-400 font-bold ml-2 flex items-center gap-1">
-          <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-pulse" />
-          LIVE
-        </span>
-      </div>
-
-      {/* Expandable Gemini Key Configuration Drawer */}
-      {showKeyConfig && (
-        <div className="p-3 bg-[#F5F5F5] dark:bg-[#141414] border-b border-[#E5E5E5] dark:border-[#262626] text-xs font-mono">
-          <div className="flex items-center justify-between mb-1.5">
-            <span className="font-bold text-[11px] text-black dark:text-white flex items-center gap-1.5">
-              <Key className="w-3 h-3 text-emerald-500" />
-              Google Gemini API Key
-            </span>
-            <button 
-              onClick={() => setShowKeyConfig(false)}
-              className="text-[#737373] hover:text-black dark:hover:text-white text-[10px] cursor-pointer"
-            >
-              ✕
-            </button>
-          </div>
-          <p className="text-[10px] text-[#737373] dark:text-[#A3A3A3] mb-2 leading-relaxed">
-            Provide your personal Gemini API key for live LLM roleplay. Stored securely in your browser.
-          </p>
-          <div className="flex items-center gap-1.5">
-            <input
-              type="password"
-              value={keyInput}
-              onChange={(e) => setKeyInput(e.target.value)}
-              placeholder="Paste AIzaSy... key"
-              className="flex-1 px-2.5 py-1 text-xs rounded border border-[#CCCCCC] dark:border-[#333333] bg-white dark:bg-[#0A0A0A] text-black dark:text-white focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white font-mono"
-            />
-            <button
-              onClick={() => {
-                const trimmed = keyInput.trim();
-                setGeminiApiKey(trimmed);
-                if (trimmed) {
-                  localStorage.setItem('pivotvault_gemini_api_key', trimmed);
-                } else {
-                  localStorage.removeItem('pivotvault_gemini_api_key');
-                }
-                setShowKeyConfig(false);
-              }}
-              className="vault-btn-primary text-[10px] py-1 px-2.5 shrink-0 font-bold cursor-pointer"
-            >
-              Save
-            </button>
-            {geminiApiKey && (
-              <button
-                onClick={() => {
-                  setGeminiApiKey('');
-                  setKeyInput('');
-                  localStorage.removeItem('pivotvault_gemini_api_key');
-                }}
-                className="text-[10px] py-1 px-2 text-[#737373] hover:text-red-500 font-mono cursor-pointer"
-              >
-                Clear
-              </button>
-            )}
-          </div>
-        </div>
-      )}
 
       {/* Messages Scroll Area */}
       <div className="flex-1 overflow-y-auto p-4 space-y-4 text-xs leading-relaxed">

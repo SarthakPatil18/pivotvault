@@ -5,7 +5,7 @@ import {
   FileUp, FileText, AlertTriangle, CheckCircle, ArrowRight, 
   Sparkles, Layers, ShieldAlert, DollarSign, PieChart, RefreshCw,
   Key, Check, ExternalLink, Printer, Upload, HelpCircle, ChevronRight,
-  Cpu, Zap
+  Cpu, Zap, Download
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { runPitchDeckAutopsy } from '../lib/api';
@@ -148,6 +148,23 @@ export function PitchDeckAutopsy() {
     setActiveTab('paste');
   };
 
+  // Load Demo PPTX Deck
+  const handleLoadDemoPPT = () => {
+    setUploadedFileName('NexusFleet_Autonomous_Logistics_Series_A.pptx');
+    setCustomTitle('NexusFleet Autonomous Logistics — Series A Deck');
+    setCustomIndustry('Mobility, Logistics & Robotics');
+    setCustomRaise('$6,500,000 Series A');
+    setCustomContent(`Slide 01: Executive Summary — Level-4 autonomous freight truck retrofits operating commercial middle-mile lanes in the American Southwest.
+Slide 02: Market Opportunity — $800B US trucking market constrained by persistent driver shortages and federal hours-of-service limitations.
+Slide 03: Product Architecture — Sensor pods (6x LiDAR, 4D imaging radar, automotive-grade compute) retrofitted onto existing commercial Class-8 diesel and electric semi-tractors.
+Slide 04: Unit Economics — Operating cost modeled at $1.25/mile vs $2.40/mile incumbent human driver benchmark. Proposes 74% gross margin at 100-vehicle scale.
+Slide 05: Capex Requirements — Upfront sensor pod and compute retrofit capex of $180,000 per truck amortized over 60 months.
+Slide 06: Regulatory Roadmap — Projects full driver-out autonomous operations on interstate highways within 9 months of Series A close without safety driver interventions.
+Slide 07: Commercial Traction — Books 4 non-binding Letters of Intent (LOIs) from mid-sized freight brokers as committed enterprise backlog.
+Slide 08: Financing Plan — $6.5M Series A allocation: $3.2M hardware retrofits & QA, $2.0M autonomy software engineering, $1.3M operational working capital.`);
+    setActiveTab('upload');
+  };
+
   return (
     <div className="pb-24 bg-white dark:bg-black text-black dark:text-white min-h-screen">
       <PageHeader
@@ -159,8 +176,8 @@ export function PitchDeckAutopsy() {
       />
 
       <div className="vault-container space-y-8">
-        {/* Top Control Bar: Groq Engine Status & Tabs */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 p-4 rounded-[12px] bg-[#F8F9FA] dark:bg-[#0E0E0E] border border-[#E5E5E5] dark:border-[#222222]">
+        {/* Top Control Bar: Tabs */}
+        <div className="flex items-center justify-between p-2.5 rounded-[12px] bg-[#F8F9FA] dark:bg-[#0E0E0E] border border-[#E5E5E5] dark:border-[#222222]">
           <div className="flex items-center gap-2">
             <button
               onClick={() => setActiveTab('upload')}
@@ -185,67 +202,6 @@ export function PitchDeckAutopsy() {
               <span>Paste Slide Outline</span>
             </button>
           </div>
-
-          {/* Groq LPU Reasoning Trigger Pill */}
-          <div className="relative shrink-0">
-            <button
-              onClick={() => setShowKeyInput(!showKeyInput)}
-              className="flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] text-xs font-mono border border-[#E0E0E0] dark:border-[#2A2A2A] bg-white dark:bg-[#141414] hover:border-black dark:hover:border-white transition-all text-[#555555] dark:text-[#CCCCCC]"
-            >
-              <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-              <span>Groq LPU (LLaMA 3.3 70B):</span>
-              <span className={`font-bold ${groqApiKey ? 'text-emerald-600 dark:text-emerald-400' : 'text-neutral-500'}`}>
-                {groqApiKey ? 'Connected' : 'Free Built-in'}
-              </span>
-            </button>
-
-            {showKeyInput && (
-              <div className="absolute right-0 top-10 w-84 p-4 rounded-[10px] bg-white dark:bg-[#161616] border border-[#E0E0E0] dark:border-[#2E2E2E] shadow-2xl z-30 space-y-3">
-                <div className="flex items-center justify-between text-xs font-bold font-sans">
-                  <span className="flex items-center gap-1.5">
-                    <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                    Groq Cloud API Key
-                  </span>
-                  <a
-                    href="https://console.groq.com/keys"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="text-[10px] text-blue-600 hover:underline flex items-center gap-1 font-normal"
-                  >
-                    Get free key <ExternalLink className="w-2.5 h-2.5" />
-                  </a>
-                </div>
-                <input
-                  type="password"
-                  placeholder="gsk_..."
-                  value={groqApiKey}
-                  onChange={(e) => setGroqApiKey(e.target.value)}
-                  className="w-full text-xs font-mono px-3 py-2 rounded-[6px] border border-[#CCCCCC] dark:border-[#333333] bg-transparent text-black dark:text-white focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white"
-                />
-
-                <div className="text-[11px] font-sans text-[#777777] dark:text-[#888888] pt-1">
-                  Optional Gemini Fallback Key:
-                </div>
-                <input
-                  type="password"
-                  placeholder="AIzaSy... (optional backup)"
-                  value={geminiApiKey}
-                  onChange={(e) => setGeminiApiKey(e.target.value)}
-                  className="w-full text-xs font-mono px-3 py-1.5 rounded-[6px] border border-[#E0E0E0] dark:border-[#262626] bg-transparent text-black dark:text-white focus:outline-none"
-                />
-
-                <div className="flex items-center justify-between pt-1">
-                  <span className="text-[10px] text-[#777777]">Stored locally in browser</span>
-                  <button
-                    onClick={handleSaveKeys}
-                    className="px-3 py-1 text-xs font-semibold bg-black text-white dark:bg-white dark:text-black rounded-[4px]"
-                  >
-                    {keySaved ? 'Saved!' : 'Save Keys'}
-                  </button>
-                </div>
-              </div>
-            )}
-          </div>
         </div>
 
         {/* Tab 1: Upload File Dropzone */}
@@ -253,32 +209,97 @@ export function PitchDeckAutopsy() {
           <div className="vault-card p-6 sm:p-8 space-y-6">
             <div>
               <h2 className="text-sm sm:text-base font-bold font-sans text-black dark:text-white">
-                Upload Custom Pitch Deck (PDF / Text / Notes)
+                Upload Custom Pitch Deck (PPTX / PDF / Text / Notes)
               </h2>
               <p className="text-xs text-[#737373] dark:text-[#A3A3A3] mt-0.5">
                 Our forensic parser audits slide statements, unit economics claims, and funding asks using high-throughput Groq LPU reasoning.
               </p>
             </div>
 
+            {/* Demo PPT Feature Box */}
+            <div className="p-4 rounded-[12px] bg-[#F4F5F7] dark:bg-[#121212] border border-[#E2E4E8] dark:border-[#222222] flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+              <div className="flex items-center gap-3">
+                <div className="w-10 h-10 rounded-[8px] bg-red-500/10 text-red-600 dark:text-red-400 flex items-center justify-center font-mono font-extrabold text-xs shrink-0 border border-red-500/20">
+                  PPT
+                </div>
+                <div>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs font-bold font-sans text-black dark:text-white">
+                      NexusFleet_Autonomous_Logistics_Series_A.pptx
+                    </span>
+                    <span className="px-1.5 py-0.5 rounded text-[10px] font-mono bg-neutral-200 dark:bg-neutral-800 text-neutral-700 dark:text-neutral-300 font-medium">
+                      Demo Deck (14 Slides)
+                    </span>
+                  </div>
+                  <p className="text-[11px] text-[#666666] dark:text-[#999999] mt-0.5">
+                    Autonomous freight presentation seeking $6.5M Series A with modeled 74% gross margin &amp; hardware capex.
+                  </p>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2 shrink-0 w-full sm:w-auto">
+                <button
+                  type="button"
+                  onClick={handleLoadDemoPPT}
+                  className="px-3.5 py-2 rounded-[6px] bg-black text-white dark:bg-white dark:text-black font-semibold text-xs flex items-center gap-1.5 hover:opacity-90 transition-opacity w-full sm:w-auto justify-center shadow-xs"
+                >
+                  <FileText className="w-3.5 h-3.5" />
+                  <span>Load Demo PPT File</span>
+                </button>
+                <a
+                  href="/demo_pitch_deck.pptx"
+                  download="NexusFleet_Autonomous_Logistics_Series_A.pptx"
+                  className="px-3 py-2 rounded-[6px] border border-[#CCCCCC] dark:border-[#333333] text-xs font-semibold hover:border-black dark:hover:border-white transition-colors flex items-center gap-1.5 bg-white dark:bg-black text-[#555555] dark:text-[#CCCCCC]"
+                  title="Download demo PPTX file to your computer"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download .pptx</span>
+                </a>
+              </div>
+            </div>
+
             <input
               type="file"
               ref={fileInputRef}
               onChange={handleFileUpload}
-              accept=".pdf,.txt,.md,.json,.csv"
+              accept=".pptx,.ppt,.pdf,.txt,.md,.json,.csv"
               className="hidden"
             />
 
             <div
               onClick={() => fileInputRef.current?.click()}
-              className="p-10 border-2 border-dashed border-[#CCCCCC] dark:border-[#333333] rounded-[12px] text-center hover:border-black dark:hover:border-white transition-all bg-[#F9F9F9] dark:bg-[#111111] cursor-pointer"
+              className={`p-8 sm:p-10 border-2 border-dashed rounded-[12px] text-center transition-all cursor-pointer ${
+                uploadedFileName
+                  ? 'border-emerald-500 bg-emerald-500/5 dark:bg-emerald-500/10'
+                  : 'border-[#CCCCCC] dark:border-[#333333] hover:border-black dark:hover:border-white bg-[#F9F9F9] dark:bg-[#111111]'
+              }`}
             >
-              <Upload className="w-9 h-9 text-[#737373] dark:text-[#A3A3A3] mx-auto mb-3" />
-              <p className="text-sm font-bold text-black dark:text-white font-sans">
-                {uploadedFileName ? `Loaded: ${uploadedFileName}` : 'Click or Drop Pitch Deck Document Here'}
-              </p>
-              <p className="text-xs text-[#737373] dark:text-[#A3A3A3] mt-1.5 font-mono">
-                Supports PDF, TXT, MD, or JSON slide outlines (Up to 25MB)
-              </p>
+              {uploadedFileName ? (
+                <div className="space-y-1.5">
+                  <div className="w-9 h-9 rounded-full bg-emerald-100 dark:bg-emerald-950 text-emerald-600 dark:text-emerald-400 mx-auto flex items-center justify-center">
+                    <Check className="w-5 h-5" />
+                  </div>
+                  <p className="text-sm font-bold text-black dark:text-white font-sans">
+                    Loaded File: {uploadedFileName}
+                  </p>
+                  <p className="text-xs text-emerald-600 dark:text-emerald-400 font-mono">
+                    Slide claims & unit economics extracted • Ready for forensic autopsy
+                  </p>
+                  <span className="inline-block text-[11px] text-[#737373] underline hover:text-black dark:hover:text-white pt-1">
+                    Click to choose a different deck file
+                  </span>
+                </div>
+              ) : (
+                <>
+                  <Upload className="w-9 h-9 text-[#737373] dark:text-[#A3A3A3] mx-auto mb-3" />
+                  <p className="text-sm font-bold text-black dark:text-white font-sans">
+                    Click or Drop Pitch Deck Document Here (.pptx, .pdf, .txt)
+                  </p>
+                  <p className="text-xs text-[#737373] dark:text-[#A3A3A3] mt-1.5 font-mono">
+                    Supports PowerPoint (.pptx), PDF, TXT, or Markdown slide notes (Up to 25MB)
+                  </p>
+                </>
+              )}
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

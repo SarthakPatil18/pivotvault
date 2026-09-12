@@ -237,7 +237,7 @@ export function RiskScanner() {
         {/* Startup Input Form */}
         <div className="vault-card p-6 sm:p-8 border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-7">
           {/* Header */}
-          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-4 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
+          <div className="flex items-center justify-between pb-4 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
             <div>
               <h2 className="text-base font-mono font-bold uppercase tracking-wider text-black dark:text-white">
                 Tell Us About Your Startup
@@ -246,69 +246,16 @@ export function RiskScanner() {
                 Give us a few details so we can identify the risks that matter most to your idea.
               </p>
             </div>
-            <div className="flex items-center gap-2">
-              {/* Groq LPU Trigger Pill */}
-              <div className="relative">
-                <button
-                  type="button"
-                  onClick={() => setShowKeyInput(!showKeyInput)}
-                  className="flex items-center gap-1.5 px-3 py-1.5 rounded-[6px] text-xs font-mono border border-[#E0E0E0] dark:border-[#2A2A2A] bg-white dark:bg-[#141414] hover:border-black dark:hover:border-white transition-all text-[#555555] dark:text-[#CCCCCC]"
-                >
-                  <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                  <span>Groq LPU (70B):</span>
-                  <span className={`font-bold ${groqApiKey ? 'text-emerald-600 dark:text-emerald-400' : 'text-neutral-500'}`}>
-                    {groqApiKey ? 'Connected' : 'Free Built-in'}
-                  </span>
-                </button>
-
-                {showKeyInput && (
-                  <div className="absolute right-0 top-10 w-80 p-4 rounded-[10px] bg-white dark:bg-[#161616] border border-[#E0E0E0] dark:border-[#2E2E2E] shadow-2xl z-30 space-y-3">
-                    <div className="flex items-center justify-between text-xs font-bold font-sans">
-                      <span className="flex items-center gap-1.5">
-                        <Zap className="w-3.5 h-3.5 text-amber-500 fill-amber-500" />
-                        Groq Cloud API Key
-                      </span>
-                      <a
-                        href="https://console.groq.com/keys"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="text-[10px] text-blue-600 hover:underline flex items-center gap-1 font-normal"
-                      >
-                        Get key <ExternalLink className="w-2.5 h-2.5" />
-                      </a>
-                    </div>
-                    <input
-                      type="password"
-                      placeholder="gsk_..."
-                      value={groqApiKey}
-                      onChange={(e) => setGroqApiKey(e.target.value)}
-                      className="w-full text-xs font-mono px-3 py-2 rounded-[6px] border border-[#CCCCCC] dark:border-[#333333] bg-transparent text-black dark:text-white focus:outline-none focus:ring-1 focus:ring-black dark:focus:ring-white"
-                    />
-                    <div className="flex items-center justify-between pt-1">
-                      <span className="text-[10px] text-[#777777]">Stored locally in browser</span>
-                      <button
-                        type="button"
-                        onClick={handleSaveGroqKey}
-                        className="px-3 py-1 text-xs font-semibold bg-black text-white dark:bg-white dark:text-black rounded-[4px]"
-                      >
-                        {keySaved ? 'Saved!' : 'Save Key'}
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-
-              {result && (
-                <button
-                  type="button"
-                  onClick={handleReset}
-                  className="vault-btn vault-btn-ghost text-xs flex items-center gap-1.5"
-                >
-                  <RotateCcw className="w-3.5 h-3.5" />
-                  <span>Reset</span>
-                </button>
-              )}
-            </div>
+            {result && (
+              <button
+                type="button"
+                onClick={handleReset}
+                className="vault-btn vault-btn-ghost text-xs flex items-center gap-1.5"
+              >
+                <RotateCcw className="w-3.5 h-3.5" />
+                <span>Reset</span>
+              </button>
+            )}
           </div>
 
           <form onSubmit={handleScan} className="space-y-7">

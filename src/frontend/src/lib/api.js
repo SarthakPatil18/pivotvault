@@ -11,7 +11,13 @@ import { QUIZ_QUESTIONS } from './data/quizData';
 import { FOUNDER_CONFESSIONS } from './data/confessionsData';
 import { GHOST_PERSONAS } from './data/ghostsData';
 
-const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
+function normalizeApiUrl(url) {
+  if (!url) return 'http://localhost:5001/api';
+  const clean = url.trim().replace(/\/+$/, '');
+  return clean.endsWith('/api') ? clean : `${clean}/api`;
+}
+
+const BASE_URL = normalizeApiUrl(import.meta.env.VITE_API_URL);
 
 /**
  * Helper to attempt a network fetch to the backend API, falling back to mock generator

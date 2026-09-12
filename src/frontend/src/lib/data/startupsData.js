@@ -733,6 +733,237 @@ export const CURATED_STARTUPS = [
     ],
     evidenceSources: ['The Verge "The Life and Death of Vine"', 'Rus Yusupov Post-Mortem Tweets', 'Twitter 10-K Filings'],
     relatedStartupIds: ['yik-yak', 'secret', 'meerkat']
+  },
+  {
+    id: 'lehman-brothers',
+    name: 'Lehman Brothers',
+    industry: 'FinTech & Crypto',
+    country: 'United States',
+    foundedYear: 1850,
+    failedYear: 2008,
+    capitalRaised: 639000000000,
+    peakValuation: 60000000000,
+    failureScore: 99,
+    status: 'Defunct / Bankruptcy (Global Financial Crisis)',
+    tagline: 'Global investment bank collapse triggering the 2008 financial crisis.',
+    summary: 'Lehman Brothers collapsed under the weight of $639B in assets leveraged 31:1 against subprime mortgage bonds. The firm concealed liquidity distress through off-balance-sheet "Repo 105" accounting maneuvers until the Federal Reserve refused a bailout, triggering the greatest financial panic since 1929.',
+    failureMode: 'Unit Economics Collapse',
+    rootCauses: [
+      'Catastrophic 31:1 balance-sheet leverage on illiquid mortgage-backed collateral',
+      'Repo 105 off-balance-sheet accounting deception hiding $50B in liabilities',
+      'Concentrated risk exposure in subprime commercial and residential real estate loans'
+    ],
+    failureFactors: {
+      productRisk: 90,
+      marketRisk: 98,
+      businessModelRisk: 99,
+      competitionRisk: 70,
+      executionRisk: 95
+    },
+    founders: [
+      { name: 'Henry Lehman', role: 'Original Founder', background: 'Commodities merchant' },
+      { name: 'Richard Fuld', role: 'Chairman & CEO (at collapse)', background: 'Longtime Wall Street executive dubbed "The Gorilla"' }
+    ],
+    investors: ['Public Shareholders', 'Berkshire Hathaway (Rejected Offer)', 'Korea Development Bank (Failed Talks)'],
+    timeline: [
+      { year: '1850', event: 'Founded in Montgomery, Alabama by German immigrant brothers.' },
+      { year: '2007', event: 'Aggressively underwrites more subprime securitizations than any other Wall Street bank.' },
+      { year: '2008 (Mar)', event: 'Bear Stearns collapse sends borrowing costs surging; Lehman executives deny solvency concerns.' },
+      { year: '2008 (Sep 15)', event: 'Files Chapter 11 bankruptcy with $639B in assets; largest bankruptcy in history.' }
+    ],
+    lessons: [
+      'Excessive balance sheet leverage turns manageable asset drawdowns into fatal liquidity crises.',
+      'Accounting trickery (Repo 105) buys short-term cosmetic optics at the cost of catastrophic sudden death.',
+      'In systemic financial contagion, counterparties flee faster than central banks can coordinate rescue packages.'
+    ],
+    evidenceSources: ['Valukas Bankruptcy Examiner Report', 'Financial Crisis Inquiry Commission (FCIC) Report', 'SEC Enforcement Filings'],
+    relatedStartupIds: ['enron', 'worldcom', 'wirecard']
+  },
+  {
+    id: 'worldcom',
+    name: 'WorldCom',
+    industry: 'SaaS & Enterprise',
+    country: 'United States',
+    foundedYear: 1983,
+    failedYear: 2002,
+    capitalRaised: 107000000000,
+    peakValuation: 175000000000,
+    failureScore: 98,
+    status: 'Bankruptcy / Dissolved (SEC Indictments)',
+    tagline: 'Massive $11B accounting scandal that bankrupted the telecom giant.',
+    summary: 'WorldCom fabricated over $3.8B in ordinary operating line costs into capital expenditures, creating fictitious profits on paper. When uncovered by internal auditor Cynthia Cooper, the $107B debt-fueled telecom empire declared the largest Chapter 11 bankruptcy in US history at the time.',
+    failureMode: 'Fraud & Governance Failure',
+    rootCauses: [
+      'Fraudulent capitalization of line costs to inflate reported EBITDA and net margins',
+      'Unchecked CEO Bernie Ebbers leveraging personal stock pledges to finance real estate and ranch holdings',
+      'Passive board oversight and collusive external audits failing to challenge non-GAAP adjustments'
+    ],
+    failureFactors: {
+      productRisk: 60,
+      marketRisk: 85,
+      businessModelRisk: 95,
+      competitionRisk: 80,
+      executionRisk: 99
+    },
+    founders: [
+      { name: 'Bernard Ebbers', role: 'Co-Founder & CEO', background: 'Telecom mogul convicted of securities fraud; sentenced to 25 years' },
+      { name: 'Scott Sullivan', role: 'CFO', background: 'Architect of accounting adjustments' }
+    ],
+    investors: ['Salomon Smith Barney (Jack Grubman)', 'Institutional Bondholders', 'Public Equity Markets'],
+    timeline: [
+      { year: '1983', event: 'Founded as Long Distance Discount Service (LDDS) in Hattiesburg, Mississippi.' },
+      { year: '1998', event: 'Acquires MCI Communications for $37B, forming telecom behemoth carrying 50% of global internet traffic.' },
+      { year: '2000', event: 'Dot-com crash crushes bandwidth prices and fiber capacity demand.' },
+      { year: '2002 (Jun)', event: 'Internal audit reveals $3.8B in false accounting entries; SEC files civil fraud charges.' },
+      { year: '2002 (Jul)', event: 'Files Chapter 11 bankruptcy with $107B in assets.' }
+    ],
+    lessons: [
+      'Capitalizing operating expenses is an elementary fraud that inevitably unwinds with explosive momentum.',
+      'Analyst cheerleading and conflicted investment banking research mask catastrophic structural decay.',
+      'Independent internal audit reporting directly to the audit committee is non-negotiable for enterprise survival.'
+    ],
+    evidenceSources: ['Cynthia Cooper "Extraordinary Circumstances"', 'Thornburgh Bankruptcy Examiner Report', 'SEC vs. WorldCom Inc.'],
+    relatedStartupIds: ['enron', 'wirecard', 'lehman-brothers']
+  },
+  {
+    id: 'enron',
+    name: 'Enron',
+    industry: 'CleanTech & Energy',
+    country: 'United States',
+    foundedYear: 1985,
+    failedYear: 2001,
+    capitalRaised: 63400000000,
+    peakValuation: 70000000000,
+    failureScore: 97,
+    status: 'Bankruptcy / Dissolved (Sarbanes-Oxley Precedent)',
+    tagline: 'The textbook corporate fraud involving special purpose vehicles and mark-to-market accounting.',
+    summary: 'Enron transformed from a sleepy pipeline firm into a speculative energy derivative trader. By exploiting mark-to-market accounting rules and shifting hundreds of millions in debts into off-balance-sheet Special Purpose Entities (LJM, Chewco), leadership concealed colossal trading losses until whistleblower Sherron Watkins exposed the scheme.',
+    failureMode: 'Fraud & Governance Failure',
+    rootCauses: [
+      'Abuse of mark-to-market accounting recognizing decades of projected future income upfront on day one',
+      'Off-balance-sheet special purpose entities (SPEs) managed by CFO Andrew Fastow collecting illicit kickbacks',
+      'Hyper-aggressive "rank-and-yank" corporate culture destroying risk controls and compliance incentives'
+    ],
+    failureFactors: {
+      productRisk: 75,
+      marketRisk: 88,
+      businessModelRisk: 96,
+      competitionRisk: 65,
+      executionRisk: 98
+    },
+    founders: [
+      { name: 'Kenneth Lay', role: 'Chairman & CEO', background: 'Energy executive and deregulatory champion, convicted in 2006' },
+      { name: 'Jeffrey Skilling', role: 'CEO', background: 'Former McKinsey partner, convicted in 2006' },
+      { name: 'Andrew Fastow', role: 'CFO', background: 'Architect of Special Purpose Entities' }
+    ],
+    investors: ['Arthur Andersen (Auditor)', 'Citigroup', 'J.P. Morgan', 'Public Markets'],
+    timeline: [
+      { year: '1985', event: 'Formed through merger of Houston Natural Gas and InterNorth.' },
+      { year: '1992', event: 'SEC approves Enron\'s request to use mark-to-market accounting for natural gas contracts.' },
+      { year: '2000', event: 'Reaches peak stock price of $90.75; named Fortune\'s "Most Innovative Company" 6 years running.' },
+      { year: '2001 (Aug)', event: 'CEO Jeffrey Skilling abruptly resigns; VP Sherron Watkins writes warning memo to Ken Lay.' },
+      { year: '2001 (Dec)', event: 'Enron files Chapter 11 bankruptcy; shares collapse to $0.26.' }
+    ],
+    lessons: [
+      'Complex corporate structures created specifically to obscure accounting transparency are red flags of terminal risk.',
+      'Incentives drive behavior: when compensation rewards paper deal originations rather than cash realizations, fraud follows.',
+      'Auditing firms with lucrative concurrent consulting contracts cannot reliably exercise fiduciary independence.'
+    ],
+    evidenceSources: ['Powers Report to the Board of Directors of Enron Corp.', 'Bethany McLean "The Smartest Guys in the Room"', 'DOJ Enron Task Force Indictments'],
+    relatedStartupIds: ['worldcom', 'wirecard', 'ftx']
+  },
+  {
+    id: 'nokia',
+    name: 'Nokia (Mobile Division)',
+    industry: 'Hardware & Robotics',
+    country: 'Germany',
+    foundedYear: 1865,
+    failedYear: 2013,
+    capitalRaised: 10000000000,
+    peakValuation: 110000000000,
+    failureScore: 95,
+    status: 'Division Acquired by Microsoft / Written Down',
+    tagline: 'Market-dominant mobile phone empire obliterated by software ecosystems.',
+    summary: 'Nokia controlled over 40% of the worldwide mobile phone market before the smartphone transition. Complacent executive bureaucracy and fractured Symbian OS software development left it helpless against Apple iOS and Google Android, resulting in a disastrous fire-sale acquisition by Microsoft for $7.2B that was subsequently written down.',
+    failureMode: 'Outcompeted by Incumbents',
+    rootCauses: [
+      'Failure to recognize that mobile hardware had transitioned from industrial design into software ecosystems and app developer networks',
+      'Symbian OS technical debt and fractured internal software divisions paralyzing touchscreen smartphone development',
+      'Stephen Elop "Burning Platform" memo tanking current device sales before Windows Phone alternatives were ready'
+    ],
+    failureFactors: {
+      productRisk: 88,
+      marketRisk: 95,
+      businessModelRisk: 80,
+      competitionRisk: 98,
+      executionRisk: 90
+    },
+    founders: [
+      { name: 'Fredrik Idestam', role: 'Original Founder', background: '19th century industrialist' },
+      { name: 'Jorma Ollila', role: 'CEO (Golden Era)', background: 'Led transformation from conglomerate to mobile telecom giant' },
+      { name: 'Stephen Elop', role: 'CEO (Collapse Era)', background: 'Former Microsoft executive who authored the "Burning Platform" memo' }
+    ],
+    investors: ['Helsinki Stock Exchange (OMX)', 'NYSE Public Shareholders', 'Microsoft (Acquirer)'],
+    timeline: [
+      { year: '1998', event: 'Becomes best-selling mobile phone manufacturer on Earth, surpassing Motorola.' },
+      { year: '2007', event: 'Apple launches the iPhone; Nokia executives dismiss it as a niche device lacking hardware numeric keypads.' },
+      { year: '2011', event: 'CEO Stephen Elop issues "Burning Platform" memo and commits Nokia exclusively to Microsoft Windows Phone.' },
+      { year: '2013', event: 'Agrees to sell entire Devices & Services mobile business to Microsoft for $7.2 Billion.' },
+      { year: '2015', event: 'Microsoft writes down $7.6B on the acquisition, laying off 7,800 workers and effectively shuttering the brand.' }
+    ],
+    lessons: [
+      'Incumbent scale does not insulate a company when the competitive battleground shifts from hardware engineering to software developer platforms.',
+      'Publicly disparaging your own current product line before its replacement is available destroys channel sales velocity.',
+      'Organizational fear cultures where middle managers conceal technical delays from executive leadership guarantee market displacement.'
+    ],
+    evidenceSources: ['Stephen Elop "Burning Platform" Memo', 'Insead Case Study: Why Nokia Really Lost the Smartphone Battle', 'Microsoft 10-K Asset Impairment Filings'],
+    relatedStartupIds: ['blackberry', 'kodak', 'pebble']
+  },
+  {
+    id: 'byjus',
+    name: "BYJU'S",
+    industry: 'EdTech',
+    country: 'India',
+    foundedYear: 2011,
+    failedYear: 2024,
+    capitalRaised: 5800000000,
+    peakValuation: 22000000000,
+    failureScore: 94,
+    status: 'Insolvency Proceedings / Liquidation',
+    tagline: 'World\'s most valuable edtech company collapsed under aggressive debt and audit irregularities.',
+    summary: 'BYJU\'S raised over $5.8B and peaked at a $22B valuation through hyper-aggressive acquisition sprees (Aakash, WhiteHat Jr) and predatory sales tactics. Delayed financial audits, a disputed $1.2B term loan B, and boardroom resignations collapsed the company into insolvency and liquidation.',
+    failureMode: 'Premature Scaling',
+    rootCauses: [
+      'Aggressive predatory sales tactics targeting low-income parents with high-interest educational loan debt',
+      'Uncontrolled M&A spree spending over $2.5B acquiring companies like WhiteHat Jr and Great Learning that bled massive cash',
+      'Prolonged failure to file statutory audited financial reports leading to auditor resignations (Deloitte) and lender lawsuits'
+    ],
+    failureFactors: {
+      productRisk: 65,
+      marketRisk: 80,
+      businessModelRisk: 95,
+      competitionRisk: 75,
+      executionRisk: 96
+    },
+    founders: [
+      { name: 'Byju Raveendran', role: 'Founder & CEO', background: 'Celebrated maths tutor turned tech billionaire' },
+      { name: 'Divya Gokulnath', role: 'Co-Founder & Director', background: 'Educator and entrepreneur' }
+    ],
+    investors: ['Prosus (Naspers)', 'Peak XV Partners (Sequoia India)', 'Chan Zuckerberg Initiative', 'General Atlantic', 'Tiger Global', 'Silver Lake', 'BlackRock'],
+    timeline: [
+      { year: '2011', event: 'Founded in Bengaluru, India as Think and Learn Pvt. Ltd.' },
+      { year: '2018', event: 'Becomes a unicorn after raising funds from Tencent and General Atlantic.' },
+      { year: '2021', event: 'Raises massive capital during pandemic edtech boom, reaching peak $22B valuation and acquiring Aakash for $1B.' },
+      { year: '2023 (Jun)', event: 'Auditor Deloitte and three key board members (Prosus, Peak XV, Chan Zuckerberg) resign simultaneously.' },
+      { year: '2024', event: 'NCLT admits BYJU\'S into corporate insolvency; Prosus writes down entire 9.6% stake to $0.' }
+    ],
+    lessons: [
+      'EdTech customer lifetime value cannot withstand predatory high-pressure sales tactics once word-of-mouth deteriorates.',
+      'Debt-financed multi-billion-dollar M&A in non-profitable startups creates catastrophic balance sheet fragility during interest rate spikes.',
+      'Delayed audits and boardroom resignations signal governance breakdown that equity markets will penalize with total wipeout.'
+    ],
+    evidenceSources: ['National Company Law Tribunal (NCLT) Filings', 'Prosus Annual Report 100% Impairment Write-Off', 'Deloitte Resignation Letter to BYJU\'S Board'],
+    relatedStartupIds: ['theranos', 'wework', 'scalefactor']
   }
 ];
 

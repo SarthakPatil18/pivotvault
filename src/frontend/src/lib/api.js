@@ -65,7 +65,7 @@ export async function getStartups(params = {}) {
     maxScore = 100,
     sort = 'score_desc', // score_desc, score_asc, capital_desc, capital_asc, year_desc, name_asc
     page = 1,
-    limit = 12
+    limit = 20
   } = params;
 
   const queryParams = new URLSearchParams();
@@ -437,7 +437,7 @@ export async function runRiskScanner(inputData) {
       confidence: ideaText.length > 100 ? 88 : 72,
       diagnosis: {
         whatWeThink,
-        whyItIsRisky: riskDrivers.map(d => `${d.name} (${d.score}/100): ${d.reasoning}`),
+        whyItIsRisky: riskDrivers.map(d => `${d.name} (${d.score}/100): ${d.reasoning}`).join('; '),
         whatLooksPromising,
         validateFirst,
         practicalQuestions: [
@@ -484,14 +484,26 @@ export async function runRiskScanner(inputData) {
     };
   });
 
-  if (result.isLive && result.data) {
+  if (result.data) {
     const d = result.data.data || result.data;
+    const diagnosis = d.diagnosis || {
+      whatWeThink: d.explanation || `Evaluated concept.`,
+      whyItIsRisky: d.primaryFailureVectors?.[0]?.rationale || 'Venture risk profile indicates critical validation checkpoints.',
+      whatLooksPromising: d.positiveSignals || [],
+      validateFirst: d.recommendations || [],
+      practicalQuestions: d.unknowns || []
+    };
+
     return {
       ...result,
       data: {
         ...d,
-        ideaScore: d.finalRiskScore,
-        overallRiskScore: d.finalRiskScore,
+        diagnosis,
+        ideaScore: d.finalRiskScore ?? 65,
+        overallRiskScore: d.finalRiskScore ?? 65,
+        finalRiskScore: d.finalRiskScore ?? 65,
+        riskDrivers: d.riskDrivers || [],
+        historicalMatches: d.historicalMatches || [],
         categoryScores: {
           productRisk: d.ventureProfile?.dimensions?.productMarketFit || 60,
           marketRisk: d.ventureProfile?.dimensions?.customerNeed || 55,

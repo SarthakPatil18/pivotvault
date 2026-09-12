@@ -296,6 +296,78 @@ const OFFICIAL_BRAND_SVGS = {
       <path d="M26 70 L50 30 L74 70 Z" fill="none" stroke="#FFFFFF" strokeWidth="7" strokeLinejoin="round" />
       <path d="M38 70 L50 50 L62 70 Z" fill="#FFFFFF" />
     </svg>
+  ),
+  'better-place': (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="20" fill="#047857" />
+      <circle cx="50" cy="50" r="26" stroke="#FFFFFF" strokeWidth="6" fill="none" />
+      <path d="M50 32 L50 48 L62 48" stroke="#34D399" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+      <circle cx="50" cy="50" r="5" fill="#34D399" />
+    </svg>
+  ),
+  moviepass: (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="20" fill="#DC2626" />
+      <rect x="22" y="30" width="56" height="40" rx="6" fill="#991B1B" stroke="#FFFFFF" strokeWidth="3" />
+      <text x="50" y="58" textAnchor="middle" fill="#FFFFFF" fontFamily="system-ui, sans-serif" fontWeight="900" fontSize="24">
+        M
+      </text>
+    </svg>
+  ),
+  'essential-products': (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="20" fill="#18181B" />
+      <circle cx="50" cy="50" r="24" stroke="#A1A1AA" strokeWidth="5" fill="none" />
+      <circle cx="50" cy="50" r="8" fill="#FFFFFF" />
+    </svg>
+  ),
+  convoy: (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="20" fill="#059669" />
+      <path d="M24 64 L50 26 L76 64 Z" fill="none" stroke="#FFFFFF" strokeWidth="6" strokeLinejoin="round" />
+      <line x1="38" y1="52" x2="62" y2="52" stroke="#FFFFFF" strokeWidth="4" />
+    </svg>
+  ),
+  'toys-r-us': (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="20" fill="#0284C7" />
+      <text x="50" y="64" textAnchor="middle" fill="#FACC15" fontFamily="system-ui, sans-serif" fontWeight="900" fontSize="36" transform="scale(-1, 1) translate(-100, 0)">
+        R
+      </text>
+      <circle cx="28" cy="36" r="4" fill="#EF4444" />
+      <circle cx="72" cy="68" r="4" fill="#22C55E" />
+    </svg>
+  ),
+  'musical-ly': (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="20" fill="#E11D48" />
+      <circle cx="42" cy="66" r="10" fill="#FFFFFF" />
+      <path d="M52 66 L52 30 L74 24 L74 44 L52 48" stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" fill="none" />
+    </svg>
+  ),
+  'justin-tv': (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="20" fill="#7C3AED" />
+      <rect x="22" y="34" width="56" height="42" rx="8" fill="#5B21B6" stroke="#FFFFFF" strokeWidth="4" />
+      <line x1="38" y1="22" x2="48" y2="34" stroke="#FFFFFF" strokeWidth="4" strokeLinecap="round" />
+      <line x1="62" y1="22" x2="52" y2="34" stroke="#FFFFFF" strokeWidth="4" strokeLinecap="round" />
+      <circle cx="50" cy="55" r="8" fill="#FACC15" />
+    </svg>
+  ),
+  netscape: (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="20" fill="#0D9488" />
+      <circle cx="50" cy="50" r="28" stroke="#FFFFFF" strokeWidth="4" fill="none" />
+      <path d="M38 68 L38 32 L62 68 L62 32" stroke="#FFFFFF" strokeWidth="6" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+  ),
+  digg: (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="20" fill="#1E40AF" />
+      <text x="50" y="66" textAnchor="middle" fill="#FFFFFF" fontFamily="system-ui, sans-serif" fontWeight="900" fontSize="32">
+        digg
+      </text>
+    </svg>
   )
 };
 
@@ -340,7 +412,7 @@ export function CompanyLogo({
   className = '',
   showDomainFallback = true
 }) {
-  const [providerIndex, setProviderIndex] = useState(0); // 0: Clearbit, 1: Google S2 128, 2: DuckDuckGo, 3: Monogram
+  const [providerIndex, setProviderIndex] = useState(0);
 
   // Normalize inputs
   const companyName = startup?.name || name || 'Startup';
@@ -369,11 +441,13 @@ export function CompanyLogo({
   // 2. Resolve domain for real high-clarity network fetching
   const domain = startup?.domain || resolveCompanyDomain(companyName, cleanKey);
 
-  if (domain && showDomainFallback && providerIndex < 3) {
+  if (domain && showDomainFallback && providerIndex < 5) {
     const urls = [
-      `https://logo.clearbit.com/${domain}`,
       `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
-      `https://icons.duckduckgo.com/ip3/${domain}.ico`
+      `https://icon.horse/icon/${domain}`,
+      `https://icons.duckduckgo.com/ip3/${domain}.ico`,
+      `https://unavatar.io/${domain}?fallback=false`,
+      `https://logo.clearbit.com/${domain}`
     ];
     const currentUrl = urls[providerIndex];
 

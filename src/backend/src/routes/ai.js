@@ -161,21 +161,22 @@ Instructions:
     if (!answer || answer.includes('When our startup collapsed, the primary lesson')) {
       const qLower = userMsg.toLowerCase();
       let matched = null;
+      const pResp = persona.responses || {};
 
       if (qLower.includes('fail') || qLower.includes('wrong') || qLower.includes('why') || qLower.includes('root') || qLower.includes('cause') || qLower.includes('collapse') || qLower.includes('microfactory') || qLower.includes('fraud') || qLower.includes('spac') || qLower.includes('bankrupt')) {
-        matched = persona.responses['strategy-fail'] || persona.responses['fail'];
+        matched = pResp['strategy-fail'] || pResp['fail'];
       } else if (qLower.includes('turn') || qLower.includes('signal') || qLower.includes('warn') || qLower.includes('when') || qLower.includes('point') || qLower.includes('early')) {
-        matched = persona.responses['turning-point'] || persona.responses['signals'];
+        matched = pResp['turning-point'] || pResp['signals'];
       } else if (qLower.includes('differ') || qLower.includes('again') || qLower.includes('today') || qLower.includes('start over')) {
-        matched = persona.responses['differently'];
+        matched = pResp['differently'];
       } else if (qLower.includes('advice') || qLower.includes('lesson') || qLower.includes('learn') || qLower.includes('rule') || qLower.includes('recommend') || qLower.includes('takeaway')) {
-        matched = persona.responses['advice-lesson'] || persona.responses['lesson'] || persona.responses['advice'];
+        matched = pResp['advice-lesson'] || pResp['lesson'] || pResp['advice'];
       } else if (qLower.includes('money') || qLower.includes('capital') || qLower.includes('fund') || qLower.includes('investor') || qLower.includes('burn') || qLower.includes('valuation')) {
-        matched = persona.responses['money'] || `We raised substantial capital, but we burned through our runway faster than our operational capacity could generate revenue. In high-capital ventures, equity subsidies create an illusion of invincibility until liquidity tightens.`;
+        matched = pResp['money'] || `We raised substantial capital, but we burned through our runway faster than our operational capacity could generate revenue. In high-capital ventures, equity subsidies create an illusion of invincibility until liquidity tightens.`;
       }
 
-      if (!matched && persona.responses) {
-        for (const [key, text] of Object.entries(persona.responses)) {
+      if (!matched && pResp) {
+        for (const [key, text] of Object.entries(pResp)) {
           if (key === 'default') continue;
           const parts = key.split('-');
           if (parts.some((p) => qLower.includes(p))) {
@@ -185,7 +186,7 @@ Instructions:
         }
       }
 
-      answer = matched || persona.responses['default'] || `Looking back at ${persona.startup}, our failure stemmed directly from ${persona.failureCause}. We had bold ambition, but ambition without unit-economic sustainability is hazardous. What specific aspect of our journey would you like to examine?`;
+      answer = matched || pResp['default'] || `Looking back at ${persona.startup}, our failure stemmed directly from ${persona.failureCause || 'structural unit-economic challenges'}. We had bold ambition, but ambition without unit-economic sustainability is hazardous. What specific aspect of our journey would you like to examine?`;
     }
 
     res.json({ 

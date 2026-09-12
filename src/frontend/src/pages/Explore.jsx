@@ -6,11 +6,12 @@ import { FailureScoreBadge } from '../components/common/FailureScoreBadge';
 import { CompanyLogo } from '../components/common/CompanyLogo';
 import { LoadingState, EmptyState } from '../components/common/InsightCard';
 import { getStartups } from '../lib/api';
-import { INDUSTRIES, FAILURE_MODES, COUNTRIES } from '../lib/data/startupsData';
+import { INDUSTRIES, FAILURE_MODES, COUNTRIES, CURATED_STARTUPS } from '../lib/data/startupsData';
 import { formatCurrency } from '../lib/utils';
 import { 
   Search, Filter, SlidersHorizontal, ArrowUpDown, Grid, 
-  List, ChevronLeft, ChevronRight, RotateCcw, Download, Check
+  List, ChevronLeft, ChevronRight, RotateCcw, Download, Check,
+  Trophy, ArrowRight, ArrowUpRight, Flame, Sparkles
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
@@ -28,7 +29,8 @@ export function Explore() {
 
   // Data & loading state
   const [startups, setStartups] = useState([]);
-  const [pagination, setPagination] = useState({ totalRecords: 0, totalPages: 1, currentPage: 1, limit: 12 });
+  const [pagination, setPagination] = useState({ totalRecords: 0, totalPages: 1, currentPage: 1, limit: 20 });
+  const [top20List, setTop20List] = useState(() => (CURATED_STARTUPS ? CURATED_STARTUPS.slice(0, 20) : []));
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
@@ -62,11 +64,17 @@ export function Explore() {
           country: selectedCountry,
           sort: sortOption,
           page: currentPage,
-          limit: 12
+          limit: 20
         });
         
-        setStartups(res.data.startups || []);
-        setPagination(res.data.pagination || { totalRecords: 0, totalPages: 1, currentPage: 1, limit: 12 });
+        const fetchedStartups = res.data.startups || [];
+        setStartups(fetchedStartups);
+        setPagination(res.data.pagination || { totalRecords: fetchedStartups.length, totalPages: 1, currentPage: 1, limit: 20 });
+
+        // If on first page with default or top sort, capture the top 20 list
+        if (fetchedStartups.length >= 20 && (!searchQuery || searchQuery.trim() === '')) {
+          setTop20List(fetchedStartups.slice(0, 20));
+        }
       } catch (err) {
         setError(err.message || 'Failed to fetch startup intelligence records.');
       } finally {
@@ -127,8 +135,8 @@ export function Explore() {
     <div className="pb-20 bg-white dark:bg-black min-h-screen text-black dark:text-white">
       <PageHeader
         title="Startup Failure Archive"
-        subtitle="Search, filter, and analyze 413+ verified startup failure post-mortems across 15 industries and 12 failure vectors."
-        badge="413+ Startups Indexed"
+        subtitle="Search, filter, and analyze 768+ verified startup failure post-mortems across 15 industries and 12 failure vectors."
+        badge="768+ Startups Indexed"
         tagline="ARCHIVE DATABASE"
         breadcrumbs={[{ label: 'Explore Archive' }]}
         actions={
@@ -143,6 +151,85 @@ export function Explore() {
       />
 
       <div className="vault-container">
+        {/* Top 20 Companies Spotlight Showcase */}
+        {top20List.length > 0 && (
+          <div className="mb-8 p-5 bg-[#FAFAFA] dark:bg-[#111111] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[10px] shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 mb-4">
+              <div>
+                <div className="flex items-center gap-2">
+                  <span className="inline-flex items-center justify-center p-1 rounded-full bg-amber-500/10 text-amber-500">
+                    <Trophy className="w-4 h-4" />
+                  </span>
+                  <h2 className="text-base font-bold font-sans tracking-tight text-black dark:text-white">
+                    Top 20 Startup Failures & Historical Collapses
+                  </h2>
+                  <span className="text-[11px] px-2 py-0.5 rounded-full font-bold bg-amber-500/10 text-amber-600 dark:text-amber-400 border border-amber-500/20">
+                    Hall of Autopsies
+                  </span>
+                </div>
+                <p className="text-xs text-[#737373] dark:text-[#A3A3A3] mt-0.5">
+                  The 20 most catastrophic venture liquidations, accounting scandals, and unit-economic breakdowns.
+                </p>
+              </div>
+
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedIndustry('All Industries');
+                  setSelectedFailureMode('All Failure Modes');
+                  setSelectedCountry('All Countries');
+                  setSortOption('score_desc');
+                  setCurrentPage(1);
+                  updateFilters({ q: '', industry: 'All Industries', failureMode: 'All Failure Modes', country: 'All Countries', sort: 'score_desc', page: 1 });
+                }}
+                className="inline-flex items-center gap-1 text-xs font-bold text-black dark:text-white hover:underline cursor-pointer"
+              >
+                <span>View All 20 In Archive Grid</span>
+                <ArrowRight className="w-3.5 h-3.5" />
+              </button>
+            </div>
+
+            {/* Horizontal scrollable rail of Top 20 company cards */}
+            <div className="flex gap-3 overflow-x-auto pb-2">
+              {top20List.map((c, idx) => (
+                <Link
+                  key={c.id || idx}
+                  to={`/startup/${c.id}`}
+                  className="shrink-0 w-[210px] p-3.5 rounded-[8px] bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#262626] hover:border-black dark:hover:border-white transition-all group flex flex-col justify-between shadow-2xs"
+                >
+                  <div>
+                    <div className="flex items-center justify-between gap-2 mb-2.5">
+                      <span className="text-[11px] font-extrabold px-1.5 py-0.5 rounded-[4px] bg-[#F5F5F5] dark:bg-[#222222] text-[#737373] dark:text-[#A3A3A3] font-mono">
+                        #{idx + 1}
+                      </span>
+                      <FailureScoreBadge score={c.failureScore || (99 - idx)} size="xs" />
+                    </div>
+                    <div className="flex items-center gap-2.5 mb-2">
+                      <CompanyLogo startup={c} name={c.name} id={c.id} size="sm" />
+                      <div className="min-w-0 flex-1">
+                        <h3 className="font-bold text-xs truncate text-black dark:text-white group-hover:underline">
+                          {c.name}
+                        </h3>
+                        <p className="text-[11px] text-[#737373] dark:text-[#A3A3A3] truncate">
+                          {c.industry}
+                        </p>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="pt-2 mt-1 border-t border-[#F0F0F0] dark:border-[#222222] flex items-center justify-between text-[11px]">
+                    <span className="font-mono font-bold text-black dark:text-white">
+                      {formatCurrency(c.capitalRaised)}
+                    </span>
+                    <span className="text-[10px] text-[#737373] dark:text-[#A3A3A3] group-hover:text-black dark:group-hover:text-white flex items-center gap-0.5">
+                      Autopsy <ArrowUpRight className="w-2.5 h-2.5" />
+                    </span>
+                  </div>
+                </Link>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Search & Filter Controls Bar */}
         <div className="p-5 mb-8 space-y-4 bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[8px] shadow-sm">
           <div className="grid grid-cols-1 md:grid-cols-4 gap-3">
@@ -238,6 +325,24 @@ export function Explore() {
                   <option value="name_asc">Company Name (A–Z)</option>
                 </select>
               </div>
+
+              {/* Quick Filter: Top 20 Titans */}
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedIndustry('All Industries');
+                  setSelectedFailureMode('All Failure Modes');
+                  setSelectedCountry('All Countries');
+                  setSortOption('score_desc');
+                  setCurrentPage(1);
+                  updateFilters({ q: '', industry: 'All Industries', failureMode: 'All Failure Modes', country: 'All Countries', sort: 'score_desc', page: 1 });
+                }}
+                className="flex items-center gap-1 px-2.5 py-1 rounded-[4px] bg-amber-500/10 dark:bg-amber-400/10 text-amber-600 dark:text-amber-400 border border-amber-500/20 text-[11px] font-bold hover:bg-amber-500/20 transition-colors cursor-pointer"
+                title="View Top 20 Companies by Failure Score"
+              >
+                <Trophy className="w-3 h-3 text-amber-500" />
+                <span>Top 20 Titans</span>
+              </button>
 
               {/* Reset Filters Button */}
               {(searchQuery || selectedIndustry !== 'All Industries' || selectedFailureMode !== 'All Failure Modes' || selectedCountry !== 'All Countries') && (

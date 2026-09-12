@@ -98,9 +98,11 @@ export function Home() {
 
   const handleRunDemoScan = () => {
     setIsScanning(true);
-    setTimeout(() => {
-      setIsScanning(false);
-    }, 600);
+    if (demoIdea && demoIdea.trim()) {
+      navigate(`/risk-scanner?idea=${encodeURIComponent(demoIdea.trim())}`);
+    } else {
+      navigate('/risk-scanner');
+    }
   };
 
   // Failure vectors for horizontal bar visualization

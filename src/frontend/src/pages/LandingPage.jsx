@@ -10,6 +10,8 @@ import '../styles/landing.css';
 
 const navItems = [
   ['Explore', '/explore'],
+  ['Risk Scanner', '/risk-scanner'],
+  ['Hall of Ghosts', '/hall-of-ghosts'],
   ['Intelligence', 'intelligence'],
   ['Analysis', 'pillars'],
   ['Insights', 'insights'],
@@ -274,7 +276,11 @@ export function LandingPage() {
   const analyze = (event) => {
     event.preventDefault();
     setAnalyzing(true);
-    window.setTimeout(() => setAnalyzing(false), 1100);
+    if (idea && idea.trim()) {
+      navigate(`/risk-scanner?idea=${encodeURIComponent(idea.trim())}`);
+    } else {
+      navigate('/risk-scanner');
+    }
   };
 
   const goToScan = () => {
@@ -602,12 +608,21 @@ export function LandingPage() {
             <SectionIntro
               eyebrow="HALL OF GHOSTS"
               title="The graveyard of startups that once looked promising."
-              copy="Explore what happened, why they failed, how much capital disappeared — and what founders today can learn from them."
+              copy="Explore what happened, why they failed, how much capital disappeared — and interview reconstructed founders synthesized from public trial & SEC records."
             />
             <Reveal className="ghost-grid">
               {ghosts.map(ghost => (
-                <article className="ghost-card" key={ghost.name}>
-                  <span className="micro">GHOST № {String(ghosts.indexOf(ghost) + 1).padStart(3, '0')}</span>
+                <article 
+                  className="ghost-card" 
+                  key={ghost.name}
+                  onClick={() => navigate('/hall-of-ghosts')}
+                  style={{ cursor: 'pointer' }}
+                  title={`Interview reconstructed ghost of ${ghost.name}`}
+                >
+                  <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                    <span className="micro">GHOST № {String(ghosts.indexOf(ghost) + 1).padStart(3, '0')}</span>
+                    <span style={{ fontSize: '11px', fontFamily: 'monospace', fontWeight: 'bold' }}>Interview →</span>
+                  </div>
                   <h3>{ghost.name}</h3>
                   <div className="ghost-meta">
                     <span>{ghost.domain}</span>
@@ -624,6 +639,17 @@ export function LandingPage() {
                 </article>
               ))}
             </Reveal>
+
+            <div style={{ textAlign: 'center', marginTop: '2.5rem' }}>
+              <button 
+                type="button"
+                className="button dark"
+                onClick={() => navigate('/hall-of-ghosts')}
+                style={{ display: 'inline-flex', alignItems: 'center', gap: '8px', margin: '0 auto' }}
+              >
+                Enter Hall of Ghosts: Interview 6 Reconstructed Founders <ArrowRight size={17} />
+              </button>
+            </div>
           </div>
         </section>
 
@@ -696,9 +722,17 @@ export function LandingPage() {
                 onChange={event => setIdea(event.target.value)}
               />
               <button className="button dark" type="submit" disabled={analyzing}>
-                {analyzing ? 'Scanning evidence…' : <>Scan startup risk <ArrowRight size={17} /></>}
+                {analyzing ? 'Opening Live Scanner…' : <>Scan startup risk <ArrowRight size={17} /></>}
               </button>
-              <p><Database size={14} /> No idea is stored in this demo.</p>
+              <button 
+                type="button"
+                onClick={() => navigate(`/risk-scanner?idea=${encodeURIComponent(idea.trim())}`)} 
+                className="text-button"
+                style={{ marginTop: '0.75rem', width: '100%', justifyContent: 'center' }}
+              >
+                Open Full Live Risk Scanner Suite <ArrowRight size={15} />
+              </button>
+              <p><Database size={14} /> Powered by 413+ verified startup failure autopsies.</p>
             </form>
             <div className="demo-result">
               <div className="analysis-status">
@@ -722,7 +756,7 @@ export function LandingPage() {
               </div>
               <div className="historical">
                 <span className="micro">RELEVANT FAILURE CASES</span>
-                <p>7 similar startups analyzed <a href="#intelligence">View evidence <ArrowRight size={13} /></a></p>
+                <p>7 similar startups analyzed <button type="button" onClick={() => navigate(`/risk-scanner?idea=${encodeURIComponent(idea.trim())}`)} style={{ background: 'none', border: 'none', color: 'inherit', font: 'inherit', textDecoration: 'underline', cursor: 'pointer', display: 'inline-flex', alignItems: 'center', gap: '4px' }}>Run full scan <ArrowRight size={13} /></button></p>
                 <p>3 failed due to customer acquisition</p>
                 <p>2 struggled with retention</p>
                 <p>Recommended action: validate pricing before building</p>

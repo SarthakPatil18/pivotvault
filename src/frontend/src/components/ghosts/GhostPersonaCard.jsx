@@ -157,66 +157,67 @@ export function GhostChatInterface({ persona }) {
         return;
       }
     } catch (e) {
-      // Graceful fallback to offline smart heuristics
+      console.warn('Live ghost chat fallback activated:', e);
     }
 
     // Smart heuristic matching across persona responses
-    let replyText = persona.responses['default'];
+    const responses = persona?.responses || {};
+    let replyText = responses['default'] || `Reflecting on ${persona?.startup || 'our venture'}, our failure was grounded in ${persona?.failureCause || 'misaligned unit economics and premature scaling'}. Ambition without economic discipline is dangerous. What specific aspect of our journey would you like to investigate?`;
     const qLower = query.toLowerCase();
 
-    const matchKeys = Object.keys(persona.responses);
+    const matchKeys = Object.keys(responses);
     for (const key of matchKeys) {
       if (key === 'default') continue;
       // If query matches any key or parts of key words
       const parts = key.split('-');
       if (parts.some((part) => qLower.includes(part))) {
-        replyText = persona.responses[key];
+        replyText = responses[key];
         break;
       }
     }
 
     // Additional thematic heuristics
-    if (replyText === persona.responses['default']) {
+    if (replyText === responses['default']) {
       if (qLower.includes('peer') || qLower.includes('science') || qLower.includes('journal') || qLower.includes('publish')) {
-        replyText = persona.responses['peer-review'] || replyText;
+        replyText = responses['peer-review'] || replyText;
       } else if (qLower.includes('board') || qLower.includes('governance') || qLower.includes('director') || qLower.includes('kissinger')) {
-        replyText = persona.responses['board'] || persona.responses['governance'] || replyText;
+        replyText = responses['board'] || responses['governance'] || replyText;
       } else if (qLower.includes('signal') || qLower.includes('warn') || qLower.includes('lab') || qLower.includes('early')) {
-        replyText = persona.responses['signals'] || persona.responses['beta'] || replyText;
+        replyText = responses['signals'] || responses['beta'] || replyText;
       } else if (qLower.includes('softbank') || qLower.includes('masa') || qLower.includes('capital') || qLower.includes('fund')) {
-        replyText = persona.responses['softbank'] || replyText;
+        replyText = responses['softbank'] || replyText;
       } else if (qLower.includes('lease') || qLower.includes('duration') || qLower.includes('mismatch') || qLower.includes('rent')) {
-        replyText = persona.responses['mismatch'] || replyText;
+        replyText = responses['mismatch'] || replyText;
       } else if (qLower.includes('tech') || qLower.includes('valuation') || qLower.includes('multiple') || qLower.includes('software')) {
-        replyText = persona.responses['tech'] || replyText;
+        replyText = responses['tech'] || replyText;
       } else if (qLower.includes('screenshot') || qLower.includes('clip') || qLower.includes('social') || qLower.includes('piracy')) {
-        replyText = persona.responses['screenshots'] || replyText;
+        replyText = responses['screenshots'] || replyText;
       } else if (qLower.includes('tiktok') || qLower.includes('creator') || qLower.includes('youtube') || qLower.includes('consumer')) {
-        replyText = persona.responses['tiktok'] || replyText;
+        replyText = responses['tiktok'] || replyText;
       } else if (qLower.includes('cost') || qLower.includes('minute') || qLower.includes('spend') || qLower.includes('budget')) {
-        replyText = persona.responses['cost'] || replyText;
+        replyText = responses['cost'] || replyText;
       } else if (qLower.includes('burn') || qLower.includes('runway') || qLower.includes('cash') || qLower.includes('revenue')) {
-        replyText = persona.responses['burn'] || replyText;
+        replyText = responses['burn'] || replyText;
       } else if (qLower.includes('merchant') || qLower.includes('checkout') || qLower.includes('retail') || qLower.includes('adoption')) {
-        replyText = persona.responses['merchants'] || replyText;
+        replyText = responses['merchants'] || replyText;
       } else if (qLower.includes('platform') || qLower.includes('shopify') || qLower.includes('apple') || qLower.includes('moat')) {
-        replyText = persona.responses['platforms'] || replyText;
+        replyText = responses['platforms'] || replyText;
       } else if (qLower.includes('headcount') || qLower.includes('hire') || qLower.includes('hiring') || qLower.includes('team')) {
-        replyText = persona.responses['headcount'] || replyText;
+        replyText = responses['headcount'] || replyText;
       } else if (qLower.includes('hardware') || qLower.includes('part') || qLower.includes('engineer') || qLower.includes('machine')) {
-        replyText = persona.responses['hardware'] || replyText;
+        replyText = responses['hardware'] || replyText;
       } else if (qLower.includes('wifi') || qLower.includes('drm') || qLower.includes('pack') || qLower.includes('qr')) {
-        replyText = persona.responses['wifi'] || replyText;
+        replyText = responses['wifi'] || replyText;
       } else if (qLower.includes('bloomberg') || qLower.includes('video') || qLower.includes('squeeze') || qLower.includes('hand')) {
-        replyText = persona.responses['bloomberg'] || replyText;
+        replyText = responses['bloomberg'] || replyText;
       } else if (qLower.includes('alameda') || qLower.includes('backdoor') || qLower.includes('code') || qLower.includes('python')) {
-        replyText = persona.responses['backdoor'] || replyText;
+        replyText = responses['backdoor'] || replyText;
       } else if (qLower.includes('deficit') || qLower.includes('hole') || qLower.includes('customer') || qLower.includes('deposit')) {
-        replyText = persona.responses['deficit'] || replyText;
+        replyText = responses['deficit'] || replyText;
       } else if (qLower.includes('diligence') || qLower.includes('investor') || qLower.includes('sequoia') || qLower.includes('fomo')) {
-        replyText = persona.responses['diligence'] || replyText;
+        replyText = responses['diligence'] || replyText;
       } else if (qLower.includes('control') || qLower.includes('ray') || qLower.includes('audit') || qLower.includes('accounting')) {
-        replyText = persona.responses['controls'] || replyText;
+        replyText = responses['controls'] || replyText;
       }
     }
 

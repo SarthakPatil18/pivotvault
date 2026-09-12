@@ -63,6 +63,9 @@ export function App() {
             <Route path="/explore" element={<Explore />} />
             <Route path="/startup/:id" element={<StartupDetail />} />
             <Route path="/risk-scanner" element={<RiskScanner />} />
+            <Route path="/scanner" element={<Navigate to="/risk-scanner" replace />} />
+            <Route path="/risk" element={<Navigate to="/risk-scanner" replace />} />
+            <Route path="/riskscanner" element={<Navigate to="/risk-scanner" replace />} />
             <Route path="/pitch-deck-autopsy" element={<PitchDeckAutopsy />} />
             <Route path="/competitor-compare" element={<CompetitorCompare />} />
             <Route path="/founder-playbook" element={<FounderPlaybook />} />
@@ -71,6 +74,10 @@ export function App() {
             <Route path="/founder-confessions" element={<FounderConfessions />} />
             <Route path="/hall-of-confessions" element={<Navigate to="/founder-confessions" replace />} />
             <Route path="/hall-of-ghosts" element={<HallOfGhosts />} />
+            <Route path="/ghosts" element={<Navigate to="/hall-of-ghosts" replace />} />
+            <Route path="/ghost" element={<Navigate to="/hall-of-ghosts" replace />} />
+            <Route path="/hall-of-ghost" element={<Navigate to="/hall-of-ghosts" replace />} />
+            <Route path="/hallofghosts" element={<Navigate to="/hall-of-ghosts" replace />} />
             <Route path="/ai-assistant" element={<AIAssistant />} />
           </Route>
 

@@ -1,4 +1,5 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { PageHeader } from '../components/layout/PageHeader';
 import { RiskScoreGauge } from '../components/intelligence/RiskScoreGauge';
 import { runRiskScanner } from '../lib/api';
@@ -86,6 +87,9 @@ const FRIENDLY_RISK_NAMES = {
 };
 
 export function RiskScanner() {
+  const [searchParams] = useSearchParams();
+  const hasAutoScanned = useRef(false);
+
   const [formData, setFormData] = useState({
     idea: 'A lightweight AI-powered daily to-do list and task scheduler for remote software developers and designers.',
     industry: 'Software / SaaS',
@@ -102,6 +106,36 @@ export function RiskScanner() {
   const [showMethodology, setShowMethodology] = useState(false);
   const [showAllDimensions, setShowAllDimensions] = useState(false);
 
+  const triggerScan = async (dataToScan) => {
+    setLoading(true);
+    try {
+      const res = await runRiskScanner(dataToScan || formData);
+      setResult(res.data);
+      window.scrollTo({ top: 380, behavior: 'smooth' });
+    } catch (err) {
+      console.error('Risk scanner error:', err);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // Support URL search parameters: ?idea=... or ?q=...
+  useEffect(() => {
+    const queryIdea = searchParams.get('idea') || searchParams.get('q');
+    if (queryIdea && queryIdea.trim() && !hasAutoScanned.current) {
+      hasAutoScanned.current = true;
+      const initialIndustry = searchParams.get('industry') || formData.industry;
+      const targetIdea = queryIdea.trim();
+      const updated = {
+        ...formData,
+        idea: targetIdea,
+        industry: initialIndustry
+      };
+      setFormData(updated);
+      triggerScan(updated);
+    }
+  }, [searchParams]);
+
   // Animate loading through real analytical stages
   useEffect(() => {
     let timer;
@@ -117,17 +151,8 @@ export function RiskScanner() {
   }, [loading]);
 
   const handleScan = async (e) => {
-    e.preventDefault();
-    setLoading(true);
-    try {
-      const res = await runRiskScanner(formData);
-      setResult(res.data);
-      window.scrollTo({ top: 380, behavior: 'smooth' });
-    } catch (err) {
-      console.error('Risk scanner error:', err);
-    } finally {
-      setLoading(false);
-    }
+    if (e && e.preventDefault) e.preventDefault();
+    triggerScan(formData);
   };
 
   const handleReset = () => {
@@ -479,10 +504,10 @@ export function RiskScanner() {
                   )}
 
                   {/* What We Understand (Concept Summary) */}
-                  {result.diagnosis?.whatWeThink && (
+                  {(result.diagnosis?.whatWeThink || result.explanation) && (
                     <div className="text-xs text-[#404040] dark:text-[#D4D4D4] leading-relaxed pt-1">
                       <strong className="font-mono text-black dark:text-white block mb-0.5">What We Understand:</strong>
-                      {result.diagnosis.whatWeThink}
+                      {result.diagnosis?.whatWeThink || result.explanation}
                     </div>
                   )}
                 </div>
@@ -555,7 +580,7 @@ export function RiskScanner() {
             )}
 
             {/* 3. WHAT LOOKS PROMISING? */}
-            {result.diagnosis?.whatLooksPromising && result.diagnosis.whatLooksPromising.length > 0 && (
+            {((result.diagnosis?.whatLooksPromising && result.diagnosis.whatLooksPromising.length > 0) || (result.positiveSignals && result.positiveSignals.length > 0)) && (
               <div className="vault-card p-6 sm:p-8 border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-4">
                 <div className="pb-3 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#737373] dark:text-[#A3A3A3] block mb-1">
@@ -570,14 +595,14 @@ export function RiskScanner() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {result.diagnosis.whatLooksPromising.map((point, idx) => (
+                  {(result.diagnosis?.whatLooksPromising || result.positiveSignals || []).map((point, idx) => (
                     <div 
                       key={idx} 
                       className="p-4 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] flex items-start gap-3"
                     >
                       <CheckCircle2 className="w-4 h-4 text-black dark:text-white shrink-0 mt-0.5" />
                       <p className="text-xs text-[#404040] dark:text-[#D4D4D4] leading-relaxed">
-                        {point}
+                        {typeof point === 'string' ? point : (point.reasoning || point.name)}
                       </p>
                     </div>
                   ))}
@@ -586,7 +611,7 @@ export function RiskScanner() {
             )}
 
             {/* 4. WHAT SHOULD I VALIDATE FIRST? */}
-            {result.diagnosis?.validateFirst && result.diagnosis.validateFirst.length > 0 && (
+            {((result.diagnosis?.validateFirst && result.diagnosis.validateFirst.length > 0) || (result.recommendations && result.recommendations.length > 0)) && (
               <div className="vault-card p-6 sm:p-8 border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-4">
                 <div className="pb-3 border-b border-[#E5E5E5] dark:border-[#2A2A2A]">
                   <span className="text-[10px] font-mono font-bold uppercase tracking-wider text-[#737373] dark:text-[#A3A3A3] block mb-1">
@@ -601,7 +626,7 @@ export function RiskScanner() {
                 </div>
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                  {result.diagnosis.validateFirst.map((action, idx) => (
+                  {(result.diagnosis?.validateFirst || result.recommendations || []).map((action, idx) => (
                     <div 
                       key={idx} 
                       className="p-4 rounded-[6px] bg-[#F5F5F5] dark:bg-[#1A1A1A] border border-[#E5E5E5] dark:border-[#2A2A2A] space-y-1.5"

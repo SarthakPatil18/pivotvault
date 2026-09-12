@@ -5,17 +5,26 @@ const logger = require('../lib/logger');
 const router = Router();
 
 const CANONICAL_PRIORITY_SLUGS = [
-  'enron',
   'lehman-brothers',
   'worldcom',
-  'theranos',
-  'ftx',
+  'enron',
   'wework',
-  'wirecard',
-  'kodak',
   'nokia',
+  'byjus',
+  'kodak',
+  'wirecard',
+  'katerra',
+  'ftx',
+  'quibi',
+  'theranos',
   'blackberry',
-  'byjus'
+  'jawbone',
+  'bird',
+  'better-place',
+  'solyndra',
+  'blockbuster',
+  'fast',
+  'juicero'
 ];
 
 function mapCompanyToStartup(c) {
@@ -152,11 +161,11 @@ router.get(['/startups', '/companies'], async (req, res, next) => {
       country = 'All Countries',
       sort = 'score_desc',
       page = 1,
-      limit = 12
+      limit = 20
     } = req.query;
 
     const pageNum = Math.max(1, parseInt(page, 10) || 1);
-    const limitNum = Math.max(1, Math.min(100, parseInt(limit, 10) || 12));
+    const limitNum = Math.max(1, Math.min(100, parseInt(limit, 10) || 20));
     const skip = (pageNum - 1) * limitNum;
 
     // Prisma query filters

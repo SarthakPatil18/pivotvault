@@ -5,7 +5,7 @@ import {
   Activity, Database, Flame, HelpCircle, Layers, Users, 
   FileText, BarChart3, Scale, Globe, CheckCircle2, ChevronRight,
   AlertTriangle, Network, Cpu, ArrowUpRight, Lock, Eye, Compass,
-  BookOpen, Gauge, Brain
+  BookOpen, Gauge, Brain, MessageSquare
 } from 'lucide-react';
 import { getInsights } from '../lib/api';
 import { CURATED_STARTUPS } from '../lib/data/startupsData';

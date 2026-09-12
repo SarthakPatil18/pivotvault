@@ -19,7 +19,7 @@ const BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:5001/api';
 async function fetchWithFallback(endpoint, options = {}, fallbackFn) {
   try {
     const controller = new AbortController();
-    const timeoutMs = options.timeout || 25000; // default 25s for deep analytical reasoning
+    const timeoutMs = options.timeout || (options.method === 'POST' ? 25000 : 3000); // 3s fast fallback for archive browsing
     const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
     
     const response = await fetch(`${BASE_URL}${endpoint}`, {

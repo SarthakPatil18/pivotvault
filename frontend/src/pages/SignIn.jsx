@@ -40,10 +40,10 @@ export function SignIn() {
   };
 
   const handleGuestAccess = () => {
-    setSuccessMsg('Entering PivotVault Intelligence Platform...');
+    setSuccessMsg('Opening Startup Failure Archive...');
     setTimeout(() => {
-      navigate('/app');
-    }, 300);
+      navigate('/explore');
+    }, 200);
   };
 
   // Handle Email & Password Sign In / Sign Up
@@ -63,10 +63,10 @@ export function SignIn() {
       const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
       if (!anonKey) {
         // Allow demo login so the user can test the UI immediately
-        setSuccessMsg('Demo access granted! Redirecting to PivotVault intelligence platform...');
+        setSuccessMsg('Demo access granted! Redirecting to Startup Failure Archive...');
         setTimeout(() => {
-          navigate('/app');
-        }, 600);
+          navigate('/explore');
+        }, 500);
         return;
       }
 
@@ -76,12 +76,12 @@ export function SignIn() {
           setSuccessMsg('Verification email sent! Check your inbox to confirm your account.');
         } else {
           setSuccessMsg('Account created successfully! Redirecting...');
-          setTimeout(() => navigate('/app'), 800);
+          setTimeout(() => navigate('/explore'), 600);
         }
       } else {
         await signInWithEmail(email, password);
         setSuccessMsg('Signed in successfully! Redirecting...');
-        setTimeout(() => navigate('/app'), 600);
+        setTimeout(() => navigate('/explore'), 500);
       }
     } catch (err) {
       console.error('[Auth Error]', err);
@@ -175,7 +175,7 @@ export function SignIn() {
             onClick={handleGuestAccess}
             className="inline-flex items-center gap-1.5 text-xs font-semibold text-neutral-800 hover:text-black transition-colors bg-neutral-100 hover:bg-neutral-200 px-3 py-1.5 rounded-lg border border-neutral-200 shadow-2xs"
           >
-            <span>Skip to Dashboard</span>
+            <span>Skip to Explore</span>
             <ArrowRight className="w-3.5 h-3.5" />
           </button>
         </div>

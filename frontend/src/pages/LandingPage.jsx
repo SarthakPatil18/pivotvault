@@ -331,14 +331,11 @@ export function LandingPage() {
           </div>
 
           <div className="nav-actions">
-            <button type="button" onClick={goToExplore} className="signin button" style={{ background: 'transparent', padding: '6px 10px' }}>
-              Explore
-            </button>
-            <button type="button" onClick={goToSignIn} className="signin button" style={{ background: 'transparent', padding: '6px 10px' }}>
+            <button type="button" onClick={goToSignIn} className="signin button" style={{ background: 'transparent', padding: '6px 12px' }}>
               Sign In
             </button>
-            <button className="button dark small" onClick={goToDashboard}>
-              Launch Dashboard <ArrowUpRight size={15} />
+            <button className="button dark small" onClick={goToExplore}>
+              Explore Archive <ArrowUpRight size={15} />
             </button>
           </div>
 
@@ -396,10 +393,10 @@ export function LandingPage() {
             className="button dark"
             onClick={() => {
               setMenuOpen(false);
-              goToDashboard();
+              goToExplore();
             }}
           >
-            Launch Platform <ArrowRight size={17} />
+            Explore Archive <ArrowRight size={17} />
           </button>
         </div>
       </header>
@@ -435,7 +432,7 @@ export function LandingPage() {
               </h1>
               <p>PivotVault synthesizes historical startup failures, AI reasoning, and evidence into actionable intelligence for founders and investors.</p>
               <div className="hero-buttons">
-                <button className="button dark" onClick={goToDashboard}>
+                <button className="button dark" onClick={goToExplore}>
                   Explore 413+ Failures <ArrowRight size={17} />
                 </button>
                 <a className="text-button" href="#scan">
@@ -516,7 +513,7 @@ export function LandingPage() {
               <div className="searchbar">
                 <Search size={19} />
                 <span>Why do AI productivity startups fail to retain users?</span>
-                <button aria-label="Search evidence" onClick={goToDashboard}>
+                <button aria-label="Search evidence" onClick={goToExplore}>
                   <ArrowRight size={18} />
                 </button>
               </div>
@@ -915,7 +912,7 @@ export function LandingPage() {
             <h2 className="h-xxl">Before you build it, learn why others couldn’t.</h2>
             <p>Use the history of startup failure to make better decisions about what to build next.</p>
             <div className="hero-buttons">
-              <button className="button light" onClick={goToDashboard}>
+              <button className="button light" onClick={goToExplore}>
                 Explore Archive <ArrowRight size={17} />
               </button>
               <button

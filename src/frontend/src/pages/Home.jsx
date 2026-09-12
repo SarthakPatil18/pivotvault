@@ -78,10 +78,20 @@ export function Home() {
       try {
         const insightsRes = await getInsights();
         setStats(insightsRes.data);
-        setFeaturedStartups(CURATED_STARTUPS.slice(0, 6));
+        const priorityIds = ['byjus', 'wework', 'theranos', 'quibi', 'ftx', 'fast'];
+        const priorityStartups = priorityIds
+          .map(id => CURATED_STARTUPS.find(s => s.id === id))
+          .filter(Boolean);
+        const restStartups = CURATED_STARTUPS.filter(s => !priorityIds.includes(s.id));
+        setFeaturedStartups([...priorityStartups, ...restStartups].slice(0, 6));
       } catch (err) {
         console.error('Failed loading home stats:', err);
-        setFeaturedStartups(CURATED_STARTUPS.slice(0, 6));
+        const priorityIds = ['byjus', 'wework', 'theranos', 'quibi', 'ftx', 'fast'];
+        const priorityStartups = priorityIds
+          .map(id => CURATED_STARTUPS.find(s => s.id === id))
+          .filter(Boolean);
+        const restStartups = CURATED_STARTUPS.filter(s => !priorityIds.includes(s.id));
+        setFeaturedStartups([...priorityStartups, ...restStartups].slice(0, 6));
       }
     }
     loadHomeData();
@@ -284,6 +294,30 @@ export function Home() {
           q: 'What is your core defensive takeaway for founders scaling today?',
           a: 'If your company stewards customer funds, risk management and segregated custody are not administrative burdens—they are the foundational premise of your business. Charisma can never replace audited ledgers.',
           lesson: 'Segregate operational treasury and submit to independent, verifiable audits.'
+        }
+      }
+    },
+    byju: {
+      name: 'Byju Raveendran',
+      startup: "BYJU'S",
+      avatar: 'BR',
+      industry: 'EdTech',
+      stat: '$5.8B Raised • $22.0B Lost',
+      dialogues: {
+        warning: {
+          q: 'What warning signs did you miss before the collapse became irreversible?',
+          a: 'During the pandemic lockdown, our growth was exponential. We assumed the tailwinds would last forever and went on a $2.5B debt-fueled acquisition spree, buying Aakash for $1B and WhiteHat Jr for $300M. When schools reopened, customer acquisition costs soared while parent retention plummeted.',
+          lesson: 'Never borrow billions against pandemic-era transient growth surges.'
+        },
+        governance: {
+          q: 'Why did corporate governance and board oversight fail?',
+          a: 'We delayed our audited financial statements for months. In June 2023, auditor Deloitte and board representatives from Prosus, Peak XV (Sequoia), and Chan Zuckerberg resigned on the same day. Without transparent reporting, lenders recalled our $1.2B Term Loan B, triggering bankruptcy.',
+          lesson: 'Delayed statutory audits and boardroom resignations signal fatal institutional mistrust.'
+        },
+        lesson: {
+          q: 'What is your core defensive takeaway for founders scaling today?',
+          a: 'High-pressure predatory sales tactics destroy customer goodwill. An education company cannot survive if its sales reps push low-income families into unaffordable loan defaults. True educational value creates organic retention, not aggressive sales quotas.',
+          lesson: 'Ethical customer acquisition and transparent accounting always outlast financial engineering.'
         }
       }
     }
@@ -800,11 +834,11 @@ export function Home() {
             <div className="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-3.5">
               {[
                 { name: 'WeWork', lost: '$12.8B', sector: 'PropTech', sectorColor: 'bg-amber-500/15 text-amber-300 border-amber-500/30', cause: 'Lease arbitrage vs 30-day flex' },
+                { name: "BYJU'S", lost: '$5.8B', sector: 'EdTech', sectorColor: 'bg-purple-500/15 text-purple-300 border-purple-500/30', cause: '$22B peak valuation collapse & $2.5B M&A debt' },
                 { name: 'Quibi', lost: '$1.75B', sector: 'Streaming', sectorColor: 'bg-purple-500/15 text-purple-300 border-purple-500/30', cause: 'Hardware-agnostic mobile lock-in' },
                 { name: 'Theranos', lost: '$1.4B', sector: 'HealthTech', sectorColor: 'bg-emerald-500/15 text-emerald-300 border-emerald-500/30', cause: 'Unverified medical diagnostics' },
                 { name: 'Better Place', lost: '$900M', sector: 'CleanTech', sectorColor: 'bg-teal-500/15 text-teal-300 border-teal-500/30', cause: 'EV battery-swap capex trap' },
-                { name: 'Fast', lost: '$125M', sector: 'FinTech', sectorColor: 'bg-blue-500/15 text-blue-300 border-blue-500/30', cause: '$10M/mo burn with $50k ARR' },
-                { name: 'Juicero', lost: '$120M', sector: 'Hardware', sectorColor: 'bg-rose-500/15 text-rose-300 border-rose-500/30', cause: '$400 press with hand-squeezable bag' }
+                { name: 'Fast', lost: '$125M', sector: 'FinTech', sectorColor: 'bg-blue-500/15 text-blue-300 border-blue-500/30', cause: '$10M/mo burn with $50k ARR' }
               ].map((item) => (
                 <div 
                   key={item.name} 
@@ -1029,6 +1063,14 @@ export function Home() {
                   </div>
                   <span className="text-black dark:text-white font-bold">92</span>
                   <span className="tabular-nums font-semibold text-black dark:text-white">$12.8B</span>
+                </div>
+                <div className="flex justify-between items-center text-[#737373] dark:text-[#A3A3A3]">
+                  <div className="flex items-center gap-1.5 text-black dark:text-white font-medium">
+                    <CompanyLogo name="BYJU'S" size="xs" />
+                    <span>BYJU'S</span>
+                  </div>
+                  <span className="text-black dark:text-white font-bold">94</span>
+                  <span className="tabular-nums font-semibold text-black dark:text-white">$5.8B</span>
                 </div>
                 <div className="flex justify-between items-center text-[#737373] dark:text-[#A3A3A3]">
                   <div className="flex items-center gap-1.5 text-black dark:text-white font-medium">
@@ -1338,6 +1380,7 @@ export function Home() {
                       className="flex items-center justify-between text-[12px] p-2.5 bg-white dark:bg-black border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[6px]"
                     >
                       <div className="flex items-center gap-2">
+                        <CompanyLogo name={m.name} size="xs" />
                         <span className="font-bold text-black dark:text-white">{m.name}</span>
                         <span className="text-[#737373] dark:text-[#A3A3A3] text-[11px]">— {m.cause}</span>
                       </div>
@@ -1381,7 +1424,7 @@ export function Home() {
           </div>
 
           {/* Persona Switcher Selector */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2 mb-6">
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-7 gap-2 mb-6">
             {Object.keys(ghostProfiles).map((key) => {
               const p = ghostProfiles[key];
               const isSelected = activeGhost === key;
@@ -1395,14 +1438,8 @@ export function Home() {
                       : 'border-[#E5E5E5] dark:border-[#2A2A2A] bg-white dark:bg-black hover:border-[#A3A3A3] dark:hover:border-[#525252]'
                   }`}
                 >
-                  <div className="flex items-center justify-between mb-1.5">
-                    <span className={`w-7 h-7 rounded-[4px] font-mono font-bold text-[11px] flex items-center justify-center shrink-0 border ${
-                      isSelected
-                        ? 'bg-black text-white dark:bg-white dark:text-black border-black dark:border-white'
-                        : 'bg-[#F0F0F0] dark:bg-[#1C1C1C] text-black dark:text-white border-[#E5E5E5] dark:border-[#2A2A2A]'
-                    }`}>
-                      {p.avatar}
-                    </span>
+                  <div className="flex items-center justify-between mb-2">
+                    <CompanyLogo name={p.startup} size="xs" />
                     <span className="text-[10px] font-mono font-semibold px-1.5 py-0.5 rounded-[3px] bg-[#F5F5F5] dark:bg-[#202020] text-[#737373] dark:text-[#A3A3A3]">
                       {p.industry}
                     </span>
@@ -1429,7 +1466,8 @@ export function Home() {
               <div className="rounded-[8px] border border-[#E5E5E5] dark:border-[#2A2A2A] bg-[#FAFAFA] dark:bg-[#0D0D0D] overflow-hidden">
                 {/* Simulation Control Bar */}
                 <div className="px-4 py-3 border-b border-[#E5E5E5] dark:border-[#2A2A2A] bg-white dark:bg-black flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2.5">
+                    <CompanyLogo name={currentProfile.startup} size="xs" />
                     <div className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
                     <span className="font-mono text-xs font-bold text-black dark:text-white tracking-tight">
                       Active Debrief: {currentProfile.name} ({currentProfile.startup})

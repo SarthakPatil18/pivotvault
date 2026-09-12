@@ -259,10 +259,38 @@ const OFFICIAL_BRAND_SVGS = {
   ),
   byjus: (
     <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
-      <rect width="100" height="100" rx="20" fill="#6D28D9" />
-      <text x="50" y="62" textAnchor="middle" fill="#FBBF24" fontFamily="system-ui, sans-serif" fontWeight="900" fontSize="32">
-        B
-      </text>
+      <rect width="100" height="100" rx="20" fill="#682382" />
+      <defs>
+        <linearGradient id="byjus-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+          <stop offset="0%" stopColor="#FDB813" />
+          <stop offset="100%" stopColor="#F59E0B" />
+        </linearGradient>
+      </defs>
+      <path
+        d="M30 24 L52 24 C62 24 70 29 70 37.5 C70 43.5 66 47.5 60 49.5 C68 51.5 73 56.5 73 64 C73 72.5 64 78 52 78 L30 78 Z M43 35 L43 45 L52 45 C56 45 59 43 59 40 C59 37 56 35 52 35 Z M43 57 L43 67 L53 67 C57.5 67 61 65 61 62 C61 59 57.5 57 53 57 Z"
+        fill="url(#byjus-gold)"
+      />
+      <circle cx="76" cy="27" r="4.5" fill="#FDB813" />
+    </svg>
+  ),
+  'byju-s': (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="20" fill="#682382" />
+      <path
+        d="M30 24 L52 24 C62 24 70 29 70 37.5 C70 43.5 66 47.5 60 49.5 C68 51.5 73 56.5 73 64 C73 72.5 64 78 52 78 L30 78 Z M43 35 L43 45 L52 45 C56 45 59 43 59 40 C59 37 56 35 52 35 Z M43 57 L43 67 L53 67 C57.5 67 61 65 61 62 C61 59 57.5 57 53 57 Z"
+        fill="#FDB813"
+      />
+      <circle cx="76" cy="27" r="4.5" fill="#FDB813" />
+    </svg>
+  ),
+  byju: (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="20" fill="#682382" />
+      <path
+        d="M30 24 L52 24 C62 24 70 29 70 37.5 C70 43.5 66 47.5 60 49.5 C68 51.5 73 56.5 73 64 C73 72.5 64 78 52 78 L30 78 Z M43 35 L43 45 L52 45 C56 45 59 43 59 40 C59 37 56 35 52 35 Z M43 57 L43 67 L53 67 C57.5 67 61 65 61 62 C61 59 57.5 57 53 57 Z"
+        fill="#FDB813"
+      />
+      <circle cx="76" cy="27" r="4.5" fill="#FDB813" />
     </svg>
   ),
   'yik-yak': (
@@ -366,6 +394,48 @@ const OFFICIAL_BRAND_SVGS = {
       <rect width="100" height="100" rx="20" fill="#1E40AF" />
       <text x="50" y="66" textAnchor="middle" fill="#FFFFFF" fontFamily="system-ui, sans-serif" fontWeight="900" fontSize="32">
         digg
+      </text>
+    </svg>
+  ),
+  kozmo: (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="20" fill="#FF5000" />
+      <circle cx="50" cy="44" r="22" stroke="#FFFFFF" strokeWidth="6" fill="none" />
+      <path d="M42 36 L58 52 M58 36 L42 52" stroke="#FFFFFF" strokeWidth="5.5" strokeLinecap="round" />
+      <text x="50" y="80" textAnchor="middle" fill="#FFFFFF" fontFamily="system-ui, sans-serif" fontWeight="900" fontSize="12" letterSpacing="1">
+        KOZMO
+      </text>
+    </svg>
+  ),
+  'kozmo-com': (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="20" fill="#FF5000" />
+      <circle cx="50" cy="44" r="22" stroke="#FFFFFF" strokeWidth="6" fill="none" />
+      <path d="M42 36 L58 52 M58 36 L42 52" stroke="#FFFFFF" strokeWidth="5.5" strokeLinecap="round" />
+      <text x="50" y="80" textAnchor="middle" fill="#FFFFFF" fontFamily="system-ui, sans-serif" fontWeight="900" fontSize="12" letterSpacing="1">
+        KOZMO
+      </text>
+    </svg>
+  ),
+  shyp: (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="20" fill="#1E88E5" />
+      <path d="M30 40 L50 28 L70 40 L70 64 L50 76 L30 64 Z" stroke="#FFFFFF" strokeWidth="6" strokeLinejoin="round" fill="none" />
+      <path d="M50 28 L50 76 M30 40 L50 52 L70 40" stroke="#FFFFFF" strokeWidth="4.5" strokeLinejoin="round" />
+    </svg>
+  ),
+  hopin: (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="20" fill="#2563EB" />
+      <circle cx="50" cy="50" r="20" fill="#FFFFFF" />
+      <circle cx="50" cy="50" r="9" fill="#2563EB" />
+    </svg>
+  ),
+  casper: (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="20" fill="#1C355E" />
+      <text x="50" y="58" textAnchor="middle" fill="#FFFFFF" fontFamily="Georgia, serif" fontStyle="italic" fontWeight="700" fontSize="22">
+        Casper
       </text>
     </svg>
   )

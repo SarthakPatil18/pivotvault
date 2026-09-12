@@ -150,6 +150,53 @@ export const CURATED_STARTUPS = [
     relatedStartupIds: ['katerra', 'bird', 'fast']
   },
   {
+    id: 'byjus',
+    name: "BYJU'S",
+    industry: 'EdTech',
+    country: 'India',
+    domain: 'byjus.com',
+    foundedYear: 2011,
+    failedYear: 2024,
+    capitalRaised: 5800000000,
+    peakValuation: 22000000000,
+    failureScore: 94,
+    status: 'Insolvency Proceedings / Liquidation',
+    tagline: 'World\'s most valuable edtech company collapsed under aggressive debt and audit irregularities.',
+    summary: 'BYJU\'S raised over $5.8B and peaked at a $22B valuation through hyper-aggressive acquisition sprees (Aakash, WhiteHat Jr) and predatory sales tactics. Delayed financial audits, a disputed $1.2B term loan B, and boardroom resignations collapsed the company into insolvency and liquidation.',
+    failureMode: 'Premature Scaling',
+    rootCauses: [
+      'Aggressive predatory sales tactics targeting low-income parents with high-interest educational loan debt',
+      'Uncontrolled M&A spree spending over $2.5B acquiring companies like WhiteHat Jr and Great Learning that bled massive cash',
+      'Prolonged failure to file statutory audited financial reports leading to auditor resignations (Deloitte) and lender lawsuits'
+    ],
+    failureFactors: {
+      productRisk: 65,
+      marketRisk: 80,
+      businessModelRisk: 95,
+      competitionRisk: 75,
+      executionRisk: 96
+    },
+    founders: [
+      { name: 'Byju Raveendran', role: 'Founder & CEO', background: 'Celebrated maths tutor turned tech billionaire' },
+      { name: 'Divya Gokulnath', role: 'Co-Founder & Director', background: 'Educator and entrepreneur' }
+    ],
+    investors: ['Prosus (Naspers)', 'Peak XV Partners (Sequoia India)', 'Chan Zuckerberg Initiative', 'General Atlantic', 'Tiger Global', 'Silver Lake', 'BlackRock'],
+    timeline: [
+      { year: '2011', event: 'Founded in Bengaluru, India as Think and Learn Pvt. Ltd.' },
+      { year: '2018', event: 'Becomes a unicorn after raising funds from Tencent and General Atlantic.' },
+      { year: '2021', event: 'Raises massive capital during pandemic edtech boom, reaching peak $22B valuation and acquiring Aakash for $1B.' },
+      { year: '2023 (Jun)', event: 'Auditor Deloitte and three key board members (Prosus, Peak XV, Chan Zuckerberg) resign simultaneously.' },
+      { year: '2024', event: 'NCLT admits BYJU\'S into corporate insolvency; Prosus writes down entire 9.6% stake to $0.' }
+    ],
+    lessons: [
+      'EdTech customer lifetime value cannot withstand predatory high-pressure sales tactics once word-of-mouth deteriorates.',
+      'Debt-financed multi-billion-dollar M&A in non-profitable startups creates catastrophic balance sheet fragility during interest rate spikes.',
+      'Delayed audits and boardroom resignations signal governance breakdown that equity markets will penalize with total wipeout.'
+    ],
+    evidenceSources: ['National Company Law Tribunal (NCLT) Filings', 'Prosus Annual Report 100% Impairment Write-Off', 'Deloitte Resignation Letter to BYJU\'S Board'],
+    relatedStartupIds: ['theranos', 'wework', 'scalefactor']
+  },
+  {
     id: 'quibi',
     name: 'Quibi',
     industry: 'Media & Streaming',
@@ -918,52 +965,6 @@ export const CURATED_STARTUPS = [
     ],
     evidenceSources: ['Stephen Elop "Burning Platform" Memo', 'Insead Case Study: Why Nokia Really Lost the Smartphone Battle', 'Microsoft 10-K Asset Impairment Filings'],
     relatedStartupIds: ['blackberry', 'kodak', 'pebble']
-  },
-  {
-    id: 'byjus',
-    name: "BYJU'S",
-    industry: 'EdTech',
-    country: 'India',
-    foundedYear: 2011,
-    failedYear: 2024,
-    capitalRaised: 5800000000,
-    peakValuation: 22000000000,
-    failureScore: 94,
-    status: 'Insolvency Proceedings / Liquidation',
-    tagline: 'World\'s most valuable edtech company collapsed under aggressive debt and audit irregularities.',
-    summary: 'BYJU\'S raised over $5.8B and peaked at a $22B valuation through hyper-aggressive acquisition sprees (Aakash, WhiteHat Jr) and predatory sales tactics. Delayed financial audits, a disputed $1.2B term loan B, and boardroom resignations collapsed the company into insolvency and liquidation.',
-    failureMode: 'Premature Scaling',
-    rootCauses: [
-      'Aggressive predatory sales tactics targeting low-income parents with high-interest educational loan debt',
-      'Uncontrolled M&A spree spending over $2.5B acquiring companies like WhiteHat Jr and Great Learning that bled massive cash',
-      'Prolonged failure to file statutory audited financial reports leading to auditor resignations (Deloitte) and lender lawsuits'
-    ],
-    failureFactors: {
-      productRisk: 65,
-      marketRisk: 80,
-      businessModelRisk: 95,
-      competitionRisk: 75,
-      executionRisk: 96
-    },
-    founders: [
-      { name: 'Byju Raveendran', role: 'Founder & CEO', background: 'Celebrated maths tutor turned tech billionaire' },
-      { name: 'Divya Gokulnath', role: 'Co-Founder & Director', background: 'Educator and entrepreneur' }
-    ],
-    investors: ['Prosus (Naspers)', 'Peak XV Partners (Sequoia India)', 'Chan Zuckerberg Initiative', 'General Atlantic', 'Tiger Global', 'Silver Lake', 'BlackRock'],
-    timeline: [
-      { year: '2011', event: 'Founded in Bengaluru, India as Think and Learn Pvt. Ltd.' },
-      { year: '2018', event: 'Becomes a unicorn after raising funds from Tencent and General Atlantic.' },
-      { year: '2021', event: 'Raises massive capital during pandemic edtech boom, reaching peak $22B valuation and acquiring Aakash for $1B.' },
-      { year: '2023 (Jun)', event: 'Auditor Deloitte and three key board members (Prosus, Peak XV, Chan Zuckerberg) resign simultaneously.' },
-      { year: '2024', event: 'NCLT admits BYJU\'S into corporate insolvency; Prosus writes down entire 9.6% stake to $0.' }
-    ],
-    lessons: [
-      'EdTech customer lifetime value cannot withstand predatory high-pressure sales tactics once word-of-mouth deteriorates.',
-      'Debt-financed multi-billion-dollar M&A in non-profitable startups creates catastrophic balance sheet fragility during interest rate spikes.',
-      'Delayed audits and boardroom resignations signal governance breakdown that equity markets will penalize with total wipeout.'
-    ],
-    evidenceSources: ['National Company Law Tribunal (NCLT) Filings', 'Prosus Annual Report 100% Impairment Write-Off', 'Deloitte Resignation Letter to BYJU\'S Board'],
-    relatedStartupIds: ['theranos', 'wework', 'scalefactor']
   }
 ];
 

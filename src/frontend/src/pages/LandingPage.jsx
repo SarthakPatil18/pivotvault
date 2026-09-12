@@ -9,7 +9,7 @@ import { PivotVaultIcon } from '../assets/logo';
 import '../styles/landing.css';
 
 const navItems = [
-  ['Explore', '/explore'],
+  ['Explore', '/app'],
   ['Risk Scanner', '/risk-scanner'],
   ['Hall of Ghosts', '/hall-of-ghosts'],
   ['Intelligence', 'intelligence'],
@@ -292,7 +292,7 @@ export function LandingPage() {
   };
 
   const goToExplore = () => {
-    navigate('/explore');
+    navigate('/app');
   };
 
   const goToSignIn = () => {

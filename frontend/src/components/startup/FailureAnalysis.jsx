@@ -424,10 +424,10 @@ export function FailureAnalysis({ startup }) {
           1. THE INSIDER BRIEFING (Matching Screenshot Layout)
          ======================================================== */}
       <section className="space-y-4">
-        {/* Eyebrow Header: Sparkle + THE INSIDER BRIEFING */}
-        <div className="flex items-center gap-2 pl-1">
+        {/* Eyebrow Header: Sparkles + THE INSIDER BRIEFING */}
+        <div className="flex items-center gap-2 pl-0.5">
           <Sparkles className="w-4 h-4 text-[#9C6636] dark:text-[#D4A373] shrink-0" />
-          <h2 className="text-xs sm:text-[13px] font-mono font-bold uppercase tracking-widest text-[#9C6636] dark:text-[#D4A373]">
+          <h2 className="text-[12.5px] sm:text-[13px] font-sans font-bold uppercase tracking-[0.16em] text-[#9C6636] dark:text-[#D4A373]">
             THE INSIDER BRIEFING
           </h2>
         </div>
@@ -435,46 +435,46 @@ export function FailureAnalysis({ startup }) {
         {/* 3-Column Card Grid exactly matching user screenshot */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-5 sm:gap-6">
           {/* Card 1: The Dream */}
-          <div className="bg-white dark:bg-[#0E0E0E] rounded-[16px] p-6 border border-[#EBEBEB] dark:border-[#222222] shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all flex flex-col justify-start">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-[10px] bg-[#EBF3FF] dark:bg-[#0D2040] text-[#3B82F6] dark:text-[#60A5FA] flex items-center justify-center shrink-0 border border-[#D6E6FE] dark:border-[#1E3A66]">
-                <Target className="w-4.5 h-4.5" />
+          <div className="bg-white dark:bg-[#0E0E0E] rounded-[20px] p-6 sm:p-7 border border-[#ECECEC] dark:border-[#222222] shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all flex flex-col justify-start">
+            <div className="flex items-center gap-3.5 mb-4">
+              <div className="w-10 h-10 rounded-[12px] bg-[#EBF3FF] dark:bg-[#0D2040] text-[#3B82F6] dark:text-[#60A5FA] flex items-center justify-center shrink-0 border border-[#D6E6FE] dark:border-[#1E3A66]">
+                <Target className="w-5 h-5" strokeWidth={2} />
               </div>
-              <h3 className="font-bold text-sm sm:text-[15px] text-black dark:text-white font-sans">
+              <h3 className="font-bold text-[15px] sm:text-[16px] text-black dark:text-white font-sans">
                 The Dream
               </h3>
             </div>
-            <p className="text-[13px] sm:text-sm text-[#555555] dark:text-[#A3A3A3] leading-relaxed font-sans">
+            <p className="text-[13.5px] sm:text-[14px] text-[#555555] dark:text-[#A3A3A3] leading-[1.65] font-sans">
               To become the defining {cleanIndustry} platform in {cleanCountry} — building a product that would make the existing alternatives obsolete and generate a durable, compounding competitive moat.
             </p>
           </div>
 
           {/* Card 2: The Investment Thesis */}
-          <div className="bg-white dark:bg-[#0E0E0E] rounded-[16px] p-6 border border-[#EBEBEB] dark:border-[#222222] shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all flex flex-col justify-start">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-[10px] bg-[#EBFBF3] dark:bg-[#0D3320] text-[#10B981] dark:text-[#34D399] flex items-center justify-center shrink-0 border border-[#D1F6E3] dark:border-[#175333]">
-                <Landmark className="w-4.5 h-4.5" />
+          <div className="bg-white dark:bg-[#0E0E0E] rounded-[20px] p-6 sm:p-7 border border-[#ECECEC] dark:border-[#222222] shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all flex flex-col justify-start">
+            <div className="flex items-center gap-3.5 mb-4">
+              <div className="w-10 h-10 rounded-[12px] bg-[#EBFBF3] dark:bg-[#0D3320] text-[#10B981] dark:text-[#34D399] flex items-center justify-center shrink-0 border border-[#D1F6E3] dark:border-[#175333]">
+                <Landmark className="w-5 h-5" strokeWidth={2} />
               </div>
-              <h3 className="font-bold text-sm sm:text-[15px] text-black dark:text-white font-sans">
+              <h3 className="font-bold text-[15px] sm:text-[16px] text-black dark:text-white font-sans">
                 The Investment Thesis
               </h3>
             </div>
-            <p className="text-[13px] sm:text-sm text-[#555555] dark:text-[#A3A3A3] leading-relaxed font-sans">
+            <p className="text-[13.5px] sm:text-[14px] text-[#555555] dark:text-[#A3A3A3] leading-[1.65] font-sans">
               Investors were drawn to the large addressable market, the early traction signals, and a founding team with the conviction to execute at speed. The early metrics suggested a clear product-market fit was within reach.
             </p>
           </div>
 
           {/* Card 3: The Excitement */}
-          <div className="bg-white dark:bg-[#0E0E0E] rounded-[16px] p-6 border border-[#EBEBEB] dark:border-[#222222] shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all flex flex-col justify-start">
-            <div className="flex items-center gap-3 mb-4">
-              <div className="w-9 h-9 rounded-[10px] bg-[#F5F0FF] dark:bg-[#251340] text-[#8B5CF6] dark:text-[#A78BFA] flex items-center justify-center shrink-0 border border-[#E8DAFE] dark:border-[#3D2168]">
-                <Flame className="w-4.5 h-4.5" />
+          <div className="bg-white dark:bg-[#0E0E0E] rounded-[20px] p-6 sm:p-7 border border-[#ECECEC] dark:border-[#222222] shadow-[0_4px_20px_rgba(0,0,0,0.03)] dark:shadow-none hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] transition-all flex flex-col justify-start">
+            <div className="flex items-center gap-3.5 mb-4">
+              <div className="w-10 h-10 rounded-[12px] bg-[#F5F0FF] dark:bg-[#251340] text-[#8B5CF6] dark:text-[#A78BFA] flex items-center justify-center shrink-0 border border-[#E8DAFE] dark:border-[#3D2168]">
+                <Flame className="w-5 h-5" strokeWidth={2} />
               </div>
-              <h3 className="font-bold text-sm sm:text-[15px] text-black dark:text-white font-sans">
+              <h3 className="font-bold text-[15px] sm:text-[16px] text-black dark:text-white font-sans">
                 The Excitement
               </h3>
             </div>
-            <p className="text-[13px] sm:text-sm text-[#555555] dark:text-[#A3A3A3] leading-relaxed font-sans">
+            <p className="text-[13.5px] sm:text-[14px] text-[#555555] dark:text-[#A3A3A3] leading-[1.65] font-sans">
               With significant venture capital committed and a growing team, {name} appeared positioned to execute the playbook that had made category winners in adjacent markets. Industry observers cited it as one to watch.
             </p>
           </div>

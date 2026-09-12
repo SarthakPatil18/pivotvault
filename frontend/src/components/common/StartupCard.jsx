@@ -12,26 +12,28 @@ export function StartupCard({ startup, compact = false }) {
 
   if (!startup) return null;
 
+  // Single essential failure reason (eliminate repetitive duplicates)
+  const failureReason = startup.failureMode || 
+    (Array.isArray(startup.rootCauses) && startup.rootCauses[0]) || 
+    startup.tagline || 
+    startup.summary || 
+    'Unit economics inversion';
+
+  const cleanCountry = (startup.country?.toLowerCase().includes('united states') || startup.country?.toLowerCase().includes('us'))
+    ? 'USA' 
+    : (startup.country || '');
+
   return (
-    <div 
-      className="flex flex-col justify-between h-full group transition-all duration-150 bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#2A2A2A] hover:border-black dark:hover:border-white rounded-[8px] p-5 shadow-xs hover:shadow-dropdown"
+    <Link 
+      to={`/startup/${startup.id}`}
+      className="group block h-full bg-white dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#242424] hover:border-black dark:hover:border-white rounded-[12px] p-5 transition-all duration-150 shadow-[0_2px_8px_rgba(0,0,0,0.02)] hover:shadow-[0_8px_24px_rgba(0,0,0,0.06)] flex flex-col justify-between"
     >
       <div>
-        {/* Card Header: Industry, Failure Score & Bookmark */}
-        <div className="flex items-center justify-between gap-2 mb-3">
-          <div className="flex items-center gap-2 flex-wrap">
-            {startup.canonicalPillar && (
-              <span className="bg-black text-white dark:bg-white dark:text-black rounded-[4px] text-[9px] px-1.5 py-0.5 font-mono font-extrabold uppercase tracking-wider">
-                CANONICAL CASE
-              </span>
-            )}
-            <span className="bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[4px] text-[10px] px-2 py-0.5 font-mono font-bold uppercase tracking-wider">
-              {startup.industry}
-            </span>
-            <span className="text-[#737373] dark:text-[#A3A3A3] text-[11px] font-mono">
-              {startup.country}
-            </span>
-          </div>
+        {/* Top Meta: Industry & Failure Score */}
+        <div className="flex items-center justify-between gap-2 mb-3.5">
+          <span className="text-[11px] font-mono font-bold uppercase tracking-wider text-[#666666] dark:text-[#999999] bg-[#F5F5F5] dark:bg-[#161616] px-2 py-0.5 rounded-[4px] border border-[#EAEAEA] dark:border-[#222222]">
+            {startup.industry}
+          </span>
           <div className="flex items-center gap-2">
             <FailureScoreBadge score={startup.failureScore} size="sm" />
             <button
@@ -53,59 +55,36 @@ export function StartupCard({ startup, compact = false }) {
           </div>
         </div>
 
-        {/* Startup Name & Summary */}
-        <Link to={`/startup/${startup.id}`} className="block">
-          <div className="flex items-center gap-3.5">
-            <CompanyLogo startup={startup} size="lg" className="rounded-[10px] shadow-xs shrink-0" />
-            <h3 className="flex items-center justify-between flex-1 text-lg sm:text-xl font-extrabold text-black dark:text-white transition-colors">
-              <span>{startup.name}</span>
-              <span className="text-[14px] text-black dark:text-white opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">
-                →
-              </span>
+        {/* Company Header: Logo, Name & Origin */}
+        <div className="flex items-center gap-3.5 mb-3">
+          <CompanyLogo startup={startup} size="lg" className="rounded-[10px] shadow-xs shrink-0" />
+          <div className="min-w-0 flex-1">
+            <h3 className="text-base sm:text-[17px] font-bold text-black dark:text-white truncate group-hover:underline">
+              {startup.name}
             </h3>
+            <div className="text-[11.5px] font-mono text-[#737373] dark:text-[#A3A3A3] mt-0.5">
+              {cleanCountry ? `${cleanCountry} • ` : ''}{startup.foundedYear}–{startup.failedYear}
+            </div>
           </div>
-        </Link>
-        <p className="mt-2 line-clamp-2 leading-relaxed text-[13px] text-[#737373] dark:text-[#A3A3A3]">
-          {startup.tagline || startup.summary}
-        </p>
-
-        {/* Fatal Failure Mode */}
-        <div className="mt-4 pt-3 border-t border-[#E5E5E5] dark:border-[#2A2A2A]">
-          <div className="text-[#737373] dark:text-[#A3A3A3] text-[10px] font-mono font-bold uppercase tracking-wider mb-1">
-            Fatal Failure Vector
-          </div>
-          <div className="line-clamp-1 text-[13px] font-bold text-black dark:text-white">
-            {startup.failureMode}
-          </div>
-          {startup.rootCauses && startup.rootCauses.length > 0 && !compact && (
-            <p className="mt-1 line-clamp-2 text-[12px] italic text-[#737373] dark:text-[#A3A3A3]">
-              "{startup.rootCauses[0]}"
-            </p>
-          )}
         </div>
+
+        {/* Essential Core Failure Vector */}
+        <p className="text-xs sm:text-[13px] text-[#444444] dark:text-[#BBBBBB] leading-relaxed line-clamp-2 mt-2 font-sans">
+          {failureReason}
+        </p>
       </div>
 
-      {/* Card Footer: Metrics & Link */}
-      <div className="mt-5 pt-3 border-t border-[#E5E5E5] dark:border-[#2A2A2A] flex items-center justify-between text-[12px] font-mono">
-        <div className="flex items-center gap-2">
-          <span className="font-bold text-black dark:text-white">
-            {formatCurrency(startup.capitalRaised)} lost
-          </span>
-          <span className="text-[#A3A3A3] dark:text-[#404040]">•</span>
-          <span className="text-[#737373] dark:text-[#A3A3A3]">
-            {startup.foundedYear}–{startup.failedYear}
-          </span>
-        </div>
-
-        <Link
-          to={`/startup/${startup.id}`}
-          className="inline-flex items-center gap-1 text-black dark:text-white font-bold hover:underline"
-        >
+      {/* Footer: Capital Lost & Action */}
+      <div className="mt-4 pt-3 border-t border-[#EAEAEA] dark:border-[#1E1E1E] flex items-center justify-between text-xs font-mono">
+        <span className="font-bold text-black dark:text-white">
+          {formatCurrency(startup.capitalRaised)} lost
+        </span>
+        <span className="text-black dark:text-white font-bold flex items-center gap-1 group-hover:translate-x-0.5 transition-transform">
           <span>Dossier</span>
           <span>→</span>
-        </Link>
+        </span>
       </div>
-    </div>
+    </Link>
   );
 }
 

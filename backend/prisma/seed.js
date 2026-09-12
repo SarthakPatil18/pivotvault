@@ -13,103 +13,504 @@
 const { PrismaClient } = require('@prisma/client');
 const logger = require('../src/lib/logger');
 
-const prisma = new PrismaClient();
+const dbUrl = process.env.DIRECT_URL || process.env.DATABASE_URL;
+const prisma = new PrismaClient({
+  datasources: {
+    db: { url: dbUrl }
+  }
+});
 
 const SEED_COMPANIES = [
   {
-    name: 'WeWork',
-    slug: 'wework',
-    description: 'Commercial real estate company providing flexible shared workspaces for technology startups and enterprise businesses.',
-    foundedYear: 2010,
-    failureYear: 2023,
-    industry: 'Real Estate / PropTech',
-    stage: 'Late Stage / Pre-IPO',
-    totalFunding: 21400000000,
-    valuation: 47000000000,
-    website: 'https://wework.com',
-    founders: ['Adam Neumann', 'Miguel McKelvey'],
+    name: 'Enron',
+    slug: 'enron',
+    description: 'Enron Corporation was an American energy, commodities, and services company that perpetrated one of the largest accounting frauds and corporate governance collapses in financial history.',
+    foundedYear: 1985,
+    failureYear: 2001,
+    industry: 'Energy',
+    stage: 'Public Enterprise',
+    totalFunding: 63400000000,
+    valuation: 70000000000,
+    website: 'https://enron.com',
+    founders: ['Kenneth Lay', 'Jeffrey Skilling'],
     failureReasons: [
-      'Massive long-term lease liabilities versus short-term tenant commitments (asset-liability mismatch)',
-      'Unsustainable cash burn and unchecked global expansion without localized profitability',
-      'Corporate governance breakdown and self-dealing by executive leadership',
-      'Subsidized membership pricing masking fundamentally flawed unit economics'
+      'Accounting fraud and financial manipulation',
+      'Corporate Governance Failure',
+      'Financial Mismanagement',
+      'Excessive Leverage'
     ],
     keyLessons: [
-      'Valuation multiples of tech companies cannot be applied to capital-intensive leasehold real estate',
-      'Corporate governance and independent board oversight are vital before pre-IPO hypergrowth',
-      'Unit economics must hold at mature location levels without constant external subsidy'
+      'Financial transparency is critical',
+      'Strong corporate governance is essential',
+      'Complex financial structures can conceal systemic risk',
+      'Aggressive growth without risk controls can become destructive'
     ],
-    postmortemSummary: 'WeWork raised over $21B from SoftBank and major investors, reaching a peak private valuation of $47B. When attempting to IPO in 2019, its S-1 exposed massive operational losses, multi-billion dollar lease commitments, and rampant conflicts of interest. The company imploded, ousted its CEO, was bailed out, and eventually filed for Chapter 11 bankruptcy in late 2023 under $19B in debt obligations.',
+    postmortemSummary: 'Enron concealed losses and debt through complex accounting structures and off-balance-sheet entities, while weak governance and excessive risk-taking contributed to its collapse.',
     evidence: [
       {
-        contentType: 'POSTMORTEM',
-        title: 'The Fall of WeWork: S-1 Disclosures and Capital Reckoning',
-        sourceName: 'Failory',
-        sourceUrl: 'https://failory.com/cemetery/wework',
-        content: 'WeWork committed to over $47 billion in lease payments with only $4 billion in tenant commitments. The company spent billions aggressively expanding into dozens of cities before existing locations reached breakeven.',
-      },
-      {
         contentType: 'FILING',
-        title: 'WeWork Inc. Form S-1 Registration Statement (2019)',
+        title: 'SEC Enforcement & DOJ Bankruptcy Docket: Enron Special Purpose Entities',
         sourceName: 'SEC Edgar',
-        sourceUrl: 'https://www.sec.gov/edgar/wework-s1',
-        content: 'For the six months ended June 30, 2019, WeWork generated $1.54B in revenue but lost $904M, carrying long-term lease commitments exceeding $47.2 billion.',
+        sourceUrl: 'https://www.sec.gov/news/press/2001-enron',
+        content: 'Enron utilized Fastow-controlled Chewco, LJM, and Raptors special purpose entities to remove billions in toxic liabilities from financial statements while recording fictional mark-to-market earnings.',
+        metadata: { country: 'United States', city: 'Houston' }
       }
     ],
     claims: [
       {
-        claimText: 'WeWork carried over $47 billion in future lease obligations against only $4 billion in committed tenant revenue at the time of its 2019 S-1 filing.',
+        claimText: 'Enron concealed over $60 billion in liabilities through off-balance-sheet entities while inflating market valuations through aggressive mark-to-market accounting.',
         category: 'FINANCIAL',
         verificationStatus: 'VERIFIED',
-        confidenceScore: 0.98,
-      },
+        confidenceScore: 0.99
+      }
+    ]
+  },
+  {
+    name: 'Lehman Brothers',
+    slug: 'lehman-brothers',
+    description: 'Fourth-largest US investment bank whose September 2008 collapse triggered the climax of the global subprime financial crisis.',
+    foundedYear: 1850,
+    failureYear: 2008,
+    industry: 'Financial Services',
+    stage: 'Public Enterprise',
+    totalFunding: 639000000000,
+    valuation: 60000000000,
+    website: 'https://lehman.com',
+    founders: ['Henry Lehman', 'Emanuel Lehman', 'Mayer Lehman'],
+    failureReasons: [
+      'Excessive leverage and inadequate risk management',
+      'Risk Management Failure',
+      'Liquidity Crisis',
+      'Real Estate Exposure'
+    ],
+    keyLessons: [
+      'Leverage amplifies both returns and losses',
+      'Liquidity risk can destroy otherwise large institutions',
+      'Risk models can fail during systemic shocks',
+      'Concentration in one market can become catastrophic'
+    ],
+    postmortemSummary: 'Lehman Brothers accumulated significant exposure to the US housing and mortgage markets while operating with extremely high leverage and relying heavily on short-term funding.',
+    evidence: [
       {
-        claimText: 'Adam Neumann exercised voting control via high-vote shares and personally leased owned real estate back to WeWork at inflated rates.',
+        contentType: 'POSTMORTEM',
+        title: 'Bankruptcy Examiner Anton Valukas Report: Lehman Insolvency',
+        sourceName: 'US Bankruptcy Court',
+        sourceUrl: 'https://jenner.com/lehman-examiner',
+        content: 'Lehman operated at net leverage ratios exceeding 30:1, with over $600 billion in assets funded by volatile short-term repo markets and undisclosed Repo 105 balance-sheet maneuvers.',
+        metadata: { country: 'United States', city: 'New York' }
+      }
+    ],
+    claims: [
+      {
+        claimText: 'Lehman Brothers carried $639 billion in assets against $619 billion in debt when its overnight repo counter-parties pulled liquidity, precipitating bankruptcy.',
+        category: 'FINANCIAL',
+        verificationStatus: 'VERIFIED',
+        confidenceScore: 0.99
+      }
+    ]
+  },
+  {
+    name: 'WorldCom',
+    slug: 'worldcom',
+    description: 'American telecommunications titan that imploded after an internal audit revealed over $11 billion in fraudulent accounting entries to artificially inflate earnings.',
+    foundedYear: 1983,
+    failureYear: 2002,
+    industry: 'Telecommunications',
+    stage: 'Public Enterprise',
+    totalFunding: 107000000000,
+    valuation: 175000000000,
+    website: 'https://worldcom.com',
+    founders: ['Bernard Ebbers'],
+    failureReasons: [
+      'Accounting fraud and aggressive financial manipulation',
+      'Financial Manipulation',
+      'Corporate Governance Failure'
+    ],
+    keyLessons: [
+      'Financial reporting must reflect economic reality',
+      'Internal controls must be independent',
+      'Pressure to meet financial targets can encourage manipulation',
+      'Governance failures can allow fraud to persist'
+    ],
+    postmortemSummary: 'WorldCom improperly classified operating expenses as capital expenditures to inflate profits and present a stronger financial position than the company actually had.',
+    evidence: [
+      {
+        contentType: 'FILING',
+        title: 'SEC Litigation Release No. 17588: SEC v. WorldCom Inc.',
+        sourceName: 'SEC Edgar',
+        sourceUrl: 'https://sec.gov/litigation/litreleases/lr17588.htm',
+        content: 'WorldCom fraudulently capitalized standard operating line costs as capital expenditures to fabricate profit and meet Wall Street earnings expectations.',
+        metadata: { country: 'United States', city: 'Clinton' }
+      }
+    ],
+    claims: [
+      {
+        claimText: 'WorldCom executives reclassified over $3.8 billion in ordinary line expenses into capital asset accounts to mask collapsing margins during the telecom crash.',
         category: 'LEGAL',
         verificationStatus: 'VERIFIED',
-        confidenceScore: 0.95,
+        confidenceScore: 0.99
       }
     ]
   },
   {
     name: 'Theranos',
     slug: 'theranos',
-    description: 'Health technology company claiming to revolutionize laboratory blood testing using miniaturized automated fingerprick devices.',
+    description: 'Healthcare technology company claiming to revolutionize laboratory blood diagnostics using miniaturized fingerprick technology.',
     foundedYear: 2003,
     failureYear: 2018,
-    industry: 'HealthTech / Biotech',
+    industry: 'Healthcare Technology',
     stage: 'Unicorn / Growth',
     totalFunding: 1400000000,
     valuation: 9000000000,
     website: 'https://theranos.com',
     founders: ['Elizabeth Holmes', 'Ramesh Sunny Balwani'],
     failureReasons: [
-      'Technological infeasibility concealed via fraudulent test results and third-party commercial machines',
-      'Absolute secrecy culture suppressing scientific peer review and internal dissent',
-      'Regulatory non-compliance with CMS and FDA validation standards',
-      'Board composed of political and military dignitaries without medical or diagnostic expertise'
+      'Failure to deliver the claimed technology combined with misleading investors and stakeholders',
+      'Technology Validation Failure',
+      'Fraud',
+      'Corporate Governance Failure',
+      'Regulatory Failure'
     ],
     keyLessons: [
-      'In regulated healthcare, Silicon Valley "fake it till you make it" culture is criminal fraud',
-      'Scientific claims require peer-reviewed clinical validation and independent audits',
-      'Domain-expert governance is indispensable when dealing with diagnostic technology'
+      'Technology claims must be independently validated',
+      'Scientific evidence must precede aggressive commercialization',
+      'Strong governance and technical oversight are essential',
+      'Investor storytelling cannot replace product validation'
     ],
-    postmortemSummary: 'Theranos claimed its proprietary Edison device could perform hundreds of diagnostic tests from a single drop of capillary blood. An investigative exposé by John Carreyrou in the Wall Street Journal uncovered that the company secretly used Siemens commercial analyzers and fabricated quality control metrics. The company collapsed amid federal indictments and criminal convictions of its leadership.',
+    postmortemSummary: "Theranos claimed its technology could perform extensive blood testing from very small samples, but the technology did not perform as represented, leading to regulatory action, legal consequences and the company's collapse.",
     evidence: [
       {
         contentType: 'POSTMORTEM',
-        title: 'Bad Blood: Secrets and Lies in a Silicon Valley Startup',
-        sourceName: 'Wall Street Journal',
-        sourceUrl: 'https://wsj.com/theranos-investigation',
-        content: 'Theranos ran the vast majority of patient tests on commercially purchased machines diluted with saline rather than on its own proprietary Edison analyzers.',
+        title: 'US v. Holmes Trial Exhibits: Diagnostic Hardware Infeasibility',
+        sourceName: 'US District Court',
+        sourceUrl: 'https://justice.gov/usao-ndca/us-v-elizabeth-holmes-et-al',
+        content: 'Federal court records proved Theranos routinely ran patient blood samples on modified commercial Siemens analyzers while claiming tests ran on Edison devices.',
+        metadata: { country: 'United States', city: 'Palo Alto' }
       }
     ],
     claims: [
       {
-        claimText: 'Theranos conducted fewer than 12 of its advertised 200+ blood assays on its proprietary Edison hardware, relying secretly on diluted samples in modified Siemens machines.',
+        claimText: 'Theranos claimed its proprietary Edison hardware could run 200+ blood diagnostic tests from a single capillary fingerprick, which was technologically infeasible.',
         category: 'PRODUCT',
         verificationStatus: 'VERIFIED',
-        confidenceScore: 0.99,
+        confidenceScore: 0.99
+      }
+    ]
+  },
+  {
+    name: 'FTX',
+    slug: 'ftx',
+    description: 'Global cryptocurrency derivatives exchange that collapsed after revelations concerning customer fund co-mingling with Alameda Research and non-existent controls.',
+    foundedYear: 2019,
+    failureYear: 2022,
+    industry: 'Cryptocurrency / Financial Services',
+    stage: 'Late Stage / Decacorn',
+    totalFunding: 1800000000,
+    valuation: 32000000000,
+    website: 'https://ftx.com',
+    founders: ['Sam Bankman-Fried', 'Gary Wang', 'Nishad Singh'],
+    failureReasons: [
+      'Severe governance and financial-control failures',
+      'Fraud',
+      'Corporate Governance Failure',
+      'Risk Management Failure',
+      'Misuse of Customer Funds'
+    ],
+    keyLessons: [
+      'Customer assets require strict segregation',
+      'Independent governance is critical',
+      'Financial controls must scale with company growth',
+      'Rapid growth cannot substitute for operational discipline'
+    ],
+    postmortemSummary: "FTX collapsed after revelations concerning the relationship between FTX and Alameda Research, customer funds, financial controls and the company's governance structure.",
+    evidence: [
+      {
+        contentType: 'POSTMORTEM',
+        title: 'First Interim Report of John J. Ray III: FTX Governance & Controls Failure',
+        sourceName: 'US Bankruptcy Court',
+        sourceUrl: 'https://restructuring.ra.kroll.com/ftx',
+        content: 'Never in my career have I seen such a complete failure of corporate controls and such a complete absence of trustworthy financial information as occurred here.',
+        metadata: { country: 'Bahamas', city: 'Nassau' }
+      }
+    ],
+    claims: [
+      {
+        claimText: 'FTX secretly diverted billions in customer exchange deposits to Alameda Research via custom codebase exemptions including allow_negative flags.',
+        category: 'FINANCIAL',
+        verificationStatus: 'VERIFIED',
+        confidenceScore: 0.99
+      }
+    ]
+  },
+  {
+    name: 'WeWork',
+    slug: 'wework',
+    description: 'Shared office space and commercial real estate technology company that crashed after aggressive global scaling exposed flawed unit economics.',
+    foundedYear: 2010,
+    failureYear: 2023,
+    industry: 'Commercial Real Estate / Technology',
+    stage: 'Late Stage / Pre-IPO',
+    totalFunding: 21400000000,
+    valuation: 47000000000,
+    website: 'https://wework.com',
+    founders: ['Adam Neumann', 'Miguel McKelvey'],
+    failureReasons: [
+      'Unsustainable business economics combined with aggressive expansion and governance problems',
+      'Unsustainable Economics',
+      'Governance Failure',
+      'Excessive Expansion',
+      'Capital Intensity'
+    ],
+    keyLessons: [
+      'Growth does not equal a sustainable business',
+      'Unit economics must support expansion',
+      'Capital-intensive models require disciplined scaling',
+      'Founder governance structures can create significant risk'
+    ],
+    postmortemSummary: 'WeWork expanded rapidly while carrying substantial long-term lease obligations and pursuing a growth strategy that struggled to produce sustainable economics.',
+    evidence: [
+      {
+        contentType: 'FILING',
+        title: 'WeWork Inc. Form S-1 Registration Statement (2019)',
+        sourceName: 'SEC Edgar',
+        sourceUrl: 'https://sec.gov/edgar/wework-s1',
+        content: 'WeWork committed to over $47 billion in lease liabilities with only $4 billion in tenant commitments, burning through billions of venture capital subsidies.',
+        metadata: { country: 'United States', city: 'New York' }
+      }
+    ],
+    claims: [
+      {
+        claimText: 'WeWork had 15-year fixed lease liabilities versus 30-day flexible tenant contracts, creating a fatal asset-liability duration mismatch.',
+        category: 'FINANCIAL',
+        verificationStatus: 'VERIFIED',
+        confidenceScore: 0.98
+      }
+    ]
+  },
+  {
+    name: 'Wirecard',
+    slug: 'wirecard',
+    description: 'German payments and financial technology conglomerate that collapsed after disclosing €1.9 billion in nonexistent trustee cash accounts.',
+    foundedYear: 1999,
+    failureYear: 2020,
+    industry: 'Financial Technology',
+    stage: 'Public Enterprise',
+    totalFunding: 2000000000,
+    valuation: 28000000000,
+    website: 'https://wirecard.com',
+    founders: ['Markus Braun'],
+    failureReasons: [
+      'Financial reporting fraud and inadequate oversight',
+      'Accounting Fraud',
+      'Audit Failure',
+      'Regulatory Failure',
+      'Corporate Governance Failure'
+    ],
+    keyLessons: [
+      'Financial claims require independent verification',
+      'Auditing systems must challenge management assertions',
+      'Rapid growth can hide underlying control weaknesses',
+      'Regulatory oversight needs effective access to reliable evidence'
+    ],
+    postmortemSummary: 'Wirecard collapsed after a major shortfall in reported cash was revealed, exposing severe problems in financial reporting, auditing and corporate oversight.',
+    evidence: [
+      {
+        contentType: 'NEWS',
+        title: 'Financial Times House of Wirecard Investigation (Dan McCrum)',
+        sourceName: 'Financial Times',
+        sourceUrl: 'https://ft.com/wirecard-investigation',
+        content: 'FT investigative journalism revealed that Wirecard’s high-margin Asian processing profits and €1.9B in Philippine bank balances were fictitious.',
+        metadata: { country: 'Germany', city: 'Aschheim' }
+      }
+    ],
+    claims: [
+      {
+        claimText: 'Wirecard booked €1.9 billion in phantom cash balances held in escrow accounts that Philippine banks confirmed never existed.',
+        category: 'FINANCIAL',
+        verificationStatus: 'VERIFIED',
+        confidenceScore: 0.99
+      }
+    ]
+  },
+  {
+    name: 'Kodak',
+    slug: 'kodak',
+    description: 'Iconic American photography pioneer that dominated film for over a century before filing for bankruptcy due to digital photography disruption.',
+    foundedYear: 1892,
+    failureYear: 2012,
+    industry: 'Photography / Imaging',
+    stage: 'Public Enterprise',
+    totalFunding: 5000000000,
+    valuation: 31000000000,
+    website: 'https://kodak.com',
+    founders: ['George Eastman'],
+    failureReasons: [
+      'Failure to successfully transition its business model as digital photography disrupted film',
+      'Disruption Denial',
+      'Strategic Failure',
+      'Business Model Failure',
+      'Organizational Inertia'
+    ],
+    keyLessons: [
+      'Inventing a disruptive technology is not enough',
+      'Companies must adapt their business models',
+      'Protecting an existing revenue stream can delay necessary transformation',
+      'Market disruption can destroy established advantages'
+    ],
+    postmortemSummary: 'Kodak developed early digital photography technology but struggled to transform its highly profitable film-centered business model as digital imaging fundamentally changed the market.',
+    evidence: [
+      {
+        contentType: 'POSTMORTEM',
+        title: 'The Real Reason Kodak Failed (Harvard Business Review)',
+        sourceName: 'HBR',
+        sourceUrl: 'https://hbr.org/2016/07/the-real-reason-kodak-failed',
+        content: 'Kodak invented the digital camera in 1975 but suppressed it to protect its lucrative analog film processing and photographic paper business.',
+        metadata: { country: 'United States', city: 'Rochester' }
+      }
+    ],
+    claims: [
+      {
+        claimText: 'Kodak engineer Steve Sasson invented the digital camera in 1975, but executive leadership feared commercializing it would cannibalize analog film revenues.',
+        category: 'PRODUCT',
+        verificationStatus: 'VERIFIED',
+        confidenceScore: 0.98
+      }
+    ]
+  },
+  {
+    name: 'Nokia',
+    slug: 'nokia',
+    description: 'Finnish mobile telecom titan that commanded over 50% of the world handset market before collapsing in the touchscreen smartphone revolution.',
+    foundedYear: 1865,
+    failureYear: 2013,
+    industry: 'Mobile Technology',
+    stage: 'Public Enterprise',
+    totalFunding: 10000000000,
+    valuation: 250000000000,
+    website: 'https://nokia.com',
+    founders: ['Fredrik Idestam', 'Leo Mechelin'],
+    failureReasons: [
+      'Failure to adapt effectively to the smartphone and software ecosystem shift',
+      'Strategic Failure',
+      'Disruption',
+      'Organizational Inertia',
+      'Platform Failure'
+    ],
+    keyLessons: [
+      'Hardware leadership does not guarantee platform leadership',
+      'Software ecosystems can redefine competitive advantage',
+      'Organizational culture affects strategic responsiveness',
+      'Market leaders must continuously challenge their assumptions'
+    ],
+    postmortemSummary: "Nokia's position in mobile hardware was disrupted by smartphones and software-centric competitors, while organizational and strategic challenges slowed its response.",
+    evidence: [
+      {
+        contentType: 'POSTMORTEM',
+        title: 'Stephen Elop "Burning Platform" Internal Memo (Feb 2011)',
+        sourceName: 'Wall Street Journal',
+        sourceUrl: 'https://wsj.com/nokia-burning-platform',
+        content: 'Our competitors aren’t taking our market share with devices; they are taking our market share with an entire ecosystem.',
+        metadata: { country: 'Finland', city: 'Espoo' }
+      }
+    ],
+    claims: [
+      {
+        claimText: 'Nokia commanded over 50% of global smartphone handset market share in 2007, which plummeted to under 3% by 2013 following the rise of iOS and Android.',
+        category: 'COMPETITION',
+        verificationStatus: 'VERIFIED',
+        confidenceScore: 0.99
+      }
+    ]
+  },
+  {
+    name: 'BlackBerry',
+    slug: 'blackberry',
+    description: 'Canadian mobile pioneer (Research In Motion) that pioneered enterprise wireless email before touchscreen smartphones made physical keyboards obsolete.',
+    foundedYear: 1984,
+    failureYear: 2016,
+    industry: 'Mobile Technology',
+    stage: 'Public Enterprise',
+    totalFunding: 3000000000,
+    valuation: 83000000000,
+    website: 'https://blackberry.com',
+    founders: ['Mike Lazaridis', 'Jim Balsillie'],
+    failureReasons: [
+      'Failure to adapt to touchscreen smartphones and the modern mobile application ecosystem',
+      'Disruption',
+      'Product Strategy Failure',
+      'Platform Failure',
+      'Organizational Inertia'
+    ],
+    keyLessons: [
+      'Customer expectations can change rapidly',
+      'A strong existing product can become a constraint',
+      'Platform ecosystems create powerful network effects',
+      'Competitive advantage must continuously evolve'
+    ],
+    postmortemSummary: "BlackBerry's strong position in secure mobile communication and physical-keyboard devices was disrupted by Apple's iPhone and Android smartphones, whose touchscreen interfaces and app ecosystems changed consumer expectations.",
+    evidence: [
+      {
+        contentType: 'POSTMORTEM',
+        title: 'Losing the Signal: Rise and Fall of BlackBerry (McNish & Silcoff)',
+        sourceName: 'Forensic Books',
+        sourceUrl: 'https://blackberry-forensics.com/losing-signal',
+        content: 'BlackBerry co-CEOs initially dismissed full touchscreen phones as battery-inefficient toys, failing to recognize consumer demand for mobile web and apps.',
+        metadata: { country: 'Canada', city: 'Waterloo' }
+      }
+    ],
+    claims: [
+      {
+        claimText: 'BlackBerry controlled 43% of the US smartphone market in 2010 before declining to 0% as touchscreen app store ecosystems swept enterprise adoption.',
+        category: 'PRODUCT',
+        verificationStatus: 'VERIFIED',
+        confidenceScore: 0.99
+      }
+    ]
+  },
+  {
+    name: "BYJU'S",
+    slug: 'byjus',
+    description: 'Indian multinational educational technology company providing personalized online learning programs and tutoring services.',
+    foundedYear: 2011,
+    failureYear: 2024,
+    industry: 'EdTech',
+    stage: 'Late Stage / Decacorn',
+    totalFunding: 5800000000,
+    valuation: 22000000000,
+    website: 'https://byjus.com',
+    founders: ['Byju Raveendran', 'Divya Gokulnath'],
+    failureReasons: [
+      'Aggressive expansion combined with financial, governance and operational challenges',
+      'Aggressive Expansion',
+      'Financial Mismanagement',
+      'Corporate Governance Failure',
+      'Cash Burn',
+      'Regulatory Pressure'
+    ],
+    keyLessons: [
+      'Growth must be supported by sustainable economics',
+      'Acquisitions require disciplined integration',
+      'Financial reporting and governance must scale with the company',
+      'High valuation does not guarantee business sustainability',
+      'Aggressive expansion increases operational complexity'
+    ],
+    postmortemSummary: "BYJU'S experienced a dramatic decline after reaching a peak valuation of approximately $22 billion, with aggressive expansion, governance problems, financial difficulties and increasing regulatory scrutiny contributing to its collapse in value.",
+    evidence: [
+      {
+        contentType: 'NEWS',
+        title: 'Deloitte Resignation & $1.2B Debt Default: Inside the BYJU\'S Collapse',
+        sourceName: 'TechCrunch',
+        sourceUrl: 'https://techcrunch.com/byjus-debt-default-deloitte',
+        content: 'Deloitte resigned as statutory auditor citing absence of management financial statements, while US lenders initiated insolvency proceedings.',
+        metadata: { country: 'India', city: 'Bengaluru' }
+      }
+    ],
+    claims: [
+      {
+        claimText: "BYJU'S valuation collapsed from $22 billion in 2022 to effectively zero as lenders invoked insolvency over a defaulted $1.2 billion Term Loan B.",
+        category: 'FINANCIAL',
+        verificationStatus: 'VERIFIED',
+        confidenceScore: 0.98
       }
     ]
   },
@@ -446,90 +847,6 @@ const SEED_COMPANIES = [
         category: 'FINANCIAL',
         verificationStatus: 'VERIFIED',
         confidenceScore: 0.98,
-      }
-    ]
-  },
-  {
-    name: "Byju's",
-    slug: 'byjus',
-    description: 'Indian multinational educational technology company providing personalized online learning programs and tutoring services.',
-    foundedYear: 2011,
-    failureYear: 2024,
-    industry: 'EdTech',
-    stage: 'Late Stage / Decacorn',
-    totalFunding: 5800000000,
-    valuation: 22000000000,
-    website: 'https://byjus.com',
-    founders: ['Byju Raveendran', 'Divya Gokulnath'],
-    failureReasons: [
-      'Debt-fueled international M&A buying WhiteHat Jr, Aakash, and Epic without integration or fiscal discipline',
-      'Aggressive predatory sales tactics forcing parents into subprime non-cancellable education loan contracts',
-      'Failure to file timely statutory audits leading to Deloitte resignation and investor lawsuits',
-      'Default on a $1.2 billion Term Loan B triggering insolvencies across US and Indian subsidiaries'
-    ],
-    keyLessons: [
-      'Acquisition sprees funded by high-yield debt during low interest rate regimes turn toxic when post-pandemic demand cools',
-      'Predatory hard-selling to low-income customers creates irreparable brand erosion and regulatory retribution',
-      'Timely financial transparency and audited statements are non-negotiable for fiduciary survival'
-    ],
-    postmortemSummary: 'Once India’s most valuable startup at $22 billion, Byju’s collapsed under $1.2B in defaulted US debt, regulatory probes, and severe governance scandals. Its auditor Deloitte and key board members resigned simultaneously after financial statements were withheld for over 18 months, wiping out equity value.',
-    evidence: [
-      {
-        contentType: 'NEWS',
-        title: 'The Unraveling of Byjus: Debt Defaults and Board Resignations',
-        sourceName: 'TechCrunch',
-        sourceUrl: 'https://techcrunch.com/byjus-collapse-debt-default',
-        content: 'Deloitte resigned as statutory auditor alongside representatives from Prosus, Peak XV, and Chan Zuckerberg Initiative citing complete absence of financial communication.',
-      }
-    ],
-    claims: [
-      {
-        claimText: 'Byjus defaulted on a $1.2 billion Term Loan B after failing to meet debt reporting covenants and quarterly audited accounts.',
-        category: 'FINANCIAL',
-        verificationStatus: 'VERIFIED',
-        confidenceScore: 0.97,
-      }
-    ]
-  },
-  {
-    name: 'FTX',
-    slug: 'ftx',
-    description: 'Global cryptocurrency derivatives exchange offering spot, futures, and leveraged crypto trading instruments.',
-    foundedYear: 2019,
-    failureYear: 2022,
-    industry: 'Fintech / Crypto',
-    stage: 'Series C / Unicorn',
-    totalFunding: 1800000000,
-    valuation: 32000000000,
-    website: 'https://ftx.com',
-    founders: ['Sam Bankman-Fried', 'Gary Wang'],
-    failureReasons: [
-      'Direct commingling and embezzlement of billions in customer deposits into proprietary hedge fund Alameda Research',
-      'Absence of internal financial controls, balance sheet auditing, or risk management committees',
-      'Fabricated collateral backed by self-printed illiquid utility token (FTT)',
-      'Bank-run cascade triggered when rival exchange Binance announced liquidation of FTT holdings'
-    ],
-    keyLessons: [
-      'Custodial exchanges must never lend or commingle client deposits into proprietary trading operations',
-      'Never allow uncollateralized leverage backed by native self-issued tokens',
-      'Lack of an independent board and traditional accounting controls is an immediate catastrophic red flag'
-    ],
-    postmortemSummary: 'FTX reached a $32B valuation endorsed by top global venture funds and celebrity ambassadors. In November 2022, CoinDesk published Alameda’s leaked balance sheet showing its reserves consisted of illiquid FTT tokens created by FTX. A customer withdrawal run of $6B revealed an $8B deficit, precipitating bankruptcy and criminal fraud convictions.',
-    evidence: [
-      {
-        contentType: 'POSTMORTEM',
-        title: 'John J. Ray III Report on FTX Internal Controls and Fraud',
-        sourceName: 'SEC Edgar',
-        sourceUrl: 'https://restructuring.ra.kroll.com/ftx',
-        content: 'Never in my career have I seen such a complete failure of corporate controls and such a complete absence of trustworthy financial information as occurred here.',
-      }
-    ],
-    claims: [
-      {
-        claimText: 'FTX maintained an secret backdoor code allowing Alameda Research to execute unlimited negative balance accounts using customer deposits without liquidation triggers.',
-        category: 'LEGAL',
-        verificationStatus: 'VERIFIED',
-        confidenceScore: 0.99,
       }
     ]
   },
@@ -972,6 +1289,7 @@ async function seedDatabase() {
 
       // Seed Evidence
       if (evidence && evidence.length > 0) {
+        await prisma.evidence.deleteMany({ where: { companyId: company.id } });
         for (const ev of evidence) {
           const createdEv = await prisma.evidence.create({
             data: {
@@ -998,11 +1316,13 @@ async function seedDatabase() {
       logger.debug(`Seeded company: ${company.name} [slug: ${company.slug}, id: ${company.id}]`);
     }
 
-    logger.info(`Successfully seeded ${createdCompanyIds.length} companies with evidence and claims.`);
-    logger.info('--- SYNC 2 CHECKPOINT: 5 REAL COMPANY IDS FOR DEV 2 RAG TESTING ---');
-    createdCompanyIds.slice(0, 5).forEach((c, idx) => {
-      logger.info(`  ${idx + 1}. ${c.name} (slug: ${c.slug}) -> ID: ${c.id}`);
-    });
+    // 3. Ingest seed.json if present
+    try {
+      const { seedFromJson } = require('./seedFromJson');
+      await seedFromJson();
+    } catch (jsonErr) {
+      logger.warn(`seedFromJson skipped or failed: ${jsonErr.message}`);
+    }
 
     return createdCompanyIds;
   } catch (err) {

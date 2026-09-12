@@ -1,6 +1,7 @@
 import React from 'react';
-import { Users, Briefcase, FileCheck } from 'lucide-react';
+import { Users, Briefcase, FileCheck, ExternalLink } from 'lucide-react';
 import { StartupCard } from '../common/StartupCard';
+import { getFounderWikipediaUrl } from '../../lib/wikipedia';
 
 export function FinancialSummary({ startup }) {
   if (!startup) return null;
@@ -19,23 +20,43 @@ export function FinancialSummary({ startup }) {
         </div>
 
         <div className="space-y-2.5">
-          {startup.founders?.map((person, idx) => (
-            <div key={idx} className="p-3 rounded-[6px] bg-[#FAFAFA] dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#2A2A2A] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-              <div>
-                <span className="font-bold text-xs text-black dark:text-white font-sans block">
-                  {person.name}
-                </span>
-                <span className="text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3]">
-                  {person.role}
-                </span>
+          {startup.founders?.map((person, idx) => {
+            const name = typeof person === 'string' ? person : (person.name || 'Founder');
+            const role = typeof person === 'string' ? 'Founder' : (person.role || 'Leadership');
+            const background = typeof person === 'string' ? null : person.background;
+            const wikiUrl = getFounderWikipediaUrl(name);
+
+            return (
+              <div key={idx} className="p-3 rounded-[6px] bg-[#FAFAFA] dark:bg-[#0A0A0A] border border-[#E5E5E5] dark:border-[#2A2A2A] flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                <div>
+                  {wikiUrl ? (
+                    <a
+                      href={wikiUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-bold text-xs text-black dark:text-white font-sans inline-flex items-center gap-1.5 hover:underline group"
+                      title={`View ${name}'s Wikipedia biography`}
+                    >
+                      <span>{name}</span>
+                      <ExternalLink className="w-3 h-3 text-[#737373] dark:text-[#A3A3A3] group-hover:text-black dark:group-hover:text-white transition-colors" />
+                    </a>
+                  ) : (
+                    <span className="font-bold text-xs text-black dark:text-white font-sans block">
+                      {name}
+                    </span>
+                  )}
+                  <span className="text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3] block mt-0.5">
+                    {role}
+                  </span>
+                </div>
+                {background && (
+                  <span className="text-xs text-[#737373] dark:text-[#A3A3A3] italic max-w-sm sm:text-right">
+                    {background}
+                  </span>
+                )}
               </div>
-              {person.background && (
-                <span className="text-xs text-[#737373] dark:text-[#A3A3A3] italic max-w-sm sm:text-right">
-                  {person.background}
-                </span>
-              )}
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

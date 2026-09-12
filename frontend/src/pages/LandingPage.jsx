@@ -287,6 +287,10 @@ export function LandingPage() {
     navigate('/app');
   };
 
+  const goToSignIn = () => {
+    navigate('/signin');
+  };
+
   return (
     <div className="pivotvault-landing-page">
       {/* Landing Top Navigation Bar */}
@@ -307,7 +311,7 @@ export function LandingPage() {
           </div>
 
           <div className="nav-actions">
-            <button type="button" onClick={goToDashboard} className="signin button" style={{ background: 'transparent', padding: '6px 10px' }}>
+            <button type="button" onClick={goToSignIn} className="signin button" style={{ background: 'transparent', padding: '6px 10px' }}>
               Sign In
             </button>
             <button className="button dark small" onClick={goToDashboard}>

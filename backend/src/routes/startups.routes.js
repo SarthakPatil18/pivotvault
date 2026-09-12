@@ -4,10 +4,28 @@ const logger = require('../lib/logger');
 
 const router = Router();
 
+const CANONICAL_PRIORITY_SLUGS = [
+  'enron',
+  'lehman-brothers',
+  'worldcom',
+  'theranos',
+  'ftx',
+  'wework',
+  'wirecard',
+  'kodak',
+  'nokia',
+  'blackberry',
+  'byjus'
+];
+
 function mapCompanyToStartup(c) {
   const primaryReason = (c.failureReasons && c.failureReasons[0]) || 'Unit Economics Collapse';
+  const isCanonical = CANONICAL_PRIORITY_SLUGS.includes(c.slug);
+  const canonicalIndex = CANONICAL_PRIORITY_SLUGS.indexOf(c.slug);
   const capital = c.totalFunding || (c.valuation ? c.valuation * 0.2 : 50000000);
-  const score = Math.min(99, Math.max(50, Math.round(70 + (capital > 500000000 ? 20 : capital > 50000000 ? 10 : 0) + ((c.evidence && c.evidence.length) || 1) * 2)));
+  const score = isCanonical
+    ? 99 - canonicalIndex
+    : Math.min(88, Math.max(50, Math.round(65 + (capital > 500000000 ? 15 : capital > 50000000 ? 8 : 0) + ((c.evidence && c.evidence.length) || 1) * 2)));
 
   let domain = '';
   if (c.website) {
@@ -15,6 +33,40 @@ function mapCompanyToStartup(c) {
       domain = new URL(c.website.startsWith('http') ? c.website : `https://${c.website}`).hostname.replace(/^www\./, '');
     } catch {
       domain = '';
+    }
+  }
+
+  const primaryEvidence = (c.evidence && c.evidence[0]) || null;
+  const meta = primaryEvidence?.metadata || {};
+  const country = meta.country || (meta.city ? `${meta.city}, USA` : 'United States');
+  const investors = Array.isArray(meta.investors) && meta.investors.length > 0
+    ? meta.investors
+    : (typeof meta.investors === 'string' && meta.investors.trim() ? [meta.investors] : ['Venture Syndicate', 'Institutional Angels']);
+
+  let timeline = [
+    { year: String(c.foundedYear || 2014), event: `${c.name} founded and secured initial seed funding.` },
+    { year: String(Math.round(((c.foundedYear || 2014) + (c.failureYear || 2023)) / 2)), event: 'Rapid multi-market expansion and headcount acceleration.' },
+    { year: String(c.failureYear || 2023), event: `Operational shutdown and liquidation. Documented in public post-mortems.` }
+  ];
+
+  if (Array.isArray(meta.milestones) && meta.milestones.length > 0) {
+    timeline = meta.milestones.map((m, idx) => {
+      const yearMatch = typeof m === 'string' ? m.match(/\b(19\d\d|20\d\d)\b/) : null;
+      return {
+        year: yearMatch ? yearMatch[1] : String((c.foundedYear || 2014) + idx),
+        event: m
+      };
+    });
+  } else if (typeof meta.timeline === 'string' && meta.timeline.includes(';')) {
+    const rawEvents = meta.timeline.split(';').map(s => s.trim()).filter(Boolean);
+    if (rawEvents.length > 0) {
+      timeline = rawEvents.map(ev => {
+        const yearMatch = ev.match(/\b(19\d\d|20\d\d)\b/);
+        return {
+          year: yearMatch ? yearMatch[1] : String(c.foundedYear || 2014),
+          event: ev
+        };
+      });
     }
   }
 
@@ -26,16 +78,26 @@ function mapCompanyToStartup(c) {
     website: c.website || (domain ? `https://${domain}` : undefined),
     domain: domain || undefined,
     industry: c.industry || 'Technology',
-    country: 'United States',
+    country,
+    city: meta.city || undefined,
     foundedYear: c.foundedYear || 2014,
     failedYear: c.failureYear || 2023,
     capitalRaised: capital,
     peakValuation: c.valuation || capital * 3,
     failureScore: score,
-    status: 'Defunct (Documented Autopsy)',
+    isFeatured: isCanonical,
+    featuredRank: isCanonical ? canonicalIndex + 1 : undefined,
+    canonicalPillar: isCanonical,
+    status: meta.finalStatus || (isCanonical ? 'Defunct (Canonical Autopsy)' : 'Defunct (Documented Autopsy)'),
     tagline: c.description ? c.description.slice(0, 100) + '...' : `${c.name} post-mortem analysis.`,
     summary: c.postmortemSummary || c.description || 'Comprehensive failure analysis indexed in PivotVault evidence vault.',
     failureMode: primaryReason,
+    failureCategory: meta.failureCategory || undefined,
+    businessModel: meta.businessModel || undefined,
+    targetCustomers: meta.targetCustomers || undefined,
+    employees: meta.employees || undefined,
+    competitors: Array.isArray(meta.competitors) ? meta.competitors : [],
+    verificationNotes: meta.verificationNotes || undefined,
     rootCauses: (c.failureReasons && c.failureReasons.length > 0) ? c.failureReasons : [
       'Unit economics deterioration and unsustainable customer acquisition costs',
       'Premature headcount and operational scaling before lock-in',
@@ -51,12 +113,8 @@ function mapCompanyToStartup(c) {
     founders: (c.founders && c.founders.length > 0) ? c.founders.map(f => ({ name: f, role: 'Co-Founder' })) : [
       { name: 'Founding Team', role: 'Executive Leadership' }
     ],
-    investors: ['Venture Syndicate', 'Institutional Angels'],
-    timeline: [
-      { year: String(c.foundedYear || 2014), event: `${c.name} founded and secured initial seed funding.` },
-      { year: String(Math.round(((c.foundedYear || 2014) + (c.failureYear || 2023)) / 2)), event: 'Rapid multi-market expansion and headcount acceleration.' },
-      { year: String(c.failureYear || 2023), event: `Operational shutdown and liquidation. Documented in public post-mortems.` }
-    ],
+    investors,
+    timeline,
     lessons: (c.keyLessons && c.keyLessons.length > 0) ? c.keyLessons : [
       'Unit economics must show sustainable unit contribution margin before expanding sales team headcount.',
       'Customer acquisition cost via paid marketing must pay back in under 12 months.',
@@ -73,6 +131,13 @@ function mapCompanyToStartup(c) {
       sourceName: e.sourceName,
       sourceUrl: e.sourceUrl,
       snippet: e.content ? e.content.slice(0, 300) + '...' : ''
+    })),
+    claims: (c.claims || []).map(cl => ({
+      id: cl.id,
+      claimText: cl.claimText,
+      category: cl.category,
+      verificationStatus: cl.verificationStatus,
+      confidenceScore: cl.confidenceScore
     }))
   };
 }
@@ -110,18 +175,46 @@ router.get(['/startups', '/companies'], async (req, res, next) => {
       where.industry = { contains: industry.split(' ')[0], mode: 'insensitive' };
     }
 
-    const [totalRecords, companies] = await Promise.all([
+    // First retrieve any canonical priority companies matching the current query filter for page 1
+    let canonicalCompanies = [];
+    if (pageNum === 1) {
+      canonicalCompanies = await prisma.company.findMany({
+        where: {
+          ...where,
+          slug: { in: CANONICAL_PRIORITY_SLUGS }
+        },
+        include: { evidence: { take: 3 } }
+      });
+      canonicalCompanies.sort((a, b) => {
+        return CANONICAL_PRIORITY_SLUGS.indexOf(a.slug) - CANONICAL_PRIORITY_SLUGS.indexOf(b.slug);
+      });
+    }
+
+    const canonicalSlugs = canonicalCompanies.map((c) => c.slug);
+    const standardTake = Math.max(0, limitNum - canonicalCompanies.length);
+    const standardSkip = pageNum === 1
+      ? 0
+      : Math.max(0, (pageNum - 1) * limitNum - CANONICAL_PRIORITY_SLUGS.length);
+
+    const [totalRecords, standardCompanies] = await Promise.all([
       prisma.company.count({ where }),
       prisma.company.findMany({
-        where,
+        where: {
+          ...where,
+          slug: { notIn: canonicalSlugs.length > 0 ? canonicalSlugs : [] }
+        },
         include: { evidence: { take: 3 } },
-        skip,
-        take: limitNum,
+        skip: standardSkip,
+        take: pageNum === 1 ? standardTake : limitNum,
         orderBy: { totalFunding: 'desc' }
       })
     ]);
 
-    let startups = companies.map(mapCompanyToStartup);
+    const mergedCompanies = pageNum === 1
+      ? [...canonicalCompanies, ...standardCompanies]
+      : standardCompanies;
+
+    let startups = mergedCompanies.map(mapCompanyToStartup);
 
     // Apply sorting
     if (sort === 'score_desc') {

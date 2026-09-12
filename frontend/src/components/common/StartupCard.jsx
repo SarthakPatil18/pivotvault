@@ -20,6 +20,11 @@ export function StartupCard({ startup, compact = false }) {
         {/* Card Header: Industry, Failure Score & Bookmark */}
         <div className="flex items-center justify-between gap-2 mb-3">
           <div className="flex items-center gap-2 flex-wrap">
+            {startup.canonicalPillar && (
+              <span className="bg-black text-white dark:bg-white dark:text-black rounded-[4px] text-[9px] px-1.5 py-0.5 font-mono font-extrabold uppercase tracking-wider">
+                CANONICAL CASE
+              </span>
+            )}
             <span className="bg-[#F5F5F5] dark:bg-[#1A1A1A] text-black dark:text-white border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-[4px] text-[10px] px-2 py-0.5 font-mono font-bold uppercase tracking-wider">
               {startup.industry}
             </span>
@@ -50,8 +55,8 @@ export function StartupCard({ startup, compact = false }) {
 
         {/* Startup Name & Summary */}
         <Link to={`/startup/${startup.id}`} className="block">
-          <div className="flex items-center gap-3">
-            <CompanyLogo startup={startup} size="md" />
+          <div className="flex items-center gap-3.5">
+            <CompanyLogo startup={startup} size="lg" className="rounded-[10px] shadow-xs shrink-0" />
             <h3 className="flex items-center justify-between flex-1 text-lg sm:text-xl font-extrabold text-black dark:text-white transition-colors">
               <span>{startup.name}</span>
               <span className="text-[14px] text-black dark:text-white opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 transition-all">

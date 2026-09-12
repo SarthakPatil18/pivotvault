@@ -16,6 +16,7 @@ app.use(cors());
 app.use(express.json({ limit: '10mb' }));
 app.use(express.urlencoded({ extended: true }));
 app.get('/health', (_req, res) => res.json({ status: 'ok', service: 'PivotVault API', timestamp: new Date().toISOString() }));
+app.get('/api/health', (_req, res) => res.json({ status: 'ok', service: 'PivotVault API', timestamp: new Date().toISOString() }));
 app.use('/api', startupsRoutes);
 app.use('/api/rag', ragRoutes);
 app.use('/api/agent', agentRoutes);

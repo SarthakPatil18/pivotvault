@@ -6,10 +6,12 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
+    "build": "prisma generate --schema=prisma/schema.prisma",
     "prisma:generate": "prisma generate --schema=prisma/schema.prisma",
     "prisma:migrate": "prisma migrate dev --schema=prisma/schema.prisma",
     "prisma:push": "prisma db push --schema=prisma/schema.prisma",
     "prisma:seed": "node prisma/seed.js",
+    "prisma:seed:json": "node prisma/seedFromJson.js",
     "prisma:validate": "prisma validate --schema=prisma/schema.prisma",
     "pipeline:start": "node src/pipeline/index.js",
     "ingest:direct": "node src/pipeline/directIngest.js",

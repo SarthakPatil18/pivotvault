@@ -1,5 +1,14 @@
 // Complete domain dictionary for 297+ startup failure entities
 export const COMPANY_DOMAINS = {
+  "arrival": "arrival.com",
+  "enron": "enron.com",
+  "lehman-brothers": "lehmanbrothers.com",
+  "lehman": "lehmanbrothers.com",
+  "worldcom": "worldcom.com",
+  "wirecard": "wirecard.com",
+  "kodak": "kodak.com",
+  "nokia": "nokia.com",
+  "blackberry": "blackberry.com",
   "wework": "wework.com",
   "yogome": "yogome.com",
   "hotelsaroundyou": "hotelsaroundyou.com",

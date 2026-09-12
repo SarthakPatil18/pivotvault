@@ -18,6 +18,7 @@ import { StartupGraph } from './pages/StartupGraph';
 import { FounderConfessions } from './pages/FounderConfessions';
 import { HallOfGhosts } from './pages/HallOfGhosts';
 import { AIAssistant } from './pages/AIAssistant';
+import { SignIn } from './pages/SignIn';
 
 /**
  * DashboardLayout wraps the inner PivotVault intelligence platform
@@ -47,6 +48,12 @@ export function App() {
         <Routes>
           {/* Public Landing Page Entry */}
           <Route path="/" element={<LandingPage />} />
+
+          {/* Dedicated Auth & Sign In Page */}
+          <Route path="/signin" element={<SignIn />} />
+          <Route path="/login" element={<Navigate to="/signin" replace />} />
+          <Route path="/signup" element={<SignIn />} />
+          <Route path="/auth" element={<Navigate to="/signin" replace />} />
 
           {/* Main Dashboard & Application Platform */}
           <Route element={<DashboardLayout />}>

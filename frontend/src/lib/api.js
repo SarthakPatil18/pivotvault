@@ -452,10 +452,22 @@ export async function askAssistant(question) {
 /**
  * Interactive Founder Persona Ghost Chat
  */
-export async function chatWithGhost(personaId, message) {
+export async function chatWithGhost(personaId, message, personaMeta = {}) {
+  const geminiApiKey = personaMeta?.geminiApiKey || 
+                       (typeof window !== 'undefined' ? localStorage.getItem('pivotvault_gemini_api_key') : null) || 
+                       undefined;
+
   return fetchWithFallback('/ai/ghost-chat', {
     method: 'POST',
-    body: JSON.stringify({ personaId, message }),
+    timeout: 25000,
+    headers: geminiApiKey ? { 'x-gemini-api-key': geminiApiKey } : {},
+    body: JSON.stringify({ 
+      personaId, 
+      message, 
+      persona: personaMeta?.founder || personaMeta?.name, 
+      startup: personaMeta?.startup,
+      geminiApiKey
+    }),
   }, async () => null);
 }
 

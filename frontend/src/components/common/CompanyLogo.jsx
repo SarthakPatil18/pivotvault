@@ -3,6 +3,97 @@ import { resolveCompanyDomain } from '../../lib/data/companyDomains';
 
 // Authentic vector brand marks for famous historical startup failures
 const OFFICIAL_BRAND_SVGS = {
+  arrival: (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="18" fill="#0A0A0A" />
+      <g fill="#FFFFFF">
+        <path d="M22 68 L36 28 L46 28 L60 68 L50 68 L41 42 L32 68 Z" />
+        <rect x="33" y="52" width="16" height="5" />
+        <path d="M58 28 L72 28 C78 28 82 32 82 37 C82 41 79 44 75 45 L84 68 L74 68 L66 47 L64 47 L64 68 L58 68 Z M64 34 L64 42 L71 42 C73 42 75 40 75 38 C75 36 73 34 71 34 Z" />
+      </g>
+      <circle cx="50" cy="80" r="3" fill="#10B981" />
+    </svg>
+  ),
+  enron: (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="18" fill="#FFFFFF" stroke="#E5E5E5" strokeWidth="2" />
+      <g transform="translate(50, 40) rotate(-45) translate(-26, -26)">
+        <rect x="0" y="0" width="46" height="10" fill="#00A859" />
+        <rect x="0" y="16" width="36" height="10" fill="#0080C6" />
+        <rect x="0" y="32" width="46" height="10" fill="#ED1C24" />
+        <rect x="0" y="0" width="10" height="42" fill="#00A859" />
+      </g>
+      <text x="50" y="84" textAnchor="middle" fill="#111111" fontFamily="sans-serif" fontWeight="900" fontSize="13" letterSpacing="2">
+        ENRON
+      </text>
+    </svg>
+  ),
+  'lehman-brothers': (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="18" fill="#001F3F" />
+      <text x="50" y="48" textAnchor="middle" fill="#FFFFFF" fontFamily="Georgia, serif" fontWeight="700" fontSize="30" letterSpacing="1">
+        LB
+      </text>
+      <line x1="20" y1="56" x2="80" y2="56" stroke="#C5A059" strokeWidth="2" />
+      <text x="50" y="70" textAnchor="middle" fill="#C5A059" fontFamily="system-ui, sans-serif" fontWeight="800" fontSize="7.5" letterSpacing="1.8">
+        LEHMAN BROTHERS
+      </text>
+    </svg>
+  ),
+  lehman: (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="18" fill="#001F3F" />
+      <text x="50" y="48" textAnchor="middle" fill="#FFFFFF" fontFamily="Georgia, serif" fontWeight="700" fontSize="30" letterSpacing="1">
+        LB
+      </text>
+      <line x1="20" y1="56" x2="80" y2="56" stroke="#C5A059" strokeWidth="2" />
+      <text x="50" y="70" textAnchor="middle" fill="#C5A059" fontFamily="system-ui, sans-serif" fontWeight="800" fontSize="7.5" letterSpacing="1.8">
+        LEHMAN BROTHERS
+      </text>
+    </svg>
+  ),
+  worldcom: (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="18" fill="#002B49" />
+      <circle cx="50" cy="38" r="18" stroke="#00A3E0" strokeWidth="3.5" fill="none" />
+      <ellipse cx="50" cy="38" rx="18" ry="7" stroke="#FFBF00" strokeWidth="2.5" fill="none" transform="rotate(-25 50 38)" />
+      <text x="50" y="74" textAnchor="middle" fill="#FFFFFF" fontFamily="system-ui, sans-serif" fontWeight="900" fontSize="9.5" letterSpacing="1.5">
+        WORLDCOM
+      </text>
+    </svg>
+  ),
+  wirecard: (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="18" fill="#FFFFFF" stroke="#E5E5E5" strokeWidth="2" />
+      <g fill="#FF5500">
+        <circle cx="50" cy="36" r="4.5" />
+        <path d="M41 28 C46 23 54 23 59 28" stroke="#FF5500" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+        <path d="M33 21 C42 13 58 13 67 21" stroke="#FF5500" strokeWidth="3.5" strokeLinecap="round" fill="none" />
+      </g>
+      <text x="50" y="72" textAnchor="middle" fill="#111111" fontFamily="system-ui, sans-serif" fontWeight="800" fontSize="12" letterSpacing="0.5">
+        wirecard
+      </text>
+    </svg>
+  ),
+  kodak: (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="18" fill="#FFC800" />
+      <g fill="#D81E05">
+        <rect x="22" y="20" width="56" height="60" rx="8" />
+        <circle cx="62" cy="50" r="18" fill="#FFC800" />
+        <path d="M22 20 L22 80 L38 80 L38 56 L54 80 L74 80 L52 50 L72 20 L52 20 L38 42 L38 20 Z" fill="#FFC800" />
+        <text x="44" y="55" fill="#D81E05" fontFamily="sans-serif" fontWeight="900" fontSize="8" letterSpacing="1">Kodak</text>
+      </g>
+    </svg>
+  ),
+  nokia: (
+    <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
+      <rect width="100" height="100" rx="18" fill="#124191" />
+      <text x="50" y="59" textAnchor="middle" fill="#FFFFFF" fontFamily="system-ui, -apple-system, sans-serif" fontWeight="900" fontSize="19" letterSpacing="1.5">
+        NOKIA
+      </text>
+    </svg>
+  ),
   theranos: (
     <svg viewBox="0 0 100 100" className="w-full h-full" fill="none">
       <circle cx="50" cy="50" r="46" fill="#E52528" />
@@ -230,13 +321,15 @@ function getBrandGradient(str = '') {
   return BRAND_GRADIENTS[idx];
 }
 
-// Size configurations in exact pixels
+// Size configurations in exact pixels (enlarged for rich visibility)
 const SIZES = {
-  xs: 'w-5 h-5 min-w-[20px] text-[10px]',
-  sm: 'w-7 h-7 min-w-[28px] text-[11px]',
-  md: 'w-9 h-9 min-w-[36px] text-[13px]',
-  lg: 'w-12 h-12 min-w-[48px] text-[16px]',
-  xl: 'w-16 h-16 min-w-[64px] text-[20px]'
+  xs: 'w-6 h-6 min-w-[24px] text-[11px]',
+  sm: 'w-8 h-8 min-w-[32px] text-[12px]',
+  md: 'w-12 h-12 min-w-[48px] text-[15px]',
+  lg: 'w-16 h-16 min-w-[64px] text-[18px]',
+  xl: 'w-20 h-20 min-w-[80px] text-[22px]',
+  '2xl': 'w-24 h-24 sm:w-28 sm:h-28 min-w-[96px] sm:min-w-[112px] text-[28px]',
+  '3xl': 'w-32 h-32 sm:w-36 sm:h-36 min-w-[128px] sm:min-w-[144px] text-[36px]'
 };
 
 export function CompanyLogo({ 
@@ -247,7 +340,7 @@ export function CompanyLogo({
   className = '',
   showDomainFallback = true
 }) {
-  const [providerIndex, setProviderIndex] = useState(0); // 0: Google S2, 1: DuckDuckGo, 2: Monogram
+  const [providerIndex, setProviderIndex] = useState(0); // 0: Clearbit, 1: Google S2 128, 2: DuckDuckGo, 3: Monogram
 
   // Normalize inputs
   const companyName = startup?.name || name || 'Startup';
@@ -265,7 +358,7 @@ export function CompanyLogo({
   if (svgLogo) {
     return (
       <div 
-        className={`inline-flex items-center justify-center shrink-0 rounded-[8px] overflow-hidden bg-white shadow-xs p-0.5 border border-neutral-200/90 dark:border-neutral-700/80 select-none ${sizeClass} ${className}`}
+        className={`inline-flex items-center justify-center shrink-0 rounded-[10px] overflow-hidden bg-white shadow-xs p-1 border border-neutral-200/90 dark:border-neutral-700/80 select-none ${sizeClass} ${className}`}
         title={`${companyName} Official Logo`}
       >
         {svgLogo}
@@ -276,8 +369,9 @@ export function CompanyLogo({
   // 2. Resolve domain for real high-clarity network fetching
   const domain = startup?.domain || resolveCompanyDomain(companyName, cleanKey);
 
-  if (domain && showDomainFallback && providerIndex < 2) {
+  if (domain && showDomainFallback && providerIndex < 3) {
     const urls = [
+      `https://logo.clearbit.com/${domain}`,
       `https://www.google.com/s2/favicons?domain=${domain}&sz=128`,
       `https://icons.duckduckgo.com/ip3/${domain}.ico`
     ];
@@ -285,7 +379,7 @@ export function CompanyLogo({
 
     return (
       <div 
-        className={`inline-flex items-center justify-center shrink-0 rounded-[8px] overflow-hidden bg-white shadow-xs p-1 border border-neutral-200/90 dark:border-neutral-700/80 select-none ${sizeClass} ${className}`}
+        className={`inline-flex items-center justify-center shrink-0 rounded-[10px] overflow-hidden bg-white shadow-xs p-1.5 border border-neutral-200/90 dark:border-neutral-700/80 select-none ${sizeClass} ${className}`}
         title={`${companyName} Logo`}
       >
         <img

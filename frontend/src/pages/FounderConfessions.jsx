@@ -13,9 +13,11 @@ import {
   ArrowRight,
   TrendingDown,
   User,
-  Bot
+  Bot,
+  ExternalLink
 } from 'lucide-react';
 import { CompanyLogo } from '../components/common/CompanyLogo';
+import { getFounderWikipediaUrl } from '../lib/wikipedia';
 
 export function FounderConfessions() {
   const [selectedFounderId, setSelectedFounderId] = useState('all');
@@ -193,8 +195,28 @@ export function FounderConfessions() {
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
                 <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse" />
-                <span className="font-mono text-xs font-bold uppercase tracking-wider text-black dark:text-white">
-                  {selectedFounderId === 'all' ? 'All Confessions Vault' : `Confessing: ${currentFounder?.founder}`}
+                <span className="font-mono text-xs font-bold uppercase tracking-wider text-black dark:text-white flex items-center gap-1.5">
+                  {selectedFounderId === 'all' ? (
+                    'All Confessions Vault'
+                  ) : (
+                    <>
+                      <span>Confessing:</span>
+                      {getFounderWikipediaUrl(currentFounder?.founder) ? (
+                        <a
+                          href={getFounderWikipediaUrl(currentFounder?.founder)}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="hover:underline inline-flex items-center gap-1 text-black dark:text-white cursor-pointer group"
+                          title={`View ${currentFounder?.founder}'s Wikipedia biography`}
+                        >
+                          <span>{currentFounder?.founder}</span>
+                          <ExternalLink className="w-3 h-3 text-[#737373] group-hover:text-black dark:group-hover:text-white" />
+                        </a>
+                      ) : (
+                        <span>{currentFounder?.founder}</span>
+                      )}
+                    </>
+                  )}
                 </span>
                 <span className="text-[#D4D4D4] dark:text-[#404040] hidden sm:inline">•</span>
                 <span className="text-[11px] font-mono text-[#737373] dark:text-[#A3A3A3] hidden sm:inline">

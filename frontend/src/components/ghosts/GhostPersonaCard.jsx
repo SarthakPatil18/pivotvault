@@ -142,7 +142,7 @@ export function GhostChatInterface({ persona }) {
     setIsTyping(true);
 
     try {
-      const liveRes = await chatWithGhost(persona.id, query);
+      const liveRes = await chatWithGhost(persona.id, query, persona);
       const reply = liveRes?.data?.reply || liveRes?.data?.answer;
       if (reply) {
         setMessages((prev) => [

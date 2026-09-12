@@ -493,7 +493,7 @@ Slide 08: Financing Plan — $6.5M Series A allocation: $3.2M hardware retrofits
               <div className="flex items-center gap-2">
                 <span className="px-2.5 py-1 rounded-[5px] text-[11px] font-mono font-bold bg-[#F0FDF4] text-[#15803D] dark:bg-[#052e16] dark:text-[#4ade80] border border-[#BBF7D0] dark:border-[#166534] flex items-center gap-1.5">
                   <Zap className="w-3 h-3 fill-current" />
-                  <span>{autopsyResult.engine || '⚡ Groq LPU (LLaMA 3.3 70B) Reasoning'}</span>
+                  <span>AI Forensic Knowledge Engine</span>
                 </span>
                 <span className="text-xs font-mono text-[#737373] dark:text-[#A3A3A3]">
                   • Audited: <strong className="text-black dark:text-white">{autopsyResult.title || customTitle || 'Venture Deck'}</strong>
@@ -510,24 +510,28 @@ Slide 08: Financing Plan — $6.5M Series A allocation: $3.2M hardware retrofits
 
             {/* 1. Historical Parallel Callout Banner */}
             <div className="p-6 sm:p-8 rounded-[16px] bg-black text-white dark:bg-[#0A0A0A] border border-[#262626] flex flex-col md:flex-row items-start justify-between gap-6 shadow-xl">
-              <div className="space-y-2 max-w-2xl">
+              <div className="space-y-3 max-w-2xl">
                 <div className="flex items-center gap-2">
                   <span className="w-2.5 h-2.5 rounded-full bg-[#EF4444] animate-pulse" />
                   <span className="text-[11px] font-mono font-bold uppercase tracking-widest text-[#EF4444]">
                     CRITICAL HISTORICAL GRAVEYARD PARALLEL
                   </span>
                 </div>
-                <h3 className="text-base sm:text-lg font-extrabold tracking-tight">
-                  This venture's unit economics & cost architecture mirror:{' '}
-                  <span className="underline decoration-[#EF4444] text-white">
-                    {autopsyResult.parallelCompany || 'Canonical High-Burn Venture Archetype'}
-                  </span>
-                </h3>
+                <div className="space-y-1">
+                  <div className="text-xs font-mono uppercase tracking-wider text-[#A3A3A3]">
+                    Venture Unit Economics & Cost Architecture Mirror:
+                  </div>
+                  <h3 className="text-xl sm:text-2xl font-black text-white tracking-tight leading-tight">
+                    <span className="underline decoration-[#EF4444] decoration-2 underline-offset-4 text-white">
+                      {autopsyResult.parallelCompany || 'Canonical High-Burn Venture Archetype'}
+                    </span>
+                  </h3>
+                </div>
                 <p className="text-xs sm:text-sm text-[#CCCCCC] leading-relaxed">
                   {autopsyResult.summary}
                 </p>
                 {autopsyResult.parallelExplanation && (
-                  <p className="text-xs text-[#999999] pt-1 leading-relaxed border-t border-[#222222]">
+                  <p className="text-xs text-[#999999] pt-2 leading-relaxed border-t border-[#222222]">
                     <span className="text-white font-semibold">Why this pattern repeats: </span>
                     {autopsyResult.parallelExplanation}
                   </p>

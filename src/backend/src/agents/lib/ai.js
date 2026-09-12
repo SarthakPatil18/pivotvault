@@ -29,14 +29,35 @@ async function gemini(prompt, { maxTokens = 1000, json = false, system = '', api
   return payload.candidates?.[0]?.content?.parts?.map((part) => part.text ?? '').join('') ?? null;
 }
 
-async function callGroq(prompt, { maxTokens = 1000, model = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile' } = {}) {
+async function callGroq(prompt, { maxTokens = 1400, model = process.env.GROQ_MODEL || 'llama-3.3-70b-versatile', system = '', apiKey = null, json = false } = {}) {
   const config = await getConfig();
-  if (!config.GROQ_API_KEY || config.GROQ_API_KEY.includes('mock')) throw new Error('GROQ_API_KEY is not configured or is mock.');
+  const effectiveKey = apiKey || config.GROQ_API_KEY || process.env.GROQ_API_KEY;
+  if (!effectiveKey || effectiveKey.includes('mock')) throw new Error('GROQ_API_KEY is not configured or is mock.');
+  
+  const messages = [];
+  if (system) {
+    messages.push({ role: 'system', content: system });
+  }
+  messages.push({ role: 'user', content: prompt });
+
+  const body = {
+    model,
+    max_tokens: maxTokens,
+    messages
+  };
+
+  if (json) {
+    body.response_format = { type: 'json_object' };
+  }
+
   const response = await fetch('https://api.groq.com/openai/v1/chat/completions', { 
     method: 'POST', 
-    headers: { 'content-type': 'application/json', authorization: `Bearer ${config.GROQ_API_KEY}` }, 
+    headers: { 
+      'content-type': 'application/json', 
+      authorization: `Bearer ${effectiveKey}` 
+    }, 
     signal: AbortSignal.timeout(25000),
-    body: JSON.stringify({ model, max_tokens: maxTokens, messages: [{ role: 'user', content: prompt }] }) 
+    body: JSON.stringify(body) 
   });
   if (!response.ok) throw new Error(`Groq request failed (${response.status}): ${await response.text()}`);
   return (await response.json()).choices?.[0]?.message?.content ?? null;
@@ -173,12 +194,29 @@ function generateContextualResponse(prompt) {
 3. **Key Forensic Takeaway**: Sustainable venture architecture requires proving repeatable positive contribution margins before scaling headcount or paid customer acquisition. Founders must protect their runway by maintaining a minimum 18-month cash buffer under conservative revenue assumptions.`;
 }
 
-async function callGemini(prompt, options = {}) {
-  try { return await gemini(prompt, options); } catch (geminiError) {
-    try { return await callGroq(prompt, options); } catch (groqError) {
-      console.warn('Both configured cloud LLMs failed, activating local forensic intelligence model.', { geminiError: geminiError.message, groqError: groqError.message });
-      return generateContextualResponse(prompt);
-    }
+async function callLLM(prompt, options = {}) {
+  // 1. Prioritize Groq (ultra-fast LPU reasoning with LLaMA 3.3 70B)
+  try {
+    const groqRes = await callGroq(prompt, options);
+    if (groqRes) return groqRes;
+  } catch (groqError) {
+    // Continue to Gemini fallback
   }
+
+  // 2. Gemini fallback
+  try {
+    const geminiRes = await gemini(prompt, options);
+    if (geminiRes) return geminiRes;
+  } catch (geminiError) {
+    // Continue to local fallback
+  }
+
+  // 3. Deterministic Local Forensic Model fallback
+  return generateContextualResponse(prompt);
 }
-module.exports = { callGemini, callGroq, wrapExternalContent, parseJSON, generateContextualResponse };
+
+async function callGemini(prompt, options = {}) {
+  return callLLM(prompt, options);
+}
+
+module.exports = { callLLM, callGemini, callGroq, wrapExternalContent, parseJSON, generateContextualResponse };

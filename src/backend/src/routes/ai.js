@@ -1,5 +1,5 @@
 const { Router } = require('express');
-const { callGemini, wrapExternalContent } = require('../agents/lib/ai');
+const { callLLM, callGemini, callGroq, wrapExternalContent, parseJSON } = require('../agents/lib/ai');
 const { scoreIdea } = require('../agents/lib/ideaScoreModel');
 const { estimateFeaturesFromContext } = require('../agents/specialists/riskAnalyst');
 const { ragAsk, ragSearch } = require('../rag/rag.service');
@@ -84,6 +84,9 @@ const router = Router();
 
 router.post('/risk-scan', async (req, res, next) => {
   try {
+    const groqApiKey = req.body.groqApiKey || req.headers['x-groq-api-key'] || (process.env.GROQ_API_KEY && !process.env.GROQ_API_KEY.includes('mock') ? process.env.GROQ_API_KEY : null);
+    const geminiApiKey = req.body.geminiApiKey || req.headers['x-gemini-api-key'] || (process.env.GEMINI_API_KEY && !process.env.GEMINI_API_KEY.includes('mock') ? process.env.GEMINI_API_KEY : null);
+
     const input = {
       ideaText: req.body.ideaText || req.body.query || req.body.idea || '',
       industry: req.body.industry || 'SaaS & Enterprise',
@@ -92,7 +95,9 @@ router.post('/risk-scan', async (req, res, next) => {
       burnRate: req.body.burnRate || '$20k - $50k/mo',
       hardwareInvolved: Boolean(req.body.hardwareInvolved),
       regulatoryHeavy: Boolean(req.body.regulatoryHeavy),
-      modelFeatures: req.body.features || req.body.modelFeatures || null
+      modelFeatures: req.body.features || req.body.modelFeatures || null,
+      groqApiKey,
+      geminiApiKey
     };
 
     const result = await evaluateVenture(input);
@@ -223,14 +228,12 @@ router.post('/pitch-deck-autopsy', async (req, res, next) => {
     const deckContent = req.body.deckContent || req.body.content || req.body.text || '';
     const deckId = req.body.deckId || '';
     
-    const userApiKey = req.body.geminiApiKey || req.headers['x-gemini-api-key'] || null;
-    const effectiveKey = userApiKey || (process.env.GEMINI_API_KEY && !process.env.GEMINI_API_KEY.includes('mock') ? process.env.GEMINI_API_KEY : null);
+    const groqKey = req.body.groqApiKey || req.headers['x-groq-api-key'] || (process.env.GROQ_API_KEY && !process.env.GROQ_API_KEY.includes('mock') ? process.env.GROQ_API_KEY : null);
+    const geminiKey = req.body.geminiApiKey || req.headers['x-gemini-api-key'] || (process.env.GEMINI_API_KEY && !process.env.GEMINI_API_KEY.includes('mock') ? process.env.GEMINI_API_KEY : null);
 
     let autopsyData = null;
 
-    if (effectiveKey && deckContent && deckContent.trim().length > 30) {
-      try {
-        const systemPrompt = `You are the Lead Forensic Venture Auditor at PivotVault, an elite startup failure intelligence platform.
+    const systemPrompt = `You are the Lead Forensic Venture Auditor at PivotVault, an elite startup failure intelligence platform.
 Your task is to analyze pitch deck contents, business model claims, and target raise plans with ruthless mathematical objectivity and empirical accuracy.
 Identify inverted unit economics, TAM delusions, CAC payback traps, capex underestimations, and regulatory blind spots.
 Map the deck to real failed startups in history that shared this exact fatal flaw.
@@ -242,7 +245,7 @@ Return ONLY a valid JSON object matching this schema:
   "riskLevel": "CRITICAL" | "HIGH" | "ELEVATED" | "MODERATE",
   "summary": "2-3 sentence executive diagnostic summary explaining the core fatal vulnerability of this deck.",
   "parallelCompany": "Name of primary historical failure (e.g. 'Juicero ($120M Lost) & Teforia ($17M Lost)')",
-  "parallelSlug": "lowercase slug if applicable (e.g. 'arrival', 'wework', 'theranos', 'enron')",
+  "parallelSlug": "lowercase slug if applicable (e.g. 'arrival', 'wework', 'theranos', 'fast', 'scalefactor')",
   "parallelExplanation": "Why this business model risk trajectory matches that failed venture.",
   "categories": [
     { "name": "Category Name (e.g. Unit Economics & Contribution)", "score": 0-100 integer, "flag": "Specific diagnostic observation" }
@@ -255,7 +258,7 @@ Return ONLY a valid JSON object matching this schema:
   ]
 }`;
 
-        const prompt = `Perform a forensic deck autopsy for this venture:
+    const prompt = `Perform a forensic deck autopsy for this venture:
 Venture Title: ${title}
 Industry / Sector: ${industry}
 Target Raise: ${targetRaise}
@@ -264,23 +267,55 @@ ${deckContent.slice(0, 15000)}
 
 Analyze and return the strict JSON report.`;
 
-        const geminiRes = await callGemini(prompt, { 
+    // 1. Primary: Groq LPU Reasoning (LLaMA 3.3 70B)
+    if (groqKey && deckContent && deckContent.trim().length > 20) {
+      try {
+        const groqRes = await callGroq(prompt, { 
           system: systemPrompt, 
-          apiKey: effectiveKey,
-          json: true 
+          apiKey: groqKey,
+          json: true,
+          maxTokens: 1600
         });
 
-        if (geminiRes) {
-          const parsed = typeof geminiRes === 'string' ? parseJSON(geminiRes) : geminiRes;
-          if (parsed && parsed.overallRiskScore && Array.isArray(parsed.categories)) {
+        if (groqRes) {
+          const parsed = typeof groqRes === 'string' ? parseJSON(groqRes) : groqRes;
+          if (parsed && (parsed.overallRiskScore || parsed.score) && Array.isArray(parsed.categories)) {
             autopsyData = {
               ...parsed,
-              provider: 'google-gemini'
+              overallRiskScore: parsed.overallRiskScore || parsed.score || 75,
+              provider: 'groq-lpu-llama3.3-70b',
+              engine: '⚡ Groq LPU (LLaMA 3.3 70B) Reasoning'
             };
           }
         }
       } catch (err) {
-        console.warn('Gemini deck autopsy failed, falling back to forensic rule engine:', err.message);
+        console.warn('[PitchDeckAutopsy] Groq execution failed, trying Gemini:', err.message);
+      }
+    }
+
+    // 2. Secondary: Google Gemini Fallback
+    if (!autopsyData && geminiKey && deckContent && deckContent.trim().length > 20) {
+      try {
+        const geminiRes = await callGemini(prompt, { 
+          system: systemPrompt, 
+          apiKey: geminiKey,
+          json: true,
+          maxTokens: 1600
+        });
+
+        if (geminiRes) {
+          const parsed = typeof geminiRes === 'string' ? parseJSON(geminiRes) : geminiRes;
+          if (parsed && (parsed.overallRiskScore || parsed.score) && Array.isArray(parsed.categories)) {
+            autopsyData = {
+              ...parsed,
+              overallRiskScore: parsed.overallRiskScore || parsed.score || 75,
+              provider: 'google-gemini',
+              engine: 'Google Gemini 1.5 Flash'
+            };
+          }
+        }
+      } catch (err) {
+        console.warn('[PitchDeckAutopsy] Gemini execution failed, falling back to rule engine:', err.message);
       }
     }
 

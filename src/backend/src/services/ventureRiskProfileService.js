@@ -626,10 +626,30 @@ Return a STRICT JSON object with this exact structure:
   }
 }`;
 
+  const userGroqKey = rawInput.groqApiKey || rawInput.apiKey || (process.env.GROQ_API_KEY && !process.env.GROQ_API_KEY.includes('mock') ? process.env.GROQ_API_KEY : null);
+  const userGeminiKey = rawInput.geminiApiKey || (process.env.GEMINI_API_KEY && !process.env.GEMINI_API_KEY.includes('mock') ? process.env.GEMINI_API_KEY : null);
+
+  let engineUsed = 'PivotVault Forensic Knowledge Graph';
+
   try {
-    // Use callGroq's own default model (from process.env.GROQ_MODEL or 'llama-3.3-70b-versatile')
-    const raw = await callGroq(prompt, { maxTokens: 1200 })
-      .catch(() => callGemini(prompt, { maxTokens: 1200, json: true }));
+    let raw = null;
+    if (userGroqKey) {
+      try {
+        raw = await callGroq(prompt, { maxTokens: 1400, json: true, apiKey: userGroqKey });
+        if (raw) engineUsed = 'Groq LPU (LLaMA 3.3 70B)';
+      } catch (err) {
+        console.warn('Groq profiling call failed, attempting Gemini:', err.message);
+      }
+    }
+
+    if (!raw && userGeminiKey) {
+      try {
+        raw = await callGemini(prompt, { maxTokens: 1400, json: true, apiKey: userGeminiKey });
+        if (raw) engineUsed = 'Google Gemini 1.5 Flash';
+      } catch (err) {
+        console.warn('Gemini profiling call failed:', err.message);
+      }
+    }
 
     const parsed = parseJSON(raw);
     if (parsed && parsed.dimensionScores && typeof parsed.dimensionScores === 'object') {
@@ -682,7 +702,9 @@ Return a STRICT JSON object with this exact structure:
         primaryAssumptions: [
           'Target customers will switch from current tools.',
           'Unit economics remain positive as acquisition scales.'
-        ]
+        ],
+        engine: engineUsed,
+        reasoningEngine: engineUsed
       };
     }
   } catch (err) {
@@ -690,7 +712,12 @@ Return a STRICT JSON object with this exact structure:
   }
 
   // Grounded deterministic fallback (zero hallucination, plain English, idea-aware)
-  return createDeterministicProfile(rawInput);
+  const deterministic = createDeterministicProfile(rawInput);
+  return {
+    ...deterministic,
+    engine: 'PivotVault Forensic Grounded Engine',
+    reasoningEngine: 'PivotVault Forensic Knowledge Graph'
+  };
 }
 
 module.exports = {

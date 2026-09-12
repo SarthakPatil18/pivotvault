@@ -366,7 +366,7 @@ export function FounderChatBox({ startup, isOpen, onClose }) {
         </div>
         <div className="mt-1.5 flex items-center justify-between text-[9px] font-mono text-[#8E8E8E]">
           <span>Press Enter to send</span>
-          <span>PivotVault Hall of Ghosts v3.0</span>
+          <span>PivotVault Hall of Ghosts v4.0</span>
         </div>
       </div>
     </div>

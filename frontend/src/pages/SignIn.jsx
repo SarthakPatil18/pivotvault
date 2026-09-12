@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ArrowLeft, Mail, Lock, Eye, EyeOff, Zap, ShieldCheck, TrendingUp, AlertCircle, CheckCircle2 } from 'lucide-react';
+import { ArrowLeft, ArrowRight, Mail, Lock, Eye, EyeOff, Zap, ShieldCheck, TrendingUp, AlertCircle, CheckCircle2 } from 'lucide-react';
 import { PivotVaultIcon } from '../assets/logo';
 import { signInWithGoogle, signInWithEmail, signUpWithEmail } from '../lib/supabase';
 
@@ -39,6 +39,13 @@ export function SignIn() {
     }
   };
 
+  const handleGuestAccess = () => {
+    setSuccessMsg('Entering PivotVault Intelligence Platform...');
+    setTimeout(() => {
+      navigate('/app');
+    }, 300);
+  };
+
   // Handle Email & Password Sign In / Sign Up
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -46,7 +53,7 @@ export function SignIn() {
     setSuccessMsg('');
 
     if (!email || !password) {
-      setErrorMsg('Please enter both email and password.');
+      setErrorMsg('Please enter your email and password, or click "Explore as Guest" below to access the platform immediately.');
       return;
     }
 
@@ -59,7 +66,7 @@ export function SignIn() {
         setSuccessMsg('Demo access granted! Redirecting to PivotVault intelligence platform...');
         setTimeout(() => {
           navigate('/app');
-        }, 800);
+        }, 600);
         return;
       }
 
@@ -154,8 +161,8 @@ export function SignIn() {
 
       {/* Right Column: Clean White Sign-In Form */}
       <div className="flex flex-col justify-between p-6 sm:p-10 lg:p-16 xl:p-20 bg-white relative">
-        {/* Top bar: Back to Home link */}
-        <div className="w-full">
+        {/* Top bar: Back to Home link & Skip to Dashboard */}
+        <div className="w-full flex items-center justify-between">
           <Link
             to="/"
             className="inline-flex items-center gap-2 text-sm font-medium text-neutral-600 hover:text-black transition-colors"
@@ -163,6 +170,14 @@ export function SignIn() {
             <ArrowLeft className="w-4 h-4" />
             <span>Back to Home</span>
           </Link>
+          <button
+            type="button"
+            onClick={handleGuestAccess}
+            className="inline-flex items-center gap-1.5 text-xs font-semibold text-neutral-800 hover:text-black transition-colors bg-neutral-100 hover:bg-neutral-200 px-3 py-1.5 rounded-lg border border-neutral-200 shadow-2xs"
+          >
+            <span>Skip to Dashboard</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </button>
         </div>
 
         {/* Center: Auth Form Container */}
@@ -323,6 +338,21 @@ export function SignIn() {
               </>
             )}
           </button>
+
+          {/* Guest / Direct Demo Dashboard Button */}
+          <div className="mt-4 pt-4 border-t border-neutral-100">
+            <button
+              type="button"
+              onClick={handleGuestAccess}
+              className="w-full py-3 px-4 bg-neutral-900 hover:bg-black text-white text-sm font-semibold rounded-xl transition-all shadow-sm flex items-center justify-center gap-2 active:scale-[0.99] group"
+            >
+              <span>Explore as Guest (Instant Access)</span>
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </button>
+            <p className="text-[11px] text-center text-neutral-400 mt-2">
+              Instant preview of 413+ startup autopsies, failure intelligence & tools.
+            </p>
+          </div>
 
           {/* Toggle between Sign In & Sign Up */}
           <div className="mt-8 text-center text-xs text-neutral-500">

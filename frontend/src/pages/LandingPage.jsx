@@ -9,7 +9,7 @@ import { PivotVaultIcon } from '../assets/logo';
 import '../styles/landing.css';
 
 const navItems = [
-  ['Explore', 'ghosts'],
+  ['Explore', '/explore'],
   ['Intelligence', 'intelligence'],
   ['Analysis', 'pillars'],
   ['Insights', 'insights'],
@@ -285,6 +285,10 @@ export function LandingPage() {
     navigate('/app');
   };
 
+  const goToExplore = () => {
+    navigate('/explore');
+  };
+
   const goToSignIn = () => {
     navigate('/signin');
   };
@@ -304,16 +308,37 @@ export function LandingPage() {
 
           <div className="nav-links">
             {navItems.map(([name, target]) => (
-              <a key={name} href={`#${target}`}>{name}</a>
+              target.startsWith('/') ? (
+                <button
+                  key={name}
+                  type="button"
+                  onClick={() => navigate(target)}
+                  style={{
+                    background: 'transparent',
+                    border: 'none',
+                    font: 'inherit',
+                    color: 'inherit',
+                    cursor: 'pointer',
+                    padding: 0
+                  }}
+                >
+                  {name}
+                </button>
+              ) : (
+                <a key={name} href={`#${target}`}>{name}</a>
+              )
             ))}
           </div>
 
           <div className="nav-actions">
+            <button type="button" onClick={goToExplore} className="signin button" style={{ background: 'transparent', padding: '6px 10px' }}>
+              Explore
+            </button>
             <button type="button" onClick={goToSignIn} className="signin button" style={{ background: 'transparent', padding: '6px 10px' }}>
               Sign In
             </button>
             <button className="button dark small" onClick={goToDashboard}>
-              Explore Archive <ArrowUpRight size={15} />
+              Launch Dashboard <ArrowUpRight size={15} />
             </button>
           </div>
 
@@ -331,14 +356,41 @@ export function LandingPage() {
         {/* Mobile Navigation Drawer */}
         <div id="mobile-menu" className={`mobile-menu ${menuOpen ? 'open' : ''}`}>
           {navItems.map(([name, target]) => (
-            <a
-              key={name}
-              href={`#${target}`}
-              onClick={() => setMenuOpen(false)}
-            >
-              {name}
-              <ArrowRight size={18} />
-            </a>
+            target.startsWith('/') ? (
+              <button
+                key={name}
+                type="button"
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  textAlign: 'left',
+                  width: '100%',
+                  display: 'flex',
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                  font: 'inherit',
+                  color: 'inherit',
+                  cursor: 'pointer',
+                  padding: '16px 0'
+                }}
+                onClick={() => {
+                  setMenuOpen(false);
+                  navigate(target);
+                }}
+              >
+                <span>{name}</span>
+                <ArrowRight size={18} />
+              </button>
+            ) : (
+              <a
+                key={name}
+                href={`#${target}`}
+                onClick={() => setMenuOpen(false)}
+              >
+                {name}
+                <ArrowRight size={18} />
+              </a>
+            )
           ))}
           <button
             className="button dark"
@@ -347,7 +399,7 @@ export function LandingPage() {
               goToDashboard();
             }}
           >
-            Explore Archive <ArrowRight size={17} />
+            Launch Platform <ArrowRight size={17} />
           </button>
         </div>
       </header>
